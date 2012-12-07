@@ -6,9 +6,15 @@
 
 {% block content_bundle %}
 
-	<h2>{{ etude.id }}</h2>
-	<i>Par {{ etude.mandat }}, le {{ etude.num}}</i>
-
+	<h2>Etude n°{{ etude.id }}</h2>
+	<i>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</i>
+        <i>Client {{ etude.prospect.nom }} </i>
+        <i>Description de l'étude: {{etude.description }}</i>
+        <br>
+        <h2>Avant projet</h2>
+        {% for ap in etude.aps %}
+        <i>Version {{ap.id}}</i>
+        {% endfor %}   
 	<div>
 		
 	</div>

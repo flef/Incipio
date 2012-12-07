@@ -6,6 +6,7 @@ namespace mgate\SuiviBundle\Form;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManager;
+use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Entity\Etude;
 
 class ApHandler
@@ -40,10 +41,8 @@ class ApHandler
 
     public function onSuccess(Ap $ap)
     {
-        $this->em->persist($ap);
-
         
-
+        $this->em->persist($ap);
         $this->em->flush();
     }
 }

@@ -15,7 +15,7 @@
 {% for etude in etudes %}
     <li>
     <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> etude numéro {{ etude.num }}</a>
-    faite par le mandat {{ etude.mandat }}
+    faite par le mandat {{ etude.mandat }} créée le {{ etude.dateCreation|date("d/m/Y") }}
     </li>
 {% else %}
     <li>Pas (encore !) d'études</li>

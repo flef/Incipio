@@ -7,26 +7,15 @@ use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
 
-class ApType extends AbstractType
+class ApType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-	    $builder
-            //->add('dateCreation',  'date')
-            ->add('version','integer')
-            ->add('redige')
-            ->add('relu')
-            ->add('spt1')
-            ->add('spt2')
-            ->add('envoye')
-            ->add('receptionne')
-            ->add('fraisDossier')
-            ->add('montant')
-            ->add('dateSignature','datetime');
+	    DocTypeType::buildForm($builder,$options);
+            $builder->add('fraisDossier','integer');
+             
             
-            /*             ->add('prospect', 'collection', array('type'  => new \mgate\PersonneBundle\Form\ProspectType,
-                                              'prototype' => true,
-                                              'allow_add' => true)); */
+            
             
     }
 

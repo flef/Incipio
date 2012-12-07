@@ -24,56 +24,56 @@ class DocType
     /**
      * @var boolean $redige
      *
-     * @ORM\Column(name="redige", type="boolean")
+     * @ORM\Column(name="redige", type="boolean",nullable=true)
      */
     private $redige;
 
     /**
      * @var boolean $relu
      *
-     * @ORM\Column(name="relu", type="boolean")
+     * @ORM\Column(name="relu", type="boolean",nullable=true)
      */
     private $relu;
 
     /**
      * @var integer $montant
      *
-     * @ORM\Column(name="montant", type="integer")
+     * @ORM\Column(name="montant", type="integer",nullable=true)
      */
     private $montant;
 
     /**
      * @var boolean $spt1
      *
-     * @ORM\Column(name="spt1", type="boolean")
+     * @ORM\Column(name="spt1", type="boolean",nullable=true)
      */
     private $spt1;
 
     /**
      * @var \DateTime $dateSignature
      *
-     * @ORM\Column(name="dateSignature", type="datetime")
+     * @ORM\Column(name="dateSignature", type="datetime",nullable=true)
      */
     private $dateSignature;
 
     /**
      * @var boolean $envoye
      *
-     * @ORM\Column(name="envoye", type="boolean")
+     * @ORM\Column(name="envoye", type="boolean",nullable=true)
      */
     private $envoye;
 
     /**
      * @var boolean $receptionne
      *
-     * @ORM\Column(name="receptionne", type="boolean")
+     * @ORM\Column(name="receptionne", type="boolean",nullable=true)
      */
     private $receptionne;
 
     /**
      * @var boolean $spt2
      *
-     * @ORM\Column(name="spt2", type="boolean")
+     * @ORM\Column(name="spt2", type="boolean",nullable=true)
      */
     private $spt2;
     
