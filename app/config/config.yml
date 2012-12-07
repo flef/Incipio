@@ -1,0 +1,137 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+
+framework:
+    #esi:             ~
+    #translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+    default_locale:  %locale%
+    trust_proxy_headers: false # Should Request object should trust proxy headers (X_FORWARDED_FOR/HTTP_CLIENT_IP)
+    session:         ~
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    bundles:        ["FOSCommentBundle" ] # rajout de FOSCommentBundle
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        #closure:
+        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
+        #yui_css:
+        #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+   
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main # Nom du firewall security.yml
+    user_class: mgate\PersonneBundle\Entity\User # La classe de l'entité User a modifier
+
+#ConsoleBundle
+sf2gen_console:
+    new_process: false  # use a new shell process to launch the command
+    toolbar: true  # display the toolbar in the current application ; to be disabled to use it in a third application.
+    local: true   # add the current application to list of available apps ; if false, the current application is excluded.
+    all: true   # will add all apps with a console available without using `apps` in configuration.
+    env: %kernel.environment% #the env used for the kernel setup
+    apps: #  use this to have a well defined list.
+        - app
+        - symfony-standard
+
+#CommentBundle
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: mgate\CommentBundle\Entity\Comment
+            thread:  mgate\CommentBundle\Entity\Thread
+
+#RestBundle bundle supplémentaire pour le bon fonctionnement de Comment
+fos_rest:
+    body_listener: false
+    format_listener: # false avant
+      default_priorities: [html, json, '/']
+    view:
+        view_response_listener: true # false avant
+
+# necessaire pour faire marcher fos_rest
+sensio_framework_extra:
+  view:
+    annotations: false
+
+# JMSSerializerBundle usefull for CommentBundle
+jms_serializer:
+    handlers:
+        object_based: false
+        datetime:
+            format: "Y-m-dTH:i:s" # ISO8601
+            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+        array_collection: true
+        form_error: true
+        constraint_violation: true
+
+    property_naming:
+        separator:  _
+        lower_case: true
+
+    metadata:
+        cache: file
+        debug: "%kernel.debug%"
+        file_cache:
+            dir: "%kernel.cache_dir%/serializer"
+
+        # Using auto-detection, the mapping files for each bundle will be
+        # expected in the Resources/config/serializer directory.
+        #
+        # Example:
+        # class: My\FooBundle\Entity\User
+        # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
+        auto_detection: true
+
+        # if you don't want to use auto-detection, you can also define the
+        # namespace prefix and the corresponding directory explicitly
+#        directories:
+#            any-name:
+#                namespace_prefix: "My\\FooBundle"
+#                path: "@MyFooBundle/Resources/config/serializer"
+#            another-name:
+#                namespace_prefix: "My\\BarBundle"
+#                path: "@MyBarBundle/Resources/config/serializer"
