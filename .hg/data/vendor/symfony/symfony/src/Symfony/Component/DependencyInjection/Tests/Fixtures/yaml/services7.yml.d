@@ -1,0 +1,2 @@
+uservices:
+    foo: { class: BarClass }

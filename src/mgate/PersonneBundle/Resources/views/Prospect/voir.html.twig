@@ -1,0 +1,31 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un prospect - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+	<h2>{{ prospect.id }}</h2>
+	<i>Par {{ prospect.nom }}</i>
+
+	<div>
+		
+	</div>
+
+	<p>
+		<a href="{{ path('mgatePersonne_prospect_homepage') }}">
+			
+			Retour à la liste
+		</a>
+                <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">
+			
+			Modifier le prospect
+		</a>
+		
+	
+	</p>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': prospect.thread} %}
+
+{% endblock %}

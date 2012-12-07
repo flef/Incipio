@@ -1,0 +1,1 @@
+u.foo { color: blue; }

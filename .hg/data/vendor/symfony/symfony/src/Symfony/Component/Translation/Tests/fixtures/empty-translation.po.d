@@ -1,0 +1,3 @@
+umsgid "foo"
+msgstr ""
+

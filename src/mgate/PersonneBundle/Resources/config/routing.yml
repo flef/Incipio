@@ -1,0 +1,52 @@
+mgatePersonne_homepage:
+    pattern:  /
+    defaults: { _controller: mgatePersonneBundle:Default:index }
+
+mgatePersonne_prospect_homepage:
+    pattern:  /prospect/{page}
+    defaults: { _controller: mgatePersonneBundle:Prospect:index , page: 1 }
+    requirements:
+      page : \d*
+    
+mgatePersonne_prospect_ajouter:
+    pattern: /prospect/add
+    defaults: {_controller: mgatePersonneBundle:Prospect:ajouter}
+    requirements:
+        id: \d+
+
+mgatePersonne_prospect_voir:
+    pattern:   /prospect/{id}
+    defaults:  { _controller: mgatePersonneBundle:Prospect:voir}
+    requirements:
+        id:  \d+
+
+mgatePersonne_prospect_modifier:
+    pattern: /prospect/modifier/{id}
+    defaults: {_controller: mgatePersonneBundle:Prospect:modifier}
+    requirements:
+        id: \d+
+
+ #/{page}
+mgatePersonne_user_homepage:
+    pattern:  /user
+    defaults: { _controller: mgatePersonneBundle:User:index , page: 1 }
+    requirements:
+      page : \d*
+    
+mgatePersonne_user_ajouter:
+    pattern: /user/add
+    defaults: {_controller: mgatePersonneBundle:User:ajouter}
+    requirements:
+        id: \d+
+
+mgatePersonne_user_voir:
+    pattern:   /user/{id}
+    defaults:  { _controller: mgatePersonneBundle:User:voir}
+    requirements:
+        id:  \d+
+
+mgatePersonne_user_modifier:
+    pattern: /user/modifier/{id}
+    defaults: {_controller: mgatePersonneBundle:User:modifier}
+    requirements:
+        id: \d+

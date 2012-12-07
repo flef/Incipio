@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+ <html lang="en">
+ <head>
+   <meta charset="utf-8">
+   <title>jQuery demo</title>
+ </head>
+ <body>
+     
+        <a href="http://jquery.com/">jQuery</a>
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+
+
+
+
+<h1>Subclass</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Champ1</th>
+            <td>{{ entity.champ1 }}</td>
+        </tr>
+        <tr>
+            <th>Mapped1</th>
+            <td>{{ entity.mapped1 }}</td>
+        </tr>
+        <tr>
+            <th>Mapped2</th>
+            <td>{{ entity.mapped2 }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('subclass') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('subclass_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('subclass_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+
+
+{% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': entity.thread.id} %}
+
+
+
+</body>
+
+ </html>

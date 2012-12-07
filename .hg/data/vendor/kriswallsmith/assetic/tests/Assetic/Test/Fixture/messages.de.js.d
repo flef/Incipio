@@ -1,0 +1,1 @@
+uvar messages = {"text.greeting": "Hallo %name%!"};

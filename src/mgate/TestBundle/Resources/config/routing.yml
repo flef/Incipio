@@ -1,0 +1,16 @@
+mgateTestBundle_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: mgateTestBundle:Default:index }
+
+
+mgateTestBundle_Relatedclass:
+    resource: "@mgateTestBundle/Resources/config/routing/relatedclass.yml"
+    prefix:   /Relatedclass
+
+mgateTestBundle_subclass:
+    resource: "@mgateTestBundle/Resources/config/routing/subclass.yml"
+    prefix:   /subclass
+
+mgateTestBundle_testthread:
+    resource: "@mgateTestBundle/Resources/config/routing/testthread.yml"
+    prefix:   /testthread
