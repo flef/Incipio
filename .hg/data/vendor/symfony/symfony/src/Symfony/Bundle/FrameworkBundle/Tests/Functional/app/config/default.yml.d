@@ -1,2 +1,0 @@
-uimports:
-    - { resource: framework.yml }

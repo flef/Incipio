@@ -1,1 +1,0 @@
-uname: 'Foo Bar'

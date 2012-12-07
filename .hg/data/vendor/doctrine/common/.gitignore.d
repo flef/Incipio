@@ -1,4 +1,0 @@
-ubuild/
-logs/
-reports/
-dist/

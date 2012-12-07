@@ -1,2 +1,0 @@
-umsgid "foo"
-msgstr "bar"

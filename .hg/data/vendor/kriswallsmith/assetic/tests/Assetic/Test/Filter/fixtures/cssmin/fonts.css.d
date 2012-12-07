@@ -1,3 +1,0 @@
-ubody {
-    color: white;
-}

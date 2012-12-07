@@ -1,3 +1,0 @@
-uid: 1
-name: Johannes
-read_only_property: 42

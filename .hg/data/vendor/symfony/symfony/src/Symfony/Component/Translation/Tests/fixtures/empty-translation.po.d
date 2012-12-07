@@ -1,3 +1,0 @@
-umsgid "foo"
-msgstr ""
-

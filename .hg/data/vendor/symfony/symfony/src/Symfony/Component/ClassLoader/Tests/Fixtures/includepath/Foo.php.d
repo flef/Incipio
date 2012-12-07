@@ -1,5 +1,0 @@
-u<?php
-
-class Foo
-{
-}
