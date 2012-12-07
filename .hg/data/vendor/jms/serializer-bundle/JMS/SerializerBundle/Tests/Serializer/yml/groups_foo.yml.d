@@ -1,2 +1,0 @@
-ufoo: foo
-foobar: foobar
