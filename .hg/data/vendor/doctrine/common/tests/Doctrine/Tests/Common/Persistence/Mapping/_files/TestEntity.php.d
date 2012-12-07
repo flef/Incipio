@@ -1,3 +1,0 @@
-u<?php
-
-$metadata->getFieldNames();

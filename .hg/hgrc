@@ -1,7 +1,0 @@
-[paths]
-default = http://stephane.collot:fa34smur@mgate.fr:8080/scm/hg/My-M-GaTE
-default-push = http://stephane.collot:fa34smur@mgate.fr:8080/scm/hg/My-M-GaTE
-
-[ui]
-username = stephane.collot
-
