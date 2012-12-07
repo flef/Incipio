@@ -1,0 +1,21 @@
+{# layout père de suivi bundle #}
+{% extends "::layout.html.twig" %}
+
+{% block title %}M-GaTE - {{ parent() }}{% endblock %}
+
+{% block body %}
+
+    {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+    <h1>Suivi d'étude</h1>
+    <h4>Sous-Menu</h4>
+    <ul>
+        <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Accueil</a></li>
+        <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter une étude</a></li>
+    </ul>
+    <hr>
+
+    {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+    {% block content_bundle %}
+    {% endblock %}
+
+{% endblock %}

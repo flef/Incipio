@@ -1,0 +1,21 @@
+{# layout d'accueil pour les Users  #}
+
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Liste des Users</h2>
+
+    <ul>
+        {% for user in users %}
+            <li>
+            <a href="{{ path('mgatePersonne_user_voir', {'id': user.id}) }}"> {{ user.nom }} </a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) de User</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

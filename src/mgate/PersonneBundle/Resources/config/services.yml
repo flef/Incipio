@@ -1,0 +1,11 @@
+parameters:
+#    mgate_personne.example.class: mgate\PersonneBundle\Example
+#    mgate_personne.prospect.class: mgate\PersonneBundle\Prospect
+
+services:
+#    mgate_personne.prospect:
+#        class: %mgate_personne.prospect.class%
+#        arguments: ['@fos_comment.manager.thread', '@router']
+#    mgate_personne.example:
+#        class: %mgate_personne.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
