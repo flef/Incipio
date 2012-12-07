@@ -1,0 +1,21 @@
+{# layout d'accueil pour les Prospect  #}
+
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Liste des Prospects</h2>
+
+    <ul>
+        {% for prospect in prospects %}
+            <li>
+            <a href="{{ path('mgatePersonne_prospect_voir', {'id': prospect.id}) }}"> {{ prospect.nom }} </a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) de Prospect</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'une étude - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+	<h2>{{ etude.id }}</h2>
+	<i>Par {{ etude.mandat }}, le {{ etude.num}}</i>
+
+	<div>
+		
+	</div>
+
+	<p>
+		<a href="{{ path('mgateSuivi_etude_homepage') }}">
+			
+			Retour à la liste
+		</a>
+                <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">
+			
+			Modifier l'étude
+		</a>
+ {#   <li>
+        <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+#}	
+	</p>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+u<?php
+
+class Foo
+{
+}

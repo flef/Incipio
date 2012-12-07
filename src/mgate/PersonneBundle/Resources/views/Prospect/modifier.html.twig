@@ -1,0 +1,23 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}Modifier un prospect - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+	<h2>Modifier un prospect</h2>
+
+	{% include "mgatePersonneBundle:Prospect:formulaire.html.twig" %}
+
+	<p>
+		Modification d'un prospect
+	</p>
+
+	<p>
+		<a href="{{ path('mgatePersonne_prospect_voir', {'id': prospect.id}) }}" >
+			
+			Retour ?
+		</a>
+	</p>
+
+{% endblock %}
+

@@ -1,0 +1,39 @@
+<h1>Relatedclass list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Champ1</th>
+            <th>Actions</th>
+            <th>Liste de Subclass (avec héritage)</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('Relatedclass_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.champ1 }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('Relatedclass_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('Relatedclass_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+            <td>{% for sub in entity.Subclasss %}<li>{{ sub.champ1 }}</li>{% endfor %}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('Relatedclass_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

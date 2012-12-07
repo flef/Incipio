@@ -1,0 +1,25 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier une étude - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+	<h2>Modifier un article</h2>
+
+        {% include "mgateSuiviBundle:Etude:formulaire.html.twig" %} 
+
+	<p>
+		Modification d'une étude
+	</p>
+
+	<p>
+		<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >
+			
+			Retour à l'article
+		</a>
+	</p>
+
+{% endblock %}
+

@@ -1,0 +1,50 @@
+{# app/Resources/views/layout.html.twig #}
+{# layout grand-père #}
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>{% block title %}My M-GaTE / P-GaTE{% endblock %}</title>
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
+{% endblock %}
+</head>
+
+<body>
+    <div>
+        <div id="header">
+            <h1>header</h1>
+        </div>
+
+        <div>
+            <div id="menu">
+                <h3>Menu</h3>
+                <ul>
+                    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'étude</a></li>
+                    <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Gestion des personnes</a></li>
+                </ul>
+            </div>
+                
+            <div id="content">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+
+        <hr>
+
+        <footer>
+            <p>Collot's Duty</p>
+        </footer>
+        
+    </div>
+
+    {% block javascripts %}
+
+    {% endblock %}
+
+</body>
+</html>

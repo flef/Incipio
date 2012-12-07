@@ -1,0 +1,30 @@
+Relatedclass_:
+    pattern:  /
+    defaults: { _controller: "mgateTestBundle:Relatedclass:index" }
+
+Relatedclass_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "mgateTestBundle:Relatedclass:show" }
+
+Relatedclass_new:
+    pattern:  /new
+    defaults: { _controller: "mgateTestBundle:Relatedclass:new" }
+
+Relatedclass_create:
+    pattern:  /create
+    defaults: { _controller: "mgateTestBundle:Relatedclass:create" }
+    requirements: { _method: post }
+
+Relatedclass_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "mgateTestBundle:Relatedclass:edit" }
+
+Relatedclass_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "mgateTestBundle:Relatedclass:update" }
+    requirements: { _method: post }
+
+Relatedclass_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "mgateTestBundle:Relatedclass:delete" }
+    requirements: { _method: post }

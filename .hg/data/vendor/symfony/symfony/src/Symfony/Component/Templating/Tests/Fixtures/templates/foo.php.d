@@ -1,0 +1,1 @@
+u<?php echo $foo ?>

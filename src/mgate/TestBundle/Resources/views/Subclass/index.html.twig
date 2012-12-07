@@ -1,0 +1,43 @@
+<h1>Subclass list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Champ1</th>
+            <th>Mapped1</th>
+            <th>Mapped2</th>
+            <th>Actions</th>
+            <th>Lié par ManyToOne bidirectionnel</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('subclass_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.champ1 }}</td>
+            <td>{{ entity.mapped1 }}</td>
+            <td>{{ entity.mapped2 }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('subclass_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('subclass_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+            <td>{{ entity.mappedRelated1.champ1 }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('subclass_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

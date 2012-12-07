@@ -1,0 +1,30 @@
+subclass:
+    pattern:  /
+    defaults: { _controller: "mgateTestBundle:Subclass:index" }
+
+subclass_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "mgateTestBundle:Subclass:show" }
+
+subclass_new:
+    pattern:  /new
+    defaults: { _controller: "mgateTestBundle:Subclass:new" }
+
+subclass_create:
+    pattern:  /create
+    defaults: { _controller: "mgateTestBundle:Subclass:create" }
+    requirements: { _method: post }
+
+subclass_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "mgateTestBundle:Subclass:edit" }
+
+subclass_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "mgateTestBundle:Subclass:update" }
+    requirements: { _method: post }
+
+subclass_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "mgateTestBundle:Subclass:delete" }
+    requirements: { _method: post }
