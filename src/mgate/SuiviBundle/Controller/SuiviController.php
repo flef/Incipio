@@ -44,13 +44,28 @@ class SuiviController extends Controller
     public function addEtudeAction()
     {
         $etude = new Etude;
-
+        
         $form        = $this->createForm(new EtudeType, $etude);
         $formHandler = new EtudeHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
+        echo 'caca';
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            var_dump($this->get('request')->request->get('envoie'));
+           
+            if($this->get('request')->get('next'))
+            {
+               
+                return $this->redirect($this->generateUrl('mgateSuivi_ap_ajouter',array('id' => $etude->getId())));
+            }
+            else
+            {
+                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            }
+            
+            //$ap = new Ap;
+            //$form_suivant = $this->createForm(new ApType,$ap);
+            //return $this->redirect($this->generateUrl('route de l'ap', array('id...));
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
@@ -59,16 +74,33 @@ class SuiviController extends Controller
         
     }
     
-    public function addApAction()
+    public function addApAction($id)
     {
+         $em = $this->getDoctrine()->getEntityManager();
+
+        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+        }
+        
+        
         $ap = new Ap;
-
+        $ap->setEtude($etude);
         $form        = $this->createForm(new ApType, $ap);
-        $formHandler = new ApHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
+        $formHandler = new ApHandler($form, $this->get('request'), $em);
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $ap->getId())) );
+            if($this->get('request')->get('next'))
+            {
+               
+                return $this->redirect($this->generateUrl('mgateSuivi_cc_ajouter_cc',array('id' => $etude->getId())));
+            }
+            else
+            {
+                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            }
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
@@ -79,6 +111,8 @@ class SuiviController extends Controller
     
     public function addCcAction()
     {
+        
+        
         $cc = new Cc;
 
         $form        = $this->createForm(new CcType, $cc);
