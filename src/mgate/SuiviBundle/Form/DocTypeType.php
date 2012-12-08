@@ -13,16 +13,15 @@ class DocTypeType extends AbstractType
     {
 	    $builder
             //->add('dateCreation',  'date')
-            ->add('version','integer')
+            ->add('version', 'integer')
             ->add('redige')
             ->add('relu')
             ->add('spt1')
             ->add('spt2')
             ->add('envoye')
             ->add('receptionne')
-            
-            ->add('montant')
-            ->add('dateSignature','datetime');
+            ->add('montant')    
+            ->add('dateSignature', 'date');
             
             /*             ->add('prospect', 'collection', array('type'  => new \mgate\PersonneBundle\Form\ProspectType,
                                               'prototype' => true,
