@@ -38,7 +38,9 @@ use mgate\SuiviBundle\Entity\Pvr;
 use mgate\SuiviBundle\Form\PvrHandler;
 use mgate\SuiviBundle\Form\PvrType;
 
-class EtudeController extends Controller
+use Ob\HighchartsBundle\Highcharts\Highchart;
+
+class PanelController extends Controller
 {
     
     public function indexAction($page)
@@ -47,82 +49,29 @@ class EtudeController extends Controller
 
         $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
 
-        return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
+        return $this->render('mgateSuiviBundle:Panel:index.html.twig', array(
             'etudes' => $entities,
         ));
          
     }
     
-    public function addAction()
+    public function testAction()
     {
-        $etude = new Etude;
-        
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-        echo 'caca';
-        
-        if($formHandler->process())
-        {
-            var_dump($this->get('request')->request->get('envoie'));
-           
-            if($this->get('request')->get('ap'))
-            {
-                
-                return $this->redirect($this->generateUrl('mgateSuivi_ap_ajouter', array('id' => $etude->getId())));
-            }
-            else
-            {
-                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
-            }
+        // Chart
+        $series = array(
+            array("name" => "Data Serie Name",    "data" => array(1,2,4,5,6,3,8))
+        );
 
-        }
+        $ob = new Highchart();
+        $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
+        $ob->title->text('Chart Title');
+        $ob->xAxis->title(array('text'  => "Horizontal axis title"));
+        $ob->yAxis->title(array('text'  => "Vertical axis title"));
+        $ob->series($series);
 
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
-            'form' => $form->createView(),
-        ));
-        
-    }
-    
-    public function voirAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
-        
-    }
-    
-    public function modifierAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
-        }
-
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
-        {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
-        }
-
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
-            'form' => $form->createView(),
-            'etude' => $etude,
+        return $this->render('mgateSuiviBundle:Panel:test.html.twig', array(
+            'chart' => $ob
         ));
     }
+ 
 }
