@@ -65,6 +65,13 @@ class Etude
      * @ORM\Column(name="dossierCree", type="boolean", nullable=true)
      */
     private $dossierCree;
+    
+    /**
+     * @var string $nom
+     *
+     * @ORM\Column(name="nom", type="text", nullable=false)
+     */
+    private $nom;
 
     /**
      * @var string $description
@@ -144,6 +151,11 @@ class Etude
      * @ORM\OneToMany(targetEntity="Ap", mappedBy="etude")
      */
     private $aps;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude")
+     */
+    private $phases;
 
     /**
      * @ORM\OneToMany(targetEntity="Cc", mappedBy="etude")
@@ -1121,5 +1133,94 @@ class Etude
     public static function getAuditType()
     {
         return array('Déontologique', 'Exhaustive');
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Etude
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+    
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Add phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     * @return Etude
+     */
+    public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases)
+    {
+        $this->phases[] = $phases;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     */
+    public function removePhase(\mgate\SuiviBundle\Entity\Phase $phases)
+    {
+        $this->phases->removeElement($phases);
+    }
+
+    /**
+     * Get phases
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhases()
+    {
+        return $this->phases;
+    }
+
+    /**
+     * Add factures
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $factures
+     * @return Etude
+     */
+    public function addFacture(\mgate\SuiviBundle\Entity\Facture $factures)
+    {
+        $this->factures[] = $factures;
+    
+        return $this;
+    }
+
+    /**
+     * Remove factures
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $factures
+     */
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $factures)
+    {
+        $this->factures->removeElement($factures);
+    }
+
+    /**
+     * Get factures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFactures()
+    {
+        return $this->factures;
     }
 }

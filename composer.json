@@ -6,10 +6,10 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "symfony/symfony": "2.1.*",
+        "symfony/symfony": "2.1.4",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.0.*",
-        "twig/extensions": "1.0.*",
+        "twig/extensions": "1.0.*@dev",
         "symfony/assetic-bundle": "2.1.*",
         "symfony/swiftmailer-bundle": "2.1.*",
         "symfony/monolog-bundle": "2.1.*",
@@ -24,7 +24,8 @@
         "friendsofsymfony/comment-bundle" : "2.*",
         "jms/serializer-bundle" : "0.9.0",
         "friendsofsymfony/rest" : "dev-master",
-        "friendsofsymfony/rest-bundle" : "dev-master"
+        "friendsofsymfony/rest-bundle" : "dev-master",
+        "ob/highcharts-bundle": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
@@ -47,5 +48,11 @@
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web"
-    }
+    },
+   "repositories":[
+       {
+           "type":"composer",
+           "url":"http://packages.zendframework.com/"
+       }
+   ]
 }
