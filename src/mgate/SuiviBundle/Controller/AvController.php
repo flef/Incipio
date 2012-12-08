@@ -3,17 +3,14 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use mgate\SuiviBundle\Entity\Etude;
-
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
-use mgate\SuiviBundle\Entity\Suivi;
-use mgate\SuiviBundle\Form\SuiviType;
-use mgate\SuiviBundle\Form\SuiviHandler;
 
+use mgate\SuiviBundle\Entity\Av;
+use mgate\SuiviBundle\Form\AvHandler;
+use mgate\SuiviBundle\Form\AvType;
 
-class SuiviController extends Controller
+class AvController extends Controller
 {
     public function indexAction($page)
     {
@@ -29,14 +26,14 @@ class SuiviController extends Controller
     
     public function addAction()
     {
-        $suivi = new Suivi;
+        $av = new Av;
 
-        $form        = $this->createForm(new SuiviType, $suivi);
-        $formHandler = new SuiviHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+        $form        = $this->createForm(new AvType, $av);
+        $formHandler = new AvHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
 
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $suivi->getId())) );
+            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $av->getId())) );
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
@@ -44,7 +41,7 @@ class SuiviController extends Controller
         ));
         
     }
-    
+
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();

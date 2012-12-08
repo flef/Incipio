@@ -1,85 +1,86 @@
 mgateSuivi_etude_homepage:
     pattern:  /{page}
-    defaults: { _controller: mgateSuiviBundle:Suivi:index , page: 1 }
+    defaults: {_controller: mgateSuiviBundle:Etude:index , page: 1}
     requirements:
       page : \d*
     
 mgateSuivi_etude_ajouter:
     pattern: /etude/ajouter
-    defaults: {_controller: mgateSuiviBundle:Suivi:addEtude}
+    defaults: {_controller: mgateSuiviBundle:Etude:add}
+    requirements:
+        id: \d+
+
+mgateSuivi_etude_voir:
+    pattern:   /etude/{id}
+    defaults: {_controller: mgateSuiviBundle:Etude:voir}
+    requirements:
+        id:  \d+
+
+mgateSuivi_etude_modifier:
+    pattern: /etude/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Etude:modifier}
     requirements:
         id: \d+
         
 mgateSuivi_ap_ajouter:
     pattern: /ap/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addAp}
+    defaults: {_controller: mgateSuiviBundle:Ap:add}
     requirements:
         id: \d+
         
-mgateSuivi_cc_ajouter_cc:
+mgateSuivi_cc_ajouter:
     pattern: /cc/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addCc}
+    defaults: {_controller: mgateSuiviBundle:Cc:add}
     requirements:
         id: \d+        
 
 mgateSuivi_mission_ajouter:
     pattern: /mission/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addMission}
+    defaults: {_controller: mgateSuiviBundle:Mission:add}
     requirements:
         id: \d+
         
 mgateSuivi_suivi_ajouter:
     pattern: /suivi/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addSuivi}
+    defaults: {_controller: mgateSuiviBundle:Suivi:add}
     requirements:
         id: \d+
 
 
 mgateSuivi_clientcontact_ajouter:
     pattern: /clientcontact/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addClientContact}
+    defaults: {_controller: mgateSuiviBundle:ClientContact:add}
     requirements:
         id: \d+
         
 mgateSuivi_pvi_ajouter:
     pattern: /pvi/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addPvi}
+    defaults: {_controller: mgateSuiviBundle:Pvi:add}
     requirements:
         id: \d+
         
         
 mgateSuivi_av_ajouter:
     pattern: /av/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addAv}
+    defaults: {_controller: mgateSuiviBundle:Av:addAv}
     requirements:
         id: \d+
         
 mgateSuivi_avmission_ajouter:
     pattern: /avmission/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addAvMission}
+    defaults: {_controller: mgateSuiviBundle:AvMission:addAvMission}
     requirements:
         id: \d+
         
 mgateSuivi_facture_ajouter:
     pattern: /facture/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addFacture}
+    defaults: {_controller: mgateSuiviBundle:Facture:addFacture}
     requirements:
         id: \d+
 
 mgateSuivi_pvr_ajouter:
     pattern: /pvr/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:addPvr}
+    defaults: {_controller: mgateSuiviBundle:Pvr:addPvr}
     requirements:
         id: \d+
         
-mgateSuivi_etude_voir:
-    pattern:   /etude/{id}
-    defaults:  { _controller: mgateSuiviBundle:Suivi:voir }
-    requirements:
-        id:  \d+
-
-mgateSuivi_etude_modifier:
-    pattern: /etude/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:modifier}
-    requirements:
-        id: \d+

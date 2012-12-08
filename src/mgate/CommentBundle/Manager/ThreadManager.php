@@ -21,7 +21,7 @@ class ThreadManager
     public function ajouterAction($name, $permaLink, $entity)
     {
         //get('fos_comment.manager.thread')
-        $thread = new mgateThread;
+        //$thread = new mgateThread;
         
         $thread = $this->tm->createThread($name.$entity->getId());
         $thread->setId($name.$entity->getId());

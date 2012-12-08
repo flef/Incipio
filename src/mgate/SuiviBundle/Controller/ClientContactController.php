@@ -8,12 +8,13 @@ use mgate\SuiviBundle\Entity\Etude;
 
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
-use mgate\SuiviBundle\Entity\Suivi;
-use mgate\SuiviBundle\Form\SuiviType;
-use mgate\SuiviBundle\Form\SuiviHandler;
+use mgate\SuiviBundle\Form\ApHandler;
+
+use mgate\SuiviBundle\Entity\ClientContact;
+use mgate\SuiviBundle\Form\ClientContactType;
 
 
-class SuiviController extends Controller
+class ClientContactController extends Controller
 {
     public function indexAction($page)
     {
@@ -29,14 +30,14 @@ class SuiviController extends Controller
     
     public function addAction()
     {
-        $suivi = new Suivi;
+        $clientcontact = new ClientContact;
 
-        $form        = $this->createForm(new SuiviType, $suivi);
-        $formHandler = new SuiviHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+        $form        = $this->createForm(new ClientContactType, $clientcontact);
+        $formHandler = new ApHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
 
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $suivi->getId())) );
+            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $clientcontact->getId())) );
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
@@ -44,7 +45,7 @@ class SuiviController extends Controller
         ));
         
     }
-    
+
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
