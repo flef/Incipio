@@ -1,0 +1,9 @@
+{# Formulaire d'ajout d'une étude #}
+
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer l'AP"/>
+        <input type="submit" value="Enregistrer l'AP et passer à la CC" name="ap" id="ap"/>
+</form>

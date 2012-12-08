@@ -27,7 +27,7 @@ class ProspectController extends Controller
                 $em->persist($prospect);    
                 $em->flush();
                 
-                $this->get('mgate_personne.thread')->ajouterAction("prospect_", $this->get('router')->generate('mgatePersonne_prospect_voir', array('id' => $prospect->getId())), $prospect);
+                $this->get('mgate_comment.thread')->ajouterAction("prospect_", $this->get('router')->generate('mgatePersonne_prospect_voir', array('id' => $prospect->getId())), $prospect);
 
                 $em->flush();
                 
