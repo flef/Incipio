@@ -3,17 +3,17 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use mgate\SuiviBundle\Entity\Etude;
 
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
-use mgate\SuiviBundle\Entity\Suivi;
-use mgate\SuiviBundle\Form\SuiviType;
-use mgate\SuiviBundle\Form\SuiviHandler;
 
+use mgate\SuiviBundle\Entity\Facture;
+use mgate\SuiviBundle\Form\FactureHandler;
+use mgate\SuiviBundle\Form\FactureType;
+use mgate\SuiviBundle\Entity\Pvr;
+use mgate\SuiviBundle\Form\PvrType;
 
-class SuiviController extends Controller
+class FactureController extends Controller
 {
     public function indexAction($page)
     {
@@ -29,14 +29,14 @@ class SuiviController extends Controller
     
     public function addAction()
     {
-        $suivi = new Suivi;
+        $facture = new Facture;
 
-        $form        = $this->createForm(new SuiviType, $suivi);
-        $formHandler = new SuiviHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+        $form        = $this->createForm(new FactureType, $facture);
+        $formHandler = new FactureHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
 
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $suivi->getId())) );
+            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $facture->getId())) );
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
@@ -45,6 +45,24 @@ class SuiviController extends Controller
         
     }
     
+    public function addPvrAction()
+    {
+        $pvr = new Pvr;
+
+        $form        = $this->createForm(new PvrType, $pvr);
+        $formHandler = new FactureHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+
+        if($formHandler->process())
+        {
+            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $pvr->getId())) );
+        }
+
+        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
+            'form' => $form->createView(),
+        ));
+        
+    }
+
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();

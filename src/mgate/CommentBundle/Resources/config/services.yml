@@ -2,7 +2,7 @@ parameters:
     mgate_comment.thread.class: mgate\CommentBundle\Manager\ThreadManager
 
 services:
-    mgate_personne.thread:
+    mgate_comment.thread:
         class: %mgate_comment.thread.class%
         arguments: ['@fos_comment.manager.thread', '@doctrine.orm.entity_manager']
 
