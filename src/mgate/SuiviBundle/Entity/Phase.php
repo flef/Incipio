@@ -4,6 +4,8 @@ namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * mgate\SuiviBundle\Entity\Phase
  *
@@ -38,6 +40,8 @@ class Phase
      * @var integer $prixJEH
      *
      * @ORM\Column(name="prixJEH", type="integer")
+     * @Assert\Min(80)
+     * @Assert\Max(300)
      */
     private $prixJEH;
     
@@ -77,9 +81,10 @@ class Phase
     private $delai;
     
     /**
-     * @var string $validation
+     * @var integer $validation
      *
      * @ORM\Column(name="validation", type="integer", nullable=true)
+     * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
 
@@ -298,5 +303,14 @@ class Phase
     public function getValidation()
     {
         return $this->validation;
+    }
+    
+    public static function getValidationChoice()
+    {
+        return array( 0 => "Aucune", 1 => "Cette phase sera soumise à une validation orale lors d’un entretien avec le client.", 2 => "Cette phase sera soumise à une validation écrite qui prend la forme d’un Procès-Verbal Intermédiaire signé par le client.");
+    }
+    public static function getValidationChoiceAssert()
+    {
+        return array_keys(Phase::getValidationChoice());
     }
 }
