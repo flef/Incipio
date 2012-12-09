@@ -68,25 +68,31 @@ mgateSuivi_pvi_ajouter:
         
 mgateSuivi_av_ajouter:
     pattern: /av/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Av:addAv}
+    defaults: {_controller: mgateSuiviBundle:Av:add}
     requirements:
         id: \d+
         
 mgateSuivi_avmission_ajouter:
     pattern: /avmission/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:AvMission:addAvMission}
+    defaults: {_controller: mgateSuiviBundle:AvMission:add}
     requirements:
         id: \d+
         
 mgateSuivi_facture_ajouter:
     pattern: /facture/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:addFacture}
+    defaults: {_controller: mgateSuiviBundle:Facture:add}
     requirements:
         id: \d+
 
 mgateSuivi_pvr_ajouter:
     pattern: /pvr/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvr:addPvr}
+    defaults: {_controller: mgateSuiviBundle:Pvr:add}
+    requirements:
+        id: \d+
+        
+mgateSuivi_phase_ajouter:
+    pattern: /phase/ajouter/{id}
+    defaults: {_controller: mgateSuiviBundle:phase:add}
     requirements:
         id: \d+
         
