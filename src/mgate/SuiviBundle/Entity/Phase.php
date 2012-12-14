@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -24,22 +25,30 @@ class Phase
     private $id;
     
     /**
+     * Gedmo\SortablePosition
+     * @ORM\Column(name="position", type="integer", nullable=true)
+     * todo enlever le nullable=true
+     */
+    private $position;
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
+     * Gedmo\SortableGroup
      */
     protected $etude;
 
     /**
      * @var integer $nbrJEH
      *
-     * @ORM\Column(name="nbrJEH", type="integer")
+     * @ORM\Column(name="nbrJEH", type="integer", nullable=true)
      */
     private $nbrJEH;
     
     /**
      * @var integer $prixJEH
      *
-     * @ORM\Column(name="prixJEH", type="integer")
+     * @ORM\Column(name="prixJEH", type="integer", nullable=true)
      * @Assert\Min(80)
      * @Assert\Max(300)
      */
@@ -48,7 +57,7 @@ class Phase
    /**
      * @var string $titre
      *
-     * @ORM\Column(name="titre", type="text", nullable=false)
+     * @ORM\Column(name="titre", type="text", nullable=true)
      */
     private $titre;
 
@@ -87,6 +96,13 @@ class Phase
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
+    
+    public function __construct()
+    {
+        $this->voteCount = 0;
+        $this->createdAt = new \DateTime('now');
+        $this->isEnabled = false;
+    }
 
     /**
      * Get id
@@ -102,7 +118,7 @@ class Phase
      * Set etude
      *
      * @param mgate\SuiviBundle\Entity\Etude $etude
-     * @return Ap
+     * @return Phase
      */
     public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
     {
@@ -280,6 +296,29 @@ class Phase
     public function getDelai()
     {
         return $this->delai;
+    }
+    
+    /**
+     * Set position
+     *
+     * @param string $position
+     * @return integer
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+        
+        return $this;
+    }
+    
+    /**
+     * Get position
+     *
+     * @return integer 
+     */ 
+    public function getPosition()
+    {
+        return $this->position;
     }
 
     /**
