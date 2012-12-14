@@ -1,0 +1,150 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block content_bundle %}
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    <h2>Ajouter des PHASES </h2>
+
+
+    
+<form method="POST" {{ form_enctype(form) }}>
+    {# affiche l'unique champ de la tâche : description #}
+    {#{ form_row(form.description) }#}
+        
+
+
+    <h3>Phases</h3>
+    <u1 class="phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
+        {# itère sur chaque tag existant et affiche son unique champ : name #}
+        {% for phase in form.phases %}
+            <li>{{ form_row(phase.titre) }} {{ form_row(phase.validation) }}{{ form_widget(phase) }}</li>
+        {% endfor %}
+    </u1>
+
+    {{ form_rest(form) }}
+    {# ... #}
+    
+    <script type="text/javascript">
+// Récupère le div qui contient la collection de tags
+var collectionHolder = $('.phases');
+
+// ajoute un lien « add a tag »
+var $addPhaseLink = $('<a href="#" class="add_phase_link">Ajouter une PHASEMETHODE2</a>');
+var $newLinkLi = $('<li></li>').append($addPhaseLink);
+
+    function reorder() {
+        alert('reorder');
+        
+       $("#mgate_suivibundle_etudephasestype_phases_"+(collectionHolder.children().length-1)+"_position").val(collectionHolder.children().length-1);
+        
+    }
+  
+    jQuery(document).ready(function() {
+       
+        // ajoute l'ancre « ajouter un tag » et li à la balise ul
+        collectionHolder.append($newLinkLi);
+
+        $addPhaseLink.on('click', function(e) {
+        //$('#add_phase_link').click(function() {
+            // empêche le lien de créer un « # » dans l'URL
+            e.preventDefault();
+
+            // ajoute un nouveau formulaire tag (voir le prochain bloc de code)
+            addPhaseForm(collectionHolder, $newLinkLi);
+        });
+        
+        collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
+        });
+        
+        collectionHolder.sortable({
+            // limitons les déplacements sur l'axe des ordonnées, ce sera plus propre
+            axis: 'y',
+
+            // Il faut cliquer sur cet élément pour pouvoir initier le drag'n'drop
+            //handle: '.sort-button',
+
+            // Créons un joli trou stylé lors des déplacements
+            placeholder: 'ui-state-highlight',
+            forcePlaceholderSize: true,
+
+            // Cette fonction permet à notre ligne de conserver son formatage lors du déplacement
+            // Pas vraiment utile, mais plus agréable à l'œil
+            helper: function(e, tr)
+            {
+              var $originals = tr.children();
+              var $helper = tr.clone();
+              $helper.children().each(function(index)
+              {
+                // Set helper cell sizes to match the original sizes
+                $(this).width($originals.eq(index).width())
+              });
+              return $helper;
+            },
+
+            // La fonction appelée quand un élément change de position
+            // C'est le code vraiment utile, en fait
+            update: function(){
+              //Construit un tableau des ids des stories
+              var serial = collectionHolder.sortable('serialize');
+              
+              
+            $('input.position').each(function(i) {
+                $(this).val( i );
+            });
+
+              // Appelle une action en ajax
+              $.ajax({
+                url: "{{ path('mgateSuivi_phases_updateOrder', {'id': etude.id}) }}", // set in layout.php
+                type: "post",
+                data: serial,
+                error: function(){
+                  //alert("Impossible d'enregistrer l'ordre"); 
+                }
+              })
+            }
+        });
+        
+            
+
+    });
+    
+    function addPhaseForm(collectionHolder, $newLinkLi) {
+        // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+        var prototype = collectionHolder.attr('data-prototype');
+
+        // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+        // la longueur de la collection courante
+        var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+             
+        // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+        var $newFormLi = $('<li></li>').append(newForm);
+        addTagFormDeleteLink($newFormLi);
+        $newLinkLi.before($newFormLi);
+        
+        $("#mgate_suivibundle_etudephasestype_phases_"+(collectionHolder.children().length-1)+"_position").val(collectionHolder.children().length-1);
+ 
+    }
+    
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<a href="#">delete this phase</a>');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $tagFormLi.remove();
+        });
+    }
+    
+</script>
+
+    <input type="submit" value="Enregistrer les phases" />
+</form>
+
+
+    
+
+{% endblock %}
