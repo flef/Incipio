@@ -96,3 +96,10 @@ mgateSuivi_phase_ajouter:
     requirements:
         id: \d+
         
+mgateSuivi_phases_modifier:
+    pattern: /phases/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:phases:modifier}
+    requirements:
+        id: \d+
+
+        

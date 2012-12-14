@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
+use mgate\SuiviBundle\Form\EtudePhasesType;
+use mgate\SuiviBundle\Form\EtudePhasesHandler;
 use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Form\ApType;
 use mgate\SuiviBundle\Form\ApHandler;
@@ -121,6 +123,29 @@ class EtudeController extends Controller
         }
 
         return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+            'form' => $form->createView(),
+            'etude' => $etude,
+        ));
+    }
+    
+    public function modifierPhasesAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+
+        $form        = $this->createForm(new EtudePhasesType, $etude);
+        $formHandler = new EtudePhasesHandler($form, $this->get('request'), $em);
+
+        if($formHandler->process())
+        {
+            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+        }
+
+        return $this->render('mgateSuiviBundle:Etude:phases.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,
         ));

@@ -153,7 +153,8 @@ class Etude
     private $aps;
     
     /**
-     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude")
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist"})
+     * @ORM\OrderBy({"position" = "ASC"})
      */
     private $phases;
 
@@ -829,6 +830,7 @@ class Etude
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fss = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -1167,7 +1169,7 @@ class Etude
     public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases)
     {
         $this->phases[] = $phases;
-    
+        $phases->setEtude($this);
         return $this;
     }
 
@@ -1189,6 +1191,15 @@ class Etude
     public function getPhases()
     {
         return $this->phases;
+    }
+    
+    //cf doc pour collection
+    public function setPhases(ArrayCollection $phases)
+    {
+        foreach ($phases as $phase) {
+            $phase->setEtude($this);
+        }
+        $this->phases = $phases;
     }
 
     /**
