@@ -95,7 +95,7 @@ class Candidature
      * @param mgate\PersonneBundle\Entity\User $candidat
      * @return Candidature
      */
-    public function setCandidat(mgate\PersonneBundle\Entity\User $candidat)
+    public function setCandidat(\mgate\PersonneBundle\Entity\User $candidat)
     {
         $this->candidat = $candidat;
     

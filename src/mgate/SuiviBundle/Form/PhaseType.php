@@ -13,7 +13,7 @@ class PhaseType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
             $builder->add('validation', 'choice', array('choices' => Phase::getValidationChoice()))
-                    ->add('titre')
+                    ->add('titre', 'text')
                     ->add('position', 'hidden', array('attr' => array('class' => 'position')));
   
     }

@@ -5,8 +5,8 @@ namespace mgate\SuiviBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use mgate\PersonneBundle\Entity\Client;
-use mgate\PersonneBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
+
 
 /**
  * mgate\SuiviBundle\Entity\Etude
@@ -26,13 +26,13 @@ class Etude
      */
     private $id;
 
-    /** inversedBy="etudes", cascade={"persist"}
+    /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Prospect")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $prospect;
     
-    /** inversedBy="etudes", cascade={"persist"}
+    /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -222,7 +222,7 @@ class Etude
      * @param mgate\PersonneBundle\Entity\User $suiveur
      * @return Etude
      */
-    public function setSuiveur(mgate\PersonneBundle\Entity\User $suiveur)
+    public function setSuiveur(\mgate\PersonneBundle\Entity\User $suiveur)
     {
         $this->suiveur = $suiveur;
     
@@ -699,28 +699,6 @@ class Etude
         return $this->pvis;
     }
 
-    /**
-     * Set fis
-     *
-     * @param string $fis
-     * @return Etude
-     */
-    public function setFis($fis)
-    {
-        $this->fis = $fis;
-    
-        return $this;
-    }
-
-    /**
-     * Get fis
-     *
-     * @return string 
-     */
-    public function getFis()
-    {
-        return $this->fis;
-    }
 
     /**
      * Set avs
@@ -792,45 +770,22 @@ class Etude
     }
 
     /**
-     * Set fss
-     *
-     * @param string $fss
-     * @return Etude
-     */
-    public function setFss($fss)
-    {
-        $this->fss = $fss;
-    
-        return $this;
-    }
-
-    /**
-     * Get fss
-     *
-     * @return string 
-     */
-    public function getFss()
-    {
-        return $this->fss;
-    }
-    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->aps = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ccs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fss = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->clientContacts = new ArrayCollection();
+        $this->candidatures = new ArrayCollection();
+        $this->aps = new ArrayCollection();
+        $this->ccs = new ArrayCollection();
+        $this->missions = new ArrayCollection();
+        $this->suivis = new ArrayCollection();
+        $this->pvis = new ArrayCollection();
+        $this->factures = new ArrayCollection();
+        $this->avs = new ArrayCollection();
+        $this->avMissions = new ArrayCollection();
+        $this->pvrs = new ArrayCollection();
+        $this->phases = new ArrayCollection();
     }
     
     /**
@@ -995,29 +950,6 @@ class Etude
     }
 
     /**
-     * Add fis
-     *
-     * @param mgate\SuiviBundle\Entity\Fi $fis
-     * @return Etude
-     */
-    public function addFi(\mgate\SuiviBundle\Entity\Fi $fis)
-    {
-        $this->fis[] = $fis;
-    
-        return $this;
-    }
-
-    /**
-     * Remove fis
-     *
-     * @param mgate\SuiviBundle\Entity\Fi $fis
-     */
-    public function removeFi(\mgate\SuiviBundle\Entity\Fi $fis)
-    {
-        $this->fis->removeElement($fis);
-    }
-
-    /**
      * Add avs
      *
      * @param mgate\SuiviBundle\Entity\Av $avs
@@ -1084,29 +1016,6 @@ class Etude
     public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
     {
         $this->pvrs->removeElement($pvrs);
-    }
-
-    /**
-     * Add fss
-     *
-     * @param mgate\SuiviBundle\Entity\Fs $fss
-     * @return Etude
-     */
-    public function addFs(\mgate\SuiviBundle\Entity\Fs $fss)
-    {
-        $this->fss[] = $fss;
-    
-        return $this;
-    }
-
-    /**
-     * Remove fss
-     *
-     * @param mgate\SuiviBundle\Entity\Fs $fss
-     */
-    public function removeFs(\mgate\SuiviBundle\Entity\Fs $fss)
-    {
-        $this->fss->removeElement($fss);
     }
 
     /**
