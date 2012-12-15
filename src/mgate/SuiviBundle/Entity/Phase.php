@@ -25,7 +25,6 @@ class Phase
     private $id;
     
     /**
-     * Gedmo\SortablePosition
      * @ORM\Column(name="position", type="integer", nullable=true)
      * todo enlever le nullable=true
      */
@@ -34,7 +33,6 @@ class Phase
     /**
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
-     * Gedmo\SortableGroup
      */
     protected $etude;
 

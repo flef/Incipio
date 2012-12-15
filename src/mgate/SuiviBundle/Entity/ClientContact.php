@@ -5,7 +5,6 @@ namespace mgate\SuiviBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use mgate\PersonneBundle\Entity\User;
-use \mgate\CommentBundle\Entity;
 
 /**
  * mgate\SuiviBundle\Entity\ClientContact
@@ -89,7 +88,7 @@ class ClientContact
      * @param mgate\PersonneBundle\Entity\User $faitPar
      * @return ClientContact
      */
-    public function setFaitPar(mgate\PersonneBundle\Entity\User $faitPar)
+    public function setFaitPar(\mgate\PersonneBundle\Entity\User $faitPar)
     {
         $this->faitPar = $faitPar;
     

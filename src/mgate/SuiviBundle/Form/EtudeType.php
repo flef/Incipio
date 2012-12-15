@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
+use mgate\PersonneBundle\Entity\User as User;
 
 class EtudeType extends AbstractType
 {
@@ -19,10 +20,17 @@ class EtudeType extends AbstractType
                        'property' => 'nom',
                        'property_path' => true,
                        'required' => true))
-            ->add('nom')
+            ->add('nom', 'text')
             //->add('dateCreation',  'date')
             ->add('description')
-            ->add('mandat', 'integer', array('data' => '5') );
+            ->add('mandat', 'integer', array('data' => '5') )
+            ->add('num', 'integer' )
+            ->add('suiveur', 'entity', 
+                array ('label' => 'Suiveur de projet',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
+                       'property' => 'username',
+                       'property_path' => true,
+                       'required' => false));
             
     }
 
