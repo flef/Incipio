@@ -27,6 +27,5 @@ _main:
     resource: routing.yml
     
 # ConsoleBundle
-_sf2gencdt:
-    resource: "@Sf2genConsoleBundle/Resources/config/routing.yml"
-    prefix:   /_sf2gencdt
+console:
+    resource: "@CoreSphereConsoleBundle/Resources/config/routing.yml"

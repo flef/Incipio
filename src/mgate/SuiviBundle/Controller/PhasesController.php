@@ -66,12 +66,15 @@ class PhasesController extends Controller
                                
                 $em->persist( $etude ); // persist $etude / $form->getData()
                 $em->flush();
-
+                
+                //Necessaire pour refraichir l ordre
+                $em->refresh($etude);
+                $form = $this->createForm(new PhasesType, $etude);
                 //return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
 
             }
         }
-
+        
         return $this->render('mgateSuiviBundle:Phase:phases.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,

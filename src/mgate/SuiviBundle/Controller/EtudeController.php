@@ -61,7 +61,6 @@ class EtudeController extends Controller
         
         $form        = $this->createForm(new EtudeType, $etude);
         $formHandler = new EtudeHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-        echo 'caca';
         
         if($formHandler->process())
         {

@@ -30,7 +30,7 @@ class Suivi
     protected $etude;
 
     /** , inversedBy="suivi", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $faitPar;
@@ -88,7 +88,7 @@ class Suivi
      * @param mgate\PersonneBundle\Entity\User $faitPar
      * @return Suivi
      */
-    public function setFaitPar(mgate\PersonneBundle\Entity\User $faitPar)
+    public function setFaitPar(\mgate\PersonneBundle\Entity\User $faitPar)
     {
         $this->faitPar = $faitPar;
     
