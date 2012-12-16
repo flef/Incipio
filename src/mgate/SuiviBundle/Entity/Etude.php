@@ -42,8 +42,8 @@ class Etude
     /**
      * @var \DateTime $dateCreation
      *
-     * @ORM\Column(name="dateCreation", type="datetime")
      * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="dateCreation", type="datetime")
      */
     private $dateCreation;
     
