@@ -26,7 +26,8 @@
         "friendsofsymfony/rest" : "dev-master",
         "friendsofsymfony/rest-bundle" : "dev-master",
         "ob/highcharts-bundle": "dev-master",
-        "stof/doctrine-extensions-bundle": "dev-master"
+        "stof/doctrine-extensions-bundle": "dev-master",
+        "genemu/form-bundle": "2.1.*"
     },
     "scripts": {
         "post-install-cmd": [
