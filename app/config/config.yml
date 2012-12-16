@@ -87,6 +87,14 @@ doctrine:
                         alias: GedmoTree # this one is optional and will default to the name set for the mapping
                         is_bundle: false
 
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            tree: true
+            timestampable: true # not needed: listeners are not enabled by default
+
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: %mailer_transport%
