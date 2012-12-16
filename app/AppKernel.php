@@ -28,7 +28,8 @@ class AppKernel extends Kernel
             new mgate\CommentBundle\mgateCommentBundle(),
             new mgate\SuiviBundle\mgateSuiviBundle(),
             new Ob\HighchartsBundle\ObHighchartsBundle(),
-            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Io\FormBundle\IoFormBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
