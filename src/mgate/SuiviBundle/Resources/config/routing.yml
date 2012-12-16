@@ -92,13 +92,13 @@ mgateSuivi_pvr_ajouter:
         
 mgateSuivi_phase_ajouter:
     pattern: /phase/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:phase:add}
+    defaults: {_controller: mgateSuiviBundle:Phase:add}
     requirements:
         id: \d+
         
 mgateSuivi_phases_modifier:
     pattern: /phases/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:phases:modifier}
+    defaults: {_controller: mgateSuiviBundle:Phases:modifier}
     requirements:
         id: \d+
 
