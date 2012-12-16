@@ -4,6 +4,7 @@ namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 
@@ -42,8 +43,17 @@ class Etude
      * @var \DateTime $dateCreation
      *
      * @ORM\Column(name="dateCreation", type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
     private $dateCreation;
+    
+        /**
+     * @var \DateTime $dateModification
+     *
+     * @ORM\Column(name="dateModification", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $dateModification;
 
     /**
      * @var integer $mandat
@@ -207,14 +217,6 @@ class Etude
     {
         return $this->id;
     }
-
-    /**
-      * @ORM\prePersist
-      */
-     public function prePersist()
-     {
-         $this->dateCreation = new \DateTime();
-     }
 
     /**
      * Set suiveur
@@ -1142,5 +1144,28 @@ class Etude
     public function getFactures()
     {
         return $this->factures;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Etude
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
     }
 }
