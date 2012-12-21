@@ -1,0 +1,75 @@
+
+cd D:/Data/Docs/Assos/M-GaTE/site/My-M-GaTE
+ D:
+
+ ne pas hesiter a supprimer des dossier de vendor
+installation de composer :
+curl -s https://getcomposer.org/installer | php
+php composer.phar self-update
+php composer.phar update
+php composer.phar install
+php -d memory_limit=-1 composer.phar update
+
+
+
+Supprimer le Cache
+php app/console cache:clear --env=prod
+php app/console cache:clear
+
+Pour installer un truc, ça fait des copies dans /web, a faire en tant que Admin
+php app/console assets:install --symlink web
+php app/console assets:install web                   pour jQuery
+
+Générateur de bundle / entity
+php app/console generate:bundle
+php app/console generate:doctrine:entity  (annotation)
+
+Génération / Mise à jour get et setter
+php app/console doctrine:generate:entities SdzBlogBundle:Article
+
+Mettre a jour la base de donnée
+php app/console doctrine:database:drop
+php app/console doctrine:database:create
+php app/console doctrine:schema:update --dump-sql
+php app/console doctrine:schema:update --force
+	
+Afficher nimporte quel type de variable	
+	var_dump() 
+
+	
+php app/console router:debug
+
+php app/console generate:doctrine:crud
+yml pour les route attention
+
+
+php app/console fos:user:promote
+
+service liste
+php app/console container:debug
+
+
+
+
+Create a new repository on the command line
+touch README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/stephanecollot/Symfony.git
+git push -u origin master
+
+Push an existing repository from the command line
+git remote add origin https://github.com/stephanecollot/Symfony.git
+git push -u origin master
+
+
+
+        
+        $logger = $this->get('logger');
+        $logger->info('I just got the logger !!!!!!!!!!!!!!!!!!!!!! ');
+        $logger->info(var_export($this->get('request'), true));
+ 
+
+
+
