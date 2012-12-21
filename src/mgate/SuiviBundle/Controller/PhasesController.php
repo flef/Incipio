@@ -8,6 +8,7 @@ use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
 use mgate\SuiviBundle\Form\PhasesType;
+use mgate\SuiviBundle\Entity\Phase;
 
 
 class PhasesController extends Controller
@@ -49,6 +50,15 @@ class PhasesController extends Controller
                
             if( $form->isValid() )
             {
+
+                if($this->get('request')->get('add'))
+                {
+                    $phaseNew = new Phase;
+                    $phaseNew->setPosition(count($etude->getPhases()));
+                    $etude->addPhase($phaseNew);
+                }
+
+
                 // filter $originalPhases to contain phases no longer present
                 foreach ($etude->getPhases() as $phase) {
                     foreach ($originalPhases as $key => $toDel) {
@@ -62,8 +72,8 @@ class PhasesController extends Controller
                 foreach ($originalPhases as $phase) {
                     $em->remove($phase); // on peut faire un persist sinon, cf doc collection form
                 }
+
                 
-                               
                 $em->persist( $etude ); // persist $etude / $form->getData()
                 $em->flush();
                 
