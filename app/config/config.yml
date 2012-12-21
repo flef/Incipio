@@ -135,13 +135,13 @@ sensio_framework_extra:
 # JMSSerializerBundle usefull for CommentBundle
 jms_serializer:
     handlers:
-        object_based: false
+        #object_based: false #commented for the new version
         datetime:
-            format: "Y-m-dTH:i:s" # ISO8601
-            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
-        array_collection: true
-        form_error: true
-        constraint_violation: true
+            default_format: DateTime::ISO8601
+            default_timezone: UTC
+        #array_collection: true #commented for the new version
+        #form_error: true #commented for the new version
+        #constraint_violation: true #commented for the new version
 
     property_naming:
         separator:  _
