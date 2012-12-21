@@ -15,6 +15,8 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
+<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+
     <h3>Phases</h3>
     <div class="boutonAdd"></div>
     <u1 class="phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
@@ -136,6 +138,9 @@
     }
     
 </script>
+
+
+<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
 
     <p><br /><input type="submit" value="Enregistrer les phases" /></p>
 </form>
