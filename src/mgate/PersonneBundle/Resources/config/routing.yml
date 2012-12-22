@@ -50,3 +50,27 @@ mgatePersonne_user_modifier:
     defaults: {_controller: mgatePersonneBundle:User:modifier}
     requirements:
         id: \d+
+        
+mgatePersonne_employe_homepage:
+    pattern:  /employe
+    defaults: { _controller: mgatePersonneBundle:Employe:index , page: 1 }
+    requirements:
+      page : \d*
+    
+mgatePersonne_employe_ajouter:
+    pattern: /employe/add/{prospect_id}
+    defaults: {_controller: mgatePersonneBundle:Employe:ajouter}
+    requirements:
+        prospect_id: \d+
+
+mgatePersonne_employe_voir:
+    pattern:   /employe/{id}
+    defaults:  { _controller: mgatePersonneBundle:Employe:voir}
+    requirements:
+        id:  \d+
+
+mgatePersonne_employe_modifier:
+    pattern: /employe/modifier/{id}
+    defaults: {_controller: mgatePersonneBundle:Employe:modifier}
+    requirements:
+        id: \d+

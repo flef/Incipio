@@ -14,13 +14,13 @@ class PhaseType extends AbstractType
     {
             $builder->add('position', 'hidden', array('attr' => array('class' => 'position')))
                     ->add('titre', 'text')
-                    ->add('objectif', 'textarea', array( 'label' => 'Objectif'))
-                    ->add('methodo', 'textarea', array( 'label' => 'Méthodologie'))
-                    ->add('validation', 'choice', array('choices' => Phase::getValidationChoice()))
-                    ->add('nbrJEH', 'integer', array( 'label' => 'Nombre de JEH'))
-                    ->add('prixJEH', 'integer', array( 'label' => 'Prix du JEH HT', 'data' => '300'))
-                    ->add('dateDebut', 'jquery_date', array( 'label' => 'Date de début', 'format' => 'd/MM/y'))
-                    ->add('delai', 'integer', array( 'label' => 'Durée en nombre de jours'));
+                    ->add('objectif', 'textarea', array( 'label'=>'Objectif', 'required'=>false))
+                    ->add('methodo', 'textarea', array( 'label'=>'Méthodologie', 'required'=>false))
+                    ->add('validation', 'choice', array('choices'=>Phase::getValidationChoice(),'required'=>false))
+                    ->add('nbrJEH', 'integer', array( 'label'=>'Nombre de JEH', 'required'=>false))
+                    ->add('prixJEH', 'money', array( 'label'=>'Prix du JEH HT', 'required'=>false))
+                    ->add('dateDebut', 'genemu_jquerydate', array('label'=>'Date de début', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
+                    ->add('delai', 'integer', array( 'label'=>'Durée en nombre de jours', 'required'=>false));
   
     }
 

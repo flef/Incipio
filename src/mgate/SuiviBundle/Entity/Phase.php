@@ -102,6 +102,7 @@ class Phase
         $this->voteCount = 0;
         $this->createdAt = new \DateTime('now');
         $this->isEnabled = false;
+        $this->prixJEH = 300;
     }
 
     /**

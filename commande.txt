@@ -25,7 +25,7 @@ php app/console generate:bundle
 php app/console generate:doctrine:entity  (annotation)
 
 Génération / Mise à jour get et setter
-php app/console doctrine:generate:entities SdzBlogBundle:Article
+php app/console doctrine:generate:entities mgatePersonneBundle:Prospect
 
 Mettre a jour la base de donnée
 php app/console doctrine:database:drop
