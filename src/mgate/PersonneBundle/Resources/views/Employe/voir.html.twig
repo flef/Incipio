@@ -1,0 +1,29 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un user - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+	<h2>{{ user.id }}</h2>
+	<i>Par {{ user.nom }}</i>
+
+	<div>
+		
+	</div>
+
+	<p>
+		<a href="{{ path('mgatePersonne_user_homepage') }}">
+			
+			Retour à la liste
+		</a>
+                <a href="{{ path('mgatePersonne_user_modifier', {'id': user.id}) }}">
+			
+			Modifier le user
+		</a>
+		
+	
+	</p>
+
+{% endblock %}

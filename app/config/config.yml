@@ -21,15 +21,18 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-    form:
-        resources:
-            - 'IoFormBundle:Form:fields.html.twig'
+#    form:
+#        resources:
+#            - 'IoFormBundle:Form:fields.html.twig'
 
 
-io_form:
-    jquery_tinymce:
-      source: /bundles/mgatesuivi/tiny_mce/jquery.tinymce.js
-      theme:  simple
+#io_form:
+#    jquery_tinymce:
+#      source: /bundles/mgatesuivi/tiny_mce/jquery.tinymce.js
+#      theme:  simple
+
+genemu_form:
+    date: ~
 
 # Assetic Configuration
 assetic:

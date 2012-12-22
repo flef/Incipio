@@ -45,47 +45,17 @@ class Prospect
     /**
      * @var string $entite
      *
-     * @ORM\Column(name="entite", type="string", length=255)
+     * @ORM\Column(name="entite", type="string", length=255, nullable=true)
      */
     private $entite;
     
     /**
      * @var string $adresse
      *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
     
-    
-    /**
-     * @var string $signataire_titre
-     *
-     * @ORM\Column(name="signataire_titre", type="string", length=255)
-     */
-    private $signataire_titre;
-    
-    /**
-     * @var string $signataire_fonction
-     *
-     * @ORM\Column(name="signataire_fonction", type="string", length=255)
-     */
-    private $signataire_fonction;
-    
-    /**
-     * @var string $signataire_nom
-     *
-     * @ORM\Column(name="signataire_nom", type="string", length=255)
-     */
-    private $signataire_nom;
-    
-    /**
-     * @var string $signataire_prenom
-     *
-     * @ORM\Column(name="signataire_prenom", type="string", length=255)
-     */
-    private $signataire_prenom;
-
-
     /**
      * Get id
      *
@@ -227,97 +197,5 @@ class Prospect
     public function getAdresse()
     {
         return $this->adresse;
-    }
-
-    /**
-     * Set signataire_titre
-     *
-     * @param string $signataireTitre
-     * @return Prospect
-     */
-    public function setSignataireTitre($signataireTitre)
-    {
-        $this->signataire_titre = $signataireTitre;
-    
-        return $this;
-    }
-
-    /**
-     * Get signataire_titre
-     *
-     * @return string 
-     */
-    public function getSignataireTitre()
-    {
-        return $this->signataire_titre;
-    }
-
-    /**
-     * Set signataire_fonction
-     *
-     * @param string $signataireFonction
-     * @return Prospect
-     */
-    public function setSignataireFonction($signataireFonction)
-    {
-        $this->signataire_fonction = $signataireFonction;
-    
-        return $this;
-    }
-
-    /**
-     * Get signataire_fonction
-     *
-     * @return string 
-     */
-    public function getSignataireFonction()
-    {
-        return $this->signataire_fonction;
-    }
-
-    /**
-     * Set signataire_nom
-     *
-     * @param string $signataireNom
-     * @return Prospect
-     */
-    public function setSignataireNom($signataireNom)
-    {
-        $this->signataire_nom = $signataireNom;
-    
-        return $this;
-    }
-
-    /**
-     * Get signataire_nom
-     *
-     * @return string 
-     */
-    public function getSignataireNom()
-    {
-        return $this->signataire_nom;
-    }
-
-    /**
-     * Set signataire_prenom
-     *
-     * @param string $signatairePrenom
-     * @return Prospect
-     */
-    public function setSignatairePrenom($signatairePrenom)
-    {
-        $this->signataire_prenom = $signatairePrenom;
-    
-        return $this;
-    }
-
-    /**
-     * Get signataire_prenom
-     *
-     * @return string 
-     */
-    public function getSignatairePrenom()
-    {
-        return $this->signataire_prenom;
     }
 }
