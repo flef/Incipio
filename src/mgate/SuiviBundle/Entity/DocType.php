@@ -347,10 +347,10 @@ class DocType
     /**
      * Set signataire2
      *
-     * @param \mgate\PersonneBundle\Entity\User $signataire2
+     * @param \mgate\PersonneBundle\Entity\Employe $signataire2
      * @return DocType
      */
-    public function setSignataire2(\mgate\PersonneBundle\Entity\User $signataire2)
+    public function setSignataire2(\mgate\PersonneBundle\Entity\Employe $signataire2)
     {
         $this->signataire2 = $signataire2;
     
@@ -360,7 +360,7 @@ class DocType
     /**
      * Get signataire2
      *
-     * @return \mgate\PersonneBundle\Entity\User 
+     * @return \mgate\PersonneBundle\Entity\Employe 
      */
     public function getSignataire2()
     {

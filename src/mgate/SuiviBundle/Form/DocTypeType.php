@@ -12,7 +12,6 @@ class DocTypeType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-            //->add('dateCreation',  'date')
             ->add('version', 'integer', array('label'=>'Version du document'))
             ->add('signataire1', 'entity', 
                 array ('label' => 'Signataire M-GaTE',
