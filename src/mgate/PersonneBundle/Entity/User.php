@@ -23,13 +23,6 @@ class User extends BaseUser
     protected $id;
     
     /**
-     * @var string $identifiant
-     *
-     * @ORM\Column(name="identifiant", type="string", length=255, nullable=true)
-     */
-    private $identifiant;
-    
-    /**
      * @var string $prenom
      *
      * @ORM\Column(name="prenom", type="string", length=255)
@@ -42,6 +35,20 @@ class User extends BaseUser
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
+    
+    /**
+     * @var string $sexe
+     *
+     * @ORM\Column(name="sexe", type="string", length=255)
+     */
+    private $sexe;
+    
+    /**
+     * @var string $poste
+     *
+     * @ORM\Column(name="poste", type="string", length=255)
+     */
+    private $poste;
 
     /**
      * @var string $mobile
@@ -221,4 +228,50 @@ class User extends BaseUser
     }
 
 
+
+    /**
+     * Set sexe
+     *
+     * @param string $sexe
+     * @return User
+     */
+    public function setSexe($sexe)
+    {
+        $this->sexe = $sexe;
+    
+        return $this;
+    }
+
+    /**
+     * Get sexe
+     *
+     * @return string 
+     */
+    public function getSexe()
+    {
+        return $this->sexe;
+    }
+
+    /**
+     * Set poste
+     *
+     * @param string $poste
+     * @return User
+     */
+    public function setPoste($poste)
+    {
+        $this->poste = $poste;
+    
+        return $this;
+    }
+
+    /**
+     * Get poste
+     *
+     * @return string 
+     */
+    public function getPoste()
+    {
+        return $this->poste;
+    }
 }

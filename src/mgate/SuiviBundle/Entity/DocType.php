@@ -48,6 +48,25 @@ class DocType
      * @ORM\Column(name="spt1", type="boolean",nullable=true)
      */
     private $spt1;
+    
+    /**
+     * @var boolean $spt2
+     *
+     * @ORM\Column(name="spt2", type="boolean",nullable=true)
+     */
+    private $spt2;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $signataire1;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Employe")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $signataire2;
 
     /**
      * @var \DateTime $dateSignature
@@ -69,15 +88,9 @@ class DocType
      * @ORM\Column(name="receptionne", type="boolean",nullable=true)
      */
     private $receptionne;
-
-    /**
-     * @var boolean $spt2
-     *
-     * @ORM\Column(name="spt2", type="boolean",nullable=true)
-     */
-    private $spt2;
+   
     
-
+    
     /**
      * Set version
      *
@@ -306,5 +319,51 @@ class DocType
     public function getSpt2()
     {
         return $this->spt2;
+    }
+
+    /**
+     * Set signataire1
+     *
+     * @param \mgate\PersonneBundle\Entity\User $signataire1
+     * @return DocType
+     */
+    public function setSignataire1(\mgate\PersonneBundle\Entity\User $signataire1)
+    {
+        $this->signataire1 = $signataire1;
+    
+        return $this;
+    }
+
+    /**
+     * Get signataire1
+     *
+     * @return \mgate\PersonneBundle\Entity\User 
+     */
+    public function getSignataire1()
+    {
+        return $this->signataire1;
+    }
+
+    /**
+     * Set signataire2
+     *
+     * @param \mgate\PersonneBundle\Entity\User $signataire2
+     * @return DocType
+     */
+    public function setSignataire2(\mgate\PersonneBundle\Entity\User $signataire2)
+    {
+        $this->signataire2 = $signataire2;
+    
+        return $this;
+    }
+
+    /**
+     * Get signataire2
+     *
+     * @return \mgate\PersonneBundle\Entity\User 
+     */
+    public function getSignataire2()
+    {
+        return $this->signataire2;
     }
 }

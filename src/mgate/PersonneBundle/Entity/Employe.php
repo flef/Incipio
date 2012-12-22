@@ -42,25 +42,39 @@ class Employe
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
+    
+    /**
+     * @var string $poste
+     *
+     * @ORM\Column(name="$poste", type="string", length=255)
+     */
+    private $poste;
+    
+    /**
+     * @var string $sexe
+     *
+     * @ORM\Column(name="sexe", type="string", length=255, nullable=true)
+     */
+    private $sexe;
 
     /**
      * @var string $mobile
      *
-     * @ORM\Column(name="mobile", type="string", length=255)
+     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
      */
     private $mobile;
 
     /**
      * @var string $fix
      *
-     * @ORM\Column(name="fix", type="string", length=255)
+     * @ORM\Column(name="fix", type="string", length=255, nullable=true)
      */
     private $fix;
 
     /**
      * @var string $email
      *
-     * @ORM\Column(name="email", type="string", length=255)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      * @Assert\Email()
      */
     private $email;
@@ -68,7 +82,7 @@ class Employe
     /**
      * @var string $adresse
      *
-     * @ORM\Column(name="adresse", type="string", length=255)
+     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
 
@@ -243,5 +257,74 @@ class Employe
     public function getProspect()
     {
         return $this->prospect;
+    }
+
+    /**
+     * Set fonction
+     *
+     * @param string $fonction
+     * @return Employe
+     */
+    public function setFonction($fonction)
+    {
+        $this->fonction = $fonction;
+    
+        return $this;
+    }
+
+    /**
+     * Get fonction
+     *
+     * @return string 
+     */
+    public function getFonction()
+    {
+        return $this->fonction;
+    }
+
+    /**
+     * Set sexe
+     *
+     * @param string $sexe
+     * @return Employe
+     */
+    public function setSexe($sexe)
+    {
+        $this->sexe = $sexe;
+    
+        return $this;
+    }
+
+    /**
+     * Get sexe
+     *
+     * @return string 
+     */
+    public function getSexe()
+    {
+        return $this->sexe;
+    }
+
+    /**
+     * Set poste
+     *
+     * @param string $poste
+     * @return Employe
+     */
+    public function setPoste($poste)
+    {
+        $this->poste = $poste;
+    
+        return $this;
+    }
+
+    /**
+     * Get poste
+     *
+     * @return string 
+     */
+    public function getPoste()
+    {
+        return $this->poste;
     }
 }

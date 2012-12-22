@@ -7,30 +7,31 @@ use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form\Type\SexeType as SexeType;
 
 
-class UserType extends AbstractType
+class EmployeType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
                 ->add('prenom')
                 ->add('nom')
-                ->add('poste')
+                ->add('poste', 'text', array('required'=>false))
                 ->add('sexe', new SexeType())
-                ->add('username')
-                ->add('password', 'password')
-                ->add('email', 'email');
+                ->add('email', 'email', array('required'=>false))
+                ->add('mobile', 'text', array('required'=>false))
+                ->add('fix', 'text', array('required'=>false))
+                ->add('adresse', 'textarea', array('required'=>false));
             
     }
 
     public function getName()
     {
-        return 'alex_suivibundle_usertype';
+        return 'mgate_personnebundle_employetype';
     }
 
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'mgate\PersonneBundle\Entity\User',
+            'data_class' => 'mgate\PersonneBundle\Entity\Employe',
         );
     }
 }

@@ -13,20 +13,9 @@ class ProspectType extends AbstractType
     {
 	    $builder
             //->add('thread', new ThreadType) // délicat 
-            ->add('nom')
-            ->add('entite')
-            ->add('adresse')
-            ->add('signataire_titre', 'choice', array(
-                'choices' => array(
-                    'M.' => 'Madame',
-                    'Mme.' => 'Monsieur'
-                ),
-                'required'    => false,
-                'empty_value' => 'Choisir le titre',
-                'empty_data'  => null))
-            ->add('signataire_fonction')
-            ->add('signataire_nom')
-            ->add('signataire_prenom');
+            ->add('nom', 'text')
+            ->add('entite', 'text', array('required'=>false))
+            ->add('adresse', 'text', array('required'=>false));
             
     }
 
