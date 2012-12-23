@@ -39,7 +39,7 @@ class SuiviController extends Controller
             return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $suivi->getId())) );
         }
 
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:Suivi:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
         

@@ -1,0 +1,9 @@
+{# Formulaire d'ajout d'une étude #}
+
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer le PVR"/>
+        <input type="submit" value="Enregistrer le PVR et passer à la Facture de solde" name="fs" id="fs"/>
+</form>
