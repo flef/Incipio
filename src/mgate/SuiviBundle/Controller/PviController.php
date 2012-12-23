@@ -24,43 +24,7 @@ class PviController extends Controller
          
     }  
         
-    public function addAction()
-    {
-        $pvi = new Pvi;
-
-        $form        = $this->createForm(new PviType, $pvi);
-        $formHandler = new PviHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
-        if($formHandler->process())
-        {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $pvi->getId())) );
-        }
-
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
-            'form' => $form->createView(),
-        ));
-        
-    }
-  
-    public function voirAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
-        
-    }
-    
-    public function modifierAction($id)
+    public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -69,19 +33,87 @@ class PviController extends Controller
         {
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
         }
-
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
+        
+        
+        $pvi = new Pvi;
+        $pvi->setEtude($etude);
+        $form        = $this->createForm(new PviType, $pvi);
+        $formHandler = new PviHandler($form, $this->get('request'), $em);
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            if($this->get('request')->get('pvr'))
+            {
+               
+                return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $etude->getId())));
+            }
+            else
+            {
+                return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $etude->getId())) );
+            }
         }
 
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Pvi:ajouter.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $etude,
+        ));
+        
+        
+    }
+  
+    public function voirAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('mgateSuiviBundle:Pvi')->find($id); // Ligne qui posse problème
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Cc entity.');
+        }
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('mgateSuiviBundle:Pvi:voir.html.twig', array(
+            'pvi'      => $entity,
+            /*'delete_form' => $deleteForm->createView(),  */      ));
+        
+        
+    }
+    
+    public function modifierAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $pvi = $em->getRepository('mgate\SuiviBundle\Entity\Pvi')->find($id) )
+        {
+            throw $this->createNotFoundException('Pvi[id='.$id.'] inexistant');
+        }
+
+        $form        = $this->createForm(new PviType, $pvi);
+        
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                if($this->get('request')->get('pvr'))
+                {
+               
+                    return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $pvi->getId())));
+                }
+                else
+                {
+                    return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $pvi->getId())) );
+                }
+                
+               
+            }
+                
+        }
+
+        return $this->render('mgateSuiviBundle:Pvi:modifier.html.twig', array(
+            'form' => $form->createView(),
+            'pvi' => $pvi,
         ));
     }
 }

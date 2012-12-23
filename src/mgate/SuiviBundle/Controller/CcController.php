@@ -45,10 +45,10 @@ class CcController extends Controller
         
         if($formHandler->process())
         {
-            if($this->get('request')->get('next'))
+            if($this->get('request')->get('pvi'))
             {
                
-                return $this->redirect($this->generateUrl('mgateSuivi_suivi_ajouter',array('id' => $etude->getId())));
+                return $this->redirect($this->generateUrl('mgateSuivi_pvi_ajouter',array('id' => $etude->getId())));
             }
             else
             {
