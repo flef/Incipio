@@ -86,12 +86,20 @@ class EmployeController extends Controller
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new EmployeType, $employe);
-        $formHandler = new UserHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
+        
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgatePersonne_user_voir', array('id' => $employe->getId())) );
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                $em->persist($employe);    
+                $em->flush();
+
+                return $this->redirect( $this->generateUrl('mgatePersonne_user_voir', array('id' => $employe->getId())) );
+            }
         }
+
 
         return $this->render('mgatePersonneBundle:Employe:modifier.html.twig', array(
             'form' => $form->createView(),

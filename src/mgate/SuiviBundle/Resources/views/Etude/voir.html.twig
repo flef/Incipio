@@ -12,20 +12,20 @@
     <li>Suiveur: {{etude.suiveur.username| default("Pas de suiveur!")}}</li>
     <li>Description de l'étude: <br />{{etude.description }}</li>
     <br>
-    <h3>Avant-Projet</h3>
-    {% for ap in etude.aps %}
-        <li>Version {{ap.id}}</li>
-    {% endfor %}
-    <h3>Phases</h3>
+<p>
+    <h3>Phases:</h3>
     {% for phase in etude.phases %}
-        <li>Phase n°{{phase.position}}: {{phase.titre}}</li>
-        <li>{{phase.validation}}</li>
+        <li>Phase n°{{phase.position+1}}: {{phase.titre}}</li>
     {% endfor %}
     <a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les phases</a>
-    <div>
-
-    </div>
-
+ </p>
+ <p>
+    <h3>Avant-Projet:</h3>
+    {% for ap in etude.aps %}
+        <li><a href="{{ path('mgateSuivi_ap_modifier', {'id': ap.id}) }}">Version {{ap.id}}</a></li>
+    {% endfor %}
+    <a href="{{ path('mgateSuivi_ap_ajouter', {'id': etude.id}) }}">Ajouter un Avant-Projet</a>
+</p>
     <p><br />
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
         <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>

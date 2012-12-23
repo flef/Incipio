@@ -1,7 +1,7 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Modifier une étude - {{ parent() }}
+	Modifier un Avant-Projet - {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -18,14 +18,13 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         
         
-    <h2>Modifier un article</h2>
+    <h2>Modifier un Avant-Projet</h2>
 
-    {% include "mgateSuiviBundle:Etude:formulaire.html.twig" %} 
+    {% include "mgateSuiviBundle:Ap:formulaire.html.twig" %} 
 
-    <p>Modification d'un Avant-Projet</p>
 
     <p>
-        <a href="{{ path('mgateSuivi_ap_voir', {'id': etude.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_ap_voir', {'id': ap.id}) }}" >Retour</a>
     </p>
 
 {% endblock %}

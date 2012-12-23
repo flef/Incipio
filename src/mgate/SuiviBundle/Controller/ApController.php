@@ -65,16 +65,16 @@ class ApController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Ap')->find($id); // Ligne qui posse problème
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('Unable to find Ap entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
+        return $this->render('mgateSuiviBundle:Ap:voir.html.twig', array(
+            'ap'      => $entity,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -83,24 +83,27 @@ class ApController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $ap = $em->getRepository('mgate\SuiviBundle\Entity\Ap')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Ap[id='.$id.'] inexistant');
         }
 
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
+        $form        = $this->createForm(new ApType, $ap);
+        
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $ap->getId())) );
+            }
+                
         }
 
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Ap:modifier.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $etude,
+            'ap' => $ap,
         ));
     }
 }
