@@ -56,7 +56,7 @@
  </p>
  <p>
     <h3>Avenants:</h3>
-    {% for avenant in etude.avs %}
+    {% for av in etude.avs %}
         <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
     {% endfor %}
     <a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a>
