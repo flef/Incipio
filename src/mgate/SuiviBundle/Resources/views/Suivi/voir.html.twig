@@ -1,0 +1,23 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Suivi - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Convention Client n°{{ suivi.id }}</h2>
+    
+    <i>Version {{suivi.version}}</i>
+
+    <div>
+
+    </div>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_suivi_modifier', {'id': suivi.id}) }}">Modifier le Suivi</a>
+	
+    </p>
+
+{% endblock %}

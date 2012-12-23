@@ -33,6 +33,20 @@
     {% endfor %}
     <a href="{{ path('mgateSuivi_cc_ajouter', {'id': etude.id}) }}">Ajouter une Convention Client</a>
  </p>
+ <p>
+    <h3>PVI:</h3>
+    {% for pvi in etude.pvis %}
+        <li><a href="{{ path('mgateSuivi_pvi_modifier', {'id': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
+    {% endfor %}
+    <a href="{{ path('mgateSuivi_pvi_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a>
+ </p>
+  <p>
+    <h3>PVR:</h3>
+    {% for pvr in etude.pvrs %}
+        <li><a href="{{ path('mgateSuivi_pvi_modifier', {'id': pvr.id}) }}">PVR n°{{pvr.id}}</a></li>
+    {% endfor %}
+    <a href="{{ path('mgateSuivi_pvr_ajouter', {'id': etude.id}) }}">Ajouter un PVR</a>
+ </p>
     <p><br />
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
         <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
