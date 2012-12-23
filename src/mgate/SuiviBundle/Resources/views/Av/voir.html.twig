@@ -1,0 +1,23 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Avenant - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Avenant n°{{ av.id }}</h2>
+    
+    <i>Version {{av.version}}</i>
+
+    <div>
+
+    </div>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Modifier l'Avenant</a>
+	
+    </p>
+
+{% endblock %}

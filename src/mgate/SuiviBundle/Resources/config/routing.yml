@@ -108,6 +108,19 @@ mgateSuivi_av_ajouter:
     requirements:
         id: \d+
         
+        
+mgateSuivi_av_modifier:
+    pattern: /av/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Av:modifier}
+    requirements:
+        id: \d+
+        
+mgateSuivi_av_voir:
+    pattern: /av/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Av:voir}
+    requirements:
+        id: \d+
+        
 mgateSuivi_avmission_ajouter:
     pattern: /avmission/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:AvMission:add}
@@ -117,6 +130,18 @@ mgateSuivi_avmission_ajouter:
 mgateSuivi_facture_ajouter:
     pattern: /facture/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Facture:add}
+    requirements:
+        id: \d+
+        
+mgateSuivi_facture_modifier:
+    pattern: /facture/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Facture:modifier}
+    requirements:
+        id: \d+
+        
+mgateSuivi_facture_voir:
+    pattern: /facture/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Facture:voir}
     requirements:
         id: \d+
 

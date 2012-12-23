@@ -27,22 +27,32 @@ class FactureController extends Controller
          
     }  
     
-    public function addAction()
+    public function addAction($id)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+        }
+        
+        
         $facture = new Facture;
-
+        $facture->setEtude($etude);
         $form        = $this->createForm(new FactureType, $facture);
-        $formHandler = new FactureHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
+        $formHandler = new FactureHandler($form, $this->get('request'), $em);
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $facture->getId())) );
+           
+            return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $etude->getId())) );
+            
         }
 
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:Facture:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
-        
     }
     
     public function addPvrAction()
@@ -65,18 +75,18 @@ class FactureController extends Controller
 
     public function voirAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+       $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problème
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('Unable to find Cc entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
+        return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
+            'facture'      => $entity,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -85,24 +95,27 @@ class FactureController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Cc[id='.$id.'] inexistant');
         }
 
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
+        $form        = $this->createForm(new FactureType, $facture);
+        
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+            }
+                
         }
 
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Facture:modifier.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $etude,
+            'facture' => $facture,
         ));
     }
 }
