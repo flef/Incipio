@@ -96,7 +96,7 @@ class EmployeController extends Controller
                 $em->persist($employe);    
                 $em->flush();
 
-                return $this->redirect( $this->generateUrl('mgatePersonne_user_voir', array('id' => $employe->getId())) );
+                return $this->redirect( $this->generateUrl('mgatePersonne_employe_voir', array('id' => $employe->getId())) );
             }
         }
 
