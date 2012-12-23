@@ -1,0 +1,23 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'une Convention Client - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Convention Client n°{{ cc.id }}</h2>
+    
+    <i>Version {{cc.version}}</i>
+
+    <div>
+
+    </div>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_cc_modifier', {'id': cc.id}) }}">Modifier la Convention Client</a>
+	
+    </p>
+
+{% endblock %}
