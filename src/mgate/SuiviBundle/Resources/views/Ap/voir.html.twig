@@ -6,33 +6,18 @@
 
 {% block content_bundle %}
 
-    <h2>Avant-Projet n°{{ etude.id }}</h2>
-    <i>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</i>
-    <i>Client {{ etude.prospect.nom }} </i>
-    <i>Description de l'étude: {{etude.description }}</i>
-    <br>
-    <h2>Avant-Projet</h2>
+    <h2>Avant-Projet n°{{ ap.id }}</h2>
     
-    {% for ap in etude.aps %}
-        <i>Version {{ap.id}}</i>
-    {% endfor %}
+    <i>Version {{ap.version}}</i>
 
     <div>
 
     </div>
 
     <p>
-        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a>
-        <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
-    
- {#  
-        <li>
-            <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
-                {{ form_widget(delete_form) }}
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-#}	
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_ap_modifier', {'id': ap.id}) }}">Modifier l'Avant-Projet</a>
+	
     </p>
 
 {% endblock %}

@@ -6,25 +6,33 @@
 
 {% block content_bundle %}
 
-	<h2>{{ prospect.id }}</h2>
-	<i>Par {{ prospect.nom }}</i>
+	<h2>{{ prospect.nom }}</h2>
+	<i>{{ prospect.entite }}</i>
 
-	<div>
-		
-	</div>
+        <p>Adresse :<br/>{{ prospect.adresse }}</p>
+ <p>
+        <h3>Employes:</h3>
+        {% for employe in prospect.employes %}
+            <li>
+            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.sexe }} {{ employe.prenom }} {{ employe.nom }} - {{ employe.poste }}</a></h4>
+            Mobile: {{ employe.mobile }}<br />
+            Fix: {{ employe.fix }}<br />
+            Email: {{ employe.email }}<br />
+            Adresse: {{ employe.adresse }}<br />
+            Mobile: {{ employe.mobile }}<br />
+            </li>
+            <br />
+        {% else %}
+            <li>L'entreprise n'a pas encore d'employés. Attention les documents ont besoin au moins du signataire</li>
+        {% endfor %}
+        <a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id': prospect.id}) }}">Ajouter un employé</a>
+</p>
 
-	<p>
-		<a href="{{ path('mgatePersonne_prospect_homepage') }}">
-			
-			Retour à la liste
-		</a>
-                <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">
-			
-			Modifier le prospect
-		</a>
-		
-	
-	</p>
+<p>     
+    <a href="{{ path('mgatePersonne_prospect_homepage') }}">Retour à la liste</a>
+    <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">Modifier le prospect</a>
+</p>
+
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': prospect.thread} %}
 
