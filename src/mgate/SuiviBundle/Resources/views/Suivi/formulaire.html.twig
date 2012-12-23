@@ -1,0 +1,9 @@
+{# Formulaire d'ajout d'une cc #}
+
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer le suivi"/>
+        <input type="submit" value="Enregistrer la suivi et passer à la suite" name="suivi" id="suivi"/>
+</form>

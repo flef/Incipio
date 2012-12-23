@@ -89,6 +89,18 @@ mgateSuivi_pvi_ajouter:
     requirements:
         id: \d+
         
+mgateSuivi_pvi_modifier:
+    pattern: /pvi/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Pvi:modifier}
+    requirements:
+        id: \d+
+        
+mgateSuivi_pvi_voir:
+    pattern: /pvi/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Pvi:voir}
+    requirements:
+        id: \d+
+        
         
 mgateSuivi_av_ajouter:
     pattern: /av/ajouter/{id}
@@ -111,6 +123,18 @@ mgateSuivi_facture_ajouter:
 mgateSuivi_pvr_ajouter:
     pattern: /pvr/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Pvr:add}
+    requirements:
+        id: \d+
+        
+mgateSuivi_pvr_modifier:
+    pattern: /pvr/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Pvr:modifier}
+    requirements:
+        id: \d+
+        
+mgateSuivi_pvr_voir:
+    pattern: /pvr/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Pvr:voir}
     requirements:
         id: \d+
         
