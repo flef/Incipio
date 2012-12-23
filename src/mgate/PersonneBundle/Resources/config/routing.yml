@@ -15,7 +15,7 @@ mgatePersonne_prospect_ajouter:
         id: \d+
 
 mgatePersonne_prospect_voir:
-    pattern:   /prospect/{id}
+    pattern:   /prospect/voir/{id}
     defaults:  { _controller: mgatePersonneBundle:Prospect:voir}
     requirements:
         id:  \d+

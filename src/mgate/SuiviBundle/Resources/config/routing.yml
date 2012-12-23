@@ -34,6 +34,18 @@ mgateSuivi_ap_ajouter:
     requirements:
         id: \d+
         
+mgateSuivi_ap_modifier:
+    pattern: /ap/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Ap:modifier}
+    requirements:
+        id: \d+        
+        
+mgateSuivi_ap_voir:
+    pattern: /ap/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Ap:voir}
+    requirements:
+        id: \d+    
+        
 mgateSuivi_cc_ajouter:
     pattern: /cc/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Cc:add}
