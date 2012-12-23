@@ -47,6 +47,21 @@
     {% endfor %}
     <a href="{{ path('mgateSuivi_pvr_ajouter', {'id': etude.id}) }}">Ajouter un PVR</a>
  </p>
+ <p>
+    <h3>Factures:</h3>
+    {% for facture in etude.factures %}
+        <li><a href="{{ path('mgateSuivi_pvi_modifier', {'id': facture.id}) }}">Facture n°{{facture.id}}</a></li>
+    {% endfor %}
+    <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture</a>
+ </p>
+ <p>
+    <h3>Avenants:</h3>
+    {% for avenant in etude.avs %}
+        <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+    {% endfor %}
+    <a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a>
+ </p>
+ 
     <p><br />
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
         <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
