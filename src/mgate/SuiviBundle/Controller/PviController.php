@@ -99,10 +99,12 @@ class PviController extends Controller
                 if($this->get('request')->get('pvr'))
                 {
                
+                    $em->flush();
                     return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $pvi->getId())));
                 }
                 else
                 {
+                    $em->flush();
                     return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $pvi->getId())) );
                 }
                 

@@ -12,8 +12,10 @@ use mgate\SuiviBundle\Form\SuiviType;
 use mgate\SuiviBundle\Form\SuiviHandler;
 
 use mgate\SuiviBundle\Form\FactureHandler;
-use mgate\SuiviBundle\Entity\Pvr;
 
+
+use mgate\SuiviBundle\Entity\Pvr;
+use mgate\SuiviBundle\Form\PvrHandler;
 use mgate\SuiviBundle\Form\PvrType;
 
 class PvrController extends Controller
@@ -85,31 +87,36 @@ class PvrController extends Controller
     
     public function modifierAction($id)
     {
-                $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $pvr = $em->getRepository('mgate\SuiviBundle\Entity\Pvr')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Pvr[id='.$id.'] inexistant');
         }
-        
-        
-        $pvr = new Pvr;
-        $pvr->setEtude($etude);
+
         $form        = $this->createForm(new PvrType, $pvr);
-        $formHandler = new PvrHandler($form, $this->get('request'), $em);
         
-        if($formHandler->process())
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            if($this->get('request')->get('fs'))
-            {
+            $form->bindRequest($this->get('request'));
                
-                return $this->redirect($this->generateUrl('mgateSuivi_fs_ajouter',array('id' => $etude->getId())));
-            }
-            else
+            if( $form->isValid() )
             {
-                return $this->redirect( $this->generateUrl('mgateSuivi_pvr_voir', array('id' => $etude->getId())) );
+                if($this->get('request')->get('fs'))
+                {
+               
+                    $em->flush();
+                    return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $pvr->getId())));
+                }
+                else
+                {
+                    $em->flush();
+                    return $this->redirect( $this->generateUrl('mgateSuivi_pvr_voir', array('id' => $pvr->getId())) );
+                }
+                
+               
             }
+                
         }
 
         return $this->render('mgateSuiviBundle:Pvr:modifier.html.twig', array(
