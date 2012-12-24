@@ -18,25 +18,36 @@ class AvController extends Controller
 
         $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
 
-        return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
+        return $this->render('mgateSuiviBundle:Av:index.html.twig', array(
             'etudes' => $entities,
         ));
          
     }  
     
-    public function addAction()
+    public function addAction($id)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+        }
+        
+        
         $av = new Av;
-
+        $av->setEtude($etude);
         $form        = $this->createForm(new AvType, $av);
-        $formHandler = new AvHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
+        $formHandler = new AvHandler($form, $this->get('request'), $em);
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $av->getId())) );
+           
+            return $this->redirect( $this->generateUrl('mgateSuivi_av_voir', array('id' => $av->getId())) );
+            
         }
 
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:Av:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
         
@@ -46,16 +57,16 @@ class AvController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Av')->find($id); // Ligne qui posse problème
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('Unable to find Cc entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
+        return $this->render('mgateSuiviBundle:Av:voir.html.twig', array(
+            'av'      => $entity,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -64,24 +75,28 @@ class AvController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Av[id='.$id.'] inexistant');
         }
 
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
+        $form        = $this->createForm(new AvType, $av);
+        
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_av_voir', array('id' => $av->getId())) );
+            }
+                
         }
 
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Av:modifier.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $etude,
+            'av' => $av,
         ));
     }
 }

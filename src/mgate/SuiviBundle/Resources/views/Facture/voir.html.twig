@@ -1,14 +1,14 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Affichage de l'état de l'étude - {{ parent() }}
+	Affichage d'une Facture - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    <h2>Etat de l'étude n°{{ suivi.id }}</h2>
+    <h2>Facture n°{{ facture.id }}</h2>
     
-    
+    <i>Version {{facture.version}}</i>
 
     <div>
 
@@ -16,7 +16,7 @@
 
     <p>
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
-        <a href="{{ path('mgateSuivi_suivi_modifier', {'id': suivi.id}) }}">Modifier l'état de l'étude</a>
+        <a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Modifier la Facture</a>
 	
     </p>
 
