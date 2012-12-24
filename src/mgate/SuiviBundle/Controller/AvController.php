@@ -88,6 +88,7 @@ class AvController extends Controller
                
             if( $form->isValid() )
             {
+                $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_av_voir', array('id' => $av->getId())) );
             }
                 

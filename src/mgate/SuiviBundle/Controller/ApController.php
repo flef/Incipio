@@ -96,6 +96,7 @@ class ApController extends Controller
                
             if( $form->isValid() )
             {
+                $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $ap->getId())) );
             }
                 
