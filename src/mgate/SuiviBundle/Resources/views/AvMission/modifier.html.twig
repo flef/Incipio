@@ -1,7 +1,7 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Modifier un Suivi - {{ parent() }}
+	Modifier un Avant-Projet - {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -18,13 +18,13 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         
         
-    <h2>Modifier un état</h2>
+    <h2>Modifier un Avenant au Récapitulatif de Mission</h2>
 
-    {% include "mgateSuiviBundle:Suivi:formulaire.html.twig" %} 
+    {% include "mgateSuiviBundle:AvMission:formulaire.html.twig" %} 
 
 
     <p>
-        <a href="{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_avmission_voir', {'id': avmission.id}) }}" >Retour</a>
     </p>
 
 {% endblock %}

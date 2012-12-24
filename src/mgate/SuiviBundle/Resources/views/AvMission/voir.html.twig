@@ -1,0 +1,23 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Avenant au Récapitulatif de Mission- {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Avenant au Récapitulatif de Mission n°{{ avmission.id }}</h2>
+    
+    <i>Version {{avmission.version}}</i>
+
+    <div>
+
+    </div>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_avmission_modifier', {'id': avmission.id}) }}">Modifier l'Avenant</a>
+	
+    </p>
+
+{% endblock %}
