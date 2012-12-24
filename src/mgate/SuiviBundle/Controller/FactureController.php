@@ -108,6 +108,7 @@ class FactureController extends Controller
                
             if( $form->isValid() )
             {
+                $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
             }
                 
