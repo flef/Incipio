@@ -9,6 +9,7 @@ use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
 use mgate\SuiviBundle\Form\ApHandler;
+use mgate\SuiviBundle\Form\ClientContactHandler;
 
 use mgate\SuiviBundle\Entity\ClientContact;
 use mgate\SuiviBundle\Form\ClientContactType;
@@ -28,19 +29,30 @@ class ClientContactController extends Controller
          
     }  
     
-    public function addAction()
+    public function addAction($id)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+        }
+        
+        
         $clientcontact = new ClientContact;
-
+        $clientcontact->setEtude($etude);
         $form        = $this->createForm(new ClientContactType, $clientcontact);
-        $formHandler = new ApHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
+        $formHandler = new ClientContactHandler($form, $this->get('request'), $em);
+        
         if($formHandler->process())
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $clientcontact->getId())) );
+           
+            return $this->redirect( $this->generateUrl('mgateSuivi_clientcontact_voir', array('id' => $clientcontact->getId())) );
+            
         }
 
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:ClientContact:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
         
@@ -50,16 +62,16 @@ class ClientContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id); // Ligne qui posse problème
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('Unable to find AvMission entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
-            'etude'      => $entity,
+        return $this->render('mgateSuiviBundle:ClientContact:voir.html.twig', array(
+            'clientcontact'      => $entity,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -68,24 +80,28 @@ class ClientContactController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $clientcontact = $em->getRepository('mgate\SuiviBundle\Entity\ClientContact')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('ClientContact[id='.$id.'] inexistant');
         }
 
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
+        $form        = $this->createForm(new ClientContactType, $clientcontact);
+        
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_clientcontact_voir', array('id' => $clientcontact->getId())) );
+            }
+                
         }
 
-        return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:ClientContact:modifier.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $etude,
+            'clientcontact' => $clientcontact,
         ));
     }
 }

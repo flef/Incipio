@@ -64,7 +64,7 @@ class CcController extends Controller
     
     public function voirAction($id)
     {
-          $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('mgateSuiviBundle:Cc')->find($id); // Ligne qui posse problème
 
@@ -98,6 +98,7 @@ class CcController extends Controller
                
             if( $form->isValid() )
             {
+                $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_cc_voir', array('id' => $cc->getId())) );
             }
                 
