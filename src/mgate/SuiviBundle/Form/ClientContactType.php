@@ -15,10 +15,17 @@ class ClientContactType extends AbstractType
 	    $builder
             //->add('dateCreation',  'date')
             
-            ->add('faitPar')
+            ->add('faitPar','entity',array ('label' => 'Fait par',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
+                       'property' => 'username',
+                       'property_path' => true,
+                       'required' => true))
             
             //->add('thread', new ThreadType) // délicat 
-            ->add('date','datetime');
+           ->add('date','datetime',array('label'=>'Date du contact'))
+           ->add('contenu','textarea',array('label'=>'Résumé du contact'))
+           ->add('mail', 'checkbox', array('label'=>'Contact effectué par mail','required'=>false))
+           ->add('appel', 'checkbox', array('label'=>'Contact effectué par téléphone','required'=>false));
             
              
             

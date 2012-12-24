@@ -278,27 +278,4 @@ class Mission extends DocType
     {
         return $this->etude;
     }
-
-    /**
-     * Set nbjeh
-     *
-     * @param integer $nbjeh
-     * @return Mission
-     */
-    public function setNbjeh($nbjeh)
-    {
-        $this->nbjeh = $nbjeh;
-    
-        return $this;
-    }
-
-    /**
-     * Get nbjeh
-     *
-     * @return integer 
-     */
-    public function getNbjeh()
-    {
-        return $this->nbjeh;
-    }
 }

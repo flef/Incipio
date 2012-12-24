@@ -13,13 +13,19 @@ class MissionType extends DocTypeType
     {
 	    $builder
             //->add('dateCreation',  'date')
-            ->add('intervenant')
-            ->add('debutOm')
-            ->add('finOm')
-            ->add('avancement')
-            ->add('rapportDemande')
-            ->add('rapportRelu')
-            ->add('remunere');
+            ->add('intervenant','entity', 
+                array ('label' => 'Intervenant',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
+                       'property' => 'username',
+                       'property_path' => true,
+                       'required' => false))
+            ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
+            ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
+            ->add('nbjeh','integer',array('label'=>'Nombre de JEH'))
+            ->add('avancement','integer',array('label'=>'Avancement en %'))
+            ->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
+            ->add('rapportRelu','checkbox', array('label'=>'Rapport pédagogique relu','required'=>false))
+            ->add('remunere','checkbox', array('label'=>'Intervenant rémunéré','required'=>false));
             DocTypeType::buildForm($builder,$options);
             
              
