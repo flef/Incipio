@@ -104,16 +104,36 @@
 
        $('.nbrJEH').text( nbrJEH );
     }
-
+    
+    var isDirty = false;
 
     jQuery(document).ready(function() {
         
         updateOrder();
-       
-        collectionHolder.find('li').each(function() {
-            addTagFormDeleteLink($(this));
+        updatePrix();
+        updateNbrJEH();     
+        
+        //Verification avant de quitter
+        $(':input').change(function(){
+            if(!isDirty){
+               isDirty = true;
+            }
+        });
+        $(window).bind('beforeunload', function(){
+            if(isDirty)
+                return "Do you really want to leave now?";
+        });
+        $('form').submit(function() {
+            isDirty = false;
+            return true;
         });
         
+        //Rajout des boutons (X, up, down) pour les phases
+        collectionHolder.find('li').each(function() {
+            addPhaseBouton($(this));
+        });
+        
+        //Ajouter le drag and drop
         collectionHolder.sortable({
             // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
             axis: 'y',
@@ -161,12 +181,11 @@
             });
         });
         
-        updatePrix();
-        updateNbrJEH();
+
 
     });
     
-    function addTagFormDeleteLink($tagFormLi) {
+    function addPhaseBouton($tagFormLi) {
         var $delete = $('<button id="myButtonDelete">delete this phase</button>');
         var $up = $('<button id="myButtonUp">▲</button>');
         var $down = $('<button id="myButtonDown">▼</button>');
