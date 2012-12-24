@@ -4,15 +4,15 @@ namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use mgate\PersonneBundle\Entity\User;
+use \mgate\CommentBundle\Entity;
 
 /**
- * mgate\SuiviBundle\Entity\ClientContact
+ * mgate\SuiviBundle\Entity\Suivi
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\ClientContactRepository")
+ * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\SuiviRepository")
  */
-class ClientContact
+class Suivi
 {
     /**
      * @var integer $id
@@ -22,15 +22,15 @@ class ClientContact
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="clientContacts", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="suivis", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
 
-    /** , inversedBy="clientContacts", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+    /** , inversedBy="suivi", cascade={"persist"}
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $faitPar;
@@ -41,12 +41,6 @@ class ClientContact
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
-
-    /**
-     * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread",cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $thread;
     
     /**
      * @var string $contenu
@@ -54,19 +48,12 @@ class ClientContact
      */
     private $contenu;
     
-     /**
-     * @var boolean $mail
-     *
-     * @ORM\Column(name="mail", type="boolean", nullable=true)
+
+    /**
+     * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread",cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $mail;
-    
-     /**
-     * @var boolean $appel
-     *
-     * @ORM\Column(name="appel", type="boolean", nullable=true)
-     */
-    private $appel;
+    private $thread;
 
 
     /**
@@ -83,7 +70,7 @@ class ClientContact
      * Set etude
      *
      * @param string $etude
-     * @return ClientContact
+     * @return Suivi
      */
     public function setEtude($etude)
     {
@@ -106,7 +93,7 @@ class ClientContact
      * Set faitPar
      *
      * @param mgate\PersonneBundle\Entity\User $faitPar
-     * @return ClientContact
+     * @return Suivi
      */
     public function setFaitPar(\mgate\PersonneBundle\Entity\User $faitPar)
     {
@@ -129,7 +116,7 @@ class ClientContact
      * Set date
      *
      * @param \DateTime $date
-     * @return ClientContact
+     * @return Suivi
      */
     public function setDate($date)
     {
@@ -171,72 +158,4 @@ class ClientContact
         return $this->thread;
     }
 
-    /**
-     * Set contenu
-     *
-     * @param string $contenu
-     * @return ClientContact
-     */
-    public function setContenu($contenu)
-    {
-        $this->contenu = $contenu;
-    
-        return $this;
-    }
-
-    /**
-     * Get contenu
-     *
-     * @return string 
-     */
-    public function getContenu()
-    {
-        return $this->contenu;
-    }
-
-    /**
-     * Set mail
-     *
-     * @param boolean $mail
-     * @return ClientContact
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-    
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return boolean 
-     */
-    public function getMail()
-    {
-        return $this->mail;
-    }
-
-    /**
-     * Set appel
-     *
-     * @param boolean $appel
-     * @return ClientContact
-     */
-    public function setAppel($appel)
-    {
-        $this->appel = $appel;
-    
-        return $this;
-    }
-
-    /**
-     * Get appel
-     *
-     * @return boolean 
-     */
-    public function getAppel()
-    {
-        return $this->appel;
-    }
 }
