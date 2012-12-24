@@ -41,6 +41,13 @@ class Suivi
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     * @var string $contenu
+     * @ORM\Column(name="contenu", type="text",nullable=true)
+     */
+    private $contenu;
+    
 
     /**
      * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread",cascade={"persist"})
@@ -151,4 +158,27 @@ class Suivi
         return $this->thread;
     }
 
+
+    /**
+     * Set contenu
+     *
+     * @param string $contenu
+     * @return Suivi
+     */
+    public function setContenu($contenu)
+    {
+        $this->contenu = $contenu;
+    
+        return $this;
+    }
+
+    /**
+     * Get contenu
+     *
+     * @return string 
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
 }

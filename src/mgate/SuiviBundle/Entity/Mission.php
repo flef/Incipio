@@ -76,6 +76,13 @@ class Mission extends DocType
      * @ORM\Column(name="remunere", type="boolean")
      */
     private $remunere;
+    
+     /**
+     * @var integer $nbjeh
+     *
+     * @ORM\Column(name="nbjeh", type="integer")
+     */
+    private $nbjeh;
 
 
     /**
@@ -270,5 +277,28 @@ class Mission extends DocType
     public function getEtude()
     {
         return $this->etude;
+    }
+
+    /**
+     * Set nbjeh
+     *
+     * @param integer $nbjeh
+     * @return Mission
+     */
+    public function setNbjeh($nbjeh)
+    {
+        $this->nbjeh = $nbjeh;
+    
+        return $this;
+    }
+
+    /**
+     * Get nbjeh
+     *
+     * @return integer 
+     */
+    public function getNbjeh()
+    {
+        return $this->nbjeh;
     }
 }

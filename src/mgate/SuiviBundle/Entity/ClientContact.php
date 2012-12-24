@@ -47,6 +47,26 @@ class ClientContact
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
+    
+    /**
+     * @var string $contenu
+     * @ORM\Column(name="contenu", type="text",nullable=true)
+     */
+    private $contenu;
+    
+     /**
+     * @var boolean $mail
+     *
+     * @ORM\Column(name="mail", type="boolean", nullable=true)
+     */
+    private $mail;
+    
+     /**
+     * @var boolean $appel
+     *
+     * @ORM\Column(name="appel", type="boolean", nullable=true)
+     */
+    private $appel;
 
 
     /**
@@ -149,5 +169,74 @@ class ClientContact
     public function getThread()
     {
         return $this->thread;
+    }
+
+    /**
+     * Set contenu
+     *
+     * @param string $contenu
+     * @return ClientContact
+     */
+    public function setContenu($contenu)
+    {
+        $this->contenu = $contenu;
+    
+        return $this;
+    }
+
+    /**
+     * Get contenu
+     *
+     * @return string 
+     */
+    public function getContenu()
+    {
+        return $this->contenu;
+    }
+
+    /**
+     * Set mail
+     *
+     * @param boolean $mail
+     * @return ClientContact
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+    
+        return $this;
+    }
+
+    /**
+     * Get mail
+     *
+     * @return boolean 
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * Set appel
+     *
+     * @param boolean $appel
+     * @return ClientContact
+     */
+    public function setAppel($appel)
+    {
+        $this->appel = $appel;
+    
+        return $this;
+    }
+
+    /**
+     * Get appel
+     *
+     * @return boolean 
+     */
+    public function getAppel()
+    {
+        return $this->appel;
     }
 }
