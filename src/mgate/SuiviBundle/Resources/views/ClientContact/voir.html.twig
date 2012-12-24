@@ -1,12 +1,12 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Affichage de l'état de l'étude - {{ parent() }}
+	Affichage du contact client - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    <h2>Etat de l'étude n°{{ suivi.id }}</h2>
+    <h2>Contact client n°{{ clientcontact.id }}</h2>
     
     
 
@@ -16,7 +16,7 @@
 
     <p>
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
-        <a href="{{ path('mgateSuivi_suivi_modifier', {'id': suivi.id}) }}">Modifier l'état de l'étude</a>
+        <a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': clientcontact.id}) }}">Modifier le contact client</a>
 	
     </p>
 

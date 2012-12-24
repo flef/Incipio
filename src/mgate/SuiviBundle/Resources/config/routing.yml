@@ -70,9 +70,33 @@ mgateSuivi_mission_ajouter:
     requirements:
         id: \d+
         
+mgateSuivi_mission_voir:
+    pattern: /mission/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Mission:voir}
+    requirements:
+        id: \d+
+        
+mgateSuivi_mission_modifier:
+    pattern: /mission/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Mission:modifier}
+    requirements:
+        id: \d+
+        
 mgateSuivi_suivi_ajouter:
     pattern: /suivi/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Suivi:add}
+    requirements:
+        id: \d+
+        
+mgateSuivi_suivi_voir:
+    pattern: /suivi/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:Suivi:voir}
+    requirements:
+        id: \d+
+        
+mgateSuivi_suivi_modifier:
+    pattern: /suivi/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Suivi:modifier}
     requirements:
         id: \d+
 
@@ -80,6 +104,18 @@ mgateSuivi_suivi_ajouter:
 mgateSuivi_clientcontact_ajouter:
     pattern: /clientcontact/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:ClientContact:add}
+    requirements:
+        id: \d+
+        
+mgateSuivi_clientcontact_modifier:
+    pattern: /clientcontact/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:ClientContact:modifier}
+    requirements:
+        id: \d+
+        
+mgateSuivi_clientcontact_voir:
+    pattern: /clientcontact/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:ClientContact:voir}
     requirements:
         id: \d+
         
@@ -124,6 +160,20 @@ mgateSuivi_av_voir:
 mgateSuivi_avmission_ajouter:
     pattern: /avmission/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:AvMission:add}
+    requirements:
+        id: \d+
+        
+        
+mgateSuivi_avmission_voir:
+    pattern: /avmission/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:AvMission:voir}
+    requirements:
+        id: \d+
+        
+        
+mgateSuivi_avmission_modifier:
+    pattern: /avmission/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:AvMission:modifier}
     requirements:
         id: \d+
         

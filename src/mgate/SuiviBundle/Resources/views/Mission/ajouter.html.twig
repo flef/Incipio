@@ -1,13 +1,9 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-{% block title %}
-	Modifier un Suivi - {{ parent() }}
-{% endblock %}
-
 {% block javascripts %}
     {{ form_javascript(form) }}
 {% endblock %}
-        
+
 {% block content_bundle %}
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
@@ -16,16 +12,12 @@
 <script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
-        
-        
-    <h2>Modifier un état</h2>
-
-    {% include "mgateSuiviBundle:Suivi:formulaire.html.twig" %} 
 
 
-    <p>
-        <a href="{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}" >Retour</a>
-    </p>
+    <h2>Ajouter un Récapitulatif de Mission</h2>
+
+    {% include "mgateSuiviBundle:Mission:formulaire.html.twig" %} 
+
+    <p>---  </p>
 
 {% endblock %}
-
