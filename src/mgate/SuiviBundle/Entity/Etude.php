@@ -34,7 +34,7 @@ class Etude
     protected $prospect;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
     protected $suiveur;
@@ -759,10 +759,10 @@ class Etude
     /**
      * Set suiveur
      *
-     * @param \mgate\PersonneBundle\Entity\User $suiveur
+     * @param \mgate\PersonneBundle\Entity\Personne $suiveur
      * @return Etude
      */
-    public function setSuiveur(\mgate\PersonneBundle\Entity\User $suiveur = null)
+    public function setSuiveur(\mgate\PersonneBundle\Entity\Personne $suiveur = null)
     {
         $this->suiveur = $suiveur;
     
@@ -772,7 +772,7 @@ class Etude
     /**
      * Get suiveur
      *
-     * @return \mgate\PersonneBundle\Entity\User 
+     * @return \mgate\PersonneBundle\Entity\Personne
      */
     public function getSuiveur()
     {

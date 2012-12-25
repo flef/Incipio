@@ -21,55 +21,20 @@ class Employe
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    
+     
     /**
      * @ORM\ManyToOne(targetEntity="Prospect", inversedBy="employes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $prospect;
-
-    /**
-     * @var string $prenom
-     *
-     * @ORM\Column(name="prenom", type="string", length=255)
-     */
-    private $prenom;
-
-    /**
-     * @var string $nom
-     *
-     * @ORM\Column(name="nom", type="string", length=255)
-     */
-    private $nom;
+    
     
     /**
-     * @var string $poste
-     *
-     * @ORM\Column(name="$poste", type="string", length=255, nullable=true)
+     * @ORM\OneToOne(targetEntity="Personne", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $poste;
-    
-    /**
-     * @var string $sexe
-     *
-     * @ORM\Column(name="sexe", type="string", length=255, nullable=true)
-     */
-    private $sexe;
+    private $personne;
 
-    /**
-     * @var string $mobile
-     *
-     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
-     */
-    private $mobile;
-
-    /**
-     * @var string $fix
-     *
-     * @ORM\Column(name="fix", type="string", length=255, nullable=true)
-     */
-    private $fix;
 
     /**
      * @var string $email
@@ -79,105 +44,15 @@ class Employe
      */
     private $email;
 
-    /**
-     * @var string $adresse
-     *
-     * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
-     */
-    private $adresse;
 
-
-    
     /**
-     * Set prenom
+     * Get id
      *
-     * @param string $prenom
-     * @return Employe
+     * @return integer 
      */
-    public function setPrenom($prenom)
+    public function getId()
     {
-        $this->prenom = $prenom;
-    
-        return $this;
-    }
-
-    /**
-     * Get prenom
-     *
-     * @return string 
-     */
-    public function getPrenom()
-    {
-        return $this->prenom;
-    }
-
-    /**
-     * Set nom
-     *
-     * @param string $nom
-     * @return Employe
-     */
-    public function setNom($nom)
-    {
-        $this->nom = $nom;
-    
-        return $this;
-    }
-
-    /**
-     * Get nom
-     *
-     * @return string 
-     */
-    public function getNom()
-    {
-        return $this->nom;
-    }
-
-    /**
-     * Set mobile
-     *
-     * @param string $mobile
-     * @return Employe
-     */
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-    
-        return $this;
-    }
-
-    /**
-     * Get mobile
-     *
-     * @return string 
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * Set fix
-     *
-     * @param string $fix
-     * @return Employe
-     */
-    public function setFix($fix)
-    {
-        $this->fix = $fix;
-    
-        return $this;
-    }
-
-    /**
-     * Get fix
-     *
-     * @return string 
-     */
-    public function getFix()
-    {
-        return $this->fix;
+        return $this->id;
     }
 
     /**
@@ -204,42 +79,9 @@ class Employe
     }
 
     /**
-     * Set adresse
-     *
-     * @param string $adresse
-     * @return Employe
-     */
-    public function setAdresse($adresse)
-    {
-        $this->adresse = $adresse;
-    
-        return $this;
-    }
-
-    /**
-     * Get adresse
-     *
-     * @return string 
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set prospect
      *
-     * @param mgate\PersonneBundle\Entity\Prospect $prospect
+     * @param \mgate\PersonneBundle\Entity\Prospect $prospect
      * @return Employe
      */
     public function setProspect(\mgate\PersonneBundle\Entity\Prospect $prospect)
@@ -252,7 +94,7 @@ class Employe
     /**
      * Get prospect
      *
-     * @return mgate\PersonneBundle\Entity\Prospect 
+     * @return \mgate\PersonneBundle\Entity\Prospect 
      */
     public function getProspect()
     {
@@ -260,71 +102,25 @@ class Employe
     }
 
     /**
-     * Set fonction
+     * Set personne
      *
-     * @param string $fonction
+     * @param \mgate\PersonneBundle\Entity\Personne $personne
      * @return Employe
      */
-    public function setFonction($fonction)
+    public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
     {
-        $this->fonction = $fonction;
+        $this->personne = $personne;
     
         return $this;
     }
 
     /**
-     * Get fonction
+     * Get personne
      *
-     * @return string 
+     * @return \mgate\PersonneBundle\Entity\Personne 
      */
-    public function getFonction()
+    public function getPersonne()
     {
-        return $this->fonction;
-    }
-
-    /**
-     * Set sexe
-     *
-     * @param string $sexe
-     * @return Employe
-     */
-    public function setSexe($sexe)
-    {
-        $this->sexe = $sexe;
-    
-        return $this;
-    }
-
-    /**
-     * Get sexe
-     *
-     * @return string 
-     */
-    public function getSexe()
-    {
-        return $this->sexe;
-    }
-
-    /**
-     * Set poste
-     *
-     * @param string $poste
-     * @return Employe
-     */
-    public function setPoste($poste)
-    {
-        $this->poste = $poste;
-    
-        return $this;
-    }
-
-    /**
-     * Get poste
-     *
-     * @return string 
-     */
-    public function getPoste()
-    {
-        return $this->poste;
+        return $this->personne;
     }
 }

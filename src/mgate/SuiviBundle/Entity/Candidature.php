@@ -30,7 +30,7 @@ class Candidature
     protected $etude;
 
     /** , inversedBy="candidatures", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $candidat;
@@ -92,10 +92,10 @@ class Candidature
     /**
      * Set candidat
      *
-     * @param mgate\PersonneBundle\Entity\User $candidat
+     * @param mgate\PersonneBundle\Entity\Personne $candidat
      * @return Candidature
      */
-    public function setCandidat(\mgate\PersonneBundle\Entity\User $candidat)
+    public function setCandidat(\mgate\PersonneBundle\Entity\Personne $candidat)
     {
         $this->candidat = $candidat;
     
@@ -105,7 +105,7 @@ class Candidature
     /**
      * Get candidat
      *
-     * @return mgate\PersonneBundle\Entity\User 
+     * @return mgate\PersonneBundle\Entity\Personne 
      */
     public function getCandidat()
     {

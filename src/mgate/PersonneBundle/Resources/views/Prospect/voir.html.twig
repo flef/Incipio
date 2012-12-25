@@ -14,12 +14,12 @@
         <h3>Employes:</h3>
         {% for employe in prospect.employes %}
             <li>
-            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.sexe }} {{ employe.prenom }} {{ employe.nom }} - {{ employe.poste }}</a></h4>
-            Mobile: {{ employe.mobile }}<br />
-            Fix: {{ employe.fix }}<br />
+            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.personne.sexe }} {{ employe.personne.prenom }} {{ employe.personne.nom }} - {{ employe.personne.poste }}</a></h4>
+            Mobile: {{ employe.personne.mobile }}<br />
+            Fix: {{ employe.personne.fix }}<br />
             Email: {{ employe.email }}<br />
-            Adresse: {{ employe.adresse }}<br />
-            Mobile: {{ employe.mobile }}<br />
+            Adresse: {{ employe.personne.adresse }}<br />
+            Mobile: {{ employe.personne.mobile }}<br />
             </li>
             <br />
         {% else %}

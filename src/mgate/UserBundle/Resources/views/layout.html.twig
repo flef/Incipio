@@ -1,21 +1,26 @@
-{# layout père de suivi bundle #}
 {% extends "::layout.html.twig" %}
 
-{% block title %}M-GaTE - {{ parent() }}{% endblock %}
+{% block title %}dsqfqsdf{% endblock %}
 
 {% block body %}
+qsdfqsdfqsdf
 
-    {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-    <h1>Suivi d'étude</h1>
-    <h4>Sous-Menu</h4>
-    <ul>
-        <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Accueil</a></li>
-        <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter une étude</a></li>
-    </ul>
-    <hr>
+{# L'utilisateur est-il connecté ? #}
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    {# L'utilisateur est connecté ! #}
+    <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
 
-    {# On définit un nouveau block, que les vues du bundle pourront remplir #}
-    {% block content_bundle %}
-    {% endblock %}
+    {# L'utilisateur est-il admin ? #}
+    {% if is_granted('ROLE_ADMIN') %}
+        {# L'utilisateur est admin ! #}
+        <a href="{{ path('admin') }}">Administration</a>
+    {% endif %}
+{% else %}
+    {# L'utilisateur n'est pas connecté ! #}
+    <a href="{{ path('fos_user_security_login') }}">Connexion</a>
+    <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
+{% endif %}
 
+
+    {% block fos_user_content %}qsdfqsdfqsdf{% endblock %}
 {% endblock %}
