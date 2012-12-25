@@ -11,8 +11,8 @@ class PrestationType extends AbstractType
         $resolver->setDefaults(array(
             'choices' => array(
                 'info' => 'ingénieur informatique',
-                'élec' => 'ingénieur électronique',
-                'info-élec' => 'ingénieur informatique et électronique',
+                'elec' => 'ingénieur électronique',
+                'info-elec' => 'ingénieur informatique et électronique',
                 'micro'=> 'ingénieur microélectronique',
             )
         ));

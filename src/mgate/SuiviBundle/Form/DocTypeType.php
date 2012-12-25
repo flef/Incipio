@@ -15,13 +15,13 @@ class DocTypeType extends AbstractType
             ->add('version', 'integer', array('label'=>'Version du document'))
             ->add('signataire1', 'entity', 
                 array ('label' => 'Signataire M-GaTE',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
                        'property_path' => true,
                        'required' => true))
             ->add('signataire2', 'entity', 
                 array ('label' => 'Signataire Client',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Employe',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'nom',
                        'property_path' => true,
                        'required' => true))

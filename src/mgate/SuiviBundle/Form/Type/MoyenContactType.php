@@ -11,7 +11,7 @@ class MoyenContactType extends AbstractType
         $resolver->setDefaults(array(
             'choices' => array(
                 'mail' => 'Mail',
-                'téléphone' => 'Téléphone',
+                'telephone' => 'Téléphone',
                 
             )
         ));
