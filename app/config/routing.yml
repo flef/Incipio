@@ -1,3 +1,7 @@
+mgate_user:
+    resource: "@mgateUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
 mgateSuiviBundle:
     resource: "@mgateSuiviBundle/Resources/config/routing.yml"
     prefix:   /suivi

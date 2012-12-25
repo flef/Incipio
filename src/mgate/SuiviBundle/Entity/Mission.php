@@ -4,7 +4,7 @@ namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use mgate\PersonneBundle\Entity\User;
+use mgate\PersonneBundle\Entity\Personne;
 
 /**
  * mgate\SuiviBundle\Entity\Mission
@@ -30,7 +30,7 @@ class Mission extends DocType
     protected $etude;
 
     /** , inversedBy="missions", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $intervenant;
@@ -98,10 +98,10 @@ class Mission extends DocType
     /**
      * Set intervenant
      *
-     * @param mgate\PersonneBundle\Entity\User $intervenant
+     * @param mgate\PersonneBundle\Entity\Personne $intervenant
      * @return Mission
      */
-    public function setIntervenant(\mgate\PersonneBundle\Entity\User $intervenant)
+    public function setIntervenant(\mgate\PersonneBundle\Entity\Personne $intervenant)
     {
         $this->intervenant = $intervenant;
     
@@ -111,7 +111,7 @@ class Mission extends DocType
     /**
      * Get intervenant
      *
-     * @return mgate\PersonneBundle\Entity\User 
+     * @return mgate\PersonneBundle\Entity\Personne 
      */
     public function getIntervenant()
     {

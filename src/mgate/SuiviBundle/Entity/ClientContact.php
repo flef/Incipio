@@ -4,7 +4,6 @@ namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use mgate\PersonneBundle\Entity\User;
 
 /**
  * mgate\SuiviBundle\Entity\ClientContact
@@ -30,7 +29,7 @@ class ClientContact
     protected $etude;
 
     /** , inversedBy="clientContacts", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $faitPar;
@@ -105,10 +104,10 @@ class ClientContact
     /**
      * Set faitPar
      *
-     * @param mgate\PersonneBundle\Entity\User $faitPar
+     * @param mgate\PersonneBundle\Entity\Personne $faitPar
      * @return ClientContact
      */
-    public function setFaitPar(\mgate\PersonneBundle\Entity\User $faitPar)
+    public function setFaitPar(\mgate\PersonneBundle\Entity\Personne $faitPar)
     {
         $this->faitPar = $faitPar;
     
@@ -118,7 +117,7 @@ class ClientContact
     /**
      * Get faitPar
      *
-     * @return mgate\PersonneBundle\Entity\User 
+     * @return mgate\PersonneBundle\Entity\Personne 
      */
     public function getFaitPar()
     {
