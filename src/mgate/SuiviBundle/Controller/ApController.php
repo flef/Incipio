@@ -83,12 +83,12 @@ class ApController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $ap = $em->getRepository('mgate\SuiviBundle\Entity\Ap')->find($id) )
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
             throw $this->createNotFoundException('Ap[id='.$id.'] inexistant');
         }
 
-        $form        = $this->createForm(new ApType, $ap);
+        $form        = $this->createForm(new ApType, $etude);//transmettre etude pour ajouter champ de etude
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -97,14 +97,14 @@ class ApController extends Controller
             if( $form->isValid() )
             {
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $ap->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $etude->getId())) );
             }
                 
         }
 
         return $this->render('mgateSuiviBundle:Ap:modifier.html.twig', array(
             'form' => $form->createView(),
-            'ap' => $ap,
+            'etude' => $etude,
         ));
     }
 }

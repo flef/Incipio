@@ -4,6 +4,7 @@ namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use mgate\SuiviBundle\Entity\Etude;
 
 use mgate\PersonneBundle\Form;
 
@@ -11,7 +12,10 @@ class CcType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-	    DocTypeType::buildForm($builder,$options);
+	   
+            $builder->add('acompte','checkbox',array('label'=>'Acompte'))
+                    ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'))
+                    ->add('cc',new DocTypeType(),array('label'=>'Suivi du document'));
             
             
              
@@ -30,7 +34,7 @@ class CcType extends DocTypeType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\Cc',
+            'data_class' => 'mgate\SuiviBundle\Entity\Etude',
         );
     }
 }

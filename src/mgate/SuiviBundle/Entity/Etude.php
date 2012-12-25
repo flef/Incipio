@@ -158,9 +158,9 @@ class Etude
     private $candidatures;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ap", mappedBy="etude")
+     * @ORM\OneToOne(targetEntity="Ap", cascade={"persist"})
      */
-    private $aps;
+    private $ap;
     
     /**
      * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist"})
@@ -169,9 +169,9 @@ class Etude
     private $phases;
 
     /**
-     * @ORM\OneToMany(targetEntity="Cc", mappedBy="etude")
+     * @ORM\OneToOne(targetEntity="Cc", cascade={"persist"})
      */
-    private $ccs;
+    private $cc;
 
     /**
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude")
@@ -207,7 +207,62 @@ class Etude
      * @ORM\OneToMany(targetEntity="Pvr", mappedBy="etude")
      */
     private $pvrs;
+    
+     /**
+     * @var boolean $acompte
+     *
+     * @ORM\Column(name="acompte", type="boolean",nullable=true)
+     */
+    private $acompte; 
+    
+    
+    /**
+     * @var integer $pourcentageAcompte
+     *
+     * @ORM\Column(name="pourcentageAcompte", type="integer",nullable=true)
+     */
+    private $pourcentageAcompte;
+    
+     /**
+     * @var integer $fraisDossier
+     *
+     * @ORM\Column(name="fraisDossier", type="integer")
+     */
+    private $fraisDossier;
+    
+     /**
+     * @var text $descriptionPrestation
+     *
+     * @ORM\Column(name="descriptionPrestation", type="text",nullable=true)
+     */
+    private $descriptionPrestation;
+    
+     /**
+     * @var text $typePrestation
+     *
+     * @ORM\Column(name="prestation", type="text", nullable=true)
+     *
+     */
+    private $typePrestation;
 
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -216,29 +271,6 @@ class Etude
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set suiveur
-     *
-     * @param mgate\PersonneBundle\Entity\User $suiveur
-     * @return Etude
-     */
-    public function setSuiveur(\mgate\PersonneBundle\Entity\User $suiveur)
-    {
-        $this->suiveur = $suiveur;
-    
-        return $this;
-    }
-
-    /**
-     * Get suiveur
-     *
-     * @return mgate\PersonneBundle\Entity\User 
-     */
-    public function getSuiveur()
-    {
-        return $this->suiveur;
     }
 
     /**
@@ -262,6 +294,29 @@ class Etude
     public function getDateCreation()
     {
         return $this->dateCreation;
+    }
+
+    /**
+     * Set dateModification
+     *
+     * @param \DateTime $dateModification
+     * @return Etude
+     */
+    public function setDateModification($dateModification)
+    {
+        $this->dateModification = $dateModification;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateModification
+     *
+     * @return \DateTime 
+     */
+    public function getDateModification()
+    {
+        return $this->dateModification;
     }
 
     /**
@@ -331,6 +386,29 @@ class Etude
     public function getDossierCree()
     {
         return $this->dossierCree;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Etude
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+    
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string 
+     */
+    public function getNom()
+    {
+        return $this->nom;
     }
 
     /**
@@ -541,489 +619,124 @@ class Etude
     }
 
     /**
-     * Set clientContacts
+     * Set acompte
      *
-     * @param string $clientContacts
+     * @param boolean $acompte
      * @return Etude
      */
-    public function setClientContacts($clientContacts)
+    public function setAcompte($acompte)
     {
-        $this->clientContacts = $clientContacts;
+        $this->acompte = $acompte;
     
         return $this;
     }
 
     /**
-     * Get clientContacts
+     * Get acompte
+     *
+     * @return boolean 
+     */
+    public function getAcompte()
+    {
+        return $this->acompte;
+    }
+
+    /**
+     * Set pourcentageAcompte
+     *
+     * @param integer $pourcentageAcompte
+     * @return Etude
+     */
+    public function setPourcentageAcompte($pourcentageAcompte)
+    {
+        $this->pourcentageAcompte = $pourcentageAcompte;
+    
+        return $this;
+    }
+
+    /**
+     * Get pourcentageAcompte
+     *
+     * @return integer 
+     */
+    public function getPourcentageAcompte()
+    {
+        return $this->pourcentageAcompte;
+    }
+
+    /**
+     * Set fraisDossier
+     *
+     * @param integer $fraisDossier
+     * @return Etude
+     */
+    public function setFraisDossier($fraisDossier)
+    {
+        $this->fraisDossier = $fraisDossier;
+    
+        return $this;
+    }
+
+    /**
+     * Get fraisDossier
+     *
+     * @return integer 
+     */
+    public function getFraisDossier()
+    {
+        return $this->fraisDossier;
+    }
+
+    /**
+     * Set descriptionPrestation
+     *
+     * @param string $descriptionPrestation
+     * @return Etude
+     */
+    public function setDescriptionPrestation($descriptionPrestation)
+    {
+        $this->descriptionPrestation = $descriptionPrestation;
+    
+        return $this;
+    }
+
+    /**
+     * Get descriptionPrestation
      *
      * @return string 
      */
-    public function getClientContacts()
+    public function getDescriptionPrestation()
     {
-        return $this->clientContacts;
+        return $this->descriptionPrestation;
     }
 
     /**
-     * Set candidatures
+     * Set typePrestation
      *
-     * @param string $candidatures
+     * @param string $typePrestation
      * @return Etude
      */
-    public function setCandidatures($candidatures)
+    public function setTypePrestation($typePrestation)
     {
-        $this->candidatures = $candidatures;
+        $this->typePrestation = $typePrestation;
     
         return $this;
     }
 
     /**
-     * Get candidatures
+     * Get typePrestation
      *
      * @return string 
      */
-    public function getCandidatures()
+    public function getTypePrestation()
     {
-        return $this->candidatures;
-    }
-
-    /**
-     * Set aps
-     *
-     * @param string $aps
-     * @return Etude
-     */
-    public function setAps($aps)
-    {
-        $this->aps = $aps;
-    
-        return $this;
-    }
-
-    /**
-     * Get aps
-     *
-     * @return string 
-     */
-    public function getAps()
-    {
-        return $this->aps;
-    }
-
-    /**
-     * Set ccs
-     *
-     * @param string $ccs
-     * @return Etude
-     */
-    public function setCcs($ccs)
-    {
-        $this->ccs = $ccs;
-    
-        return $this;
-    }
-
-    /**
-     * Get ccs
-     *
-     * @return string 
-     */
-    public function getCcs()
-    {
-        return $this->ccs;
-    }
-
-    /**
-     * Set missions
-     *
-     * @param string $missions
-     * @return Etude
-     */
-    public function setMissions($missions)
-    {
-        $this->missions = $missions;
-    
-        return $this;
-    }
-
-    /**
-     * Get missions
-     *
-     * @return string 
-     */
-    public function getMissions()
-    {
-        return $this->missions;
-    }
-
-    /**
-     * Set suivis
-     *
-     * @param string $suivis
-     * @return Etude
-     */
-    public function setSuivis($suivis)
-    {
-        $this->suivis = $suivis;
-    
-        return $this;
-    }
-
-    /**
-     * Get suivis
-     *
-     * @return string 
-     */
-    public function getSuivis()
-    {
-        return $this->suivis;
-    }
-
-    /**
-     * Set pvis
-     *
-     * @param string $pvis
-     * @return Etude
-     */
-    public function setPvis($pvis)
-    {
-        $this->pvis = $pvis;
-    
-        return $this;
-    }
-
-    /**
-     * Get pvis
-     *
-     * @return string 
-     */
-    public function getPvis()
-    {
-        return $this->pvis;
-    }
-
-
-    /**
-     * Set avs
-     *
-     * @param string $avs
-     * @return Etude
-     */
-    public function setAvs($avs)
-    {
-        $this->avs = $avs;
-    
-        return $this;
-    }
-
-    /**
-     * Get avs
-     *
-     * @return string 
-     */
-    public function getAvs()
-    {
-        return $this->avs;
-    }
-
-    /**
-     * Set avMissions
-     *
-     * @param string $avMissions
-     * @return Etude
-     */
-    public function setAvMissions($avMissions)
-    {
-        $this->avMissions = $avMissions;
-    
-        return $this;
-    }
-
-    /**
-     * Get avMissions
-     *
-     * @return string 
-     */
-    public function getAvMissions()
-    {
-        return $this->avMissions;
-    }
-
-    /**
-     * Set pvrs
-     *
-     * @param string $pvrs
-     * @return Etude
-     */
-    public function setPvrs($pvrs)
-    {
-        $this->pvrs = $pvrs;
-    
-        return $this;
-    }
-
-    /**
-     * Get pvrs
-     *
-     * @return string 
-     */
-    public function getPvrs()
-    {
-        return $this->pvrs;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->clientContacts = new ArrayCollection();
-        $this->candidatures = new ArrayCollection();
-        $this->aps = new ArrayCollection();
-        $this->ccs = new ArrayCollection();
-        $this->missions = new ArrayCollection();
-        $this->suivis = new ArrayCollection();
-        $this->pvis = new ArrayCollection();
-        $this->factures = new ArrayCollection();
-        $this->avs = new ArrayCollection();
-        $this->avMissions = new ArrayCollection();
-        $this->pvrs = new ArrayCollection();
-        $this->phases = new ArrayCollection();
-    }
-    
-    /**
-     * Add clientContacts
-     *
-     * @param mgate\SuiviBundle\Entity\ClientContact $clientContacts
-     * @return Etude
-     */
-    public function addClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
-    {
-        $this->clientContacts[] = $clientContacts;
-    
-        return $this;
-    }
-
-    /**
-     * Remove clientContacts
-     *
-     * @param mgate\SuiviBundle\Entity\ClientContact $clientContacts
-     */
-    public function removeClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
-    {
-        $this->clientContacts->removeElement($clientContacts);
-    }
-
-    /**
-     * Add candidatures
-     *
-     * @param mgate\SuiviBundle\Entity\Candidature $candidatures
-     * @return Etude
-     */
-    public function addCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
-    {
-        $this->candidatures[] = $candidatures;
-    
-        return $this;
-    }
-
-    /**
-     * Remove candidatures
-     *
-     * @param mgate\SuiviBundle\Entity\Candidature $candidatures
-     */
-    public function removeCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
-    {
-        $this->candidatures->removeElement($candidatures);
-    }
-
-    /**
-     * Add aps
-     *
-     * @param mgate\SuiviBundle\Entity\Ap $aps
-     * @return Etude
-     */
-    public function addAp(\mgate\SuiviBundle\Entity\Ap $aps)
-    {
-        $this->aps[] = $aps;
-    
-        return $this;
-    }
-
-    /**
-     * Remove aps
-     *
-     * @param mgate\SuiviBundle\Entity\Ap $aps
-     */
-    public function removeAp(\mgate\SuiviBundle\Entity\Ap $aps)
-    {
-        $this->aps->removeElement($aps);
-    }
-
-    /**
-     * Add ccs
-     *
-     * @param mgate\SuiviBundle\Entity\Cc $ccs
-     * @return Etude
-     */
-    public function addCc(\mgate\SuiviBundle\Entity\Cc $ccs)
-    {
-        $this->ccs[] = $ccs;
-    
-        return $this;
-    }
-
-    /**
-     * Remove ccs
-     *
-     * @param mgate\SuiviBundle\Entity\Cc $ccs
-     */
-    public function removeCc(\mgate\SuiviBundle\Entity\Cc $ccs)
-    {
-        $this->ccs->removeElement($ccs);
-    }
-
-    /**
-     * Add missions
-     *
-     * @param mgate\SuiviBundle\Entity\Mission $missions
-     * @return Etude
-     */
-    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions)
-    {
-        $this->missions[] = $missions;
-    
-        return $this;
-    }
-
-    /**
-     * Remove missions
-     *
-     * @param mgate\SuiviBundle\Entity\Mission $missions
-     */
-    public function removeMission(\mgate\SuiviBundle\Entity\Mission $missions)
-    {
-        $this->missions->removeElement($missions);
-    }
-
-    /**
-     * Add suivis
-     *
-     * @param mgate\SuiviBundle\Entity\Suivi $suivis
-     * @return Etude
-     */
-    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
-    {
-        $this->suivis[] = $suivis;
-    
-        return $this;
-    }
-
-    /**
-     * Remove suivis
-     *
-     * @param mgate\SuiviBundle\Entity\Suivi $suivis
-     */
-    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
-    {
-        $this->suivis->removeElement($suivis);
-    }
-
-    /**
-     * Add pvis
-     *
-     * @param mgate\SuiviBundle\Entity\Pvi $pvis
-     * @return Etude
-     */
-    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
-    {
-        $this->pvis[] = $pvis;
-    
-        return $this;
-    }
-
-    /**
-     * Remove pvis
-     *
-     * @param mgate\SuiviBundle\Entity\Pvi $pvis
-     */
-    public function removePvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
-    {
-        $this->pvis->removeElement($pvis);
-    }
-
-    /**
-     * Add avs
-     *
-     * @param mgate\SuiviBundle\Entity\Av $avs
-     * @return Etude
-     */
-    public function addAv(\mgate\SuiviBundle\Entity\Av $avs)
-    {
-        $this->avs[] = $avs;
-    
-        return $this;
-    }
-
-    /**
-     * Remove avs
-     *
-     * @param mgate\SuiviBundle\Entity\Av $avs
-     */
-    public function removeAv(\mgate\SuiviBundle\Entity\Av $avs)
-    {
-        $this->avs->removeElement($avs);
-    }
-
-    /**
-     * Add avMissions
-     *
-     * @param mgate\SuiviBundle\Entity\AvMission $avMissions
-     * @return Etude
-     */
-    public function addAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
-    {
-        $this->avMissions[] = $avMissions;
-    
-        return $this;
-    }
-
-    /**
-     * Remove avMissions
-     *
-     * @param mgate\SuiviBundle\Entity\AvMission $avMissions
-     */
-    public function removeAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
-    {
-        $this->avMissions->removeElement($avMissions);
-    }
-
-    /**
-     * Add pvrs
-     *
-     * @param mgate\SuiviBundle\Entity\Pvr $pvrs
-     * @return Etude
-     */
-    public function addPvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
-    {
-        $this->pvrs[] = $pvrs;
-    
-        return $this;
-    }
-
-    /**
-     * Remove pvrs
-     *
-     * @param mgate\SuiviBundle\Entity\Pvr $pvrs
-     */
-    public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
-    {
-        $this->pvrs->removeElement($pvrs);
+        return $this->typePrestation;
     }
 
     /**
      * Set prospect
      *
-     * @param mgate\PersonneBundle\Entity\Prospect $prospect
+     * @param \mgate\PersonneBundle\Entity\Prospect $prospect
      * @return Etude
      */
     public function setProspect(\mgate\PersonneBundle\Entity\Prospect $prospect)
@@ -1036,39 +749,123 @@ class Etude
     /**
      * Get prospect
      *
-     * @return mgate\PersonneBundle\Entity\Prospect 
+     * @return \mgate\PersonneBundle\Entity\Prospect 
      */
     public function getProspect()
     {
         return $this->prospect;
     }
-    
-    public static function getAuditType()
-    {
-        return array('Déontologique', 'Exhaustive');
-    }
 
     /**
-     * Set nom
+     * Set suiveur
      *
-     * @param string $nom
+     * @param \mgate\PersonneBundle\Entity\User $suiveur
      * @return Etude
      */
-    public function setNom($nom)
+    public function setSuiveur(\mgate\PersonneBundle\Entity\User $suiveur = null)
     {
-        $this->nom = $nom;
+        $this->suiveur = $suiveur;
     
         return $this;
     }
 
     /**
-     * Get nom
+     * Get suiveur
      *
-     * @return string 
+     * @return \mgate\PersonneBundle\Entity\User 
      */
-    public function getNom()
+    public function getSuiveur()
     {
-        return $this->nom;
+        return $this->suiveur;
+    }
+
+    /**
+     * Add clientContacts
+     *
+     * @param \mgate\SuiviBundle\Entity\ClientContact $clientContacts
+     * @return Etude
+     */
+    public function addClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
+    {
+        $this->clientContacts[] = $clientContacts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove clientContacts
+     *
+     * @param \mgate\SuiviBundle\Entity\ClientContact $clientContacts
+     */
+    public function removeClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
+    {
+        $this->clientContacts->removeElement($clientContacts);
+    }
+
+    /**
+     * Get clientContacts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClientContacts()
+    {
+        return $this->clientContacts;
+    }
+
+    /**
+     * Add candidatures
+     *
+     * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
+     * @return Etude
+     */
+    public function addCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures[] = $candidatures;
+    
+        return $this;
+    }
+
+    /**
+     * Remove candidatures
+     *
+     * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
+     */
+    public function removeCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
+    {
+        $this->candidatures->removeElement($candidatures);
+    }
+
+    /**
+     * Get candidatures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCandidatures()
+    {
+        return $this->candidatures;
+    }
+
+    /**
+     * Set ap
+     *
+     * @param \mgate\SuiviBundle\Entity\Ap $ap
+     * @return Etude
+     */
+    public function setAp(\mgate\SuiviBundle\Entity\Ap $ap = null)
+    {
+        $this->ap = $ap;
+    
+        return $this;
+    }
+
+    /**
+     * Get ap
+     *
+     * @return \mgate\SuiviBundle\Entity\Ap 
+     */
+    public function getAp()
+    {
+        return $this->ap;
     }
 
     /**
@@ -1080,7 +877,7 @@ class Etude
     public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases)
     {
         $this->phases[] = $phases;
-        $phases->setEtude($this);
+    
         return $this;
     }
 
@@ -1103,14 +900,127 @@ class Etude
     {
         return $this->phases;
     }
-    
-    //cf doc pour collection
-    public function setPhases(ArrayCollection $phases)
+
+    /**
+     * Set cc
+     *
+     * @param \mgate\SuiviBundle\Entity\Cc $cc
+     * @return Etude
+     */
+    public function setCc(\mgate\SuiviBundle\Entity\Cc $cc = null)
     {
-        foreach ($phases as $phase) {
-            $phase->setEtude($this);
-        }
-        $this->phases = $phases;
+        $this->cc = $cc;
+    
+        return $this;
+    }
+
+    /**
+     * Get cc
+     *
+     * @return \mgate\SuiviBundle\Entity\Cc 
+     */
+    public function getCc()
+    {
+        return $this->cc;
+    }
+
+    /**
+     * Add missions
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $missions
+     * @return Etude
+     */
+    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions)
+    {
+        $this->missions[] = $missions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove missions
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $missions
+     */
+    public function removeMission(\mgate\SuiviBundle\Entity\Mission $missions)
+    {
+        $this->missions->removeElement($missions);
+    }
+
+    /**
+     * Get missions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMissions()
+    {
+        return $this->missions;
+    }
+
+    /**
+     * Add suivis
+     *
+     * @param \mgate\SuiviBundle\Entity\Suivi $suivis
+     * @return Etude
+     */
+    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
+    {
+        $this->suivis[] = $suivis;
+    
+        return $this;
+    }
+
+    /**
+     * Remove suivis
+     *
+     * @param \mgate\SuiviBundle\Entity\Suivi $suivis
+     */
+    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
+    {
+        $this->suivis->removeElement($suivis);
+    }
+
+    /**
+     * Get suivis
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSuivis()
+    {
+        return $this->suivis;
+    }
+
+    /**
+     * Add pvis
+     *
+     * @param \mgate\SuiviBundle\Entity\Pvi $pvis
+     * @return Etude
+     */
+    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
+    {
+        $this->pvis[] = $pvis;
+    
+        return $this;
+    }
+
+    /**
+     * Remove pvis
+     *
+     * @param \mgate\SuiviBundle\Entity\Pvi $pvis
+     */
+    public function removePvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
+    {
+        $this->pvis->removeElement($pvis);
+    }
+
+    /**
+     * Get pvis
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPvis()
+    {
+        return $this->pvis;
     }
 
     /**
@@ -1147,25 +1057,101 @@ class Etude
     }
 
     /**
-     * Set dateModification
+     * Add avs
      *
-     * @param \DateTime $dateModification
+     * @param \mgate\SuiviBundle\Entity\Av $avs
      * @return Etude
      */
-    public function setDateModification($dateModification)
+    public function addAv(\mgate\SuiviBundle\Entity\Av $avs)
     {
-        $this->dateModification = $dateModification;
+        $this->avs[] = $avs;
     
         return $this;
     }
 
     /**
-     * Get dateModification
+     * Remove avs
      *
-     * @return \DateTime 
+     * @param \mgate\SuiviBundle\Entity\Av $avs
      */
-    public function getDateModification()
+    public function removeAv(\mgate\SuiviBundle\Entity\Av $avs)
     {
-        return $this->dateModification;
+        $this->avs->removeElement($avs);
+    }
+
+    /**
+     * Get avs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAvs()
+    {
+        return $this->avs;
+    }
+
+    /**
+     * Add avMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avMissions
+     * @return Etude
+     */
+    public function addAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
+    {
+        $this->avMissions[] = $avMissions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove avMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avMissions
+     */
+    public function removeAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
+    {
+        $this->avMissions->removeElement($avMissions);
+    }
+
+    /**
+     * Get avMissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAvMissions()
+    {
+        return $this->avMissions;
+    }
+
+    /**
+     * Add pvrs
+     *
+     * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
+     * @return Etude
+     */
+    public function addPvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
+    {
+        $this->pvrs[] = $pvrs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove pvrs
+     *
+     * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
+     */
+    public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
+    {
+        $this->pvrs->removeElement($pvrs);
+    }
+
+    /**
+     * Get pvrs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPvrs()
+    {
+        return $this->pvrs;
     }
 }
