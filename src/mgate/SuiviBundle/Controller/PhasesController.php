@@ -55,6 +55,7 @@ class PhasesController extends Controller
                 {
                     $phaseNew = new Phase;
                     $phaseNew->setPosition(count($etude->getPhases()));
+                    $phaseNew->setEtude($etude);
                     $etude->addPhase($phaseNew);
                 }
 
