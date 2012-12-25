@@ -17,16 +17,16 @@ class ApType extends DocTypeType
 	   // DocTypeType::buildForm($builder, $options);
             $builder->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
                        'property_path' => true,
                        'required' => false))
                     ->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
-                    ->add('description','textarea',array('label'=>'Présentation du projet'))
+                    ->add('presentationProjet','textarea',array('label'=>'Présentation du projet'))
                     ->add('descriptionPrestation','textarea',array('label'=>'Description de la prestation proposée par M-GaTE'))
                     ->add('typePrestation',new PrestationType(),array('label'=>'Type de prestation'))
-                    ->add('competences','textarea',array('label'=>'Capacité des intervenants:'))
-                    ->add('ap',new SuiviApType(),array('label'=>'Suivi du document'));
+                    ->add('competences','textarea',array('label'=>'Capacité des intervenants:'));
+                    //->add('ap',new SuiviApType(),array('label'=>'Suivi du document'));
   
     }
 

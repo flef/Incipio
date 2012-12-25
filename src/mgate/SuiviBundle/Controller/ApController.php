@@ -64,7 +64,12 @@ class ApController extends Controller
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        
+        
+        //attention reflechir si faut passer id etude ou rester en id Ap
+        // en fait y a 2 fonction voir
+        // une pour voir le suivi
+        // et une pour voir la redaction
         $entity = $em->getRepository('mgateSuiviBundle:Ap')->find($id); // Ligne qui posse problème
 
         if (!$entity) {
@@ -85,7 +90,7 @@ class ApController extends Controller
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
-            throw $this->createNotFoundException('Ap[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
 
         $form        = $this->createForm(new ApType, $etude);//transmettre etude pour ajouter champ de etude
