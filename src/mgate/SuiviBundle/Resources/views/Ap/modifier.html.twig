@@ -18,13 +18,13 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         
         
-    <h2>Modifier un Avant-Projet</h2>
+    <h2>Rédiger l'Avant-Projet</h2>
 
     {% include "mgateSuiviBundle:Ap:formulaire.html.twig" %} 
 
 
     <p>
-        <a href="{{ path('mgateSuivi_ap_voir', {'id': etude.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
     </p>
 
 {% endblock %}

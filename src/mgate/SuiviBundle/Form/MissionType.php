@@ -15,8 +15,8 @@ class MissionType extends DocTypeType
             //->add('dateCreation',  'date')
             ->add('intervenant','entity', 
                 array ('label' => 'Intervenant',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
                        'property_path' => true,
                        'required' => false))
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))

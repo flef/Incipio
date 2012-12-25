@@ -221,7 +221,7 @@ class Etude
      /**
      * @var boolean $acompte
      *
-     * @ORM\Column(name="acompte", type="boolean",nullable=true)
+     * @ORM\Column(name="acompte", type="boolean", nullable=true)
      */
     private $acompte; 
     
@@ -229,25 +229,33 @@ class Etude
     /**
      * @var integer $pourcentageAcompte
      *
-     * @ORM\Column(name="pourcentageAcompte", type="integer",nullable=true)
+     * @ORM\Column(name="pourcentageAcompte", type="integer", nullable=true)
      */
     private $pourcentageAcompte;
     
-     /**
+    /**
      * @var integer $fraisDossier
      *
-     * @ORM\Column(name="fraisDossier", type="integer")
+     * @ORM\Column(name="fraisDossier", type="integer", nullable=true)
      */
     private $fraisDossier;
     
-     /**
+    /**
+     * @var text $presentationProjet
+     *
+     * @ORM\Column(name="presentationProjet", type="text", nullable=true)
+     */
+    private $presentationProjet;
+    
+    
+    /**
      * @var text $descriptionPrestation
      *
-     * @ORM\Column(name="descriptionPrestation", type="text",nullable=true)
+     * @ORM\Column(name="descriptionPrestation", type="text", nullable=true)
      */
     private $descriptionPrestation;
     
-     /**
+    /**
      * @var text $typePrestation
      *
      * @ORM\Column(name="prestation", type="text", nullable=true)
@@ -697,6 +705,29 @@ class Etude
         return $this->fraisDossier;
     }
 
+    /**
+     * Set presentationProjet
+     *
+     * @param string $presentationProjet
+     * @return Etude
+     */
+    public function setPresentationProjet($presentationProjet)
+    {
+        $this->presentationProjet = $presentationProjet;
+    
+        return $this;
+    }
+
+    /**
+     * Get presentationProjet
+     *
+     * @return string 
+     */
+    public function getPresentationProjet()
+    {
+        return $this->presentationProjet;
+    }
+    
     /**
      * Set descriptionPrestation
      *

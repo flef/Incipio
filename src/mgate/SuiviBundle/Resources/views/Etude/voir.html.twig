@@ -9,7 +9,7 @@
     <h2>Etude n°{{ etude.id }}</h2>
     <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
     <li>Client: {{ etude.prospect.nom }} </li>
-    <li>Suiveur: {{etude.suiveur.username| default("Pas de suiveur!")}}</li>
+    <li>Suiveur: {{etude.suiveur.personne.nom| default("Pas de suiveur!")}}</li>
     <li>Description de l'étude: <br />{{etude.description }}</li>
     <br>
  <p>
@@ -29,7 +29,7 @@
  </p>
     <h3>Avant-Projet:</h3>
     
-        <li><a href="{{ path('mgateSuivi_ap_modifier', {'id': etude.id}) }}">Modifier l'Avant-Projet </a></li>  
+        <li><a href="{{ path('mgateSuivi_ap_modifier', {'id': etude.id}) }}">Rédiger l'Avant-Projet</a></li>  
 </p>
 <p>
     <h3>Phases:</h3>

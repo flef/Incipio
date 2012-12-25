@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
-use mgate\PersonneBundle\Entity\User as User;
+use mgate\PersonneBundle\Entity\Personne as Personne;
 
 use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
 
@@ -22,23 +22,16 @@ class EtudeType extends AbstractType
                        'property' => 'nom',
                        'property_path' => true,
                        'required' => true))
-            ->add('nom', 'text')
-            //->add('dateCreation',  'date')
-            ->add('description','textarea',array('label'=>'Présentation du projet'))
-            ->add('descriptionPrestation','textarea',array('label'=>'Description de la prestation proposée par M-GaTE'))
-            ->add('typePrestation',new PrestationType())
+            ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
+            ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
             ->add('mandat', 'integer', array('data' => '5') )
-            ->add('num', 'integer' )
+            ->add('num', 'integer', array('label'=>'Numéro de l\'étude'))
             ->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
                        'property_path' => true,
-                       'required' => false))
-            ->add('acompte','checkbox',array('label'=>'Acompte'))
-            ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'))
-            ->add('fraisDossier','integer',array('label'=>'Frais de dossier'));
-            
+                       'required' => false));            
     }
 
     public function getName()

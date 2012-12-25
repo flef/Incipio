@@ -15,8 +15,8 @@ class SuiviType extends AbstractType
 	    $builder
             //->add('dateCreation',  'date')
             ->add('faitPar','entity',array ('label' => 'Fait par',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
                        'property_path' => true,
                        'required' => true))
             ->add('date','datetime',array('label'=>'Date de l\'évènement'))
