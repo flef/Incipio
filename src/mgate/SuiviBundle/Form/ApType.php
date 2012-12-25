@@ -7,17 +7,17 @@ use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
 use mgate\SuiviBundle\Entity\Ap;
+use mgate\SuiviBundle\Entity\Etude;
 
 class ApType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-	    DocTypeType::buildForm($builder, $options);
-            $builder->add('fraisDossier','integer')
-                    ->add('presentationprojet','textarea',array('label'=>'Présentation du projet'))
-                    ->add('typePrestation', 'choice', array('choices'=>Ap::getValidationChoice(),'required'=>false,'label'=>'Type de prestation'))
-                    ->add('descriptionprestation','textarea',array('label'=>'Description de la prestation'))
-                    ->add('capacitedev','textarea',array('label'=>'Capacité des intervenants:'));
+	   // DocTypeType::buildForm($builder, $options);
+            $builder->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
+                    ->add('description','textarea',array('label'=>'Présentation du projet'))
+                    ->add('competences','textarea',array('label'=>'Capacité des intervenants:'))
+                    ->add('ap',new DocTypeType(),array('label'=>'Suivi du document'));
   
     }
 
@@ -29,7 +29,7 @@ class ApType extends DocTypeType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\Ap',
+            'data_class' => 'mgate\SuiviBundle\Entity\Etude',
         );
     }
 }
