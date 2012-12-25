@@ -49,6 +49,10 @@
     {% endfor %}
     <a href="{{ path('mgateSuivi_mission_ajouter', {'id': etude.id}) }}">Ajouter un Récapitulatif de Mission</a>
  </p>
+  <p>
+    <h3>Facture d'Acompte:</h3>
+        <li><a href="{{ path('mgateSuivi_factureacompte_modifier', {'id': etude.id}) }}">Modifier la Facture d'Acompte</a></li>
+ </p>
  <p>
     <h3>PVI:</h3>
     {% for pvi in etude.pvis %}
@@ -62,6 +66,10 @@
         <li><a href="{{ path('mgateSuivi_pvr_modifier', {'id': pvr.id}) }}">PVR n°{{pvr.id}}</a></li>
     {% endfor %}
     <a href="{{ path('mgateSuivi_pvr_ajouter', {'id': etude.id}) }}">Ajouter un PVR</a>
+ </p>
+  <p>
+    <h3>Facture de Solde:</h3>
+        <li><a href="{{ path('mgateSuivi_facturesolde_modifier', {'id': etude.id}) }}">Modifier la Facture de Solde</a></li>
  </p>
  <p>
     <h3>Factures:</h3>

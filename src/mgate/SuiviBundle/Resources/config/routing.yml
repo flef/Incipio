@@ -194,6 +194,44 @@ mgateSuivi_facture_voir:
     defaults: {_controller: mgateSuiviBundle:Facture:voir}
     requirements:
         id: \d+
+        
+mgateSuivi_factureacompte_ajouter:
+    pattern: /factureacompte/ajouter/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureAcompte:add}
+    requirements:
+        id: \d+
+
+mgateSuivi_factureacompte_voir:
+    pattern: /factureacompte/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureAcompte:voir}
+    requirements:
+        id: \d+
+        
+mgateSuivi_factureacompte_modifier:
+    pattern: /factureacompte/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureAcompte:modifier}
+    requirements:
+        id: \d+
+        
+        
+mgateSuivi_facturesolde_ajouter:
+    pattern: /facturesolde/ajouter/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureSolde:add}
+    requirements:
+        id: \d+
+
+mgateSuivi_facturesolde_voir:
+    pattern: /facturesolde/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureSolde:voir}
+    requirements:
+        id: \d+
+        
+mgateSuivi_facturesolde_modifier:
+    pattern: /facturesolde/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureSolde:modifier}
+    requirements:
+        id: \d+        
+        
 
 mgateSuivi_pvr_ajouter:
     pattern: /pvr/ajouter/{id}

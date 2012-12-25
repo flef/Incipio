@@ -1,0 +1,23 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'une Facture de Solde - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Facture de solde</h2>
+    
+    <i>Version {{facture.version}}</i>
+
+    <div>
+
+    </div>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
+        <a href="{{ path('mgateSuivi_facturesolde_modifier', {'id': facture.id}) }}">Modifier la Facture</a>
+	
+    </p>
+
+{% endblock %}
