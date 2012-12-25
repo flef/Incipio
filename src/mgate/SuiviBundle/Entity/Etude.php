@@ -177,6 +177,16 @@ class Etude
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude")
      */
     private $missions;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="FactureAcompte", cascade={"persist"})
+     */
+    private $factureAcompte;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="FactureSolde", cascade={"persist"})
+     */
+    private $factureSolde;
 
     /**
      * @ORM\OneToMany(targetEntity="Suivi", mappedBy="etude")
@@ -1153,5 +1163,51 @@ class Etude
     public function getPvrs()
     {
         return $this->pvrs;
+    }
+
+    /**
+     * Set factureAcompte
+     *
+     * @param \mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte
+     * @return Etude
+     */
+    public function setFactureAcompte(\mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte = null)
+    {
+        $this->factureAcompte = $factureAcompte;
+    
+        return $this;
+    }
+
+    /**
+     * Get factureAcompte
+     *
+     * @return \mgate\SuiviBundle\Entity\FactureAcompte 
+     */
+    public function getFactureAcompte()
+    {
+        return $this->factureAcompte;
+    }
+
+    /**
+     * Set factureSolde
+     *
+     * @param \mgate\SuiviBundle\Entity\FactureSolde $factureSolde
+     * @return Etude
+     */
+    public function setFactureSolde(\mgate\SuiviBundle\Entity\FactureSolde $factureSolde = null)
+    {
+        $this->factureSolde = $factureSolde;
+    
+        return $this;
+    }
+
+    /**
+     * Get factureSolde
+     *
+     * @return \mgate\SuiviBundle\Entity\FactureSolde 
+     */
+    public function getFactureSolde()
+    {
+        return $this->factureSolde;
     }
 }

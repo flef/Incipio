@@ -53,19 +53,11 @@ class ClientContact
      */
     private $contenu;
     
-     /**
-     * @var boolean $mail
-     *
-     * @ORM\Column(name="mail", type="boolean", nullable=true)
+    /**
+     * @var text $moyenContact
+     * @ORM\Column(name="moyenContact", type="text",nullable=true)
      */
-    private $mail;
-    
-     /**
-     * @var boolean $appel
-     *
-     * @ORM\Column(name="appel", type="boolean", nullable=true)
-     */
-    private $appel;
+    private $moyenContact;
 
 
     /**
@@ -237,5 +229,28 @@ class ClientContact
     public function getAppel()
     {
         return $this->appel;
+    }
+
+    /**
+     * Set moyenContact
+     *
+     * @param string $moyenContact
+     * @return ClientContact
+     */
+    public function setMoyenContact($moyenContact)
+    {
+        $this->moyenContact = $moyenContact;
+    
+        return $this;
+    }
+
+    /**
+     * Get moyenContact
+     *
+     * @return string 
+     */
+    public function getMoyenContact()
+    {
+        return $this->moyenContact;
     }
 }
