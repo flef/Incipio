@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Entity\User as BaseUser;
 
 /**
- * mgate\PersonneBundle\Entity\User
+ * mgate\PersonneBundle\Entity\Personne
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\PersonneBundle\Entity\UserRepository")
+ * @ORM\Entity(repositoryClass="mgate\PersonneBundle\Entity\PersonneRepository")
  */
-class User extends BaseUser
+class Personne
 {
     /**
      * @var integer $id
@@ -72,12 +72,6 @@ class User extends BaseUser
     private $adresse;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
-    
 
     /**
      * Get id
@@ -88,35 +82,12 @@ class User extends BaseUser
     {
         return $this->id;
     }
-    
-    /**
-     * Set identifiant
-     *
-     * @param string $identifiant
-     * @return User
-     */
-    public function setIdentifiant($identifiant)
-    {
-        $this->identifiant = $identifiant;
-    
-        return $this;
-    }
 
-    /**
-     * Get identifiant
-     *
-     * @return string 
-     */
-    public function getIdentifiant()
-    {
-        return $this->identifiant;
-    }
-    
     /**
      * Set prenom
      *
      * @param string $prenom
-     * @return User
+     * @return Personne
      */
     public function setPrenom($prenom)
     {
@@ -139,7 +110,7 @@ class User extends BaseUser
      * Set nom
      *
      * @param string $nom
-     * @return User
+     * @return Personne
      */
     public function setNom($nom)
     {
@@ -159,81 +130,10 @@ class User extends BaseUser
     }
 
     /**
-     * Set mobile
-     *
-     * @param string $mobile
-     * @return User
-     */
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-    
-        return $this;
-    }
-
-    /**
-     * Get mobile
-     *
-     * @return string 
-     */
-    public function getMobile()
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * Set fix
-     *
-     * @param string $fix
-     * @return User
-     */
-    public function setFix($fix)
-    {
-        $this->fix = $fix;
-    
-        return $this;
-    }
-
-    /**
-     * Get fix
-     *
-     * @return string 
-     */
-    public function getFix()
-    {
-        return $this->fix;
-    }
-
-    /**
-     * Set adresse
-     *
-     * @param string $adresse
-     * @return User
-     */
-    public function setAdresse($adresse)
-    {
-        $this->adresse = $adresse;
-    
-        return $this;
-    }
-
-    /**
-     * Get adresse
-     *
-     * @return string 
-     */
-    public function getAdresse()
-    {
-        return $this->adresse;
-    }
-
-
-
-    /**
      * Set sexe
      *
      * @param string $sexe
-     * @return User
+     * @return Personne
      */
     public function setSexe($sexe)
     {
@@ -256,7 +156,7 @@ class User extends BaseUser
      * Set poste
      *
      * @param string $poste
-     * @return User
+     * @return Personne
      */
     public function setPoste($poste)
     {
@@ -273,5 +173,74 @@ class User extends BaseUser
     public function getPoste()
     {
         return $this->poste;
+    }
+
+    /**
+     * Set mobile
+     *
+     * @param string $mobile
+     * @return Personne
+     */
+    public function setMobile($mobile)
+    {
+        $this->mobile = $mobile;
+    
+        return $this;
+    }
+
+    /**
+     * Get mobile
+     *
+     * @return string 
+     */
+    public function getMobile()
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * Set fix
+     *
+     * @param string $fix
+     * @return Personne
+     */
+    public function setFix($fix)
+    {
+        $this->fix = $fix;
+    
+        return $this;
+    }
+
+    /**
+     * Get fix
+     *
+     * @return string 
+     */
+    public function getFix()
+    {
+        return $this->fix;
+    }
+
+    /**
+     * Set adresse
+     *
+     * @param string $adresse
+     * @return Personne
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+    
+        return $this;
+    }
+
+    /**
+     * Get adresse
+     *
+     * @return string 
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
     }
 }

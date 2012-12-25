@@ -57,13 +57,13 @@ class DocType
     private $spt2;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $signataire1;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Employe")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=false)
      */
     private $signataire2;
@@ -324,10 +324,10 @@ class DocType
     /**
      * Set signataire1
      *
-     * @param \mgate\PersonneBundle\Entity\User $signataire1
+     * @param \mgate\PersonneBundle\Entity\Personne $signataire1
      * @return DocType
      */
-    public function setSignataire1(\mgate\PersonneBundle\Entity\User $signataire1)
+    public function setSignataire1(\mgate\PersonneBundle\Entity\Personne $signataire1)
     {
         $this->signataire1 = $signataire1;
     
@@ -337,7 +337,7 @@ class DocType
     /**
      * Get signataire1
      *
-     * @return \mgate\PersonneBundle\Entity\User 
+     * @return \mgate\PersonneBundle\Entity\Personne 
      */
     public function getSignataire1()
     {
@@ -347,10 +347,10 @@ class DocType
     /**
      * Set signataire2
      *
-     * @param \mgate\PersonneBundle\Entity\Employe $signataire2
+     * @param \mgate\PersonneBundle\Entity\Personne $signataire2
      * @return DocType
      */
-    public function setSignataire2(\mgate\PersonneBundle\Entity\Employe $signataire2)
+    public function setSignataire2(\mgate\PersonneBundle\Entity\Personne $signataire2)
     {
         $this->signataire2 = $signataire2;
     
@@ -360,7 +360,7 @@ class DocType
     /**
      * Get signataire2
      *
-     * @return \mgate\PersonneBundle\Entity\Employe 
+     * @return \mgate\PersonneBundle\Entity\Personne 
      */
     public function getSignataire2()
     {

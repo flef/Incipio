@@ -42,6 +42,7 @@ class EmployeController extends Controller
 
         return $this->render('mgatePersonneBundle:Employe:ajouter.html.twig', array(
             'form' => $form->createView(),
+            'prospect' => $prospect,
         ));
         
     }

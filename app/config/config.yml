@@ -4,7 +4,7 @@ imports:
 
 framework:
     #esi:             ~
-    #translator:      { fallback: %locale% }
+    translator:      { fallback: %locale% }
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
@@ -110,7 +110,10 @@ swiftmailer:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main # Nom du firewall security.yml
-    user_class: mgate\PersonneBundle\Entity\User # La classe de l'entité User a modifier
+    user_class: mgate\UserBundle\Entity\User # La classe de l'entité User a modifier
+    registration:
+      form:
+        type: mgate_user_registration
 
 
 
