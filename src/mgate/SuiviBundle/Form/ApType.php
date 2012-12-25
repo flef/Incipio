@@ -17,7 +17,7 @@ class ApType extends DocTypeType
             $builder->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
                     ->add('description','textarea',array('label'=>'Présentation du projet'))
                     ->add('competences','textarea',array('label'=>'Capacité des intervenants:'))
-                    ->add('ap',new DocTypeType(),array('label'=>'Suivi du document'));
+                    ->add('ap',new SuiviApType(),array('label'=>'Suivi du document'));
   
     }
 
