@@ -28,10 +28,8 @@
     <a href="{{ path('mgateSuivi_clientcontact_ajouter', {'id': etude.id}) }}">Ajouter un nouveau contact client</a>
  </p>
     <h3>Avant-Projet:</h3>
-    {% for ap in etude.aps %}
-        <li><a href="{{ path('mgateSuivi_ap_modifier', {'id': ap.id}) }}">Version {{ap.id}}</a></li>
-    {% endfor %}
-    <a href="{{ path('mgateSuivi_ap_ajouter', {'id': etude.id}) }}">Ajouter un Avant-Projet</a>
+    
+        <li><a href="{{ path('mgateSuivi_ap_modifier', {'id': etude.id}) }}">Modifier l'Avant-Projet </a></li>  
 </p>
 <p>
     <h3>Phases:</h3>
@@ -42,10 +40,7 @@
  </p>
  <p>
     <h3>Convention Client:</h3>
-    {% for cc in etude.ccs %}
-        <li><a href="{{ path('mgateSuivi_cc_modifier', {'id': cc.id}) }}">Version {{cc.id}}</a></li>
-    {% endfor %}
-    <a href="{{ path('mgateSuivi_cc_ajouter', {'id': etude.id}) }}">Ajouter une Convention Client</a>
+        <li><a href="{{ path('mgateSuivi_cc_modifier', {'id': etude.id}) }}">Modifier la Convention Client</a></li>
  </p>
  <p>
     <h3>Récapitulatif de Mission:</h3>

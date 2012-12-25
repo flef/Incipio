@@ -9,6 +9,8 @@ use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
 use mgate\PersonneBundle\Entity\User as User;
 
+use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
+
 class EtudeType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
@@ -22,7 +24,9 @@ class EtudeType extends AbstractType
                        'required' => true))
             ->add('nom', 'text')
             //->add('dateCreation',  'date')
-            ->add('description')
+            ->add('description','textarea',array('label'=>'Présentation du projet'))
+            ->add('descriptionPrestation','textarea',array('label'=>'Description de la prestation proposée par M-GaTE'))
+            ->add('typePrestation',new PrestationType())
             ->add('mandat', 'integer', array('data' => '5') )
             ->add('num', 'integer' )
             ->add('suiveur', 'entity', 
@@ -30,7 +34,10 @@ class EtudeType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\User',
                        'property' => 'username',
                        'property_path' => true,
-                       'required' => false));
+                       'required' => false))
+            ->add('acompte','checkbox',array('label'=>'Acompte'))
+            ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'))
+            ->add('fraisDossier','integer',array('label'=>'Frais de dossier'));
             
     }
 

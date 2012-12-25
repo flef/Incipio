@@ -85,12 +85,12 @@ class CcController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $cc = $em->getRepository('mgate\SuiviBundle\Entity\Cc')->find($id) )
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
             throw $this->createNotFoundException('Cc[id='.$id.'] inexistant');
         }
 
-        $form        = $this->createForm(new CcType, $cc);
+        $form        = $this->createForm(new CcType, $etude);
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -99,14 +99,14 @@ class CcController extends Controller
             if( $form->isValid() )
             {
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_cc_voir', array('id' => $cc->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_cc_voir', array('id' => $etude->getId())) );
             }
                 
         }
 
         return $this->render('mgateSuiviBundle:Cc:modifier.html.twig', array(
             'form' => $form->createView(),
-            'cc' => $cc,
+            'etude' => $etude,
         ));
     }
 }
