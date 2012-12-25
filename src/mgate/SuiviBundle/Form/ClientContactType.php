@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form;
 use mgate\CommentBundle\Form\ThreadType;
 
+use mgate\SuiviBundle\Form\Type\MoyenContactType as MoyenContactType;
+
 class ClientContactType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
@@ -24,8 +26,8 @@ class ClientContactType extends AbstractType
             //->add('thread', new ThreadType) // délicat 
            ->add('date','datetime',array('label'=>'Date du contact'))
            ->add('contenu','textarea',array('label'=>'Résumé du contact'))
-           ->add('mail', 'checkbox', array('label'=>'Contact effectué par mail','required'=>false))
-           ->add('appel', 'checkbox', array('label'=>'Contact effectué par téléphone','required'=>false));
+           ->add('moyenContact', new MoyenContactType(), array('label'=>'Contact effectué par'))
+           ;
             
              
             
