@@ -15,7 +15,7 @@ class CcType extends DocTypeType
 	   
             $builder->add('acompte','checkbox',array('label'=>'Acompte'))
                     ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'))
-                    ->add('cc',new DocTypeType(),array('label'=>'Suivi du document'));
+                    ->add('cc',new SuiviCcType(),array('label'=>'Suivi du document'));
             
             
              
