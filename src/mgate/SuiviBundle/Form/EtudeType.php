@@ -16,12 +16,18 @@ class EtudeType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-            ->add('prospect', 'entity', 
+            /*->add('prospect', 'entity', 
                 array ('label' => 'Client',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Prospect',
                        'property' => 'nom',
                        'property_path' => true,
-                       'required' => true))
+                       'required' => true))*/
+            ->add('prospect', 'genemu_jqueryautocomplete_entity', array(
+                 'class' => 'mgatePersonneBundle:Prospect',
+                 'property' => 'nom',
+                  'configs' => array(
+                    'minLength' => 1,
+                    ),))
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
             ->add('mandat', 'integer', array('data' => '5') )

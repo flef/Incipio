@@ -1,15 +1,15 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
-{% block title %}Modifier un employé - {{ parent() }}{% endblock %}
+{% block title %}Modifier un membre - {{ parent() }}{% endblock %}
 
 {% block content_bundle %}
 
-    <h2>Modifier un employé</h2>
-    {% include "mgatePersonneBundle:Employe:formulaire.html.twig" %}
+    <h2>Modifier un membre</h2>
+    {% include "mgatePersonneBundle:Membre:formulaire.html.twig" %}
 
                 
 <p>
-    <a href="{{ path('mgatePersonne_employe_voir', {'id': employe.id}) }}" >Retour à l'employé</a>
+    <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
 </p>
 {% endblock %}
 
