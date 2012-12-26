@@ -9,9 +9,11 @@ use mgate\PersonneBundle\Form;
 
 class DocTypeType extends AbstractType
 {
+    private $type;
+    
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-	    $builder
+            $builder
             ->add('version', 'integer', array('label'=>'Version du document'))
             ->add('signataire1', 'entity', 
                 array ('label' => 'Signataire M-GaTE',
@@ -25,19 +27,14 @@ class DocTypeType extends AbstractType
                        'property' => 'nom',
                        'property_path' => true,
                        'required' => true))
-            ->add('redige', 'checkbox', array('label'=>'Est-ce que le document est rédigé ?','required'=>false))
-            ->add('relu', 'checkbox', array('label'=>'Est-ce que le document est relu ?','required'=>false))
-            ->add('spt1', 'checkbox', array('label'=>'Est-ce que le document est signé paraphé tamponné par M-GaTE ?','required'=>false))
-            ->add('spt2', 'checkbox', array('label'=>'Est-ce que le document est signé paraphé tamponné par le client ?','required'=>false))
-            ->add('envoye', 'checkbox', array('label'=>'Est-ce que le document est envoyé ?','required'=>false))
-            ->add('receptionne', 'checkbox', array('label'=>'Est-ce que le document est réceptionné ?','required'=>false))
             //->add('montant', 'money', array('label'=>'Montant')) // inutile ?  
             ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document','required'=>false, 'widget'=>'single_text'));
             
-            /*             ->add('prospect', 'collection', array('type'  => new \mgate\PersonneBundle\Form\ProspectType,
-                                              'prototype' => true,
-                                              'allow_add' => true)); */
-            
+    }
+    
+    public function __construct($type = null)
+    {
+        $this->type = $type;
     }
 
     public function getName()
@@ -47,10 +44,16 @@ class DocTypeType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
-        return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-            /*'cascade_validation' => true,*/
-        );
+        if($this->type==null)
+            return array(
+                'data_class' => 'mgate\SuiviBundle\Entity\DocType',
+                /*'cascade_validation' => true,*/
+            );
+        else        
+            return array(
+                'data_class' => 'mgate\SuiviBundle\Entity\\'.$this->type,
+                /*'cascade_validation' => true,*/
+            );
     }
 }
 

@@ -13,16 +13,9 @@ class CcType extends DocTypeType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	   
-            $builder->add('acompte','checkbox',array('label'=>'Acompte'))
-                    ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'))
-                    ->add('cc',new SuiviCcType(),array('label'=>'Suivi du document'));
-            
-            
-             
-            
-            /*             ->add('prospect', 'collection', array('type'  => new \mgate\PersonneBundle\Form\ProspectType,
-                                              'prototype' => true,
-                                              'allow_add' => true)); */
+            $builder->add('cc', new DocTypeType('Cc'), array('label'=>' '))
+                    ->add('acompte','checkbox',array('label'=>'Acompte'))
+                    ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte'));
             
     }
 
