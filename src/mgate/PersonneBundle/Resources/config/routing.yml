@@ -9,10 +9,8 @@ mgatePersonne_prospect_homepage:
       page : \d*
     
 mgatePersonne_prospect_ajouter:
-    pattern: /prospect/add
-    defaults: {_controller: mgatePersonneBundle:Prospect:ajouter}
-    requirements:
-        id: \d+
+    pattern: /prospect/add/{format}
+    defaults: {_controller: mgatePersonneBundle:Prospect:ajouter, format:null}
 
 mgatePersonne_prospect_voir:
     pattern:   /prospect/voir/{id}

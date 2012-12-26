@@ -21,6 +21,7 @@
             <h1>header</h1>
         </div>
 
+{% block menu %}
         <div>
             <div id="menu">
                 <h3>Menu</h3>
@@ -29,7 +30,7 @@
                     <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Gestion des personnes</a></li>
                 </ul>
             </div>
-                
+{% endblock %}        
             <div id="content">
                 {% block body %}
                 {% endblock %}
