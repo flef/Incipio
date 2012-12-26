@@ -20,7 +20,7 @@ class ApType extends DocTypeType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'nom',
                        'property_path' => true,
-                       'required' => false))
+                       'required' => true))
                     ->add('ap', new DocTypeType('Ap'), array('label'=>' '))
                     ->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
                     ->add('presentationProjet','textarea',array('label'=>'Présentation du projet'))

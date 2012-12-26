@@ -31,56 +31,56 @@ class Mission extends DocType
 
     /** , inversedBy="missions", cascade={"persist"}
      * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Personne")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
 
     /**
      * @var \DateTime $debutOm
      *
-     * @ORM\Column(name="debutOm", type="datetime")
+     * @ORM\Column(name="debutOm", type="datetime", nullable=true)
      */
     private $debutOm;
 
     /**
      * @var \DateTime $finOm
      *
-     * @ORM\Column(name="finOm", type="datetime")
+     * @ORM\Column(name="finOm", type="datetime", nullable=true)
      */
     private $finOm;
 
     /**
      * @var integer $avancement
      *
-     * @ORM\Column(name="avancement", type="integer")
+     * @ORM\Column(name="avancement", type="integer", nullable=true)
      */
     private $avancement;
 
     /**
      * @var boolean $rapportDemande
      *
-     * @ORM\Column(name="rapportDemande", type="boolean")
+     * @ORM\Column(name="rapportDemande", type="boolean", nullable=true)
      */
     private $rapportDemande;
 
     /**
      * @var boolean $rapportRelu
      *
-     * @ORM\Column(name="rapportRelu", type="boolean")
+     * @ORM\Column(name="rapportRelu", type="boolean", nullable=true)
      */
     private $rapportRelu;
 
     /**
      * @var boolean $remunere
      *
-     * @ORM\Column(name="remunere", type="boolean")
+     * @ORM\Column(name="remunere", type="boolean", nullable=true)
      */
     private $remunere;
     
      /**
      * @var integer $nbjeh
      *
-     * @ORM\Column(name="nbjeh", type="integer")
+     * @ORM\Column(name="nbjeh", type="integer", nullable=true)
      */
     private $nbjeh;
 

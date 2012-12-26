@@ -1,8 +1,7 @@
-{# Formulaire d'ajout d'une étude #}
-
 <form method="post" {{ form_enctype(form) }}>
 	
 	{{ form_widget(form) }}
 	
-	<input type="submit" value="Enregistrer le Récapitulatif de Mission"/>      
+	<input type="submit" value="Enregistrer la phase"/>
+        <input type="submit" value="Enregistrer la phase et passer à une suivante" name="ap" id="ap"/>
 </form>

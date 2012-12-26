@@ -62,6 +62,12 @@ mgateSuivi_cc_modifier:
     pattern: /cc/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Cc:modifier}
     requirements:
+        id: \d+
+        
+mgateSuivi_cc_rediger:
+    pattern: /cc/rediger/{id}
+    defaults: {_controller: mgateSuiviBundle:Cc:rediger}
+    requirements:
         id: \d+ 
 
 mgateSuivi_cc_voir:
@@ -69,22 +75,16 @@ mgateSuivi_cc_voir:
     defaults: {_controller: mgateSuiviBundle:Cc:voir}
     requirements:
         id: \d+
-
-mgateSuivi_mission_ajouter:
-    pattern: /mission/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Mission:add}
+        
+mgateSuivi_mission_rediger:
+    pattern: /mission/rediger/{id}
+    defaults: {_controller: mgateSuiviBundle:Mission:rediger}
     requirements:
         id: \d+
         
-mgateSuivi_mission_voir:
-    pattern: /mission/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Mission:voir}
-    requirements:
-        id: \d+
-        
-mgateSuivi_mission_modifier:
-    pattern: /mission/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Mission:modifier}
+mgateSuivi_missions_modifier:
+    pattern: /missions/modifier/{id}
+    defaults: {_controller: mgateSuiviBundle:Missions:modifier}
     requirements:
         id: \d+
         
@@ -256,13 +256,7 @@ mgateSuivi_pvr_voir:
     defaults: {_controller: mgateSuiviBundle:Pvr:voir}
     requirements:
         id: \d+
-        
-mgateSuivi_phase_ajouter:
-    pattern: /phase/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Phase:add}
-    requirements:
-        id: \d+
-        
+                
 mgateSuivi_phases_modifier:
     pattern: /phases/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Phases:modifier}
