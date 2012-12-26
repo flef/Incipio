@@ -1,5 +1,14 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
+{% if format=='mini' %}
+    {% block menu %}
+    {% endblock %}
+    {% block submenu %}
+    {% endblock %}
+{% else %}
+
+{% endif %}
+
 {% block content_bundle %}
 
   <h2>Ajouter un Prospect</h2>

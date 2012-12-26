@@ -8,6 +8,7 @@
 {% block body %}
 
     {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+    {% block submenu %}
     <h1>Gestion des Clients et des Utilisateurs</h1>
     
     <h4>Sous-Menu</h4>
@@ -22,7 +23,8 @@
     </ul>
 
     <hr>
-
+    {% endblock %}
+    
     {# On définit un nouveau block, que les vues du bundle pourront remplir #}
     {% block content_bundle %}
     {% endblock %}

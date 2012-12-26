@@ -11,7 +11,7 @@ use mgate\PersonneBundle\Form\ProspectHandler;
 class ProspectController extends Controller
 {
     
-    public function ajouterAction()
+    public function ajouterAction($format)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $prospect = new Prospect;
@@ -39,6 +39,7 @@ class ProspectController extends Controller
 
         return $this->render('mgatePersonneBundle:Prospect:ajouter.html.twig', array(
             'form' => $form->createView(),
+            'format' => $format
         ));
         
     }
