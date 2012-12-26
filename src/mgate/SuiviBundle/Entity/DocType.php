@@ -11,7 +11,7 @@ class DocType
     /**
      * @var integer $version
      *
-     * @ORM\Column(name="version", type="integer")
+     * @ORM\Column(name="version", type="integer", nullable=true)
      */
     private $version;
 
@@ -58,13 +58,13 @@ class DocType
     
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $signataire1;
     
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $signataire2;
 

@@ -13,7 +13,14 @@ class RegistrationFormType extends BaseType
     {
         parent::buildForm($builder, $options);
 
-        $builder->add('personne', new PersonneType(), array('label'=>' '));
+        $builder->add('personne', 'entity', 
+                array ('label' => 'Personne',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'nom',
+                       'property_path' => true,
+                       'required' => true));   
+        
+        //$builder->add('personne', new PersonneType(), array('label'=>' '));
             //->add('username', null, array('label' => 'Nom dutilisateur', 'translation_domain' => 'FOSUserBundle'));
     }
 

@@ -20,10 +20,11 @@ class User extends BaseUser
     protected $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="\mgate\PersonneBundle\Entity\Personne", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="\mgate\PersonneBundle\Entity\Personne", inversedBy="user", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $personne;
+
 
     /**
      * Get id

@@ -70,6 +70,25 @@ class Personne
      * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
+    
+    
+    /**
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $employe;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="mgate\UserBundle\Entity\User", mappedBy="personne")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $user;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="membre")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $membre;
 
 
 
@@ -242,5 +261,74 @@ class Personne
     public function getAdresse()
     {
         return $this->adresse;
+    }
+
+    /**
+     * Set employe
+     *
+     * @param \mgate\PersonneBundle\Entity\Employe $employe
+     * @return Personne
+     */
+    public function setEmploye(\mgate\PersonneBundle\Entity\Employe $employe = null)
+    {
+        $this->employe = $employe;
+    
+        return $this;
+    }
+
+    /**
+     * Get employe
+     *
+     * @return \mgate\PersonneBundle\Entity\Employe 
+     */
+    public function getEmploye()
+    {
+        return $this->employe;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \mgate\UserBundle\Entity\User $user
+     * @return Personne
+     */
+    public function setUser(\mgate\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \mgate\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set membre
+     *
+     * @param \mgate\PersonneBundle\Entity\Membre $membre
+     * @return Personne
+     */
+    public function setMembre(\mgate\PersonneBundle\Entity\Membre $membre = null)
+    {
+        $this->membre = $membre;
+    
+        return $this;
+    }
+
+    /**
+     * Get membre
+     *
+     * @return \mgate\PersonneBundle\Entity\Membre 
+     */
+    public function getMembre()
+    {
+        return $this->membre;
     }
 }

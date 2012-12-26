@@ -1,0 +1,23 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Employé - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+<p>
+	<h2>{{ employe.personne.sexe }} {{ employe.personne.nom }} {{ employe.personne.prenom }}</h2>
+	<i>{{ employe.personne.poste }}</i><br />
+            Mobile: {{ employe.personne.mobile }}<br />
+            Fix: {{ employe.personne.fix }}<br />
+            Email: {{ employe.email }}<br />
+            Adresse: {{ employe.personne.adresse }}<br />
+            Mobile: {{ employe.personne.mobile }}<br />
+</p>
+
+<p>
+    <a href="{{ path('mgatePersonne_prospect_voir', {'id': employe.prospect.id}) }}">Retour au prospect</a><br />
+    <a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">Modifier l'employé</a>
+</p>
+
+{% endblock %}

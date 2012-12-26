@@ -49,3 +49,25 @@ mgatePersonne_employe_modifier:
     defaults: {_controller: mgatePersonneBundle:Employe:modifier}
     requirements:
         id: \d+
+        
+mgatePersonne_membre_homepage:
+    pattern:  /membre
+    defaults: { _controller: mgatePersonneBundle:Membre:index , page: 1 }
+    requirements:
+      page : \d*
+    
+mgatePersonne_membre_ajouter:
+    pattern: /membre/add
+    defaults: {_controller: mgatePersonneBundle:Membre:ajouter}
+
+mgatePersonne_membre_voir:
+    pattern:   /membre/{id}
+    defaults:  { _controller: mgatePersonneBundle:Membre:voir}
+    requirements:
+        id:  \d+
+
+mgatePersonne_membre_modifier:
+    pattern: /membre/modifier/{id}
+    defaults: {_controller: mgatePersonneBundle:Membre:modifier}
+    requirements:
+        id: \d+        

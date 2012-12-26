@@ -18,13 +18,13 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
         
         
-    <h2>Modifier un Récapitulatif de Mission</h2>
+    <h2>Rédiger le Récapitulatif de Mission de {{mission.intervenant.nom}} {{mission.intervenant.prenom}}</h2>
 
     {% include "mgateSuiviBundle:Mission:formulaire.html.twig" %} 
 
 
     <p>
-        <a href="{{ path('mgateSuivi_mission_voir', {'id': mission.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_etude_voir', {'id': mission.etude.id}) }}" >Retour à l'étude</a>
     </p>
 
 {% endblock %}
