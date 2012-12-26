@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             //new Io\FormBundle\IoFormBundle(),
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new mgate\UserBundle\mgateUserBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
