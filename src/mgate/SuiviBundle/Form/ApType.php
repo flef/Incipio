@@ -21,12 +21,12 @@ class ApType extends DocTypeType
                        'property' => 'nom',
                        'property_path' => true,
                        'required' => false))
+                    ->add('ap', new DocTypeType('Ap'), array('label'=>' '))
                     ->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
                     ->add('presentationProjet','textarea',array('label'=>'Présentation du projet'))
                     ->add('descriptionPrestation','textarea',array('label'=>'Description de la prestation proposée par M-GaTE'))
                     ->add('typePrestation',new PrestationType(),array('label'=>'Type de prestation'))
                     ->add('competences','textarea',array('label'=>'Capacité des intervenants:'));
-                    //->add('ap',new SuiviApType(),array('label'=>'Suivi du document'));
   
     }
 

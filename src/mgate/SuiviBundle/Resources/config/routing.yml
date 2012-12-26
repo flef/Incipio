@@ -44,7 +44,13 @@ mgateSuivi_ap_voir:
     pattern: /ap/voir/{id}
     defaults: {_controller: mgateSuiviBundle:Ap:voir}
     requirements:
-        id: \d+    
+        id: \d+
+
+mgateSuivi_ap_rediger:
+    pattern: /ap/rediger/{id}
+    defaults: {_controller: mgateSuiviBundle:Ap:rediger}
+    requirements:
+        id: \d+      
         
 mgateSuivi_cc_ajouter:
     pattern: /cc/ajouter/{id}
