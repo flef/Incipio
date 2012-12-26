@@ -1,23 +1,23 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
 {% block title %}
-	Affichage d'un Employé - {{ parent() }}
+	Affichage d'un Membre - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 <p>
-	<h2>{{ employe.personne.sexe }} {{ employe.personne.nom }} {{ employe.personne.prenom }}</h2>
-	<i>{{ employe.personne.poste }}</i><br />
-            Mobile: {{ employe.personne.mobile }}<br />
-            Fix: {{ employe.personne.fix }}<br />
-            Email: {{ employe.email }}<br />
-            Adresse: {{ employe.personne.adresse }}<br />
-            Mobile: {{ employe.personne.mobile }}<br />
+	<h2>{{ membre.personne.sexe }} {{ membre.personne.nom }} {{ membre.personne.prenom }}</h2>
+	<i>{{ membre.personne.poste }}</i><br />
+            Mobile: {{ membre.personne.mobile }}<br />
+            Fix: {{ membre.personne.fix }}<br />
+            Email: {{ membre.personne.email }}<br />
+            Adresse: {{ membre.personne.adresse }}<br />
+            Mobile: {{ membre.personne.mobile }}<br />
 </p>
 
 <p>
-    <a href="{{ path('mgatePersonne_prospect_voir', {'id': employe.prospect.id}) }}">Retour au prospect</a><br />
-    <a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">Modifier l'employé</a>
+    <a href="{{ path('mgatePersonne_membre_homepage', {'id': membre.id}) }}">Retour à la liste des membres</a><br />
+    <a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">Modifier le membre</a>
 </p>
 
 {% endblock %}

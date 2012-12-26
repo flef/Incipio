@@ -5,6 +5,7 @@ namespace mgate\PersonneBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use mgate\PersonneBundle\Entity\Membre;
+use mgate\PersonneBundle\Entity\Personne;
 use mgate\PersonneBundle\Form\MembreType;
 
 class MembreController extends Controller
@@ -15,8 +16,11 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getEntityManager();    
         
         $membre = new Membre;
+        /*$personne = new Personne;
+        $membre->setPersonne($personne);
+        $personne->setMembre($membre);*/
 
-        $form        = $this->createForm(new MembreType, $membre);
+        $form = $this->createForm(new MembreType, $membre);
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -44,7 +48,7 @@ class MembreController extends Controller
         $entities = $em->getRepository('mgatePersonneBundle:Membre')->findAll();
 
         return $this->render('mgatePersonneBundle:Membre:index.html.twig', array(
-            'users' => $entities,
+            'membres' => $entities,
         ));
                 
     }
