@@ -71,6 +71,13 @@ class Personne
      */
     private $adresse;
     
+    /**
+     * @var string $email
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     */
+    private $email;
+    
     
     /**
      * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne")
@@ -261,6 +268,29 @@ class Personne
     public function getAdresse()
     {
         return $this->adresse;
+    }    
+    
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Personne
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
     }
 
     /**

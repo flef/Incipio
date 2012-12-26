@@ -9,12 +9,12 @@
     <h2>Liste des Membres</h2>
 
     <ul>
-        {% for user in users %}
+        {% for membre in membres %}
             <li>
-            <a href="{{ path('mgatePersonne_user_voir', {'id': user.id}) }}"> {{ user.nom }} </a>
+            <a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}"> {{ membre.personne.nom }} </a>
             </li>
         {% else %}
-            <li>Pas (encore !) de User</li>
+            <li>Pas (encore !) de Membre</li>
         {% endfor %}
     </ul>
 

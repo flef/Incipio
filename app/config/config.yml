@@ -33,6 +33,7 @@ twig:
 
 genemu_form:
     date: ~
+    autocomplete: ~
 
 # Assetic Configuration
 assetic:
@@ -176,6 +177,3 @@ jms_serializer:
 #            another-name:
 #                namespace_prefix: "My\\BarBundle"
 #                path: "@MyBarBundle/Resources/config/serializer"
-
-genemu_form:
-    date: ~

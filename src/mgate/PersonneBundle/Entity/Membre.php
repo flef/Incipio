@@ -24,7 +24,7 @@ class Membre
     
     /**
      * @ORM\OneToOne(targetEntity="Personne", inversedBy="membre", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $personne;
     
