@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use mgate\PersonneBundle\Entity\Employe;
 use mgate\PersonneBundle\Form\EmployeType;
-use mgate\PersonneBundle\Form\EmployeHandler;
 
 class EmployeController extends Controller
 {

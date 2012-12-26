@@ -16,18 +16,18 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     
 
-<h2>Modifier les {{ form.phases | length  }} phases</h2>
+<h2>Modifier les {{ form.missions | length  }} intervenants</h2>
 <form method="POST" {{ form_enctype(form) }}>
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+<p><br /><input type="submit" value="Ajouter un Intervenant" name="add"/></p>
     <div class="boutonAdd"></div>
-    <u1 class="phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
+    <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">
         {# itere sur chaque tag existant et affiche son unique champ : name #}
-        {% for phase in form.phases %}
+        {% for mission in form.missions %}
             <li>
-                <h4 class="titrePhase"></h4>{{ form_widget(phase) }}
+                <h4 class="titreMission"></h4>{{ form_widget(mission) }}
             </li><br />
         {% endfor %}
     </u1>
@@ -65,30 +65,30 @@
     });
     
     // Recupere le div qui contient la collection de tags
-    var collectionHolder = $('.phases');
+    var collectionHolder = $('.missions');
     
     function updateOrder() {
         $('input.position').each(function(i) {
             $(this).val( i );
         });
-        $('.titrePhase').each(function(i) {
-            $(this).text( 'Phase n°'+(i+1) );
+        $('.titreMission').each(function(i) {
+            $(this).text( 'Mission n°'+(i+1) );
         });
     }
     
     function updatePrix() {
         var prix = 0;
-        var phase = 0;
+        var mission = 0;
         
         $('input.nbrJEH').each(function(i1) {
-            phase=parseInt($(this).val());
+            mission=parseInt($(this).val());
             
             $('input.prixJEH').each(function(i2) {
                 if(i1==i2)
-                phase*=parseInt($(this).val());           
+                mission*=parseInt($(this).val());           
             });
-            if(!isNaN(phase))
-                prix+=phase;
+            if(!isNaN(mission))
+                prix+=mission;
         });
 
        $('.prix').text( prix );
@@ -128,9 +128,9 @@
             return true;
         });
         
-        //Rajout des boutons (X, up, down) pour les phases
+        //Rajout des boutons (X, up, down) pour les missions
         collectionHolder.find('li').each(function() {
-            addPhaseBouton($(this));
+            addMissionBouton($(this));
         });
         
         //Ajouter le drag and drop
@@ -188,12 +188,10 @@
             updatePrix();
             updateNbrJEH();
         });
-        
-
 
     });
     
-    function addPhaseBouton($tagFormLi) {
+    function addMissionBouton($tagFormLi) {
         var $delete = $('<button id="myButtonDelete">X</button>');
         var $up = $('<button id="myButtonUp">▲</button>');
         var $down = $('<button id="myButtonDown">▼</button>');
@@ -231,15 +229,15 @@
 </script>
 
 
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+<p><br /><input type="submit" value="Ajouter une mission" name="add"/></p>
 
-    <p><br /><input type="submit" value="Enregistrer les phases" /></p>
+    <p><br /><input type="submit" value="Enregistrer les missions" /></p>
 </form>
 
 <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
 
 
-<div id="dialog" title="Aide au chiffrage">
+<div id="dialog" title="Résumé et vérification">
     <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
     <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
     <p><button id="myButtonUpdate">Raffraichir</button></p>

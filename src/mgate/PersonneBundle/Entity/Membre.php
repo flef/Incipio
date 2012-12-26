@@ -6,12 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * mgate\PersonneBundle\Entity\Employe
+ * mgate\PersonneBundle\Entity\Membre
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\PersonneBundle\Entity\EmployeRepository")
+ * @ORM\Entity(repositoryClass="mgate\PersonneBundle\Entity\MembreRepository")
  */
-class Employe
+class Membre
 {
     /**
      * @var integer $id
@@ -20,20 +20,20 @@ class Employe
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
-     
-    /**
-     * @ORM\ManyToOne(targetEntity="Prospect", inversedBy="employes", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $prospect;
-    
+    protected $id;  
     
     /**
-     * @ORM\OneToOne(targetEntity="Personne", inversedBy="employe", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="Personne", inversedBy="membre", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $personne;
+    
+    /**
+     * @var string $identifiant
+     *
+     * @ORM\Column(name="identifiant", type="string", length=10, nullable=true)
+     */
+    private $identifiant;
 
 
 
@@ -48,33 +48,33 @@ class Employe
     }
 
     /**
-     * Set prospect
+     * Set identifiant
      *
-     * @param \mgate\PersonneBundle\Entity\Prospect $prospect
-     * @return Employe
+     * @param string $identifiant
+     * @return Membre
      */
-    public function setProspect(\mgate\PersonneBundle\Entity\Prospect $prospect)
+    public function setIdentifiant($identifiant)
     {
-        $this->prospect = $prospect;
+        $this->identifiant = $identifiant;
     
         return $this;
     }
 
     /**
-     * Get prospect
+     * Get identifiant
      *
-     * @return \mgate\PersonneBundle\Entity\Prospect 
+     * @return string 
      */
-    public function getProspect()
+    public function getIdentifiant()
     {
-        return $this->prospect;
+        return $this->identifiant;
     }
 
     /**
      * Set personne
      *
      * @param \mgate\PersonneBundle\Entity\Personne $personne
-     * @return Employe
+     * @return Membre
      */
     public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
     {

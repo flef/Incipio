@@ -174,7 +174,7 @@ class Etude
     private $cc;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude")
+     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist"})
      */
     private $missions;
     

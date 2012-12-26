@@ -26,55 +26,8 @@ class MissionController extends Controller
          
     }  
     
-    public function addAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
-        }
-        
-        
-        $mission = new Mission;
-        $mission->setEtude($etude);
-        $form        = $this->createForm(new MissionType, $mission);
-        $formHandler = new MissionHandler($form, $this->get('request'), $em);
-        
-        if($formHandler->process())
-        {
-           
-            return $this->redirect( $this->generateUrl('mgateSuivi_mission_voir', array('id' => $mission->getId())) );
-            
-        }
-
-        return $this->render('mgateSuiviBundle:Mission:ajouter.html.twig', array(
-            'form' => $form->createView(),
-        ));
-        
-    }
     
-    public function voirAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('mgateSuiviBundle:Mission')->find($id); // Ligne qui posse problème
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AvMission entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('mgateSuiviBundle:Mission:voir.html.twig', array(
-            'mission'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
-        
-        
-    }
-    
-    public function modifierAction($id)
+    public function redigerAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -97,7 +50,7 @@ class MissionController extends Controller
                 
         }
 
-        return $this->render('mgateSuiviBundle:Mission:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Mission:rediger.html.twig', array(
             'form' => $form->createView(),
             'mission' => $mission,
         ));
