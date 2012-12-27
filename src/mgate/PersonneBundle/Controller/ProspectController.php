@@ -8,6 +8,9 @@ use mgate\PersonneBundle\Entity\Prospect;
 use mgate\PersonneBundle\Form\ProspectType;
 use mgate\PersonneBundle\Form\ProspectHandler;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 class ProspectController extends Controller
 {
     
@@ -98,4 +101,30 @@ class ProspectController extends Controller
         ));
     }
     
+    
+     /**
+     * @Route("/ajax_prospect", name="ajax_prospect")
+     */
+    public function ajaxProspectAction(Request $request)
+    {
+      
+        $value = $request->get('term');
+
+        $em = $this->getDoctrine()->getEntityManager();
+        $members = $em->getRepository('mgatePersonneBundle:Prospect')->findAll();
+
+        $json = array();
+        foreach ($members as $member) {
+            $json[] = array(
+                'label' => $member->getNom(),
+                'value' => $member->getId()
+            );
+        }
+
+        $response = new Response();
+        $response->setContent(json_encode($json));
+        
+        
+        return $response;
+    }  
 }

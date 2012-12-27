@@ -7,7 +7,7 @@ installation de composer :
 curl -s https://getcomposer.org/installer | php
 php composer.phar self-update
 php composer.phar update
-php composer.phar install
+php composer.phar install                   <- bof a ne pas faire update c'est mieux
 php -d memory_limit=-1 composer.phar update
 
 
