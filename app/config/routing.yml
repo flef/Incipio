@@ -53,3 +53,7 @@ fos_comment_api:
     
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+    
+prospect:
+    resource: "@mgatePersonneBundle/Controller/ProspectController.php"
+    type:     annotation
