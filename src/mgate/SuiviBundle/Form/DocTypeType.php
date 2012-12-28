@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
+use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 class DocTypeType extends AbstractType
 {
@@ -18,16 +19,17 @@ class DocTypeType extends AbstractType
             ->add('signataire1', 'entity', 
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
-                       'required' => true))
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
+                       'required' => false))
             ->add('signataire2', 'entity', 
                 array ('label' => 'Signataire Client',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
-                       'required' => true))
-            //->add('montant', 'money', array('label'=>'Montant')) // inutile ?  
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getEmployeOnly(); },
+                       'required' => false))
             ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document','required'=>false, 'widget'=>'single_text'));
             
     }

@@ -31,8 +31,8 @@ mgatePersonne_employe_homepage:
       page : \d*
     
 mgatePersonne_employe_ajouter:
-    pattern: /employe/add/{prospect_id}
-    defaults: {_controller: mgatePersonneBundle:Employe:ajouter}
+    pattern: /employe/add/{prospect_id}/{format}
+    defaults: {_controller: mgatePersonneBundle:Employe:ajouter, format:null}
     requirements:
         prospect_id: \d+
 
