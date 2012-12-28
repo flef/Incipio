@@ -12,9 +12,7 @@ class EmployeType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-                ->add('personne', new PersonneType(), array('label'=>' '))
-                ->add('email', 'email', array('required'=>false));
-
+                ->add('personne', new PersonneType(), array('label'=>' '));
             
     }
 
