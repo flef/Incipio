@@ -80,19 +80,19 @@ class Personne
     
     
     /**
-     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne")
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $employe;
     
     /**
-     * @ORM\OneToOne(targetEntity="mgate\UserBundle\Entity\User", mappedBy="personne")
+     * @ORM\OneToOne(targetEntity="mgate\UserBundle\Entity\User", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $user;
     
     /**
-     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="membre")
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $membre;

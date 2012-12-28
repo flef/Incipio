@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
 use mgate\PersonneBundle\Entity\Personne as Personne;
+use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
 
@@ -30,6 +31,7 @@ class EtudeType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));            
     }
 
