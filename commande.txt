@@ -73,5 +73,4 @@ git reset --hard HEAD
         $logger->info(var_export($this->get('request'), true));
  
 
-
-
+SET NAMES UTF-8

@@ -12,4 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class ProspectRepository extends EntityRepository
 {
+    
+    public function ajaxSearch($nom)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('n')->from('mgatePersonneBundle:Prospect', 'n')
+          ->where( $qb->expr()->like('n.nom', $qb->expr()->literal('%' . $nom . '%')) )
+          ->getQuery();
+        return $query->getResult();
+    }
 }
