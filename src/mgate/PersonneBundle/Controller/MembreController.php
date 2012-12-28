@@ -16,9 +16,6 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getEntityManager();    
         
         $membre = new Membre;
-        /*$personne = new Personne;
-        $membre->setPersonne($personne);
-        $personne->setMembre($membre);*/
 
         $form = $this->createForm(new MembreType, $membre);
         
@@ -29,6 +26,8 @@ class MembreController extends Controller
             if( $form->isValid() )
             {
                 $em->persist($membre);    
+                $em->flush();
+                $membre->getPersonne()->setMembre($membre);
                 $em->flush();
 
                 return $this->redirect( $this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre->getId())) );
