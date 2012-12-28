@@ -9,6 +9,7 @@ use mgate\PersonneBundle\Form;
 use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
+use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 class ApType extends DocTypeType
 {
@@ -18,9 +19,10 @@ class ApType extends DocTypeType
             $builder->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
-                       'required' => true))
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
+                       'required' => false))
                     ->add('ap', new DocTypeType('Ap'), array('label'=>' '))
                     ->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
                     ->add('presentationProjet','textarea',array('label'=>'Présentation du projet'))

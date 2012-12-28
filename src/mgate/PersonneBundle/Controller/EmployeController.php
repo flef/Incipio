@@ -10,7 +10,7 @@ use mgate\PersonneBundle\Form\EmployeType;
 class EmployeController extends Controller
 {
     
-    public function ajouterAction($prospect_id)
+    public function ajouterAction($prospect_id, $format)
     {
         $em = $this->getDoctrine()->getEntityManager();
         
@@ -42,6 +42,7 @@ class EmployeController extends Controller
         return $this->render('mgatePersonneBundle:Employe:ajouter.html.twig', array(
             'form' => $form->createView(),
             'prospect' => $prospect,
+            'format' => $format,
         ));
         
     }

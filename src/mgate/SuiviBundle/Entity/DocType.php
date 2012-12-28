@@ -36,13 +36,6 @@ class DocType
     private $relu;
 
     /**
-     * @var integer $montant
-     *
-     * @ORM\Column(name="montant", type="integer",nullable=true)
-     */
-    private $montant;
-
-    /**
      * @var boolean $spt1
      *
      * @ORM\Column(name="spt1", type="boolean",nullable=true)
@@ -181,29 +174,6 @@ class DocType
     public function getRelu()
     {
         return $this->relu;
-    }
-
-    /**
-     * Set montant
-     *
-     * @param integer $montant
-     * @return DocType
-     */
-    public function setMontant($montant)
-    {
-        $this->montant = $montant;
-    
-        return $this;
-    }
-
-    /**
-     * Get montant
-     *
-     * @return integer 
-     */
-    public function getMontant()
-    {
-        return $this->montant;
     }
 
     /**
