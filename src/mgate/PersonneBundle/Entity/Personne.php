@@ -97,7 +97,15 @@ class Personne
      */
     private $membre;
 
-
+    // pour afficher Prénom Nom
+    // Merci de ne pas supprimer
+    public function getPrenomNom()
+    {
+        return $this->prenom.' '.$this->nom;
+    }
+    
+    
+    
 
     /**
      * Get id

@@ -9,8 +9,9 @@
     <h2>Etude n°{{ etude.id }}</h2>
     <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
     <li>Client: {{ etude.prospect.nom }} </li>
-    <li>Suiveur: {{etude.suiveur.personne.nom| default("Pas de suiveur!")}}</li>
+    <li>Suiveur: {{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</li>
     <li>Description de l'étude: <br />{{etude.description }}</li>
+    <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">modifier</a>
     <br>
     
 <p>

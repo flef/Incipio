@@ -111,7 +111,7 @@ class ProspectController extends Controller
         $value = $request->get('term');
 
         $em = $this->getDoctrine()->getEntityManager();
-        $members = $em->getRepository('mgatePersonneBundle:Prospect')->findAll();
+        $members = $em->getRepository('mgatePersonneBundle:Prospect')->ajaxSearch($value);
 
         $json = array();
         foreach ($members as $member) {
