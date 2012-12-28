@@ -34,7 +34,9 @@ class EmployeController extends Controller
             {
                 $em->persist($employe);    
                 $em->flush();
-
+                $employe->getPersonne()->setEmploye($employe);
+                $em->flush();
+                
                 return $this->redirect( $this->generateUrl('mgatePersonne_employe_voir', array('id' => $employe->getId())) );
             }
         }
