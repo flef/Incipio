@@ -12,5 +12,13 @@ use Doctrine\ORM\EntityRepository;
  */
 class PersonneRepository extends EntityRepository
 {
-    
+    public function getMembreOnly()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
+          ->where('n.membre IS NOT NULL')
+          //->where( $qb->expr()->neq('n.membre', null ))
+          ;
+        return $query;
+    }
 }
