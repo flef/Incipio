@@ -18,7 +18,8 @@ class PersonneType extends AbstractType
                 ->add('sexe', new SexeType())
                 ->add('mobile')
                 ->add('fix')
-                ->add('adresse');
+                ->add('adresse')
+                ->add('email');
             
     }
 

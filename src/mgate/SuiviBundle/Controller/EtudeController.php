@@ -93,11 +93,12 @@ class EtudeController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Etude entity.');
         }
-
+       $ap = $entity->getAp();
         //$deleteForm = $this->createDeleteForm($id);
 
         return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
             'etude'      => $entity,
+            'ap'         => $ap,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
