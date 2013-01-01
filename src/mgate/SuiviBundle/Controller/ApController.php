@@ -12,7 +12,7 @@ use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Entity\Prospect;
 use mgate\SuiviBundle\Entity\Personne;
-use mgate\SuiviBundle\Entity\Employe;
+use mgate\PersonneBundle\Entity\Employe;
 
 
 use mgate\SuiviBundle\Form\ApType;
@@ -78,8 +78,8 @@ class ApController extends Controller
         // en fait y a 2 fonction voir
         // une pour voir le suivi
         // et une pour voir la redaction
-        $entity = $em->getRepository('mgateSuiviBundle:Ap')->find($id); // Ligne qui posse problème
-
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $entity = $etude->getAp();
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Ap entity.');
         }
@@ -177,6 +177,10 @@ class ApController extends Controller
         
        
         $ap = $etude->getAp();
+        
+      //  $ap->setGenerer(1);
+        $generer = $etude->getAp()->getGenerer();
+        
         $suiveur = $etude->getSuiveur();
         $fraisDossier = $etude->getFraisDossier();
         $presentationProjet = $etude->getPresentationProjet();
@@ -186,16 +190,20 @@ class ApController extends Controller
         $phases = $etude->getPhases();
         $prospect = $etude->getProspect();
         $test = array(
-            'suiveur'        => $suiveur,
-            'prospect'       => $prospect,
-             'ap' => $ap,
-             'fraisDossier'  => $fraisDossier,
-             'presentationProjet' => $presentationProjet,
-             'descriptionPrestation' => $descriptionPrestation,
-             'typePrestation' => $typePrestation,
-             'competences'  => $competences,
-             'phases'       => $phases);
+            '1'        => $suiveur,
+            '2'       => $prospect,
+             '3' => $ap,
+             '4'  => $fraisDossier,
+             '5' => $presentationProjet,
+             '6' => $descriptionPrestation,
+             '7' => $typePrestation,
+             '8'  => $competences,
+             '9'       => $phases);
       
+        for ($i = 0; $i <= sizeof($test); $i++) 
+        {
+               if(empty($test[$i])) $ap->setGenerer(0);
+        }       
         //1 - tout afficher
         
         //2 - vérifier si ils sont vides ou pas 
@@ -211,7 +219,8 @@ class ApController extends Controller
              'typePrestation' => $typePrestation,
              'competences'  => $competences,
              'phases'       => $phases,
-             'test' => $test
+             'test' => $test,
+             'generer' => $generer
              ));
         
         
@@ -235,7 +244,7 @@ class ApController extends Controller
             if( $form->isValid() )
             {
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $etude->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
             }
                 
         }
