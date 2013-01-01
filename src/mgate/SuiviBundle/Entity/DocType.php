@@ -9,6 +9,22 @@ use \mgate\CommentBundle\Entity;
 class DocType
 {
     /**
+     * @var bool
+     */
+    private $knownSignataire2 = false;
+    
+    /**
+     *
+     */
+    private $knownedSignataire2;
+    
+    /**
+     *
+     */
+    private $newSignataire2;   
+    
+    
+    /**
      * @var integer $version
      *
      * @ORM\Column(name="version", type="integer", nullable=true)
@@ -50,13 +66,13 @@ class DocType
     private $spt2;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $signataire1;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $signataire2;
@@ -343,6 +359,7 @@ class DocType
         return $this->signataire2;
     }
 
+
     /**
      * Set generer
      *
@@ -364,5 +381,35 @@ class DocType
     public function getGenerer()
     {
         return $this->generer;
+
+    }
+    //rajout à la main
+    
+    public function isKnownSignataire2()
+    {
+        return $this->knownSignataire2;
+    }
+    public function setKnownSignataire2($boolean)
+    {
+        $this->knownSignataire2 = $boolean;
+    }
+    
+    public function getKnownedSignataire2()
+    {
+        return $this->knownedSignataire2;
+    }
+    public function setKnownedSignataire2($var)
+    {
+        $this->knownedSignataire2 = $var;
+    }
+    
+    public function getNewSignataire2()
+    {
+        return $this->newSignataire2;
+    }
+    public function setNewSignataire2($var)
+    {
+        $this->newSignataire2 = $var;
+
     }
 }

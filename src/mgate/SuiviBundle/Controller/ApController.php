@@ -8,10 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
 use mgate\SuiviBundle\Entity\Ap;
+
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Entity\Prospect;
 use mgate\SuiviBundle\Entity\Personne;
 use mgate\SuiviBundle\Entity\Employe;
+
+use mgate\PersonneBundle\Entity\Employe;
+
 use mgate\SuiviBundle\Form\ApType;
 use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
@@ -135,6 +139,22 @@ class ApController extends Controller
                
             if( $form->isValid() )
             {
+                if($etude->getAp()->isKnownSignataire2()) //(true === $etude->knownSignataire2)
+                {
+                    $etude->getAp()->setSignataire2($etude->getAp()->getKnownedSignataire2());
+                }
+                else
+                {
+                    $etude->getAp()->setSignataire2($etude->getAp()->getNewSignataire2());
+                    
+                    $employe = new Employe();
+                    $employe->setPersonne($etude->getAp()->getSignataire2());
+                    $employe->setProspect($etude->getProspect());
+                    $etude->getAp()->getNewSignataire2()->setEmploye($employe);
+                    $em->persist($employe);
+                }
+                
+                
                 $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
             }
