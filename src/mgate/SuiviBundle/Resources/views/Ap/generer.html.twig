@@ -1,0 +1,73 @@
+{# empty Twig template #}
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Avant-Projet - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    
+    
+    <i>Version {{ ap.version }}</i>
+
+    <div>
+       
+    </div>
+
+    <p>
+        Suiveur: {{suiveur.nom}} {{suiveur.prenom}} <br>
+        Téléphone: {{suiveur.mobile}} <br>
+        Mail: {{suiveur.email}}
+    </p>
+    <p>
+    Prospect: {{prospect.nom}} <br>
+    Entité sociale: {{prospect.entite}} <br>
+    Adresse: {{prospect.adresse}} <br>
+    {% for employe in prospect.employes %}
+       <li>Nom signataire: {{employe.personne.poste}} {{employe.personne.poste}} <br>
+            Fonction signataire: {{employe.personne.poste}}</li> 
+    {% endfor %}
+    {# Nom signataire: {{prospect.employes.personne.poste}} {{prospect.employes.personne.poste}} <br>
+    Fonction signataire: {{prospect.employes.personne.poste}} #}
+    
+    </p>
+    <p>
+    Version :{{ ap.version }}
+ 
+    <p>
+     Date de signature: {{ ap.dateSignature|date("d/m/Y") }}
+    </p>
+    <p>
+     Frais de dossier: {{ fraisDossier }} 
+    </p>
+    <p>
+    Présentation du projet: {{ presentationProjet }} 
+    </p>
+    <p>
+    Description de la prestation: {{ descriptionPrestation }}
+    </p>
+    <p>
+    Type de prestation: {{ typePrestation }} 
+    </p>
+    <p>
+    Compétences développeurs: {{ competences }}
+    </p>
+    <p>
+    {% for phase in phases %}
+        <li>Phase n°{{phase.position+1}}: {{phase.titre}}</li>
+    {% endfor %} 
+    {% for var in test %}
+        {% if var is empty%}
+        Il manque des infos pour générer l'AP
+        {% endif %}
+        {% else %}
+        <input type="submit" value="Générer AP"/>
+        {% for gen in ap.generer %}
+            {% set gen = true %}
+        {% endfor %}
+    {% endfor %}
+	
+    </p>
+
+{% endblock %}

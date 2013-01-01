@@ -38,7 +38,13 @@ mgateSuivi_ap_modifier:
     pattern: /ap/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Ap:modifier}
     requirements:
-        id: \d+        
+        id: \d+      
+        
+mgateSuivi_ap_generer:
+    pattern: /ap/generer/{id}
+    defaults: {_controller: mgateSuiviBundle:Ap:generer}
+    requirements:
+        id: \d+  
         
 mgateSuivi_ap_voir:
     pattern: /ap/voir/{id}
@@ -50,7 +56,13 @@ mgateSuivi_ap_rediger:
     pattern: /ap/rediger/{id}
     defaults: {_controller: mgateSuiviBundle:Ap:rediger}
     requirements:
-        id: \d+      
+        id: \d+
+
+mgateSuivi_ap_suivi:
+    pattern: /ap/suivi/{id}
+    defaults: {_controller: mgateSuiviBundle:Ap:suivi}
+    requirements:
+        id: \d+
         
 mgateSuivi_cc_ajouter:
     pattern: /cc/ajouter/{id}

@@ -81,8 +81,14 @@ class DocType
      * @ORM\Column(name="receptionne", type="boolean",nullable=true)
      */
     private $receptionne;
-   
     
+    /**
+     * @var boolean $generer
+     * 
+     * @ORM\Column(name="generer", type="boolean",nullable=true)
+     */
+    private $generer;
+ 
     
     /**
      * Set version
@@ -335,5 +341,28 @@ class DocType
     public function getSignataire2()
     {
         return $this->signataire2;
+    }
+
+    /**
+     * Set generer
+     *
+     * @param boolean $generer
+     * @return DocType
+     */
+    public function setGenerer($generer)
+    {
+        $this->generer = $generer;
+    
+        return $this;
+    }
+
+    /**
+     * Get generer
+     *
+     * @return boolean 
+     */
+    public function getGenerer()
+    {
+        return $this->generer;
     }
 }
