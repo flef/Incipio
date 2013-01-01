@@ -28,7 +28,8 @@
         "ob/highcharts-bundle": "dev-master",
         "stof/doctrine-extensions-bundle": "dev-master",
         "genemu/form-bundle": "2.1.*",
-        "friendsofsymfony/jsrouting-bundle": "1.0.*"
+        "friendsofsymfony/jsrouting-bundle": "1.0.*",
+        "beberlei/acme-pizza": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [

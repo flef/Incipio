@@ -1240,5 +1240,5 @@ class Etude
     public function getFactureSolde()
     {
         return $this->factureSolde;
-    }
+    }   
 }
