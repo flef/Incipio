@@ -19,18 +19,56 @@
 <script type="text/javascript" src="{{ asset('bundles/mgatesuivi/thickbox/thickbox-compressed.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('bundles/mgatesuivi/thickbox/thickbox.css') }}" type="text/css" media="screen" />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
-        
+
+<link href="{{ asset('bundles/mgatesuivi/select2/select2.css') }}" rel="stylesheet"/>
+<script src="{{ asset('bundles/mgatesuivi/select2/select2.min.js') }}"></script>
         
     <h2>Rédiger l'Avant-Projet</h2>
  <a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>
     
-    
-    {% include "mgateSuiviBundle:Ap:formulaire.html.twig" %} 
+ 
+<form method="post" {{ form_enctype(form) }}>
+
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer l'AP"/>
+        <input type="submit" value="Enregistrer l'AP et passer à la CC" name="ap"/>
+</form>
+
 
 
     <p>
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
     </p>
 
+<script>
+     /* ...known personne... */
+    var toggle = true;
+
+    $('input#{{ form.ap.knownSignataire2.get('id') }}').change(function() {
+
+        if ($(this).is(':checked')) {
+
+            var $$ = $('label:contains("{{ form.ap.knownedSignataire2.get('label') }}"):first').closest('div');
+            $$.find('input').attr('disabled', false);
+            if (toggle) $$.show();
+
+            var $$ = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
+            $$.find('input').attr('disabled', true);
+            if (toggle) $$.hide();
+        } else {
+            var $$ = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
+            $$.find('input').attr('disabled', false);
+            if (toggle) $$.show();
+
+            var $$ = $('label:contains("{{ form.ap.knownedSignataire2.get('label') }}"):first').closest('div');
+            $$.find('input').attr('disabled', true);
+            if (toggle) $$.hide();
+        }
+
+    }).change();
+</script>    
+    
+    
 {% endblock %}
 

@@ -21,9 +21,9 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-#    form:
-#        resources:
-#            - 'IoFormBundle:Form:fields.html.twig'
+    form:
+        resources:
+            - 'mgatePersonneBundle:Form:fields.html.twig'
 
 
 #io_form:
@@ -34,6 +34,7 @@ twig:
 genemu_form:
     date: ~
     autocomplete: ~
+    select2: ~
 
 # Assetic Configuration
 assetic:
