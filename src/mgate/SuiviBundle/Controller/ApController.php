@@ -8,8 +8,13 @@ use Symfony\Component\HttpFoundation\Response;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\EtudeHandler;
 use mgate\SuiviBundle\Entity\Ap;
+use mgate\SuiviBundle\Entity\Etude;
+use mgate\SuiviBundle\Entity\Prospect;
+use mgate\SuiviBundle\Entity\Personne;
+use mgate\SuiviBundle\Entity\Employe;
 use mgate\SuiviBundle\Form\ApType;
 use mgate\SuiviBundle\Form\ApHandler;
+use mgate\SuiviBundle\Form\DocTypeSuiviType;
 
 class ApController extends Controller
 {
@@ -137,6 +142,86 @@ class ApController extends Controller
         }
 
         return $this->render('mgateSuiviBundle:Ap:rediger.html.twig', array(
+            'form' => $form->createView(),
+            'etude' => $etude,
+        ));
+    }
+    
+    public function genererAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+        
+       
+        $ap = $etude->getAp();
+        $suiveur = $etude->getSuiveur();
+        $fraisDossier = $etude->getFraisDossier();
+        $presentationProjet = $etude->getPresentationProjet();
+        $descriptionPrestation = $etude->getDescriptionPrestation();
+        $typePrestation = $etude->getTypePrestation();
+        $competences = $etude->getCompetences();
+        $phases = $etude->getPhases();
+        $prospect = $etude->getProspect();
+        $test = array(
+            'suiveur'        => $suiveur,
+            'prospect'       => $prospect,
+             'ap' => $ap,
+             'fraisDossier'  => $fraisDossier,
+             'presentationProjet' => $presentationProjet,
+             'descriptionPrestation' => $descriptionPrestation,
+             'typePrestation' => $typePrestation,
+             'competences'  => $competences,
+             'phases'       => $phases);
+      
+        //1 - tout afficher
+        
+        //2 - vérifier si ils sont vides ou pas 
+        // 3 - afficher le bouton de génération si tout est là 
+        
+         return $this->render('mgateSuiviBundle:Ap:generer.html.twig', array(
+            'suiveur'        => $suiveur,
+            'prospect'       => $prospect,
+             'ap' => $ap,
+             'fraisDossier'  => $fraisDossier,
+             'presentationProjet' => $presentationProjet,
+             'descriptionPrestation' => $descriptionPrestation,
+             'typePrestation' => $typePrestation,
+             'competences'  => $competences,
+             'phases'       => $phases,
+             'test' => $test
+             ));
+        
+        
+    }
+    
+    public function SuiviAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+        $ap = $etude->getAp();
+        $form        = $this->createForm(new DocTypeSuiviType, $ap);//transmettre etude pour ajouter champ de etude
+        
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $etude->getId())) );
+            }
+                
+        }
+
+        return $this->render('mgateSuiviBundle:Ap:modifier.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,
         ));

@@ -28,6 +28,8 @@ class DocTypeSuiviType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
+        if($options=="ap")
+            return array('data_class' => 'mgate\SuiviBundle_Entity\Ap');
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\DocType',
             /*'cascade_validation' => true,*/
