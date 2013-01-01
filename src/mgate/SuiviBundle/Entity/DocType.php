@@ -99,9 +99,9 @@ class DocType
     private $receptionne;
     
     /**
-     * @var boolean $generer
+     * @var integer $generer
      * 
-     * @ORM\Column(name="generer", type="boolean",nullable=true)
+     * @ORM\Column(name="generer", type="integer",nullable=true)
      */
     private $generer;
  
@@ -360,29 +360,7 @@ class DocType
     }
 
 
-    /**
-     * Set generer
-     *
-     * @param boolean $generer
-     * @return DocType
-     */
-    public function setGenerer($generer)
-    {
-        $this->generer = $generer;
-    
-        return $this;
-    }
 
-    /**
-     * Get generer
-     *
-     * @return boolean 
-     */
-    public function getGenerer()
-    {
-        return $this->generer;
-
-    }
     //rajout à la main
     
     public function isKnownSignataire2()
@@ -411,5 +389,28 @@ class DocType
     {
         $this->newSignataire2 = $var;
 
+    }
+
+    /**
+     * Set generer
+     *
+     * @param integer $generer
+     * @return DocType
+     */
+    public function setGenerer($generer)
+    {
+        $this->generer = $generer;
+    
+        return $this;
+    }
+
+    /**
+     * Get generer
+     *
+     * @return integer 
+     */
+    public function getGenerer()
+    {
+        return $this->generer;
     }
 }
