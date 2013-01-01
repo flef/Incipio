@@ -17,7 +17,7 @@ class MissionType extends DocTypeType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'nom',
                        'property_path' => true,
-                       'required' => false))
+                       'required' => true))
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('nbjeh','integer',array('label'=>'Nombre de JEH'));

@@ -33,6 +33,7 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new mgate\UserBundle\mgateUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Acme\PizzaBundle\AcmePizzaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
+use mgate\PersonneBundle\Form\PersonneType as PersonneType;
 
 class DocTypeType extends AbstractType
 {
@@ -23,13 +24,32 @@ class DocTypeType extends AbstractType
                        'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false))
-            ->add('signataire2', 'entity', 
+            /*->add('signataire2', 'genemu_jqueryselect2_entity', 
                 array ('label' => 'Signataire Client',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getEmployeOnly(); },
-                       'required' => false))
+                       'required' => false))*/
+            ->add('knownSignataire2', 'checkbox', array(
+                'required' => false,
+                'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
+            ))
+
+             ->add('knownedSignataire2', 'genemu_jqueryselect2_entity', array(
+                'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                'property' => 'prenomNom',
+                'label' => 'Signataire client existant',
+                'query_builder' => function(PersonneRepository $pr) { return $pr->getEmployeOnly(); },
+                 ))
+
+            ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire client:'))                               
+            /*->add('signataire2', 'genemu_jqueryselect2_hidden', array(
+            'configs' => array(
+                'multiple' => true // Wether or not multiple values are allowed (default to false)
+            )
+        ))   */                            
+                               
             ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document','required'=>false, 'widget'=>'single_text'));
             
     }
