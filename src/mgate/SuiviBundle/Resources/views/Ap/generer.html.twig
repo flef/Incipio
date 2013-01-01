@@ -57,17 +57,15 @@
     {% for phase in phases %}
         <li>Phase n°{{phase.position+1}}: {{phase.titre}}</li>
     {% endfor %} 
-    {% for var in test %}
-        {% if var is empty%}
-        Il manque des infos pour générer l'AP
-        {% endif %}
-        {% else %}
+    
+    
+    {# {% if test is not defined %}
+       Il manque des infos pour générer l'AP
+        {% set generer = 0 %} 
+    {% endif %} #}
+    {% if generer == 1 %}
         <input type="submit" value="Générer AP"/>
-        {% for gen in ap.generer %}
-            {% set gen = true %}
-        {% endfor %}
-    {% endfor %}
-	
+    {% endif %}
     </p>
 
 {% endblock %}
