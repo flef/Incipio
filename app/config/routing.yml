@@ -57,3 +57,9 @@ fos_js_routing:
 prospect:
     resource: "@mgatePersonneBundle/Controller/ProspectController.php"
     type:     annotation
+    
+    
+AcmePizzaBundle:
+    resource: "@AcmePizzaBundle/Controller/"
+    type:     annotation
+    prefix:   /acme-pizza
