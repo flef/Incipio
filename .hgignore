@@ -1,5 +1,0 @@
-^app/logs$
-^app/cache$
-^nbproject$
-^vendor$
-^vendor/symfony$

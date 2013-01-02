@@ -9,7 +9,7 @@
 
     
     
-    <i>Version {{ ap.version }}</i>
+    <i>Version {{ version }}</i>
 
     <div>
        
@@ -24,19 +24,17 @@
     Prospect: {{prospect.nom}} <br>
     Entité sociale: {{prospect.entite}} <br>
     Adresse: {{prospect.adresse}} <br>
-    {% for employe in prospect.employes %}
-       <li>Nom signataire: {{employe.personne.poste}} {{employe.personne.poste}} <br>
-            Fonction signataire: {{employe.personne.poste}}</li> 
-    {% endfor %}
-    {# Nom signataire: {{prospect.employes.personne.poste}} {{prospect.employes.personne.poste}} <br>
-    Fonction signataire: {{prospect.employes.personne.poste}} #}
+    <li>Nom signataire: {{ signataire2.prenom }} {{ signataire2.nom }}<br>
+        Fonction signataire: {{ signataire2.poste }}
+    </li> 
+   
     
     </p>
     <p>
-    Version :{{ ap.version }}
+    Version :{{ version }}
  
     <p>
-     Date de signature: {{ ap.dateSignature|date("d/m/Y") }}
+     Date de signature: {{ dateSignature|date("d/m/Y") }}
     </p>
     <p>
      Frais de dossier: {{ fraisDossier }} 
@@ -58,13 +56,14 @@
         <li>Phase n°{{phase.position+1}}: {{phase.titre}}</li>
     {% endfor %} 
     
-    
-    {# {% if test is not defined %}
-       Il manque des infos pour générer l'AP
-        {% set generer = 0 %} 
-    {% endif %} #}
     {% if generer == 1 %}
         <input type="submit" value="Générer AP"/>
+    {% else %}
+        <li>Il manque 
+        {% for manquant in manquants %} 
+                {{manquant}}, 
+        {% endfor %}        
+        </li>
     {% endif %}
     </p>
 
