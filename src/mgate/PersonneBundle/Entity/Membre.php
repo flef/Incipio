@@ -78,6 +78,7 @@ class Membre
      */
     public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
     {
+        $personne->setMembre($this);
         $this->personne = $personne;
     
         return $this;

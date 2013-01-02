@@ -11,7 +11,7 @@
     <ul>
         {% for membre in membres %}
             <li>
-            <a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}"> {{ membre.personne.nom }} </a>
+            <a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}"> {{ membre.personne.prenomNom }} </a>
             </li>
         {% else %}
             <li>Pas (encore !) de Membre</li>
