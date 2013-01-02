@@ -174,52 +174,104 @@ class ApController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-       
-        $ap = $etude->getAp();
         
-      //  $ap->setGenerer(1);
-        $generer = $etude->getAp()->getGenerer();
         
-        $suiveur = $etude->getSuiveur();
+        $version = $etude->getAp()->getVersion();
+        $dateSignature = $etude->getAp()->getDateSignature(); 
         $fraisDossier = $etude->getFraisDossier();
         $presentationProjet = $etude->getPresentationProjet();
         $descriptionPrestation = $etude->getDescriptionPrestation();
         $typePrestation = $etude->getTypePrestation();
         $competences = $etude->getCompetences();
-        $phases = $etude->getPhases();
-        $prospect = $etude->getProspect();
-        $test = array(
-            '1'        => $suiveur,
-            '2'       => $prospect,
-             '3' => $ap,
+        $phases = $etude->getPhases();// tester avec foreach
+        $prospect = $etude->getProspect();// tester avec foreach
+        $suiveur = $etude->getSuiveur();// tester avec boucle foreach
+        $signataire1 = $etude->getAp()->getSignataire1(); //suiveur
+        $signataire2 = $etude->getAp()->getSignataire2();// tester avec foreach
+        $test = array( 
+             '3' => $version,
              '4'  => $fraisDossier,
              '5' => $presentationProjet,
              '6' => $descriptionPrestation,
              '7' => $typePrestation,
              '8'  => $competences,
-             '9'       => $phases);
-      
-        for ($i = 0; $i <= sizeof($test); $i++) 
+            '10' => $dateSignature);
+        $testSignataire2=array( $etude->getAp()->getSignataire2()->getPrenom(),
+                                $etude->getAp()->getSignataire2()->getPoste(),
+                                $etude->getAp()->getSignataire2()->getNom()
+                              );
+        $testSuiveur=array( $etude->getSuiveur()->getNom(),
+                            $etude->getSuiveur()->getPrenom(),
+                            $etude->getSuiveur()->getMobile(),
+                            $etude->getSuiveur()->getEmail()
+                            );
+        $testProspect=array( $etude->getProspect()->getNom(),
+                             $etude->getProspect()->getEntite(),
+                             $etude->getProspect()->getAdresse()
+                           );
+        $etude->getAp()->setGenerer(1);//initialisation avant test
+        foreach($phases as $cle => $phase)
         {
-               if(empty($test[$i])) $ap->setGenerer(0);
-        }       
-        //1 - tout afficher
-        
-        //2 - vérifier si ils sont vides ou pas 
-        // 3 - afficher le bouton de génération si tout est là 
+            if($cle != "__isInitialized__")
+            {    
+                if(empty($phase)) 
+                {
+                   $etude->getAp()->setGenerer(0);
+                   $manquant[]=$cle;
+                }
+            }
+        }
+
+        foreach($test as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testSuiveur as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testProspect as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testSignataire2 as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+
+         $manquant[]="0"; // nécessaire pour l'initialiser si generer=1    
+         $generer = $etude->getAp()->getGenerer();// ne pas bouger car on doit récupérer la valeur de générer après vérification
         
          return $this->render('mgateSuiviBundle:Ap:generer.html.twig', array(
             'suiveur'        => $suiveur,
             'prospect'       => $prospect,
-             'ap' => $ap,
+             'version' => $version,
+             'dateSignature' => $dateSignature,
              'fraisDossier'  => $fraisDossier,
              'presentationProjet' => $presentationProjet,
              'descriptionPrestation' => $descriptionPrestation,
              'typePrestation' => $typePrestation,
              'competences'  => $competences,
              'phases'       => $phases,
-             'test' => $test,
-             'generer' => $generer
+             'generer' => $generer,
+             'signataire2' => $signataire2,
+             'manquants' => $manquant
              ));
         
         
