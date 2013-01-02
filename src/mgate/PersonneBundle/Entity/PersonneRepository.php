@@ -29,4 +29,12 @@ class PersonneRepository extends EntityRepository
           ->where('n.employe IS NOT NULL');
         return $query;
     }
+    
+    public function getNotUser()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
+          ->where('n.user IS NULL');
+        return $query;
+    }
 }

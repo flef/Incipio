@@ -149,7 +149,6 @@ class ApController extends Controller
                     $employe = new Employe();
                     $employe->setPersonne($etude->getAp()->getSignataire2());
                     $employe->setProspect($etude->getProspect());
-                    $etude->getAp()->getNewSignataire2()->setEmploye($employe);
                     $em->persist($employe);
                 }
                 
