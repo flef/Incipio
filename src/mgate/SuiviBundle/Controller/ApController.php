@@ -196,6 +196,19 @@ class ApController extends Controller
              '7' => $typePrestation,
              '8'  => $competences,
             '10' => $dateSignature);
+        $testSignataire2=array( $etude->getAp()->getSignataire2()->getPrenom(),
+                                $etude->getAp()->getSignataire2()->getPoste(),
+                                $etude->getAp()->getSignataire2()->getNom()
+                              );
+        $testSuiveur=array( $etude->getSuiveur()->getNom(),
+                            $etude->getSuiveur()->getPrenom(),
+                            $etude->getSuiveur()->getMobile(),
+                            $etude->getSuiveur()->getEmail()
+                            );
+        $testProspect=array( $etude->getProspect()->getNom(),
+                             $etude->getProspect()->getEntite(),
+                             $etude->getProspect()->getAdresse()
+                           );
         $etude->getAp()->setGenerer(1);//initialisation avant test
         foreach($phases as $cle => $phase)
         {
@@ -208,40 +221,32 @@ class ApController extends Controller
                 }
             }
         }
-        foreach($prospect as $cle => $element)
-        {
-            if($cle != "__isInitialized__")
-            {   
-                if(empty($element)) 
-                {
-                   $etude->getAp()->setGenerer(0);
-                   $manquant[]=$cle;
-                }
-            }
-        }
-        foreach($suiveur as $cle => $element)
-        {
-            if($cle != "__isInitialized__")
-            {   
-                if(empty($element)) 
-                {
-                   $etude->getAp()->setGenerer(0);
-                   $manquant[]=$cle;
-                }
-            }
-        }
-        foreach($signataire2 as $cle => $element)
-        {
-            if($cle != "__isInitialized__")
-            {   
-                if(empty($element)) 
-                {
-                   $etude->getAp()->setGenerer(0);
-                   $manquant[]=$cle;
-                }
-            }
-        }
+
         foreach($test as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testSuiveur as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testProspect as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getAp()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+        foreach($testSignataire2 as $cle => $element)
         {
             if(empty($element)) 
             {
