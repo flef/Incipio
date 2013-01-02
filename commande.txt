@@ -6,8 +6,8 @@ cd D:/Data/Docs/Assos/M-GaTE/site/My-M-GaTE
 installation de composer :
 curl -s https://getcomposer.org/installer | php
 php composer.phar self-update
-php composer.phar update
 php composer.phar install                   <- bof a ne pas faire update c'est mieux
+php composer.phar update
 php -d memory_limit=-1 composer.phar update
 
 
@@ -66,6 +66,7 @@ git push -u origin master
 restaure les fichier sur le derniere commit
 git reset --hard HEAD
 
+git checkout monFichier.txt  ou git reset HEAD monFichier.txt
 
         
         $logger = $this->get('logger');
@@ -74,3 +75,11 @@ git reset --hard HEAD
  
 
 SET NAMES UTF-8
+
+
+WAMPSERVEUR Apache 2.4.2 et PHP 5.4.3
+wamp > apache > apache module > ssl_module
+restart wamp
+wamp > php > extension > intl
+
+créer les dossier "app/cache/" "app/logs/" 
