@@ -56,3 +56,13 @@ Créer les dossiers app/cache et app/logs
 
 9. Tester My-M-GaTE
 http://127.0.0.1/My-M-GaTE/web/app_dev.php/suivi
+
+# Remarque
+En cas de problème d'acces pour phpmyadmin:
+Clique gauche sur wamp > Apache > Alias directories > http://localhost/phpmyadmin > Edit alias, mettre :
+<Directory "c:/wamp/apps/phpmyadmin3.5.1/"> # adapter la version
+   Options Indexes FollowSymLinks MultiViews
+    AllowOverride all
+        Order Deny,Allow
+        Allow from all
+</Directory>

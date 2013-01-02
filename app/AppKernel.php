@@ -34,6 +34,7 @@ class AppKernel extends Kernel
             new mgate\UserBundle\mgateUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Acme\PizzaBundle\AcmePizzaBundle(),
+            new mgate\PubliBundle\mgatePubliBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

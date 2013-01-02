@@ -25,11 +25,9 @@
     Entité sociale: {{prospect.entite}} <br>
     Adresse: {{prospect.adresse}} <br>
     {% for employe in prospect.employes %}
-       <li>Nom signataire: {{employe.personne.poste}} {{employe.personne.poste}} <br>
+       <li>Signataire: {{employe.personne.sexe}} {{employe.personne.prenomNom}}<br>
             Fonction signataire: {{employe.personne.poste}}</li> 
     {% endfor %}
-    {# Nom signataire: {{prospect.employes.personne.poste}} {{prospect.employes.personne.poste}} <br>
-    Fonction signataire: {{prospect.employes.personne.poste}} #}
     
     </p>
     <p>
