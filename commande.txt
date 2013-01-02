@@ -21,7 +21,7 @@ php app/console assets:install --symlink web
 php app/console assets:install web                   pour jQuery
 
 Générateur de bundle / entity
-php app/console generate:bundle
+php app/console generate:bundle  (mgate/PubliBundle, enter, enter, yml, no)
 php app/console generate:doctrine:entity  (annotation)
 
 Génération / Mise à jour get et setter
