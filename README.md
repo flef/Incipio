@@ -18,6 +18,25 @@ Clique droit sur My-M-GaTE dans le logiciel de github puis "clone to" choisir le
 Il faut faire en sorte que http://127.0.0.1:81/My-M-GaTE/ pointe sur le repository
 (c'est aussi possible avec un alias: Clique gauche sur wamp > Apache > Apache directories)
 
+4. Configurer Symfony2:
+Créer le fichier app/config/parameters.yml
+Contenant ceci :
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     localhost
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+
+    mailer_transport:  smtp
+    mailer_host:       localhost
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            fr
+    secret:            ThisTokenIsNotSoSecretChangeIt
+
 5. Ajouter PHP à ses variables d'environnements :
 Clique droit sur Ordinateur > Propriétés > Modifier les paramètres > Paramètres Système avancés > Variables d'environnement
 Partie "variable système", modifier l'entrée "Path" et rajouter ;c:\wamp\bin\php\php5.3.8  (en vérifiant que ce dossier existe bien, sinon adapter)
