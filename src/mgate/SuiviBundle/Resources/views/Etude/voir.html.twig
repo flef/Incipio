@@ -40,7 +40,7 @@
     
         <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}">Rédiger l'Avant-Projet</a></li>
         <li><a href="{{ path('mgateSuivi_ap_generer', {'id': etude.id}) }}">Generer l'Avant-Projet</a></li>
-        {% if apgenerer %}
+        {% if etude.ap.generer|default('0') %}
             <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi de l'Avant-Projet</a></li>
         {% endif %} 
 </p>
