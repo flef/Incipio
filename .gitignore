@@ -11,3 +11,8 @@ web/bundles/*
 # Configuration files
 app/config/parameters.ini
 app/config/parameters.yml
+
+#Other
+bin/*
+composer.phar
+composer.lock

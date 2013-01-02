@@ -66,6 +66,7 @@ git push -u origin master
 restaure les fichier sur le derniere commit
 git reset --hard HEAD
 
+pour restaurer un fichier :
 git checkout monFichier.txt  ou git reset HEAD monFichier.txt
 
         
