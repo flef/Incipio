@@ -158,7 +158,7 @@ class Etude
     private $candidatures;
 
     /**
-     * @ORM\OneToOne(targetEntity="Ap", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
      */
     private $ap;
     
@@ -169,7 +169,7 @@ class Etude
     private $phases;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cc", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Cc", inversedBy="etude", cascade={"persist"})
      */
     private $cc;
 

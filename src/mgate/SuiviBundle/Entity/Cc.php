@@ -20,7 +20,13 @@ class Cc extends DocType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-       
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Etude", inversedBy="cc", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $etude;
+           
    
 
     /**
@@ -31,5 +37,28 @@ class Cc extends DocType
     public function getId()
     {
         return $this->id;
+    }
+    
+    /**
+     * Set etude
+     *
+     * @param mgate\SuiviBundle\Entity\Etude $etude
+     * @return Cc
+     */
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    {
+        $this->etude = $etude;
+    
+        return $this;
+    }
+
+    /**
+     * Get etude
+     *
+     * @return mgate\SuiviBundle\Entity\Etude 
+     */
+    public function getEtude()
+    {
+        return $this->etude;
     }
 }
