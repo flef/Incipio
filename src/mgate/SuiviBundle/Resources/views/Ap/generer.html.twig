@@ -60,8 +60,8 @@
         <input type="submit" value="Générer AP"/>
     {% else %}
         <li>Il manque 
-        {% for manquant in manquants %} 
-                {{manquant}}, 
+        {% for manquant in manquants %}    
+             "{{manquant}}", 
         {% endfor %}        
         </li>
     {% endif %}

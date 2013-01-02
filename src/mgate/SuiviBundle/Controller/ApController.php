@@ -199,34 +199,46 @@ class ApController extends Controller
         $etude->getAp()->setGenerer(1);//initialisation avant test
         foreach($phases as $cle => $phase)
         {
-            if(empty($phase)) 
-            {
-               $etude->getAp()->setGenerer(0);
-               $manquant[]=$cle;
+            if($cle != "__isInitialized__")
+            {    
+                if(empty($phase)) 
+                {
+                   $etude->getAp()->setGenerer(0);
+                   $manquant[]=$cle;
+                }
             }
         }
         foreach($prospect as $cle => $element)
         {
-            if(empty($element)) 
-            {
-               $etude->getAp()->setGenerer(0);
-               $manquant[]=$cle;
+            if($cle != "__isInitialized__")
+            {   
+                if(empty($element)) 
+                {
+                   $etude->getAp()->setGenerer(0);
+                   $manquant[]=$cle;
+                }
             }
         }
         foreach($suiveur as $cle => $element)
         {
-            if(empty($element)) 
-            {
-               $etude->getAp()->setGenerer(0);
-               $manquant[]=$cle;
+            if($cle != "__isInitialized__")
+            {   
+                if(empty($element)) 
+                {
+                   $etude->getAp()->setGenerer(0);
+                   $manquant[]=$cle;
+                }
             }
         }
         foreach($signataire2 as $cle => $element)
         {
-            if(empty($element)) 
-            {
-               $etude->getAp()->setGenerer(0);
-               $manquant[]=$cle;
+            if($cle != "__isInitialized__")
+            {   
+                if(empty($element)) 
+                {
+                   $etude->getAp()->setGenerer(0);
+                   $manquant[]=$cle;
+                }
             }
         }
         foreach($test as $cle => $element)
@@ -238,7 +250,7 @@ class ApController extends Controller
             }
         }
 
-             
+         $manquant[]="0"; // nécessaire pour l'initialiser si generer=1    
          $generer = $etude->getAp()->getGenerer();// ne pas bouger car on doit récupérer la valeur de générer après vérification
         
          return $this->render('mgateSuiviBundle:Ap:generer.html.twig', array(
