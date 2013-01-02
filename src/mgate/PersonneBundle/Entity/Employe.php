@@ -78,6 +78,8 @@ class Employe
      */
     public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
     {
+        $personne->setEmploye($this);
+        
         $this->personne = $personne;
     
         return $this;

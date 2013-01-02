@@ -6,6 +6,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 
 use mgate\PersonneBundle\Form\PersonneType as PersonneType;
+use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 class RegistrationFormType extends BaseType
 {
@@ -14,13 +15,12 @@ class RegistrationFormType extends BaseType
         $builder->add('personne', 'entity', 
                 array ('label' => 'Séléctionner la personne',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
-                       'required' => true));   
+                       'required' => true,
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getNotUser(); },));   
         parent::buildForm($builder, $options);
         
-        //$builder->add('personne', new PersonneType(), array('label'=>' '));
-            //->add('username', null, array('label' => 'Nom dutilisateur', 'translation_domain' => 'FOSUserBundle'));
     }
 
     public function getName()

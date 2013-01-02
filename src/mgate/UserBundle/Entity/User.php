@@ -44,8 +44,10 @@ class User extends BaseUser
      */
     public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
     {
+        $personne->setUser($this);
+        
         $this->personne = $personne;
-    
+     
         return $this;
     }
 
