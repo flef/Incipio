@@ -1,0 +1,7 @@
+parameters:
+#    mgate_publi.example.class: mgate\PubliBundle\Example
+
+services:
+#    mgate_publi.example:
+#        class: %mgate_publi.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
