@@ -4,5 +4,5 @@ mgate_publi_homepage:
 
 
 mgate_publi_publiposter:
-    pattern: /publi/publiposter
+    pattern: /publi/publiposter/{id_etude}/{doc}
     defaults: {_controller: mgatePubliBundle:Traitement:publiposter}

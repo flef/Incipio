@@ -91,8 +91,15 @@ class TraitementController extends Controller {
     }
 
     //publication du doc
-    public function publiposterAction() {
+    public function publiposterAction($id_etude, $doc) {
 
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+        
         //$champs = etude->getChamps($doctype = AP || AV.... )
         $templateXMLtraite = traiterTemplate($template . '.xml', $nombrePhase, $champs);
         telechargerDocType($templateXMLtraite);
