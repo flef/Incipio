@@ -79,10 +79,10 @@ class TraitementController extends Controller {
 
     //Téléchargement du fichier
     private function telechargerDocType($templateXML) {
-        //écriture fichier sur disque TODO : dl
-        $newFile = fopen("./tests.xml", "w+");
-        fwrite($newFile, $doc);
-        fclose($newFile);
+    header('Content-type: text/xml');
+    header('Content-Disposition: attachment; filename="doctype.xml"');
+    echo $templateXML;
+    exit;
     }
 
     //Vérification du fichier
@@ -95,8 +95,6 @@ class TraitementController extends Controller {
     //publication du doc
     public function publiposterAction($id_etude, $doc) {
 
-
-
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
@@ -104,26 +102,89 @@ class TraitementController extends Controller {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-        //$champs = etude->getChamps($doctype = AP || AV.... )
-        $templateXMLtraite = traiterTemplate($template . '.xml', $nombrePhase, $champs);
-        telechargerDocType($templateXMLtraite);
+        $nombrePhase = count($etude->getPhases());
+        $champs = $this->getAllChamp($etude);
+        $templateXMLtraite = $this->traiterTemplate('C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Controller/'.$doc . '.xml', $nombrePhase, $champs);//Ne sais ou mettre mes ressources
+        $this->telechargerDocType($templateXMLtraite);
 
+        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
     }
 
     private function getAllChamp($etude) {
-        $etude = new \mgate\SuiviBundle\Entity\Etude();//Juste pour avoir l'autocompletion :D
+        //$etude = new \mgate\SuiviBundle\Entity\Etude();//Juste pour avoir l'autocompletion :D
+        
+        $phases = $etude->getPhases();
+        
+$Total_HT_Lettres = "Total_HT_Lettres______DefautValue";
+$TVA = "TVA______DefautValue";
+$Montant_TVA = "Montant_TVA______DefautValue";
+$Montant_TVA_Lettres = "Montant_TVA_Lettres______DefautValue";
+$Total_TTC = "Total_TTC______DefautValue";
+$Total_TTC_Lettres = "Total_TTC_Lettres______DefautValue";
+$Entite_Sociale = "Entite_Sociale______DefautValue";
+$Adresse_Client = "Adresse_Client______DefautValue";
+$Nom_Signataire = "Nom_Signataire______DefautValue";
+$Fonction_Signataire = "Fonction_Signataire______DefautValue";
+$Description_Prestation = "Description_Prestation______DefautValue";
+$Delais_Semaines = "Delais_Semaines______DefautValue";
+$Total_HT = "Total_HT______DefautValue";
+$Nbr_JEH_Total = "Nbr_JEH_Total______DefautValue";
+$Nbr_JEH_Total_Lettres = "Nbr_JEH_Total_Lettres______DefautValue";
+$Montant_Total_HT = "Montant_Total_HT______DefautValue";
+$Montant_Total_HT_Lettres = "Montant_Total_HT_Lettres______DefautValue";
+$Frais_HT = "Frais_HT______DefautValue";
+$Frais_HT_Lettres = "Frais_HT_Lettres______DefautValue";
+$Acompte_HT = "Acompte_HT______DefautValue";
+$Acompte_HT_Lettres = "Acompte_HT_Lettres______DefautValue";
+$Acompte_TTC = "Acompte_TTC______DefautValue";
+$Acompte_TTC_Lettres = "Acompte_TTC_Lettres______DefautValue";
+$Solde_PVR_HT = "Solde_PVR_HT______DefautValue";
+$Solde_PVR_HT_Lettres = "Solde_PVR_HT_Lettres______DefautValue";
+$Solde_PVR_TTC = "Solde_PVR_TTC______DefautValue";
+$Solde_PVR_TTC_Lettres = "Solde_PVR_TTC_Lettres______DefautValue";
+$Phase_1_Nbre_JEH = "Phase_1_Nbre_JEH______DefautValue";
+$Phase_1_Prix_JEH_HT = "Phase_1_Prix_JEH_HT______DefautValue";
+$Phase_1_Prix_Phase_HT = "Phase_1_Prix_Phase_HT______DefautValue";
+$Total_TVA = "Total_TVA______DefautValue";
+$Acompte_TVA = "Acompte_TVA______DefautValue";
+$Acompte_Pourcentage = "Acompte_Pourcentage______DefautValue";
+$Date_Emission = "Date_Emission______DefautValue";
+$Date_Limite = "Date_Limite______DefautValue";
+$Reference_PVR = "Reference_PVR______DefautValue";
+$Date_Debut = "Date_Debut______DefautValue";
+$Date_Fin = "Date_Fin______DefautValue";
+$Reference_Etude = "Reference_Etude______DefautValue";
+$Reference_CC = "Reference_CC______DefautValue";
+$Reference_AP = "Reference_AP______DefautValue";
+$Reference_OM = "Reference_OM______DefautValue";
+$Reference_CE = "Reference_CE______DefautValue";
+$Nom_Etudiant = "Nom_Etudiant______DefautValue";
+$Prenom_Etudiant = "Prenom_Etudiant______DefautValue";
+$Sexe = "Sexe______DefautValue";
+$Adresse_Etudiant = "Adresse_Etudiant______DefautValue";
+$Montant_JEH_Verse = "Montant_JEH_Verse______DefautValue";
+$Montant_JEH_Verse_Lettres = "Montant_JEH_Verse_Lettres______DefautValue";
+$Nbre_JEH = "Nbre_JEH______DefautValue";
+$Nbre_JEH_Lettres = "Nbre_JEH_Lettres______DefautValue";
+$Remuneration_Brut = "Remuneration_Brut______DefautValue";
+$Remuneration_Brut_Lettres = "Remuneration_Brut_Lettres______DefautValue";
+$Date_Fin_Etude = "Date_Fin_Etude______DefautValue";
+$Nom_Client = "Nom_Client______DefautValue";
+
+
+
         $champs = Array(
-            "%Total_HT_Lettres%" => $etude,
-            "%TVA%" => 19.6,
+            "%Total_HT_Lettres%" => $Total_HT_Lettres,
+            "%TVA%" => $TVA,
             "%Montant_TVA%" => $Montant_TVA,
             "%Montant_TVA_Lettres%" => $Montant_TVA_Lettres,
             "%Total_TTC%" => $Total_TTC,
             "%Total_TTC_Lettres%" => $Total_TTC_Lettres,
-            "%Entite_Sociale%" => $etude->getProspect()->getEntite(),
-            "%Adresse_Client%" => $etude->getProspect()->getAdresse(),
-            "%Nom_Signataire%" => $etude->getAp()->getSignataire2()->getPrenomNom(),
-            "%Fonction_Signataire%" => $etude->getAp()->getSignataire2()->getPoste(),
-            "%Description_Prestation%" => $etude->getDescriptionPrestation(),
+            "%Entite_Sociale%" => '$etude->getProspect()->getEntite()',
+            "%Adresse_Client%" => '$etude->getProspect()->getAdresse()',
+            "%Nom_Signataire%" => '$etude->getAp()->getSignataire2()->getPrenomNom()',
+            "%Fonction_Signataire%" => '$etude->getAp()->getSignataire2()->getPoste()',
+            "%Description_Prestation%" => '$etude->getDescriptionPrestation()',
             "%Delais_Semaines%" => $Delais_Semaines,
             "%Total_HT%" => $Total_HT,
             "%Nbr_JEH_Total%" => $Nbr_JEH_Total,
@@ -165,7 +226,7 @@ class TraitementController extends Controller {
             "%Remuneration_Brut_Lettres%" => $Remuneration_Brut_Lettres,
             "%Date_Fin_Etude%" => $Date_Fin_Etude,
             "%Nom_Client%" => $Nom_Client,
-            "%Description_Prestation%" => $Description_Prestation,
+            "%Description_Prestation%" => $etude->getDescriptionPrestation(), // Test 
             
             "%Nbr_JEH_Total%" => 6,
             "%Nbr_Developpeurs%" => 2,
