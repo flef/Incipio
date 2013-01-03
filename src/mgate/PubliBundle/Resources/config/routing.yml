@@ -1,3 +1,8 @@
 mgate_publi_homepage:
-    pattern:  /hello/{name}
+    pattern:  /hellooo/{name}
     defaults: { _controller: mgatePubliBundle:Default:index }
+
+
+mgate_publi_publiposter:
+    pattern: /publi/publiposter
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
