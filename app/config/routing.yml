@@ -1,6 +1,5 @@
 mgate_publi:
-    resource: "@mgatePubliBundle/Controller/"
-    type:     annotation
+    resource: "@mgatePubliBundle/Resources/config/routing.yml"
     prefix:   /
 
 mgate_user:
