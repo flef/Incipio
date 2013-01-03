@@ -1033,14 +1033,14 @@
                                 <w:b/>
                                 <w:bCs/>
                             </w:rPr>
-                            <w:t>(%Nbre_Developpeurs_Lettres%) étudiant¤</w:t>
+                            <w:t>(%Nbre_Developpeurs_Lettres%) étudiant</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t>%Nbr_Developpeurs%|s¤</w:t>
+                            <w:t>¤%Nbr_Developpeurs%|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
