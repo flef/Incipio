@@ -4,6 +4,8 @@ namespace mgate\PubliBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+
+
 class TraitementController extends Controller {
 
     //Repétition des phases
@@ -68,9 +70,9 @@ class TraitementController extends Controller {
     private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
         $templateXML = file_get_contents($templateFullPath); //récup contenu XML
         // TODO &$templateXML 
-        $templateXML = repeterPhase($templateXML, $nombrePhase); //Répétion phase
-        $templateXML = remplirChamps($templateXML, $champs); //remplissage des champs + phases
-        $templateXML = accorder($templateXML); //Accord en nombre /!\ accord en genre ?
+        $templateXML = $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
+        $templateXML = $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
+        $templateXML = $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
 
         return $templateXML;
     }
@@ -93,9 +95,10 @@ class TraitementController extends Controller {
     //publication du doc
     public function publiposterAction() {
 
-        //$champs = etude->getChamps($doctype = AP || AV.... )
-        $templateXMLtraite = traiterTemplate($template . '.xml', $nombrePhase, $champs);
-        telechargerDocType($templateXMLtraite);
+        $nombrePhase = count($etude->getPhases());
+        $champs = $this->getAllChamp($etude);
+        $templateXMLtraite = $this->traiterTemplate($template . '.xml', $nombrePhase, $champs);
+        $this->telechargerDocType($templateXMLtraite);
     }
 
     private function getAllChamp($etude) {
@@ -168,3 +171,40 @@ class TraitementController extends Controller {
     }
 
 }
+
+/*
+class Fields {//Comme tu veux
+
+    public $nombrePhase;
+    public $champs; //array("%champ%" => $value)
+    public $phases; //array("%phase_i_champ" => $value)
+}
+
+$tc = new TraitementController();
+
+
+
+$fields = new Fields();
+$fields->champs = $champs;
+$fields->nombrePhase = 5;
+$fields->phases = Array();
+
+$doc = $tc->publiposter("./AP_cleared.xml", $champs);
+
+//echo htmlspecialchars($doc);
+echo $doc;
+
+//On crée le fichier généré || proposer le téléchagement
+$newFile = fopen("./tests.xml", "w+");
+fwrite($newFile, $doc);
+fclose($newFile);
+*/
+
+
+
+
+
+
+
+
+
