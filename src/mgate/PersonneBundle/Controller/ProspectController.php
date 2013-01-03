@@ -88,11 +88,19 @@ class ProspectController extends Controller
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new ProspectType, $prospect);
-        $formHandler = new ProspectHandler($form, $this->get('request'), $em);
 
-        if($formHandler->process())
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgatePersonne_prospect_voir', array('id' => $prospect->getId())) );
+            $form->bindRequest($this->get('request'));
+
+            if( $form->isValid() )
+            {
+                $em->persist($prospect);    
+                $em->flush();
+                
+                return $this->redirect( $this->generateUrl('mgatePersonne_prospect_voir', array('id' => $prospect->getId())) );
+
+            }
         }
 
         return $this->render('mgatePersonneBundle:Prospect:modifier.html.twig', array(
