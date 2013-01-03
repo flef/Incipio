@@ -57,7 +57,9 @@
     {% endfor %} 
     
     {% if generer == 1 %}
-        <input type="submit" value="Générer AP"/>
+        <form action="{{ path('mgate_publi_publiposter') }}" method="post" >
+            <input type="submit" value="Générer AP"/>
+        </form>              
     {% else %}
         <li>Il manque 
         {% for manquant in manquants %}    
