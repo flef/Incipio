@@ -56,12 +56,14 @@ touch README.md
 git init
 git add README.md
 git commit -m "first commit"
-git remote add origin https://github.com/stephanecollot/Symfony.git
 git push -u origin master
 
 Push an existing repository from the command line
 git remote add origin https://github.com/stephanecollot/Symfony.git
 git push -u origin master
+
+update tracked files:
+git add -u
 
 restaure les fichier sur le derniere commit
 git reset --hard HEAD
