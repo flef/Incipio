@@ -894,6 +894,9 @@ class Etude
      */
     public function setAp(\mgate\SuiviBundle\Entity\Ap $ap = null)
     {
+        if($ap!=null)
+            $ap->setEtude($this);
+        
         $this->ap = $ap;
     
         return $this;
@@ -950,6 +953,9 @@ class Etude
      */
     public function setCc(\mgate\SuiviBundle\Entity\Cc $cc = null)
     {
+        if($cc!=null)
+            $cc->setEtude($this);
+        
         $this->cc = $cc;
     
         return $this;
