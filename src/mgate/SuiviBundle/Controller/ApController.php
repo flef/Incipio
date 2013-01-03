@@ -271,7 +271,8 @@ class ApController extends Controller
              'phases'       => $phases,
              'generer' => $generer,
              'signataire2' => $signataire2,
-             'manquants' => $manquant
+             'manquants' => $manquant,
+             'etude'=> $etude // pour moi faut transmettre que ça, m'enfin
              ));
         
         
