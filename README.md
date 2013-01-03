@@ -66,3 +66,4 @@ Clique gauche sur wamp > Apache > Alias directories > http://localhost/phpmyadmi
         Order Deny,Allow
         Allow from all
 </Directory>
+Autre problème courant : il faut préférer utiliser 127.0.0.1:81 au lieu de localhost:81
