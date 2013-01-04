@@ -215,24 +215,24 @@ class TraitementController extends Controller {
 
         $champs = Array(
             "date" => $date,
-            "Total_HT_Lettres" => $Total_HT_Lettres,
             "TVA" => $TVA,
+            "Entite_Sociale" => $etude->getProspect()->getEntite(),
+            "Adresse_Client" => $etude->getProspect()->getAdresse(),
+            "Nom_Signataire" => $etude->getAp()->getSignataire2()->getPrenomNom(),
+            "Fonction_Signataire" => $etude->getAp()->getSignataire2()->getPoste(),
+            "Description_Prestation" => $etude->getDescriptionPrestation(),
+            "Delais_Semaines" => $Delais_Semaines,
+            "Nbr_JEH_Total" => $this->get('mgate.etude_manager')->getNbrJEH($etude),
+            "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
             "Montant_TVA" => $Montant_TVA,
             "Montant_TVA_Lettres" => $Montant_TVA_Lettres,
-            "Total_TTC" => $Total_TTC,
-            "Total_TTC_Lettres" => $Total_TTC_Lettres,
-            "Entite_Sociale" => '$etude->getProspect()->getEntite()',
-            "Adresse_Client" => '$etude->getProspect()->getAdresse()',
-            "Nom_Signataire" => '$etude->getAp()->getSignataire2()->getPrenomNom()',
-            "Fonction_Signataire" => '$etude->getAp()->getSignataire2()->getPoste()',
-            "Description_Prestation" => '$etude->getDescriptionPrestation()',
-            "Delais_Semaines" => $Delais_Semaines,
-            "Total_HT" => $Total_HT,
-            "Nbr_JEH_Total" => $Nbr_JEH_Total,
-            "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
-            "Montant_Total_HT" => $Montant_Total_HT,
+            "Total_HT" => $this->get('mgate.etude_manager')->getTotalJEHHT($etude),
+            "Total_HT_Lettres" => $Total_HT_Lettres,
+            "Montant_Total_HT" => $this->get('mgate.etude_manager')->getTotalHT($etude),
             "Montant_Total_HT_Lettres" => $Montant_Total_HT_Lettres,
-            "Frais_HT" => $Frais_HT,
+            "Total_TTC" => $this->get('mgate.etude_manager')->getTotalTTC($etude),
+            "Total_TTC_Lettres" => $Total_TTC_Lettres,
+            "Frais_HT" => $etude->getFraisDossier(),
             "Frais_HT_Lettres" => $Frais_HT_Lettres,
             "Acompte_HT" => $Acompte_HT,
             "Acompte_HT_Lettres" => $Acompte_HT_Lettres,
@@ -276,7 +276,7 @@ class TraitementController extends Controller {
         //$phase = new \mgate\SuiviBundle\Entity\Phase();
 
         foreach ($phases as $phase) {
-            $i = $phase->getId();
+            $i = $phase->getPosition()+1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
@@ -284,7 +284,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getNbrJEH() * $phase->getDelai());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getDelai());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
