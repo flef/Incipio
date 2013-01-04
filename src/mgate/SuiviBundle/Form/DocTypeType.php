@@ -43,15 +43,16 @@ class DocTypeType extends AbstractType
                 'query_builder' => function(PersonneRepository $pr) { return $pr->getEmployeOnly(); },
                  ))
 
-            ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire client:'))                               
+            ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire client:', 'required' => false))                               
             /*->add('signataire2', 'genemu_jqueryselect2_hidden', array(
             'configs' => array(
                 'multiple' => true // Wether or not multiple values are allowed (default to false)
             )
         ))   */                            
                                
-            ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document','required'=>false, 'widget'=>'single_text'));
+            ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false, 'widget'=>'single_text'));
             
+                $builder->get('knownSignataire2')->setData( false );
     }
     
     public function __construct($type = null)
