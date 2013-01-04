@@ -6,8 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class TraitementController extends Controller {
 
+    private $SDF;
+    private $EDF;
     //Repétition des phases
     private function repeterPhase($templateXML, $nombrePhase) {
+        $SDF = $this->SDF;
+        $EDF = $this->EDF;
 
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
         $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
@@ -16,7 +20,7 @@ class TraitementController extends Controller {
         $callback = function ($matches) use ($nombrePhase) {//Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
                     for ($i = 1; $i <= $nombrePhase; $i++)
-                        $outputString .= preg_replace('#%Phase_Index%#', "$i", $matches[1]);
+                        $outputString .= preg_replace('#'.$SFD.'Phase_Index'.$EFD.'#', "$i", $matches[1]);
                     return $outputString;
                 };
 
@@ -25,10 +29,12 @@ class TraitementController extends Controller {
 
     //Remplissage des %champs%
     private function remplirChamps($templateXML, $fieldValues) {
-
+        $SDF = $this->SDF;
+        $EDF = $this->EDF;
+        
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
             if ($values != NULL) {
-                $templateXML = preg_replace('#' . $field . '#', $values, $templateXML);
+                $templateXML = preg_replace('#'.$SFD . $field . $EFD. '#', $values, $templateXML);
             }
         }
 
@@ -84,7 +90,12 @@ class TraitementController extends Controller {
     //Vérification du fichier
     //if match %   _   % then pasbien
     private function verifierTemplate($templateXML) {
+        $SDF = $this->SDF;
+        $EDF = $this->EDF;
         
+         preg_match_all('#%(.*?)%#',$templateXML,$matches);
+         echo 'Les champs suivant n\'ont pas été correctement remplis';
+         var_dump($matches[1]);
     }
 
     //publication du doc
@@ -100,7 +111,8 @@ class TraitementController extends Controller {
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
         $templateXMLtraite = $this->traiterTemplate( $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
-        $this->telechargerDocType($templateXMLtraite);
+         $this->verifierTemplate($templateXMLtraite);
+        //$this->telechargerDocType($templateXMLtraite);
 
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
     }
@@ -172,63 +184,63 @@ class TraitementController extends Controller {
 
 
         $champs = Array(
-            "%date%" => $date,
-            "%Total_HT_Lettres%" => $Total_HT_Lettres,
-            "%TVA%" => $TVA,
-            "%Montant_TVA%" => $Montant_TVA,
-            "%Montant_TVA_Lettres%" => $Montant_TVA_Lettres,
-            "%Total_TTC%" => $Total_TTC,
-            "%Total_TTC_Lettres%" => $Total_TTC_Lettres,
-            "%Entite_Sociale%" => '$etude->getProspect()->getEntite()',
-            "%Adresse_Client%" => '$etude->getProspect()->getAdresse()',
-            "%Nom_Signataire%" => '$etude->getAp()->getSignataire2()->getPrenomNom()',
-            "%Fonction_Signataire%" => '$etude->getAp()->getSignataire2()->getPoste()',
-            "%Description_Prestation%" => '$etude->getDescriptionPrestation()',
-            "%Delais_Semaines%" => $Delais_Semaines,
-            "%Total_HT%" => $Total_HT,
-            "%Nbr_JEH_Total%" => $Nbr_JEH_Total,
-            "%Nbr_JEH_Total_Lettres%" => $Nbr_JEH_Total_Lettres,
-            "%Montant_Total_HT%" => $Montant_Total_HT,
-            "%Montant_Total_HT_Lettres%" => $Montant_Total_HT_Lettres,
-            "%Frais_HT%" => $Frais_HT,
-            "%Frais_HT_Lettres%" => $Frais_HT_Lettres,
-            "%Acompte_HT%" => $Acompte_HT,
-            "%Acompte_HT_Lettres%" => $Acompte_HT_Lettres,
-            "%Acompte_TTC%" => $Acompte_TTC,
-            "%Acompte_TTC_Lettres%" => $Acompte_TTC_Lettres,
-            "%Solde_PVR_HT%" => $Solde_PVR_HT,
-            "%Solde_PVR_HT_Lettres%" => $Solde_PVR_HT_Lettres,
-            "%Solde_PVR_TTC%" => $Solde_PVR_TTC,
-            "%Solde_PVR_TTC_Lettres%" => $Solde_PVR_TTC_Lettres,
-            "%Total_TVA%" => $Total_TVA,
-            "%Acompte_TVA%" => $Acompte_TVA,
-            "%Acompte_Pourcentage%" => $Acompte_Pourcentage,
-            "%Date_Emission%" => $Date_Emission,
-            "%Date_Limite%" => $Date_Limite,
-            "%Reference_PVR%" => $Reference_PVR,
-            "%Date_Debut%" => $Date_Debut,
-            "%Date_Fin%" => $Date_Fin,
-            "%Reference_Etude%" => $Reference_Etude,
-            "%Reference_CC%" => $Reference_CC,
-            "%Reference_AP%" => $Reference_AP,
-            "%Reference_OM%" => $Reference_OM,
-            "%Reference_CE%" => $Reference_CE,
-            "%Nom_Etudiant%" => $Nom_Etudiant,
-            "%Prenom_Etudiant%" => $Prenom_Etudiant,
-            "%Sexe%" => $Sexe,
-            "%Adresse_Etudiant%" => $Adresse_Etudiant,
-            "%Montant_JEH_Verse%" => $Montant_JEH_Verse,
-            "%Montant_JEH_Verse_Lettres%" => $Montant_JEH_Verse_Lettres,
-            "%Nbre_JEH%" => $Nbre_JEH,
-            "%Nbre_JEH_Lettres%" => $Nbre_JEH_Lettres,
-            "%Remuneration_Brut%" => $Remuneration_Brut,
-            "%Remuneration_Brut_Lettres%" => $Remuneration_Brut_Lettres,
-            "%Date_Fin_Etude%" => $Date_Fin_Etude,
-            "%Nom_Client%" => $Nom_Client,
-            "%Description_Prestation%" => $etude->getDescriptionPrestation(),
-            "%Nbr_JEH_Total%" => 6,
-            "%Nbr_Developpeurs%" => 2,
-            "%Nbr_Phases%" => $nombrePhase,
+            "date" => $date,
+            "Total_HT_Lettres" => $Total_HT_Lettres,
+            "TVA" => $TVA,
+            "Montant_TVA" => $Montant_TVA,
+            "Montant_TVA_Lettres" => $Montant_TVA_Lettres,
+            "Total_TTC" => $Total_TTC,
+            "Total_TTC_Lettres" => $Total_TTC_Lettres,
+            "Entite_Sociale" => '$etude->getProspect()->getEntite()',
+            "Adresse_Client" => '$etude->getProspect()->getAdresse()',
+            "Nom_Signataire" => '$etude->getAp()->getSignataire2()->getPrenomNom()',
+            "Fonction_Signataire" => '$etude->getAp()->getSignataire2()->getPoste()',
+            "Description_Prestation" => '$etude->getDescriptionPrestation()',
+            "Delais_Semaines" => $Delais_Semaines,
+            "Total_HT" => $Total_HT,
+            "Nbr_JEH_Total" => $Nbr_JEH_Total,
+            "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
+            "Montant_Total_HT" => $Montant_Total_HT,
+            "Montant_Total_HT_Lettres" => $Montant_Total_HT_Lettres,
+            "Frais_HT" => $Frais_HT,
+            "Frais_HT_Lettres" => $Frais_HT_Lettres,
+            "Acompte_HT" => $Acompte_HT,
+            "Acompte_HT_Lettres" => $Acompte_HT_Lettres,
+            "Acompte_TTC" => $Acompte_TTC,
+            "Acompte_TTC_Lettres" => $Acompte_TTC_Lettres,
+            "Solde_PVR_HT" => $Solde_PVR_HT,
+            "Solde_PVR_HT_Lettres" => $Solde_PVR_HT_Lettres,
+            "Solde_PVR_TTC" => $Solde_PVR_TTC,
+            "Solde_PVR_TTC_Lettres" => $Solde_PVR_TTC_Lettres,
+            "Total_TVA" => $Total_TVA,
+            "Acompte_TVA" => $Acompte_TVA,
+            "Acompte_Pourcentage" => $Acompte_Pourcentage,
+            "Date_Emission" => $Date_Emission,
+            "Date_Limite" => $Date_Limite,
+            "Reference_PVR" => $Reference_PVR,
+            "Date_Debut" => $Date_Debut,
+            "Date_Fin" => $Date_Fin,
+            "Reference_Etude" => $Reference_Etude,
+            "Reference_CC" => $Reference_CC,
+            "Reference_AP" => $Reference_AP,
+            "Reference_OM" => $Reference_OM,
+            "Reference_CE" => $Reference_CE,
+            "Nom_Etudiant" => $Nom_Etudiant,
+            "Prenom_Etudiant" => $Prenom_Etudiant,
+            "Sexe" => $Sexe,
+            "Adresse_Etudiant" => $Adresse_Etudiant,
+            "Montant_JEH_Verse" => $Montant_JEH_Verse,
+            "Montant_JEH_Verse_Lettres" => $Montant_JEH_Verse_Lettres,
+            "Nbre_JEH" => $Nbre_JEH,
+            "Nbre_JEH_Lettres" => $Nbre_JEH_Lettres,
+            "Remuneration_Brut" => $Remuneration_Brut,
+            "Remuneration_Brut_Lettres" => $Remuneration_Brut_Lettres,
+            "Date_Fin_Etude" => $Date_Fin_Etude,
+            "Nom_Client" => $Nom_Client,
+            "Description_Prestation" => $etude->getDescriptionPrestation(),
+            "Nbr_JEH_Total" => 6,
+            "Nbr_Developpeurs" => 2,
+            "Nbr_Phases" => $nombrePhase,
         );
 
         //$phase = new \mgate\SuiviBundle\Entity\Phase();
@@ -236,16 +248,16 @@ class TraitementController extends Controller {
         foreach ($phases as $phase) {
             $i = $phase->getId();
 
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Titre%', $phase->getTitre());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Nbre_JEH%', $phase->getNbrJEH());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Prix_JEH_HT%', $phase->getPrixJEH());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Prix_Phase_HT%', $phase->getNbrJEH() * $phase->getPrixJEH());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Prix_Phase%', $phase->getNbrJEH() * $phase->getPrixJEH());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Date_Debut%', $phase->getDateDebut()->format('d/m/Y'));
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Delai%', $phase->getNbrJEH() * $phase->getDelai());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Objectif%', $phase->getObjectif());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Methodo%', $phase->getMethodo());
-            $this->array_push_assoc($champs, '%Phase_' . $i . '_Rendu%', $phase->getValidation());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH_HT', $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getNbrJEH() * $phase->getDelai());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
 
         return $champs;
