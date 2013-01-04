@@ -54,6 +54,12 @@
     <p>
     {% for phase in phases %}
         <li>Phase n°{{phase.position+1}}: {{phase.titre}}</li>
+        <li>Objectif: {{phase.objectif}}</li>
+        <li>Méthodologie: {{phase.methodo}}</li>
+        <li>Date de début: {{phase.dateDebut|date("d/m/Y")}}</li>
+        <li>Délai: {{phase.delai}}</li>
+        <li>Nombre de JEH: {{phase.nbrJEH}}</li>
+        <li>Prix du JEH: {{phase.prixJEH}}</li>
     {% endfor %} 
     
     {% if generer == 1 %}
