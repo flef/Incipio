@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\EtudeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Etude
+class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
 {
     /**
      * @var integer $id
@@ -280,7 +280,7 @@ class Etude
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+     
     /**
      * Get id
      *
