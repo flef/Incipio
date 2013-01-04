@@ -95,10 +95,11 @@ class TraitementController extends Controller {
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
+        $request = $this->get('request');
 
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
-        $templateXMLtraite = $this->traiterTemplate('C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Controller/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
+        $templateXMLtraite = $this->traiterTemplate( $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
         $this->telechargerDocType($templateXMLtraite);
 
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
