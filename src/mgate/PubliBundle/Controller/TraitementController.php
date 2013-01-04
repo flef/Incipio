@@ -99,7 +99,19 @@ class TraitementController extends Controller {
 
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
-        $templateXMLtraite = $this->traiterTemplate( $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
+        
+        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' =>$doc))) {
+            echo 'DocumentType[name='.$doc.'] non trouvé !!!!';
+            $chemin = $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml';
+            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
+        }
+        else
+        {
+            echo 'DocumentType uploadé trouvé';
+            $chemin = $documenttype->getWebPath();
+        }
+            
+        $templateXMLtraite = $this->traiterTemplate( $chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
         $this->telechargerDocType($templateXMLtraite);
 
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
