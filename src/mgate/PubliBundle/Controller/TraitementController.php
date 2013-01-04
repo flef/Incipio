@@ -110,10 +110,9 @@ class TraitementController extends Controller {
 
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
-<<<<<<< HEAD
         
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' =>$doc))) {
-            echo 'DocumentType[name='.$doc.'] non trouvé !!!!';
+            echo 'DocumentType[name='.$doc.'] non trouvé: on utilise un asset';
             $chemin = $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml';
             //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
         }
@@ -124,12 +123,8 @@ class TraitementController extends Controller {
         }
             
         $templateXMLtraite = $this->traiterTemplate( $chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
-        $this->telechargerDocType($templateXMLtraite);
-=======
-        $templateXMLtraite = $this->traiterTemplate( $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
-         $this->verifierTemplate($templateXMLtraite);
+        $this->verifierTemplate($templateXMLtraite);
         //$this->telechargerDocType($templateXMLtraite);
->>>>>>> cb8f8297413fa8bf2bbd01855d161cdeaab2740e
 
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
     }
