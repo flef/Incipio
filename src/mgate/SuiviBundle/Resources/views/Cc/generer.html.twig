@@ -1,0 +1,54 @@
+{# empty Twig template #}
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Génération d'une Convention Client - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    
+    
+    <i>Version {{ cc.version }}</i>
+
+    <div>
+       
+    </div>
+
+
+     Date de signature: {{ cc.dateSignature|date("d/m/Y") }}
+    </p>
+    <p>
+    Acompte: 
+    {% if etude.acompte %}
+     Oui 
+    <br>
+    {% endif %}
+    Pourcentage acompte: {{etude.pourcentageAcompte}} %
+    <br>
+    Acompte en € HT: 
+        {% set total = 0 %}
+        {% for phase in etude.phases %}
+        {% set total = total + phase.nbrJEH * phase.prixJEH %}
+        {% endfor %} 
+        {% set acompte = total*etude.pourcentageAcompte / 100 %}
+        {{ acompte }} € HT 
+    <br>
+    Acompte TTC: {#A mettre après avoir mis tva dans parameters.yml #}
+    <br>
+     
+    </p>
+    {% if cc.generer == 1 %}
+        <form action="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'AP'}) }}" method="post" >
+            <input type="submit" value="Générer AP"/>
+        </form>              
+    {% else %}
+        <li>Il manque 
+        {% for manquant in manquants %}    
+             "{{manquant}}", 
+        {% endfor %}        
+        </li>
+    {% endif %}
+   
+
+{% endblock %}
