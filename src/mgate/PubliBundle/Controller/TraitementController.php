@@ -8,6 +8,11 @@ class TraitementController extends Controller {
 
     private $SFD = '~'; //
     private $EFD = '~~';
+    
+    /*
+     * private SAD
+     * private EAD
+     */
 
     //Repétition des phases
     private function repeterPhase($templateXML, $nombrePhase) {
@@ -115,31 +120,31 @@ class TraitementController extends Controller {
 
         $em = $this->getDoctrine()->getEntityManager();
 
-        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude)) {
-            throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
-        }
+        //Récupère l'étude avec son id
+        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude))
+            throw $this->createNotFoundException('Etude[id=' . $id_etude . '] inexistant');
         $request = $this->get('request');
+
+
+
+        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
+            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset';
+            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
+            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
+        } else {
+            echo 'DocumentType uploadé trouvé';
+            $chemin = $documenttype->getWebPath();
+        }
+
+        if (false)
+            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
 
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
 
-        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' =>$doc))) {
-            echo 'DocumentType[name='.$doc.'] non trouvé: on utilise un asset';
-            $chemin = $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml';
-            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
-        }
-        else
-        {
-            echo 'DocumentType uploadé trouvé';
-            $chemin = $documenttype->getWebPath();
-        }
-        
-        if(false)
-            $templateXMLtraite = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-           
-        $templateXMLtraite = $this->traiterTemplate( $chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
+        $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
 
-         
+
         $this->verifierTemplate($templateXMLtraite);
         $this->telechargerDocType($templateXMLtraite);
 
@@ -211,26 +216,31 @@ class TraitementController extends Controller {
         $Date_Fin_Etude = "Date_Fin_Etude______DefautValue";
         $Nom_Client = "Nom_Client______DefautValue";
 
+        
 
+
+        $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
+        $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+        $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        
+        $Total_HT_Lettres = $Total_HT;
+        $Montant_Total_HT_Lettres = $Montant_Total_HT;
+        $Total_TTC_Lettres = $Total_TTC;
 
         $champs = Array(
             "date" => $date,
             "TVA" => $TVA,
-            "Entite_Sociale" => $etude->getProspect()->getEntite(),
-            "Adresse_Client" => $etude->getProspect()->getAdresse(),
-            "Nom_Signataire" => $etude->getAp()->getSignataire2()->getPrenomNom(),
-            "Fonction_Signataire" => $etude->getAp()->getSignataire2()->getPoste(),
             "Description_Prestation" => $etude->getDescriptionPrestation(),
             "Delais_Semaines" => $Delais_Semaines,
-            "Nbr_JEH_Total" => $this->get('mgate.etude_manager')->getNbrJEH($etude),
             "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
             "Montant_TVA" => $Montant_TVA,
             "Montant_TVA_Lettres" => $Montant_TVA_Lettres,
-            "Total_HT" => $this->get('mgate.etude_manager')->getTotalJEHHT($etude),
+            "Nbr_JEH_Total" => $this->get('mgate.etude_manager')->getNbrJEH($etude),
+            "Total_HT" => $Total_HT,
+            "Montant_Total_HT" => $Montant_Total_HT,
+            "Total_TTC" => $Total_TTC,
             "Total_HT_Lettres" => $Total_HT_Lettres,
-            "Montant_Total_HT" => $this->get('mgate.etude_manager')->getTotalHT($etude),
             "Montant_Total_HT_Lettres" => $Montant_Total_HT_Lettres,
-            "Total_TTC" => $this->get('mgate.etude_manager')->getTotalTTC($etude),
             "Total_TTC_Lettres" => $Total_TTC_Lettres,
             "Frais_HT" => $etude->getFraisDossier(),
             "Frais_HT_Lettres" => $Frais_HT_Lettres,
@@ -273,10 +283,27 @@ class TraitementController extends Controller {
             "Nbr_Phases" => $nombrePhase,
         );
 
+        //block dépendant de prospect
+        if (isset($etude->getProspect())) {
+            $this->array_push_assoc($champs, "Entite_Sociale", $etude->getProspect()->getEntite());
+            $this->array_push_assoc($champs, "Adresse_Client", $etude->getProspect()->getAdresse());
+        }
+
+        //block dépendant de AP
+        if (isset($etude->getAp())) {
+            //Block dependant de AP->Signataire 2
+            if (isset($etude->getSignateire2())) {
+                $this->array_push_assoc($champs, "Nom_Signataire", $etude->getAp()->getSignataire2()->getPrenomNom());
+                $this->array_push_assoc($champs, "Fonction_Signataire", $etude->getAp()->getSignataire2()->getPoste());
+            }
+        }
+
+
+
         //$phase = new \mgate\SuiviBundle\Entity\Phase();
 
         foreach ($phases as $phase) {
-            $i = $phase->getPosition()+1;
+            $i = $phase->getPosition() + 1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
