@@ -101,7 +101,7 @@
                                 <w:bCs/>
                                 <w:caps/>
                             </w:rPr>
-                            <w:t>%Reference_AP%</w:t>
+                            <w:t>~Reference_AP~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00FA4D8F">
@@ -395,7 +395,7 @@
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                             </w:rPr>
-                            <w:t>Dans le cadre de son activité professionnelle, %Nom_Client% %Presentation_Projet%</w:t>
+                            <w:t>Dans le cadre de son activité professionnelle, ~Nom_Client~~ ~Presentation_Projet~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -411,14 +411,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>La prestation proposée par Mines Gardanne Technical Engineering, de type %Type_Prestatio</w:t>
-                        </w:r>
-                        <w:r>
-                            <w:rPr>
-                                <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
-                                <w:lang w:eastAsia="ar-SA"/>
-                            </w:rPr>
-                            <w:t>n%, consiste à réaliser %Description_Prestation%</w:t>
+                            <w:t>La prestation proposée par Mines Gardanne Technical Engineering, de type ~Type_Prestation~~, consiste à réaliser ~Description_Prestation~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -434,7 +427,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>Le¤%Nbr_Developpeurs%|s¤ réalisateur¤%Nbr_Developpeurs%|s¤ de cette étude devr¤%Nbr_Developpeurs%|ont|a¤ donc être capable de :</w:t>
+                            <w:t>Le¤~Nbr_Developpeurs~~|s¤ réalisateur¤~Nbr_Developpeurs~~|s¤ de cette étude devr¤~Nbr_Developpeurs~~|ont|a¤ donc être capable de :</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -450,7 +443,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>%Capacites_Dev%</w:t>
+                            <w:t>~Capacites_Dev~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -500,14 +493,14 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:color w:val="000000"/>
                             </w:rPr>
-                            <w:t>%Nbr_Phases% phase</w:t>
+                            <w:t>~Nbr_Phases~~ phase</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Phases%|s¤</w:t>
+                            <w:t>¤~Nbr_Phases~~|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -521,7 +514,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Phases%|Ces|Cette¤</w:t>
+                            <w:t>¤~Nbr_Phases~~|Ces|Cette¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -535,7 +528,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Phases%|s¤</w:t>
+                            <w:t>¤~Nbr_Phases~~|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -549,7 +542,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Phases%|s¤</w:t>
+                            <w:t>¤~Nbr_Phases~~|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -563,7 +556,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Phases%|ont|a¤</w:t>
+                            <w:t>¤~Nbr_Phases~~|ont|a¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -577,7 +570,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">¤%Nbr_Phases%|pour chacune d'entre elles ¤</w:t>
+                            <w:t xml:space="preserve">¤~Nbr_Phases~~|pour chacune d'entre elles ¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -611,7 +604,7 @@
                                 <w:u w:val="single"/>
                                 <w:lang w:val="en-US"/>
                             </w:rPr>
-                            <w:t>Phase %Phase_Index% : %Phase_%Phase_Index%_Titre%</w:t>
+                            <w:t>Phase ~Phase_Index~~ : ~Phase_~Phase_Index~~_Titre~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -624,7 +617,7 @@
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                         <w:r>
-                            <w:t>%Phase_%Phase_Index%_Objectif%</w:t>
+                            <w:t>~Phase_~Phase_Index~~_Objectif~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -637,7 +630,7 @@
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                         <w:r>
-                            <w:t>%Phase_%Phase_Index%_Methodo%</w:t>
+                            <w:t>~Phase_~Phase_Index~~_Methodo~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -650,7 +643,7 @@
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                         <w:r>
-                            <w:t>%Phase_%Phase_Index%_Rendu%</w:t>
+                            <w:t>~Phase_~Phase_Index~~_Rendu~~</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00FA4D8F">
@@ -743,7 +736,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_Index%) %Phase_%Phase_Index%_Titre%</w:t>
+                                        <w:t>~Phase_Index~~) ~Phase_~Phase_Index~~_Titre~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -753,7 +746,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_%Phase_Index%_Date_Debut%</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Date_Debut~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -763,7 +756,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_%Phase_Index%_Delai%</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Delai~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -805,7 +798,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t xml:space="preserve">L’étude sera lancée durant le mois de %Mois_Lancement%, sous réserve de l’acceptation du présent Avant-Projet par le client et devra être terminée au plus tard durant le mois de %Mois_Fin%. </w:t>
+                            <w:t xml:space="preserve">L’étude sera lancée durant le mois de ~Mois_Lancement~~, sous réserve de l’acceptation du présent Avant-Projet par le client et devra être terminée au plus tard durant le mois de ~Mois_Fin~~. </w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00FA4D8F">
@@ -935,7 +928,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_Index%) %Phase_%Phase_Index%_Titre%</w:t>
+                                        <w:t>~Phase_Index~~) ~Phase_~Phase_Index~~_Titre~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -945,7 +938,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_%Phase_Index%_Nbre_JEH%</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Nbre_JEH~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -955,7 +948,7 @@
                                 </w:tcPr>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
                                     <w:r>
-                                        <w:t>%Phase_%Phase_Index%_Prix_Phase%</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Prix_Phase~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1025,7 +1018,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t xml:space="preserve">%Nbr_Developpeurs% </w:t>
+                            <w:t xml:space="preserve">~Nbr_Developpeurs~~ </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1033,14 +1026,14 @@
                                 <w:b/>
                                 <w:bCs/>
                             </w:rPr>
-                            <w:t>(%Nbre_Developpeurs_Lettres%) étudiant</w:t>
+                            <w:t>(~Nbre_Developpeurs_Lettres~~) étudiant</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t>¤%Nbr_Developpeurs%|s¤</w:t>
+                            <w:t>¤~Nbr_Developpeurs~~|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1096,14 +1089,14 @@
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t>La charge totale de travail de l’étude est donc estimée à %Nbr_JEH_Total% (%Nbr_JEH_Total_Lettres%) Jour-</w:t>
+                                        <w:t>La charge totale de travail de l’étude est donc estimée à ~Nbr_JEH_Total~~ (~Nbr_JEH_Total_Lettres~~) Jour-</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t>Étude Homme¤%Nbr_JEH_Total%|s¤.</w:t>
+                                        <w:t>Étude Homme¤~Nbr_JEH_Total~~|s¤.</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1205,13 +1198,13 @@
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                             </w:rPr>
-                            <w:t>conseil d’administration de M-GaTE a désigné %Nom_suiveur% comme contact privilégié de %Nom_Client%, contact qui assurera les fonctions de chef de projet de l’étude et le suivi contractuel de celle-ci et des réalisateurs. Il peut être joint tout au long du</w:t>
+                            <w:t>conseil d’administration de M-GaTE a désigné ~Nom_suiveur~~ comme contact privilégié de ~Nom_Client~~, contact qui assurera les fonctions de chef de projet de l’étude et le suivi contractuel de celle-ci et des réalisateurs. Il peut être joint tout au long du</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> déroulement de l’étude par mail à l’adresse %Mail_suiveur% ou téléphone au %Tel_suiveur%. En cas d’absence ou de problème, il est également possible de joindre le Président de M-GaTE, Stéphane COLLOT (stephane.collot@etu.emse.fr ; 06 78 39 31 94).</w:t>
+                            <w:t xml:space="preserve"> déroulement de l’étude par mail à l’adresse ~Mail_suiveur~~ ou téléphone au ~Tel_suiveur~~. En cas d’absence ou de problème, il est également possible de joindre le Président de M-GaTE, Stéphane COLLOT (stephane.collot@etu.emse.fr ; 06 78 39 31 94).</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -1288,7 +1281,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>Montant des %Nbr_JEH_Total% Jours-Etude Homme¤%Nbr_JEH_Total%|s¤:</w:t>
+                                        <w:t>Montant des ~Nbr_JEH_Total~~ Jours-Etude Homme¤~Nbr_JEH_Total~~|s¤:</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1310,7 +1303,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>%Montant_Total_HT%</w:t>
+                                        <w:t>~Montant_Total_HT~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1361,7 +1354,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>%Frais_HT%</w:t>
+                                        <w:t>~Frais_HT~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1450,7 +1443,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>%Total_HT%</w:t>
+                                        <w:t>~Total_HT~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1473,7 +1466,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>TVA (%TVA%)</w:t>
+                                        <w:t>TVA (~TVA~~)</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
@@ -1510,7 +1503,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>%Total_HT%</w:t>
+                                        <w:t>~Total_HT~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1635,7 +1628,7 @@
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t>%Total_TTC%</w:t>
+                                        <w:t>~Total_TTC~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1775,7 +1768,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t>consiste à réaliser %Description_Prestation% pour</w:t>
+                            <w:t>consiste à réaliser ~Description_Prestation~~ pour</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1792,7 +1785,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> %Nbr_JEH_Total% (%Nbr_JEH_Total_Lettres%) </w:t>
+                            <w:t xml:space="preserve"> ~Nbr_JEH_Total~~ (~Nbr_JEH_Total_Lettres~~) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1800,26 +1793,16 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">Jour-Etude Homme¤%Nbr_JEH_Total%|s¤, soit </w:t>
-                        </w:r>
-                        <w:r>
-                            <w:rPr>
-                                <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
-                                <w:b/>
-                                <w:color w:val="000000"/>
-                                <w:lang w:eastAsia="ja-JP"/>
-                            </w:rPr>
-                            <w:t xml:space="preserve">%Total_HT% </w:t>
+                            <w:t xml:space="preserve">Jour-Etude Homme¤~Nbr_JEH_Total~~|s¤, soit </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
-                                <w:bCs/>
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t>HT (%Total</w:t>
+                            <w:t xml:space="preserve">~Total_HT~~ </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1829,7 +1812,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">_HT_Lettres% hors taxes) </w:t>
+                            <w:t xml:space="preserve">HT (~Total_HT_Lettres~~ hors taxes) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1837,7 +1820,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">dont %Frais_HT% HT (%Frais_HT_Lettres% hors taxes) de frais de fonctionnement, soit </w:t>
+                            <w:t xml:space="preserve">dont ~Frais_HT~~ HT (~Frais_HT_Lettres~~ hors taxes) de frais de fonctionnement, soit </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1846,7 +1829,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t>%Total_TTC%</w:t>
+                            <w:t>~Total_TTC~~</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1856,7 +1839,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> TTC (%Total_TTC_Lettres% toutes taxes comprises) </w:t>
+                            <w:t xml:space="preserve"> TTC (~Total_TTC_Lettres~~ toutes taxes comprises) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1874,7 +1857,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> %Montant_TVA% (%Montant_TVA_Lettres%) </w:t>
+                            <w:t xml:space="preserve"> ~Montant_TVA~~ (~Montant_TVA_Lettres~~) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1892,7 +1875,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t>%TVA% du montant hors t</w:t>
+                            <w:t>~TVA~~ du montant hors t</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1961,7 +1944,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>À Gardanne, le %date%,</w:t>
+                                        <w:t>À Gardanne, le ~date~~,</w:t>
                                     </w:r>
                                 </w:p>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00FA4D8F">
@@ -1998,13 +1981,13 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:b/>
                                         </w:rPr>
-                                        <w:t>%Nom_Client%</w:t>
+                                        <w:t>~Nom_Client~~</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t xml:space="preserve"> %Entite_Sociale%,</w:t>
+                                        <w:t xml:space="preserve"> ~Entite_Sociale~~,</w:t>
                                     </w:r>
                                 </w:p>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -2019,13 +2002,13 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:b/>
                                         </w:rPr>
-                                        <w:t>%Nom_signataire%</w:t>
+                                        <w:t>~Nom_signataire~~</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>, %Fonction_signataire%</w:t>
+                                        <w:t>, ~Fonction_signataire~~</w:t>
                                     </w:r>
                                 </w:p>
                                 <w:p w:rsidR="00FA4D8F" w:rsidRDefault="00311CCD">
@@ -3289,7 +3272,7 @@
                                     <w:rPr>
                                         <w:noProof/>
                                     </w:rPr>
-                                    <w:t>%Nom_Client%</w:t>
+                                    <w:t>~Nom_Client~</w:t>
                                 </w:r>
                                 <w:r>
                                     <w:t xml:space="preserve"> </w:t>
@@ -3319,7 +3302,7 @@
                                     <w:rPr>
                                         <w:noProof/>
                                     </w:rPr>
-                                    <w:t>%Reference_AP%</w:t>
+                                    <w:t>~Reference_AP~~</w:t>
                                 </w:r>
                             </w:p>
                         </w:tc>
