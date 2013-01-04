@@ -230,6 +230,7 @@ class TraitementController extends Controller {
             "%Nbr_Phases%" => $nombrePhase,
         );
 
+        //$phase = new \mgate\SuiviBundle\Entity\Phase();
 
         foreach ($phases as $phase) {
             $i = $phase->getId();
