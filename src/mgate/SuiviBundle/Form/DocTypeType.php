@@ -52,7 +52,6 @@ class DocTypeType extends AbstractType
                                
             ->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false, 'widget'=>'single_text'));
             
-                $builder->get('knownSignataire2')->setData( false );
     }
     
     public function __construct($type = null)
