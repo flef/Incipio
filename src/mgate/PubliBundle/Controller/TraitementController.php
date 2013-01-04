@@ -6,21 +6,23 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class TraitementController extends Controller {
 
-    private $SDF;
-    private $EDF;
+    private $SFD = '~'; //
+    private $EFD = '~~';
+
     //Repétition des phases
     private function repeterPhase($templateXML, $nombrePhase) {
-        $SDF = $this->SDF;
-        $EDF = $this->EDF;
+
 
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
         $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
 
         $callback = function ($matches) use ($nombrePhase) {//Fonction de callback prétraitement de la zone à répéter
+                    $SFD = $this->SFD;
+                    $EFD = $this->EFD;
                     $outputString = "";
                     for ($i = 1; $i <= $nombrePhase; $i++)
-                        $outputString .= preg_replace('#'.$SFD.'Phase_Index'.$EFD.'#', "$i", $matches[1]);
+                        $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
 
@@ -29,12 +31,12 @@ class TraitementController extends Controller {
 
     //Remplissage des %champs%
     private function remplirChamps($templateXML, $fieldValues) {
-        $SDF = $this->SDF;
-        $EDF = $this->EDF;
-        
+        $SFD = $this->SFD;
+        $EFD = $this->EFD;
+
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
             if ($values != NULL) {
-                $templateXML = preg_replace('#'.$SFD . $field . $EFD. '#', $values, $templateXML);
+                $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $values, $templateXML);
             }
         }
 
@@ -81,21 +83,31 @@ class TraitementController extends Controller {
 
     //Téléchargement du fichier
     private function telechargerDocType($templateXML) {
-        header('Content-type: text/xml');
-        header('Content-Disposition: attachment; filename="doctype.xml"');
-        echo $templateXML;
+        /*
+          header('Content-type: text/xml');
+          header('Content-Disposition: attachment; filename="doctype.xml"');
+          echo $templateXML;
+         * 
+         */
+
+        //En attendant
+        echo '<br/>Telecharger le fichier : <br/>';
+        echo '<input type="button" value="Ne pas cliquer" onclick="alert(\'Hum... une page php qui reçoit mon template en post et le dl avec le comment l87-89 pls\');return false;" />';
         exit;
     }
 
     //Vérification du fichier
     //if match %   _   % then pasbien
     private function verifierTemplate($templateXML) {
-        $SDF = $this->SDF;
-        $EDF = $this->EDF;
-        
-         preg_match_all('#%(.*?)%#',$templateXML,$matches);
-         echo 'Les champs suivant n\'ont pas été correctement remplis';
-         var_dump($matches[1]);
+        $SFD = $this->SFD;
+        $EFD = $this->EFD;
+
+        preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
+        echo 'Les champs suivant n\'ont pas été correctement remplis';
+        echo '<ul>';
+        foreach ($matches[1] as $matche)
+            echo '<li>' . $matche . '</li>';
+        echo '</ul>';
     }
 
     //publication du doc
@@ -110,9 +122,10 @@ class TraitementController extends Controller {
 
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
-        $templateXMLtraite = $this->traiterTemplate( $request->getScheme().'://' . $request->getHttpHost() . $request->getBasePath().'/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
-         $this->verifierTemplate($templateXMLtraite);
-        //$this->telechargerDocType($templateXMLtraite);
+        //$templateXMLtraite = $this->traiterTemplate($request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml', $nombrePhase, $champs); //Ne sais ou mettre mes ressources
+        $templateXMLtraite = $this->traiterTemplate('C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml', $nombrePhase, $champs);
+        $this->verifierTemplate($templateXMLtraite);
+        $this->telechargerDocType($templateXMLtraite);
 
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
     }
@@ -123,8 +136,8 @@ class TraitementController extends Controller {
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
         $date = date("d/m/Y");
-        
-        
+
+
         $Total_HT_Lettres = "Total_HT_Lettres______DefautValue";
         $TVA = "TVA______DefautValue";
         $Montant_TVA = "Montant_TVA______DefautValue";
