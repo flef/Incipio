@@ -1,4 +1,10 @@
 <?php
+
+namespace mgate\PubliBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+
 /**
  * Description of chiffreEnLettre
  * source : http://www.javascriptfr.com/codes/CONVERSION-CHIFFRE-MONETAIRE-LETTRE_30141.aspx
@@ -6,7 +12,9 @@
  * Conversion limitée à 999 999 999 999 999 ou 9 999 999 999 999,99
  * si le nombre contient plus de 2 décimales, il est arrondit à 2 décimales
  */
-class chiffreEnLettre {
+
+class ConversionLettreController extends Controller
+{
     /**
     * fonction permettant de transformer une valeur numérique en valeur en lettre
     * @param int $Nombre le nombre a convertir
