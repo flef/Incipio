@@ -10,6 +10,7 @@
 	<i>{{ prospect.entite }}</i>
 
         <p>Adresse :<br/>{{ prospect.adresse }}</p>
+        <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">Modifier le prospect</a><br />
  <p>
         <h3>Employes:</h3>
         {% for employe in prospect.employes %}
@@ -29,8 +30,7 @@
 </p>
 
 <p>     
-    <a href="{{ path('mgatePersonne_prospect_homepage') }}">Retour à la liste</a>
-    <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">Modifier le prospect</a>
+    <br /><a href="{{ path('mgatePersonne_prospect_homepage') }}">Retour à la liste des Prospect</a>
 </p>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
