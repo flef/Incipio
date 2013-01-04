@@ -1,7 +1,17 @@
 parameters:
 #    mgate_publi.example.class: mgate\PubliBundle\Example
+    mgate.conversionlettre.class: mgate\PubliBundle\Controller\ConversionLettreController
+
 
 services:
+    mgate.conversionlettre:
+        class: "%mgate.conversionlettre.class%"
+#        arguments:
+#          - "@doctrine.orm.entity_manager"
+#          - "%tva%"
+
+
+#services:
 #    mgate_publi.example:
 #        class: %mgate_publi.example.class%
 #        arguments: [@service_id, "plain_value", %parameter%]
