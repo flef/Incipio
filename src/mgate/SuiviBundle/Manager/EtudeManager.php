@@ -22,6 +22,7 @@ class EtudeManager extends BaseManager
      */
     public function getTotalJEHHT(Etude $etude)
     {
+        $total=0;
         foreach ($etude->getPhases() as $phase) {
             $total += $phase->getNbrJEH()*$phase->getPrixJEH();
         }
