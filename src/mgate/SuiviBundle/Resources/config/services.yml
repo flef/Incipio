@@ -1,7 +1,10 @@
 parameters:
-#    mgate_suivi.example.class: mgate\SuiviBundle\Example
+    mgate.etude_manager.class: mgate\SuiviBundle\Manager\EtudeManager
+    tva: 0.196
 
 services:
-#    mgate_suivi.example:
-#        class: %mgate_suivi.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mgate.etude_manager:
+        class: "%mgate.etude_manager.class%"
+        arguments:
+          - "@doctrine.orm.entity_manager"
+          - "%tva%"
