@@ -283,16 +283,17 @@ class TraitementController extends Controller {
             "Nbr_Phases" => $nombrePhase,
         );
 
+        $etude = new \mgate\SuiviBundle\Entity\Etude();
         //block dépendant de prospect
-        if (isset($etude->getProspect())) {
+        if ($etude->getProspect()!=NULL) {
             $this->array_push_assoc($champs, "Entite_Sociale", $etude->getProspect()->getEntite());
             $this->array_push_assoc($champs, "Adresse_Client", $etude->getProspect()->getAdresse());
         }
 
         //block dépendant de AP
-        if (isset($etude->getAp())) {
+        if ($etude->getAp()!=NULL) {
             //Block dependant de AP->Signataire 2
-            if (isset($etude->getSignateire2())) {
+            if ($etude->getSignateire2()!=NULL) {
                 $this->array_push_assoc($champs, "Nom_Signataire", $etude->getAp()->getSignataire2()->getPrenomNom());
                 $this->array_push_assoc($champs, "Fonction_Signataire", $etude->getAp()->getSignataire2()->getPoste());
             }
