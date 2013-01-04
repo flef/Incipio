@@ -189,32 +189,41 @@ class ApController extends Controller
         $signataire1 = $etude->getAp()->getSignataire1(); //suiveur
         $signataire2 = $etude->getAp()->getSignataire2();// tester avec foreach
         $test = array( 
-             '3' => $version,
-             '4'  => $fraisDossier,
-             '5' => $presentationProjet,
-             '6' => $descriptionPrestation,
-             '7' => $typePrestation,
-             '8'  => $competences,
-            '10' => $dateSignature);
-        $testSignataire2=array( $etude->getAp()->getSignataire2()->getPrenom(),
-                                $etude->getAp()->getSignataire2()->getPoste(),
-                                $etude->getAp()->getSignataire2()->getNom()
+             'Version' => $version,
+             'Frais de dossier'  => $fraisDossier,
+             'Presentation du projet' => $presentationProjet,
+             'Description de la prestation' => $descriptionPrestation,
+             'Type de prestation' => $typePrestation,
+             'Competences'  => $competences,
+            'Date de signature' => $dateSignature);
+        $testSignataire2=array( 'Prenom du signataire client' => $etude->getAp()->getSignataire2()->getPrenom(),
+                                'Poste du signataire client' => $etude->getAp()->getSignataire2()->getPoste(),
+                                'Nom du signataire client' => $etude->getAp()->getSignataire2()->getNom()
                               );
-        $testSuiveur=array( $etude->getSuiveur()->getNom(),
-                            $etude->getSuiveur()->getPrenom(),
-                            $etude->getSuiveur()->getMobile(),
-                            $etude->getSuiveur()->getEmail()
+        $testSuiveur=array( 'Nom du suiveur' => $etude->getSuiveur()->getNom(),
+                            'Prenom du suiveur' => $etude->getSuiveur()->getPrenom(),
+                            'Mobile du suiveur' => $etude->getSuiveur()->getMobile(),
+                            'Mail du suiveur' => $etude->getSuiveur()->getEmail()
                             );
-        $testProspect=array( $etude->getProspect()->getNom(),
-                             $etude->getProspect()->getEntite(),
-                             $etude->getProspect()->getAdresse()
+        $testProspect=array( 'Nom du prospect' => $etude->getProspect()->getNom(),
+                             'Entite' => $etude->getProspect()->getEntite(),
+                             'Adresse du prospect' => $etude->getProspect()->getAdresse()
                            );
         $etude->getAp()->setGenerer(1);//initialisation avant test
         foreach($phases as $cle => $phase)
         {
-            if($cle != "__isInitialized__")
-            {    
-                if(empty($phase)) 
+            $testPhase = array( 'Nombre de JEH de la phase'=>$phase->getNbrJEH(),
+                                'Prix du JEH de la phase'=>$phase->getPrixJEH(),
+                                'Titre de la phase'=>$phase->getTitre(),
+                                'Objectif de la phase'=>$phase->getObjectif(),
+                                'Méthodologie de la phase'=>$phase->getMethodo(),
+                                'Début de la phase'=>$phase->getDatedebut(),
+                                'Délai de la phase'=>$phase->getDelai()
+                                );
+            
+            foreach($testPhase as $cle => $element)
+            {
+                if(empty($element)) 
                 {
                    $etude->getAp()->setGenerer(0);
                    $manquant[]=$cle;
