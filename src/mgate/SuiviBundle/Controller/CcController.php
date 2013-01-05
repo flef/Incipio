@@ -139,4 +139,50 @@ class CcController extends Controller
             'etude' => $etude,
         ));
     }
+    
+    public function genererAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+        
+        
+        $cc = $etude->getCc();
+        $version = $etude->getCc()->getVersion();
+        $dateSignature = $etude->getCc()->getDateSignature(); 
+        $acompte = $etude->getAcompte();
+        $pourcentageAcompte = $etude->getPourcentageAcompte();
+        
+        $test = array( 
+            'Version' => $version,
+            'Acompte' => $acompte,
+            'Pourcentage Acompte' => $pourcentageAcompte,
+            'Date de signature' => $dateSignature);
+        
+        $etude->getCc()->setGenerer(1);//initialisation avant test
+      
+
+        foreach($test as $cle => $element)
+        {
+            if(empty($element)) 
+            {
+               $etude->getCc()->setGenerer(0);
+               $manquant[]=$cle;
+            }
+        }
+
+         $manquant[]="0"; // nécessaire pour l'initialiser si generer=1    
+         $generer = $etude->getCc()->getGenerer();// ne pas bouger car on doit récupérer la valeur de générer après vérification
+        
+         return $this->render('mgateSuiviBundle:Cc:generer.html.twig', array(
+             'cc' => $cc,
+             'manquants' => $manquant,
+             'etude'=> $etude // pour moi faut transmettre que ça, m'enfin
+             ));
+        
+        
+    }
 }

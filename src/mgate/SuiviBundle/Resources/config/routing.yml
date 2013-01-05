@@ -87,6 +87,19 @@ mgateSuivi_cc_voir:
     defaults: {_controller: mgateSuiviBundle:Cc:voir}
     requirements:
         id: \d+
+       
+mgateSuivi_cc_generer:
+    pattern: /cc/generer/{id}
+    defaults: {_controller: mgateSuiviBundle:Cc:generer}
+    requirements:
+        id: \d+  
+        
+mgateSuivi_cc_suivi:
+    pattern: /cc/suivi/{id}
+    defaults: {_controller: mgateSuiviBundle:Cc:suivi}
+    requirements:
+        id: \d+   
+    
         
 mgateSuivi_mission_rediger:
     pattern: /mission/rediger/{id}

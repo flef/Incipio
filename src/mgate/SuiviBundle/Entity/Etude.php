@@ -19,6 +19,17 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
 {
     /**
+     * @var bool
+     */
+    private $knownProspect = false;
+        
+    /**
+     *
+     */
+    private $newProspect;   
+    
+    
+    /**
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer")
@@ -280,7 +291,29 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
     }
-     
+
+    
+/// rajout à la main
+    public function isKnownProspect()
+    {
+        return $this->knownProspect;
+    }
+    public function setKnownProspect($boolean)
+    {
+        $this->knownProspect = $boolean;
+    }
+    
+    public function getNewProspect()
+    {
+        return $this->newProspect;
+    }
+    public function setNewProspect($var)
+    {
+        $this->newProspect = $var;
+
+    }
+/// fin rajout
+    
     /**
      * Get id
      *
