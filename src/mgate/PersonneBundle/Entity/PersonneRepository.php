@@ -22,11 +22,30 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
-    public function getEmployeOnly()
+    public function getEmployeOnly($prospect = null)
     {
+        
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
-          ->where('n.employe IS NOT NULL');
+        
+        if($prospect != null)
+        {
+            $query = $qb->select('p')
+                        ->from('mgatePersonneBundle:Personne', 'p')
+                        ->leftJoin('p.employe', 'e')
+                        ->addSelect('e')
+                        ->where('p.employe IS NOT NULL')
+                        ->andWhere('e.prospect = :prospect')
+                            ->setParameter('prospect', $prospect);
+        }
+        else
+        {
+            $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
+                        ->where('n.employe IS NOT NULL');
+            
+        }
+          
+                    
+                    
         return $query;
     }
     

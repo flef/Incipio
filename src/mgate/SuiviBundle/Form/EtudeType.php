@@ -11,20 +11,32 @@ use mgate\PersonneBundle\Entity\Personne as Personne;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
+use mgate\PersonneBundle\Form\ProspectType as ProspectType;
 
 class EtudeType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('prospect', 'genemu_jqueryautocompleter_entity',
+            /*->add('prospect', 'genemu_jqueryautocompleter_entity',
                 array(  'route_name' => 'ajax_prospect',
                         'class' => 'mgate\PersonneBundle\Entity\Prospect',
                         'property' => 'nom',
-                    ))
+                    ))*/
+            ->add('knownProspect', 'checkbox', array(
+                'required' => false,
+                'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
+                ))
+             ->add('prospect', 'genemu_jqueryselect2_entity', array(
+                'class' => 'mgate\PersonneBundle\Entity\Prospect',
+                'property' => 'nom',
+                'label' => 'Prospect existant',
+                ))
+            ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))                               
+            
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
-            ->add('mandat', 'integer', array('data' => '5') )
+            ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude'))
             ->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',

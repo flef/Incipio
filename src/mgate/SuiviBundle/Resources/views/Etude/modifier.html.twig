@@ -5,8 +5,10 @@
 {% endblock %}
 
 {% block content_bundle %}
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-    <h2>Modifier un article</h2>
+    <h2>Modifier l'étude</h2>
 
     {% include "mgateSuiviBundle:Etude:formulaire.html.twig" %} 
 
@@ -16,6 +18,6 @@
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'article</a>
         <a href="{{ path('mgateSuivi_ap_ajouter', {'id': etude.id}) }}" >Ajouter un Avant-Projet</a>
     </p>
-
+    
 {% endblock %}
 

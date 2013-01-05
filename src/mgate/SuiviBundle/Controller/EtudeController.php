@@ -40,6 +40,8 @@ use mgate\SuiviBundle\Entity\Pvr;
 use mgate\SuiviBundle\Form\PvrHandler;
 use mgate\SuiviBundle\Form\PvrType;
 
+//use mgate\UserBundle\Entity\User;
+
 class EtudeController extends Controller
 {
     
@@ -59,7 +61,14 @@ class EtudeController extends Controller
     {
         $etude = new Etude;
         
-        $form        = $this->createForm(new EtudeType, $etude);
+        $etude->setMandat(5);
+        $etude->setNum($this->get('mgate.etude_manager')->getNouveauNumero($etude->getMandat()));
+        
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (is_object($user) && $user instanceof \mgate\UserBundle\Entity\User)
+            $etude->setSuiveur($user->getPersonne());
+        
+        $form        = $this->createForm(new EtudeType(), $etude);
         $formHandler = new EtudeHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
         
         if($formHandler->process())
@@ -69,7 +78,7 @@ class EtudeController extends Controller
             if($this->get('request')->get('ap'))
             {
                 
-                return $this->redirect($this->generateUrl('mgateSuivi_ap_ajouter', array('id' => $etude->getId())));
+                return $this->redirect($this->generateUrl('mgateSuivi_ap_rediger', array('id' => $etude->getId())));
             }
             else
             {

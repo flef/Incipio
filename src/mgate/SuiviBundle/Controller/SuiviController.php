@@ -37,9 +37,13 @@ class SuiviController extends Controller
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
         }
         
-        
         $suivi = new Suivi;
         $suivi->setEtude($etude);
+        $suivi->setDate(new \DateTime());
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (is_object($user) && $user instanceof \mgate\UserBundle\Entity\User)
+            $suivi->setFaitPar($user->getPersonne());
+        
         $form        = $this->createForm(new SuiviType, $suivi);
         $formHandler = new SuiviHandler($form, $this->get('request'), $em);
         
