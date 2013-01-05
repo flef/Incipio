@@ -16,6 +16,7 @@ class DocTypeType extends AbstractType
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
+        $pro=$this->prospect;
        
         $builder
             ->add('version', 'integer', array('label'=>'Version du document'))
@@ -35,7 +36,7 @@ class DocTypeType extends AbstractType
                 'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                 'property' => 'prenomNom',
                 'label' => 'Signataire client existant',
-                'query_builder' => function(PersonneRepository $pr) { return $pr->getEmployeOnly($this->prospect); },
+                'query_builder' => function(PersonneRepository $pr) use ($pro) { return $pr->getEmployeOnly($pro); },
                 ))
             ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire client:', 'required' => false))                               
                       
