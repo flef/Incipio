@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="{{ asset('bundles/mgatesuivi/thickbox/thickbox.css') }}" type="text/css" media="screen" />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     
+<link href="{{ asset('bundles/mgatesuivi/select2/select2.css') }}" rel="stylesheet"/>
+<script src="{{ asset('bundles/mgatesuivi/select2/select2.min.js') }}"></script>
 
     <h2>Ajouter une étude</h2>
     
@@ -32,4 +34,6 @@
 
     {% include "mgateSuiviBundle:Etude:formulaire.html.twig" %} 
 
+    
+ 
 {% endblock %}

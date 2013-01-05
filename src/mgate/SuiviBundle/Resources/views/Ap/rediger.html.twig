@@ -1,7 +1,7 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Modifier un Avant-Projet - {{ parent() }}
+	Rédiger l'Avant-Projet - {{ parent() }}
 {% endblock %}
 
 {% block javascripts %}
@@ -41,31 +41,30 @@
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
     </p>
 
-<script>
+ <script>
      /* ...known personne... */
-    $('input#{{ form.ap.knownSignataire2.get('id') }}').prop('checked', true);
     
     var toggle = true;
+    var known = $('input#{{ form.ap.knownSignataire2.get('id') }}');
+    var knowned = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div')
+    var newed = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
+    
+    known.prop('checked', true);
 
-    $('input#{{ form.ap.knownSignataire2.get('id') }}').change(function() {
+    known.change(function() {
 
         if ($(this).is(':checked')) {
+            knowned.find('input').attr('disabled', false);
+            if (toggle) knowned.show();
 
-            var $$ = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div');
-            $$.find('input').attr('disabled', false);
-            if (toggle) $$.show();
-
-            var $$ = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
-            $$.find('input').attr('disabled', true);
-            if (toggle) $$.hide();
+            newed.find('input').attr('disabled', true);
+            if (toggle) newed.hide();
         } else {
-            var $$ = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
-            $$.find('input').attr('disabled', false);
-            if (toggle) $$.show();
+            newed.find('input').attr('disabled', false);
+            if (toggle) newed.show();
 
-            var $$ = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div');
-            $$.find('input').attr('disabled', true);
-            if (toggle) $$.hide();
+            knowned.find('input').attr('disabled', true);
+            if (toggle) knowned.hide();
         }
 
     }).change();
