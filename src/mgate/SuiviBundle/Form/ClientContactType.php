@@ -18,8 +18,8 @@ class ClientContactType extends AbstractType
             //->add('dateCreation',  'date')
             
             ->add('faitPar','entity',array ('label' => 'Fait par',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\User',
-                       'property' => 'username',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'prenomNom',
                        'property_path' => true,
                        'required' => true))
             
