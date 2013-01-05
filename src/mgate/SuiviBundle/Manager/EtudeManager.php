@@ -6,15 +6,27 @@ use Doctrine\ORM\EntityManager;
 use mgate\SuiviBundle\Manager\BaseManager;
 use mgate\SuiviBundle\Entity\Etude as Etude;
 
-class EtudeManager extends BaseManager
+class EtudeManager extends \Twig_Extension
 {
     protected $em;
-    protected  $tva;
+    protected $tva;
 
     public function __construct(EntityManager $em, $tva)
     {
         $this->em = $em;
         $this->tva = $tva;
+    }
+    
+    public function getName()
+    {
+        return 'mgate_EtudeManager';
+    }
+    // Pour utiliser les fonctions depuis twig
+    public function getFunctions()
+    {
+        return array(
+            'getRefEtude' => new \Twig_Function_Method($this, 'getRefEtude')
+        );
     }
 
     /**
@@ -66,7 +78,7 @@ class EtudeManager extends BaseManager
      */
     public function getRefEtude(Etude $etude)
     {      
-        return "[M-GaTE]".$etude->getMandat()*100+$etude->getNum();
+        return "[M-GaTE]".(string)($etude->getMandat()*100+$etude->getNum());
     }
     
     /**
