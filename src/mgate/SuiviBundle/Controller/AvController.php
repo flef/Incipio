@@ -4,7 +4,6 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use mgate\SuiviBundle\Form\EtudeType;
-use mgate\SuiviBundle\Form\EtudeHandler;
 
 use mgate\SuiviBundle\Entity\Av;
 use mgate\SuiviBundle\Form\AvHandler;
