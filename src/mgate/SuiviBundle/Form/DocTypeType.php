@@ -37,6 +37,7 @@ class DocTypeType extends AbstractType
                 'property' => 'prenomNom',
                 'label' => 'Signataire client existant',
                 'query_builder' => function(PersonneRepository $pr) use ($pro) { return $pr->getEmployeOnly($pro); },
+                'required' => false
                 ))
             ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire client:', 'required' => false))                               
                       
