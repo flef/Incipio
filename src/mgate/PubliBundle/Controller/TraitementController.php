@@ -131,6 +131,7 @@ class TraitementController extends Controller {
             echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset';
             $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
             //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
+            echo $this->get('mgate.conversionlettre')->ConvNumberLetter(123.01,1);
         } else {
             echo 'DocumentType uploadé trouvé';
             $chemin = $documenttype->getWebPath();
@@ -223,9 +224,9 @@ class TraitementController extends Controller {
         $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
         $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
         
-        $Total_HT_Lettres = $Total_HT;
-        $Montant_Total_HT_Lettres = $Montant_Total_HT;
-        $Total_TTC_Lettres = $Total_TTC;
+        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT);
+        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT);
+        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC);
 
         $champs = Array(
             "date" => $date,

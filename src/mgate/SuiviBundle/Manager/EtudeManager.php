@@ -34,7 +34,7 @@ class EtudeManager extends BaseManager
      */
     public function getTotalHT(Etude $etude)
     {
-        $total = $etude->getFraisDossier()+getTotalJEHHT($etude);
+        $total = $etude->getFraisDossier()+$this->getTotalJEHHT($etude);
         
         return $total;
     }
