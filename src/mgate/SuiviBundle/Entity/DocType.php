@@ -12,12 +12,7 @@ class DocType
      * @var bool
      */
     private $knownSignataire2 = false;
-    
-    /**
-     *
-     */
-    private $knownedSignataire2;
-    
+        
     /**
      *
      */
@@ -105,6 +100,28 @@ class DocType
      */
     private $generer;
  
+    
+    
+/// rajout à la main
+    public function isKnownSignataire2()
+    {
+        return $this->knownSignataire2;
+    }
+    public function setKnownSignataire2($boolean)
+    {
+        $this->knownSignataire2 = $boolean;
+    }
+    
+    public function getNewSignataire2()
+    {
+        return $this->newSignataire2;
+    }
+    public function setNewSignataire2($var)
+    {
+        $this->newSignataire2 = $var;
+
+    }
+/// fin rajout
     
     /**
      * Set version
@@ -359,37 +376,6 @@ class DocType
         return $this->signataire2;
     }
 
-
-
-    //rajout à la main
-    
-    public function isKnownSignataire2()
-    {
-        return $this->knownSignataire2;
-    }
-    public function setKnownSignataire2($boolean)
-    {
-        $this->knownSignataire2 = $boolean;
-    }
-    
-    public function getKnownedSignataire2()
-    {
-        return $this->knownedSignataire2;
-    }
-    public function setKnownedSignataire2($var)
-    {
-        $this->knownedSignataire2 = $var;
-    }
-    
-    public function getNewSignataire2()
-    {
-        return $this->newSignataire2;
-    }
-    public function setNewSignataire2($var)
-    {
-        $this->newSignataire2 = $var;
-
-    }
 
     /**
      * Set generer
