@@ -36,7 +36,7 @@ class EtudeType extends AbstractType
             
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
-            ->add('mandat', 'integer', array('data' => '5') )
+            ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude'))
             ->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
