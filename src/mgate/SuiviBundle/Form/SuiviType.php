@@ -16,11 +16,11 @@ class SuiviType extends AbstractType
             //->add('dateCreation',  'date')
             ->add('faitPar','entity',array ('label' => 'Fait par',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
                        'required' => true))
-            ->add('date','datetime',array('label'=>'Date de l\'évènement'))
-            ->add('contenu','textarea',array('label'=>'Que s\'est-il passé ?'));
+            ->add('date','genemu_jquerydate', array('label'=>'Date de l\'évènement', 'widget'=>'single_text'))
+            ->add('contenu','textarea', array('label'=>'Que s\'est-il passé ?'));
             //->add('thread', new ThreadType) // délicat ;
             
              
