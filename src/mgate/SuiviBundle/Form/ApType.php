@@ -23,7 +23,7 @@ class ApType extends DocTypeType
                        'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false))
-                    ->add('ap', new DocTypeType('Ap'), array('label'=>' ')) //<- astuce !
+                    ->add('ap', new DocTypeType('Ap', $options['prospect']), array('label'=>' ')) //<- astuce !
                     ->add('fraisDossier','integer',array('label'=>'Frais de dossier'))
                     ->add('presentationProjet','textarea',array('label'=>'Présentation du projet'))
                     ->add('descriptionPrestation','textarea',array('label'=>'Description de la prestation proposée par M-GaTE'))
@@ -41,6 +41,7 @@ class ApType extends DocTypeType
     {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
+            'prospect' => '',
         );
     }
 }

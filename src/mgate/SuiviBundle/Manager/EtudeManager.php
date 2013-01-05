@@ -61,6 +61,27 @@ class EtudeManager extends BaseManager
         return $this->getTotalHT($etude)*(1+$this->tva);
     }
     
+    
+    /**
+     * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
+     */
+    public function getNouveauNumero($mandat=5)
+    {      
+        $qb = $this->em->createQueryBuilder();
+        
+        $query = $qb->select('e.num')
+                   ->from('mgateSuiviBundle:Etude', 'e')
+                   ->andWhere('e.mandat = :mandat')
+                       ->setParameter('mandat', $mandat)
+                   ->orderBy('e.num', 'DESC');
+                    
+        $value=$query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if($value)
+            return $value['num']+1;
+        else
+            return 1;
+    }
+    
 
     public function getRepository()
     {

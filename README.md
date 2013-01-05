@@ -1,25 +1,25 @@
 My-M-GaTE
 =========
 
-# Installation détaillé
+# Installation dï¿½taillï¿½
 
-1. Installer WAMPSERVEUR Apache 2.4.2 et PHP 5.4.3
+1. Installer WAMPSERVEUR Apache 2.2.22 et PHP 5.4.3, attention prendre la version 32bits !!!
 Changer le port 80 en port 81 : Clique gauche sur wamp > Apache > httpd.conf > remplacer "Listen 80" en "Listen 81"
 Activer le module ssl : Clique gauche sur wamp > Apache > Apache Module > ssl_module
 Clique gauche sur wamp > PHP > PHP Extensions > php_openssl
 Clique gauche sur wamp > PHP > PHP Extensions > php_intl
-Clique gauche sur wamp > PHP > Version > séléctionnez une version >= à 5.3.8
+Clique gauche sur wamp > PHP > Version > sï¿½lï¿½ctionnez une version >= ï¿½ 5.3.8
 
 2. Installer https://help.github.com/articles/set-up-git#platform-windows
 
 3. Cloner My-M-GaTE avec l'interface graphique.
-Se créer un compte github, et me communiquer votre pseudo
+Se crï¿½er un compte github, et me communiquer votre pseudo
 Clique droit sur My-M-GaTE dans le logiciel de github puis "clone to" choisir le dossier dans C:/wamp/www
 Il faut faire en sorte que http://127.0.0.1:81/My-M-GaTE/ pointe sur le repository
 (c'est aussi possible avec un alias: Clique gauche sur wamp > Apache > Apache directories)
 
 4. Configurer Symfony2:
-Créer le fichier app/config/parameters.yml
+Crï¿½er le fichier app/config/parameters.yml
 Contenant ceci :
 parameters:
     database_driver:   pdo_mysql
@@ -37,28 +37,28 @@ parameters:
     locale:            fr
     secret:            ThisTokenIsNotSoSecretChangeIt
 
-5. Ajouter PHP à ses variables d'environnements :
-Clique droit sur Ordinateur > Propriétés > Modifier les paramètres > Paramètres Système avancés > Variables d'environnement
-Partie "variable système", modifier l'entrée "Path" et rajouter ;c:\wamp\bin\php\php5.3.8  (en vérifiant que ce dossier existe bien, sinon adapter)
+5. Ajouter PHP ï¿½ ses variables d'environnements :
+Clique droit sur Ordinateur > Propriï¿½tï¿½s > Modifier les paramï¿½tres > Paramï¿½tres Systï¿½me avancï¿½s > Variables d'environnement
+Partie "variable systï¿½me", modifier l'entrï¿½e "Path" et rajouter ;c:\wamp\bin\php\php5.4.3  (en vï¿½rifiant que ce dossier existe bien, sinon adapter)
 
-6. Téléchargement/Installation des vendors:
+6. Tï¿½lï¿½chargement/Installation des vendors:
 - Sur le logiciel de github, clique droit sur My-M-GaTE "open a shell here"
 - Taper: curl -s https://getcomposer.org/installer | php
 - Taper: php composer.phar update
 - Faire autre chose et attendre
 
-7. Installer la base de donnée
+7. Installer la base de donnï¿½e
 php app/console doctrine:database:create
 php app/console doctrine:schema:update --force
 
 8. Tester la configuration sur http://127.0.0.1:81/My-M-GaTE/web/config.php
-Créer les dossiers app/cache et app/logs
+Crï¿½er les dossiers app/cache et app/logs
 
 9. Tester My-M-GaTE
 http://127.0.0.1/My-M-GaTE/web/app_dev.php/suivi
 
 # Remarque
-En cas de problème d'acces pour phpmyadmin:
+En cas de problï¿½me d'acces pour phpmyadmin:
 Clique gauche sur wamp > Apache > Alias directories > http://localhost/phpmyadmin > Edit alias, mettre :
 <Directory "c:/wamp/apps/phpmyadmin3.5.1/"> # adapter la version
    Options Indexes FollowSymLinks MultiViews
@@ -66,4 +66,4 @@ Clique gauche sur wamp > Apache > Alias directories > http://localhost/phpmyadmi
         Order Deny,Allow
         Allow from all
 </Directory>
-Autre problème courant : il faut préférer utiliser 127.0.0.1:81 au lieu de localhost:81
+Autre problï¿½me courant : il faut prï¿½fï¿½rer utiliser 127.0.0.1:81 au lieu de localhost:81
