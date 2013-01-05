@@ -27,13 +27,7 @@ mgateSuivi_etude_panel:
     defaults: {_controller: mgateSuiviBundle:Panel:test , page: 1}
     requirements:
       page : \d*
-        
-mgateSuivi_ap_ajouter:
-    pattern: /ap/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Ap:add}
-    requirements:
-        id: \d+
-        
+                
 mgateSuivi_ap_modifier:
     pattern: /ap/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Ap:modifier}

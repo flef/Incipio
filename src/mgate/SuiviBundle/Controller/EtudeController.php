@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
-use mgate\SuiviBundle\Form\EtudeHandler;
-use mgate\SuiviBundle\Form\EtudePhasesType;
 use mgate\SuiviBundle\Form\EtudePhasesHandler;
 use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Form\ApType;
