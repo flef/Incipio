@@ -8,7 +8,7 @@ class TraitementController extends Controller {
 
     private $SFD = '~'; //
     private $EFD = '~~';
-    
+
     /*
      * private SAD
      * private EAD
@@ -113,44 +113,9 @@ class TraitementController extends Controller {
         foreach ($matches[1] as $matche)
             echo '<li>' . $matche . '</li>';
         echo '</ul>';
-    }
-
-    //publication du doc
-    public function publiposterAction($id_etude, $doc) {
-
-        $em = $this->getDoctrine()->getEntityManager();
-
-        //Récupère l'étude avec son id
-        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude))
-            throw $this->createNotFoundException('Etude[id=' . $id_etude . '] inexistant');
-        $request = $this->get('request');
-
-
-
-        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
-            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset';
-            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
-            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
-            echo $this->get('mgate.conversionlettre')->ConvNumberLetter(123.01,1);
-        } else {
-            echo 'DocumentType uploadé trouvé';
-            $chemin = $documenttype->getWebPath();
-        }
-
-        if (false)
-            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-
-        $nombrePhase = count($etude->getPhases());
-        $champs = $this->getAllChamp($etude);
-
-        $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
-
-
-        $this->verifierTemplate($templateXMLtraite);
-        $this->telechargerDocType($templateXMLtraite);
-
-
-        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
+        echo ' <form action="{path(\'mgate_publi_publiposter_telecharger\')}" method="post" >
+            <input type="submit" value="Telecharger"/>
+        </form>';
     }
 
     private function getAllChamp($etude) {
@@ -217,13 +182,13 @@ class TraitementController extends Controller {
         $Date_Fin_Etude = "Date_Fin_Etude______DefautValue";
         $Nom_Client = "Nom_Client______DefautValue";
 
-        
+
 
 
         $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
         $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
         $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
-        
+
         $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT);
         $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT);
         $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC);
@@ -286,15 +251,15 @@ class TraitementController extends Controller {
 
         $etude = new \mgate\SuiviBundle\Entity\Etude();
         //block dépendant de prospect
-        if ($etude->getProspect()!=NULL) {
+        if ($etude->getProspect() != NULL) {
             $this->array_push_assoc($champs, "Entite_Sociale", $etude->getProspect()->getEntite());
             $this->array_push_assoc($champs, "Adresse_Client", $etude->getProspect()->getAdresse());
         }
 
         //block dépendant de AP
-        if ($etude->getAp()!=NULL) {
+        if ($etude->getAp() != NULL) {
             //Block dependant de AP->Signataire 2
-            if ($etude->getSignateire2()!=NULL) {
+            if ($etude->getSignateire2() != NULL) {
                 $this->array_push_assoc($champs, "Nom_Signataire", $etude->getAp()->getSignataire2()->getPrenomNom());
                 $this->array_push_assoc($champs, "Fonction_Signataire", $etude->getAp()->getSignataire2()->getPoste());
             }
@@ -327,41 +292,56 @@ class TraitementController extends Controller {
         return $array;
     }
 
+    private function getEtudeFromID($id_etude) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        //Récupère l'étude avec son id
+        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude))
+            throw $this->createNotFoundException('Etude[id=' . $id_etude . '] inexistant');
+
+        return $etude;
+    }
+
+    private function getDoctypeAbsolutePathFromName($doc) {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $request = $this->get('request');
+
+        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
+            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset';
+            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
+            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
+        } else {
+            echo 'DocumentType uploadé trouvé';
+            $chemin = $documenttype->getWebPath();
+        }
+        return $chemin;
+    }
+
+    //publication du doc
+    public function publiposterAction($id_etude, $doc) {
+
+        //debug
+        if (true)
+            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
+
+        $etude = $this->getEtudeFromID($id_etude);
+        $chemin = $this->getDoctypeAbsolutePathFromName($doc);
+        $nombrePhase = count($etude->getPhases());
+        $champs = $this->getAllChamp($etude);
+
+        $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
+
+
+        $this->verifierTemplate($templateXMLtraite);
+        $this->telechargerDocType($templateXMLtraite);
+
+
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
+    }
+
+    public function telechargerAction($id) {
+        
+    }
+
 }
-
-/*
-class Fields {//Comme tu veux
-
-    public $nombrePhase;
-    public $champs; //array("%champ%" => $value)
-    public $phases; //array("%phase_i_champ" => $value)
-}
-
-$tc = new TraitementController();
-
-
-
-$fields = new Fields();
-$fields->champs = $champs;
-$fields->nombrePhase = 5;
-$fields->phases = Array();
-
-$doc = $tc->publiposter("./AP_cleared.xml", $champs);
-
-//echo htmlspecialchars($doc);
-echo $doc;
-
-//On crée le fichier généré || proposer le téléchagement
-$newFile = fopen("./tests.xml", "w+");
-fwrite($newFile, $doc);
-fclose($newFile);
-*/
-
-
-
-
-
-
-
-
-
