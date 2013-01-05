@@ -80,11 +80,6 @@ class EtudeController extends Controller
                 if(!$etude->isKnownProspect())
                 {
                     $etude->setProspect($etude->getNewProspect());
-                    
-                    //$employe = new Employe();
-                    //$employe->setPersonne($etude->getAp()->getSignataire2());
-                    //$employe->setProspect($etude->getProspect());
-                    //$em->persist($employe);
                 }
                 
                 $em->persist($etude);
@@ -128,19 +123,24 @@ class EtudeController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
 
-        // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new EtudeType, $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $em);
+        $form = $this->createForm(new EtudeType, $etude);
 
-        if($formHandler->process())
+        if($this->get('request')->getMethod() == 'POST' )
         {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            $form->bindRequest($this->get('request'));
+
+            if( $form->isValid() )
+            {
+                $em->persist($etude);
+                $em->flush();
+
+                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+            }
         }
 
         return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
@@ -149,26 +149,4 @@ class EtudeController extends Controller
         ));
     }
     
-    public function modifierPhasesAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
-        }
-
-        $form        = $this->createForm(new EtudePhasesType, $etude);
-        $formHandler = new EtudePhasesHandler($form, $this->get('request'), $em);
-
-        if($formHandler->process())
-        {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
-        }
-
-        return $this->render('mgateSuiviBundle:Etude:phases.html.twig', array(
-            'form' => $form->createView(),
-            'etude' => $etude,
-        ));
-    }
 }
