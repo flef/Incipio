@@ -8,3 +8,6 @@ services:
         arguments:
           - "@doctrine.orm.entity_manager"
           - "%tva%"
+        tags:
+            - { name: twig.extension }
+            

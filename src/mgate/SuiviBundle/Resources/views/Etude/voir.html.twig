@@ -6,7 +6,7 @@
 
 {% block content_bundle %}
 
-    <h2>Etude n°{{ etude.id }}</h2>
+    <h2>Etude {{ getRefEtude(etude) }}</h2>
     <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
     <li>Client: {{ etude.prospect.nom }} </li>
     <li>Suiveur: {{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</li>
