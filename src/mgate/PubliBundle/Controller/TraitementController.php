@@ -113,7 +113,7 @@ class TraitementController extends Controller {
         foreach ($matches[1] as $matche)
             echo '<li>' . $matche . '</li>';
         echo '</ul>';
-        echo ' <form action="{path(\'mgate_publi_publiposter_telecharger\')}" method="post" >
+        echo '<form action="AP/telecharger" method="post" >
             <input type="submit" value="Telecharger"/>
         </form>';
     }
@@ -321,27 +321,54 @@ class TraitementController extends Controller {
     //publication du doc
     public function publiposterAction($id_etude, $doc) {
 
-        //debug
-        if (true)
-            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
+
 
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
 
+        
+        //debug
+        if (false)
+            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
+        
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
 
 
         $this->verifierTemplate($templateXMLtraite);
-        $this->telechargerDocType($templateXMLtraite);
 
 
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'blblallqsdflqslf lolilol'));
+        $idDocx = (int) strtotime("now") + rand();
+        $handle = fopen('tmp/' . $idDocx, "w+");
+        fwrite($handle, $templateXMLtraite);
+        fclose($handle);
+
+        $_SESSION['idDocx'] = $idDocx;
+        $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, 1);
+
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'ololilioloiol'));
     }
 
-    public function telechargerAction($id) {
-        
+    public function telechargerAction($docType = 'AP') {
+
+        if (isset($_SESSION['idDocx'])) {
+            $idDocx = $_SESSION['idDocx'];
+            $refDocx = (isset($_SESSION['refDocx']) ? $_SESSION['refDocx'] : $docType);
+
+            $doc = 'tmp/' . $idDocx;
+
+            header('Content-Type: application/msword');
+            header('Content-Length: ' . filesize($doc));
+            header('Content-disposition: attachment; filename=' . $doc);
+            header('Pragma: no-cache');
+            header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+            header('Expires: 0');
+            readfile($doc);
+            exit();
+
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'ololilioloiol'));
+        }
     }
 
 }
