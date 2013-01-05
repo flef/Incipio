@@ -26,7 +26,7 @@ class ConversionLettreController extends Controller
         $dblEnt=''; $byDec='';
         $bNegatif='';
         $strDev = '';
-            $strCentimes = '';
+        $strCentimes = '';
 
         if( $Nombre < 0 ) {
             $bNegatif = true;
@@ -50,16 +50,16 @@ class ConversionLettreController extends Controller
                 if ($byDec > 0) $strDev = " virgule" ;
                             break;
             case 1 :
-                $strDev = " Euro" ;
-                if ($byDec > 0) $strCentimes = $strCentimes . " Cents" ;
+                $strDev = " euro" ;
+                if ($byDec > 0) $strCentimes = $strCentimes . " centime" . ($byDec > 1 ? 's' : '');
                             break;
             case 2 :
-                $strDev = " Dollar" ;
-                if ($byDec > 0) $strCentimes = $strCentimes . " Cent" ;
+                $strDev = " dollar" ;
+                if ($byDec > 0) $strCentimes = $strCentimes . " cent" ;
                             break;
             }
-        if (($dblEnt > 1) && ($Devise != 0)) $strDev = $strDev . "s" ;
-
+        if (($dblEnt > 1) && ($Devise != 0)) $strDev .= "s" ;
+        if (($dblEnt > 1) && ($Devise != 0)) $strDev .= " et" ;
             $NumberLetter = $this->ConvNumEnt(floatval($dblEnt), $Langue) . $strDev . " " . $this->ConvNumDizaine($byDec, $Langue) . $strCentimes ;
             return $NumberLetter;
     }
