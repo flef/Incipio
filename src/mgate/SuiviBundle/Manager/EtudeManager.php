@@ -38,9 +38,17 @@ class EtudeManager extends BaseManager
         
         return $total;
     }
+        
+    /**
+     * Get montant total TTC
+     */
+    public function getTotalTTC(Etude $etude)
+    {      
+        return $this->getTotalHT($etude)*(1+$this->tva);
+    }
     
     /**
-     * Get montant total HT
+     * Get nombre de JEH
      */
     public function getNbrJEH(Etude $etude)
     {
@@ -51,14 +59,14 @@ class EtudeManager extends BaseManager
         }
         
         return $total;
-    }
+    }  
     
     /**
-     * Get montant total TTC
+     * Get référence de l'etude
      */
-    public function getTotalTTC(Etude $etude)
+    public function getRefEtude(Etude $etude)
     {      
-        return $this->getTotalHT($etude)*(1+$this->tva);
+        return "[M-GaTE]".$etude->getMandat()*100+$etude->getNum();
     }
     
     
