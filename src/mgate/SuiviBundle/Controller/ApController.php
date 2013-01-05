@@ -130,7 +130,7 @@ class ApController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
 
-        $form        = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()->getId()));//transmettre etude pour ajouter champ de etude
+        $form = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()->getId()));//transmettre etude pour ajouter champ de etude
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -138,11 +138,7 @@ class ApController extends Controller
                
             if( $form->isValid() )
             {
-                if($etude->getAp()->isKnownSignataire2()) //(true === $etude->knownSignataire2)
-                {
-                    //$etude->getAp()->setSignataire2($etude->getAp()->getKnownedSignataire2());
-                }
-                else
+                if(!$etude->getAp()->isKnownSignataire2()) //(true === $etude->knownSignataire2)
                 {
                     $etude->getAp()->setSignataire2($etude->getAp()->getNewSignataire2());
                     

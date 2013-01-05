@@ -39,7 +39,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Prospect")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $prospect;
