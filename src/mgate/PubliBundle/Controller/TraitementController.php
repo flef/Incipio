@@ -338,9 +338,11 @@ class TraitementController extends Controller {
 
         $this->verifierTemplate($templateXMLtraite);
 
-
+        $repertoire = 'tmp';
         $idDocx = (int) strtotime("now") + rand();
-        $handle = fopen('tmp/' . $idDocx, "w+");
+        if (!file_exists($repertoire))
+                mkdir ($repertoire/*,0700*/);
+        $handle = fopen($repertoire.'/' . $idDocx, "w+");
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
