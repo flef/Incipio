@@ -21,10 +21,10 @@ class TraitementController extends Controller {
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
         $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
-
-        $callback = function ($matches) use ($nombrePhase) {//Fonction de callback prétraitement de la zone à répéter
-                    $SFD = $this->SFD;
-                    $EFD = $this->EFD;
+        
+        $SFD = $this->SFD;
+        $EFD = $this->EFD;
+        $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
                     for ($i = 1; $i <= $nombrePhase; $i++)
                         $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
@@ -308,11 +308,11 @@ class TraitementController extends Controller {
         $request = $this->get('request');
 
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
-            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset';
+            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset<br /><br />';
             $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
             //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
         } else {
-            echo 'DocumentType uploadé trouvé';
+            echo 'DocumentType uploadé trouvé<br /><br />';
             $chemin = $documenttype->getWebPath();
         }
         return $chemin;
