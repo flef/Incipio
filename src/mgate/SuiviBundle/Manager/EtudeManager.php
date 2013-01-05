@@ -38,9 +38,17 @@ class EtudeManager extends BaseManager
         
         return $total;
     }
+        
+    /**
+     * Get montant total TTC
+     */
+    public function getTotalTTC(Etude $etude)
+    {      
+        return $this->getTotalHT($etude)*(1+$this->tva);
+    }
     
     /**
-     * Get montant total HT
+     * Get nombre de JEH
      */
     public function getNbrJEH(Etude $etude)
     {
@@ -51,16 +59,23 @@ class EtudeManager extends BaseManager
         }
         
         return $total;
+    }  
+    
+    /**
+     * Get référence de l'etude
+     */
+    public function getRefEtude(Etude $etude)
+    {      
+        return "[M-GaTE]".$etude->getMandat()*100+$etude->getNum();
     }
     
     /**
-     * Get montant total TTC
+     * Get référence document
      */
-    public function getTotalTTC(Etude $etude)
+    public function getRefDoc(Etude $etude, $doc, $version)
     {      
-        return $this->getTotalHT($etude)*(1+$this->tva);
+        return $this->getRefEtude($etude)."-".$doc."-".$version; //TODO faire les autres type de docs, genre RM
     }
-    
     
     /**
      * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
