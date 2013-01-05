@@ -69,6 +69,13 @@ class EtudeManager extends BaseManager
         return "[M-GaTE]".$etude->getMandat()*100+$etude->getNum();
     }
     
+    /**
+     * Get référence document
+     */
+    public function getRefDoc(Etude $etude, $doc, $version)
+    {      
+        return $this->getRefEtude($etude)."-".$doc."-".$version; //TODO faire les autres type de docs, genre RM
+    }
     
     /**
      * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
