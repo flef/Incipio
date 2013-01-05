@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\Response;
 use mgate\SuiviBundle\Entity\Etude;
 
 use mgate\SuiviBundle\Form\EtudeType;
-use mgate\SuiviBundle\Form\EtudeHandler;
 use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\ClientContactHandler;
 
