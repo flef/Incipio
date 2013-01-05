@@ -51,7 +51,7 @@
 
         if ($(this).is(':checked')) {
 
-            var $$ = $('label:contains("{{ form.ap.knownedSignataire2.get('label') }}"):first').closest('div');
+            var $$ = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div');
             $$.find('input').attr('disabled', false);
             if (toggle) $$.show();
 
@@ -63,7 +63,7 @@
             $$.find('input').attr('disabled', false);
             if (toggle) $$.show();
 
-            var $$ = $('label:contains("{{ form.ap.knownedSignataire2.get('label') }}"):first').closest('div');
+            var $$ = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div');
             $$.find('input').attr('disabled', true);
             if (toggle) $$.hide();
         }
