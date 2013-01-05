@@ -69,22 +69,36 @@ class EtudeController extends Controller
             $etude->setSuiveur($user->getPersonne());
         
         $form        = $this->createForm(new EtudeType(), $etude);
-        $formHandler = new EtudeHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
+        $em = $this->getDoctrine()->getEntityManager();
         
-        if($formHandler->process())
+        if($this->get('request')->getMethod() == 'POST' )
         {
-            var_dump($this->get('request')->request->get('envoie'));
-           
-            if($this->get('request')->get('ap'))
-            {
-                
-                return $this->redirect($this->generateUrl('mgateSuivi_ap_rediger', array('id' => $etude->getId())));
-            }
-            else
-            {
-                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
-            }
+            $form->bindRequest($this->get('request'));
 
+            if( $form->isValid() )
+            {
+                if(!$etude->isKnownProspect())
+                {
+                    $etude->setProspect($etude->getNewProspect());
+                    
+                    //$employe = new Employe();
+                    //$employe->setPersonne($etude->getAp()->getSignataire2());
+                    //$employe->setProspect($etude->getProspect());
+                    //$em->persist($employe);
+                }
+                
+                $em->persist($etude);
+                $em->flush();
+           
+                if($this->get('request')->get('ap'))
+                {
+                    return $this->redirect($this->generateUrl('mgateSuivi_ap_rediger', array('id' => $etude->getId())));
+                }
+                else
+                {
+                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                }
+            }
         }
 
         return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
