@@ -44,7 +44,6 @@ class CcController extends Controller
        
     public function redigerAction($id)
     {
-        
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
@@ -58,7 +57,7 @@ class CcController extends Controller
             $etude->setCc($cc);
         }
         
-        $form = $this->createForm(new CcType, $etude);
+        $form = $this->createForm(new CcType, $etude, array('prospect' => $etude->getProspect()));
         
         if( $this->get('request')->getMethod() == 'POST' )
         {

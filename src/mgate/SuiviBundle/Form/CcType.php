@@ -13,7 +13,7 @@ class CcType extends DocTypeType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	   
-            $builder->add('cc', new DocTypeType('Cc'), array('label'=>' '))
+            $builder->add('cc', new DocTypeType('Cc', $options['prospect']), array('label'=>' '))
                     ->add('acompte','checkbox',array('label'=>'Acompte', 'required' => false))
                     ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte', 'required' => false));
             
@@ -28,6 +28,7 @@ class CcType extends DocTypeType
     {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
+            'prospect' => '',
         );
     }
 }

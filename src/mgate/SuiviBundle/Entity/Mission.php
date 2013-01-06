@@ -94,6 +94,12 @@ class Mission extends DocType
     {
         return $this->id;
     }
+    
+    public function getMission()
+    {
+        return $this;
+        
+    }
 
     /**
      * Set intervenant

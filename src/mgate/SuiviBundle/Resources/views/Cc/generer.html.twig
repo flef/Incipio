@@ -39,8 +39,8 @@
      
     </p>
     {% if cc.generer == 1 %}
-        <form action="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'AP'}) }}" method="post" >
-            <input type="submit" value="Générer AP"/>
+        <form action="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'CC'}) }}" method="post" >
+            <input type="submit" value="Générer CC"/>
         </form>              
     {% else %}
         <li>Il manque 
