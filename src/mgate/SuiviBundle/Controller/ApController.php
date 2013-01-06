@@ -55,36 +55,7 @@ class ApController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-    
-    public function modifierAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
-        }
-
-        $form        = $this->createForm(new ApType, $etude);//transmettre etude pour ajouter champ de etude
         
-        if( $this->get('request')->getMethod() == 'POST' )
-        {
-            $form->bindRequest($this->get('request'));
-               
-            if( $form->isValid() )
-            {
-                $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_ap_voir', array('id' => $etude->getId())) );
-            }
-                
-        }
-
-        return $this->render('mgateSuiviBundle:Ap:modifier.html.twig', array(
-            'form' => $form->createView(),
-            'etude' => $etude,
-        ));
-    }
-    
     public function redigerAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -94,6 +65,12 @@ class ApController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
 
+        if(!$ap = $etude->getAp())
+        {
+            $ap = new Ap;
+            $etude->setAp($ap);
+        }
+       
         $form = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()->getId()));//transmettre etude pour ajouter champ de etude
         
         if( $this->get('request')->getMethod() == 'POST' )
@@ -102,7 +79,7 @@ class ApController extends Controller
                
             if( $form->isValid() )
             {
-                if(!$etude->getAp()->isKnownSignataire2()) //(true === $etude->knownSignataire2)
+                if(!$etude->getAp()->isKnownSignataire2())
                 {
                     $etude->getAp()->setSignataire2($etude->getAp()->getNewSignataire2());
                     

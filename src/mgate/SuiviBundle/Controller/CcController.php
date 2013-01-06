@@ -9,7 +9,6 @@ use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Cc;
 use mgate\SuiviBundle\Form\CcType;
-use mgate\SuiviBundle\Form\CcHandler;
 
 class CcController extends Controller
 {
@@ -24,42 +23,6 @@ class CcController extends Controller
         ));
          
     }  
-    public function addAction($id)
-    {
-        
-        
-        $em = $this->getDoctrine()->getEntityManager();
-
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
-        }
-        
-        
-        $cc = new Cc;
-        $cc->setEtude($etude);
-        $form        = $this->createForm(new CcType, $cc);
-        $formHandler = new CcHandler($form, $this->get('request'), $em);
-        
-        if($formHandler->process())
-        {
-            if($this->get('request')->get('pvi'))
-            {
-               
-                return $this->redirect($this->generateUrl('mgateSuivi_pvi_ajouter',array('id' => $etude->getId())));
-            }
-            else
-            {
-                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
-            }
-        }
-
-        return $this->render('mgateSuiviBundle:Cc:ajouter.html.twig', array(
-            'form' => $form->createView(),
-        ));
-        
-    }
     
     public function voirAction($id)
     {
@@ -78,37 +41,7 @@ class CcController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-    
-    public function modifierAction($id)
-    {
-        
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Cc[id='.$id.'] inexistant');
-        }
-
-        $form        = $this->createForm(new CcType, $etude);
-        
-        if( $this->get('request')->getMethod() == 'POST' )
-        {
-            $form->bindRequest($this->get('request'));
-               
-            if( $form->isValid() )
-            {
-                $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_cc_voir', array('id' => $etude->getId())) );
-            }
-                
-        }
-
-        return $this->render('mgateSuiviBundle:Cc:modifier.html.twig', array(
-            'form' => $form->createView(),
-            'etude' => $etude,
-        ));
-    }
-    
+       
     public function redigerAction($id)
     {
         
@@ -118,8 +51,14 @@ class CcController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
-
-        $form        = $this->createForm(new CcType, $etude);
+        
+        if(!$cc = $etude->getCc())
+        {
+            $cc = new Cc;
+            $etude->setCc($cc);
+        }
+        
+        $form = $this->createForm(new CcType, $etude);
         
         if( $this->get('request')->getMethod() == 'POST' )
         {

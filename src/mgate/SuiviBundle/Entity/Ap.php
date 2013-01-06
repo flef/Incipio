@@ -28,7 +28,7 @@ class Ap extends DocType
      */
     protected $etude;
     
-
+    
     /**
      * Get id
      *

@@ -11,7 +11,6 @@ use mgate\SuiviBundle\Form\ApType;
 use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Entity\Cc;
 use mgate\SuiviBundle\Form\CcType;
-use mgate\SuiviBundle\Form\CcHandler;
 use mgate\SuiviBundle\Entity\Mission;
 use mgate\SuiviBundle\Form\MissionType;
 use mgate\SuiviBundle\Form\MissionHandler;

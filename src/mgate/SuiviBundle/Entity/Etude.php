@@ -290,6 +290,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
+        
+        $this->fraisDossier=90;
     }
 
     
