@@ -17,6 +17,7 @@ class EtudeManager extends \Twig_Extension
         $this->tva = $tva;
     }
     
+    // Pour utiliser les fonctions depuis twig
     public function getName()
     {
         return 'mgate_EtudeManager';

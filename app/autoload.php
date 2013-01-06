@@ -17,5 +17,6 @@ if (!function_exists('intl_get_error_code')) {
 
 AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
 
+ini_set('xdebug.max_nesting_level', 200); // cf README
 
 return $loader;
