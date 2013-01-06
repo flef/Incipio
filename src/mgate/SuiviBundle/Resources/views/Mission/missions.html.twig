@@ -1,19 +1,12 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-{% block javascript %}
-
-    {{ form_javascript(form) }}
-{% endblock %}
-
-
 {% block content_bundle %}
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/tiny_mce/jquery.tinymce.js') }}"></script>
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}  
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     
 
 <h2>Modifier les {{ form.missions | length  }} intervenants</h2>
@@ -21,8 +14,8 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
-<p><br /><input type="submit" value="Ajouter un Intervenant" name="add"/></p>
-    <div class="boutonAdd"></div>
+<p><br /><input type="submit" value="Ajouter une mission" name="add"/> - <input type="submit" value="Enregistrer les missions" /></p>
+
     <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">
         {# itere sur chaque tag existant et affiche son unique champ : name #}
         {% for mission in form.missions %}
@@ -32,10 +25,28 @@
         {% endfor %}
     </u1>
     <br />
-    <div class="boutonAdd"></div>
     {{ form_rest(form) }}
 
-    
+
+
+<p><br /><input type="submit" value="Ajouter une mission" name="add"/> - <input type="submit" value="Enregistrer les missions" /></p>
+
+</form>
+
+<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
+
+
+<div id="dialog" title="Résumé et vérification">
+    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
+    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
+    <p><button id="myButtonUpdate">Raffraichir</button></p>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+
 <script type="text/javascript">
     
     // Fenetre resumant
@@ -109,7 +120,6 @@
 
     jQuery(document).ready(function() {
         
-        updateOrder();
         updatePrix();
         updateNbrJEH();     
         
@@ -131,42 +141,7 @@
         //Rajout des boutons (X, up, down) pour les missions
         collectionHolder.find('li').each(function() {
             addMissionBouton($(this));
-        });
-        
-        //Ajouter le drag and drop
-        collectionHolder.sortable({
-            // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
-            axis: 'y',
-
-            // Il faut cliquer sur cet element pour pouvoir initier le drag'n'drop
-            //handle: '.sort-button',
-
-            // Creons un joli trou style lors des deplacements
-            placeholder: 'ui-state-highlight',
-            forcePlaceholderSize: true,
-
-            // Cette fonction permet a  notre ligne de conserver son formatage lors du deplacement
-            // Pas vraiment utile, mais plus agreable
-            helper: function(e, tr)
-            {
-              var $originals = tr.children();
-              var $helper = tr.clone();
-              $helper.children().each(function(index)
-              {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width())
-              });
-              return $helper;
-            },
-
-            // La fonction appele quand un element change de position
-            // C'est le code vraiment utile, en fait
-            update: function(){             
-                updateOrder();
-            }
-            
-        });
-        
+        });      
         
         $('input.nbrJEH').each(function() {
             $(this).change(function() { 
@@ -193,11 +168,7 @@
     
     function addMissionBouton($tagFormLi) {
         var $delete = $('<button id="myButtonDelete">X</button>');
-        var $up = $('<button id="myButtonUp">▲</button>');
-        var $down = $('<button id="myButtonDown">▼</button>');
         $tagFormLi.append($delete);
-        $tagFormLi.append($up);
-        $tagFormLi.append($down);
 
         $delete.on('click', function(e) {
             // prevent the link from creating a "#" on the URL
@@ -205,41 +176,12 @@
 
             // remove the li for the tag form
             $tagFormLi.remove();
-            updateOrder();
             updatePrix();
             updateNbrJEH();
         });
         
-        $up.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
-
-            $tagFormLi.prev().before($tagFormLi);
-            updateOrder();
-        });
-        $down.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
-
-            $tagFormLi.next().after($tagFormLi);
-            updateOrder();
-        });
     }
     
 </script>
 
-
-<p><br /><input type="submit" value="Ajouter une mission" name="add"/></p>
-
-    <p><br /><input type="submit" value="Enregistrer les missions" /></p>
-</form>
-
-<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
-
-
-<div id="dialog" title="Résumé et vérification">
-    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
-    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
-    <p><button id="myButtonUpdate">Raffraichir</button></p>
-</div>
 {% endblock %}
