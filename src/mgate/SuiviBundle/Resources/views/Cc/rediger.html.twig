@@ -4,10 +4,6 @@
 	Modifier une Convention Client - {{ parent() }}
 {% endblock %}
 
-{% block javascript %}
-    {{ form_javascript(form) }}
-{% endblock %}
-        
 {% block content_bundle %}
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
@@ -29,3 +25,9 @@
 
 {% endblock %}
 
+    
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.cc } %} 
+{% endblock %}

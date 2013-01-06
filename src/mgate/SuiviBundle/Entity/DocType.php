@@ -99,7 +99,11 @@ class DocType
      * @ORM\Column(name="generer", type="integer",nullable=true)
      */
     private $generer;
- 
+
+    public function __construct()
+    {
+        $this->setVersion(1);
+    }
     
     
 /// rajout à la main

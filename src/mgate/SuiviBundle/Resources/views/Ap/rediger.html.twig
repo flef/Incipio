@@ -4,9 +4,6 @@
 	Rédiger l'Avant-Projet - {{ parent() }}
 {% endblock %}
 
-{% block javascript %}
-    {{ form_javascript(form) }}
-{% endblock %}
         
 {% block content_bundle %}
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
@@ -32,44 +29,20 @@
 	{{ form_widget(form) }}
 	
 	<input type="submit" value="Enregistrer l'AP"/>
-        <input type="submit" value="Enregistrer l'AP et passer à la CC" name="ap"/>
+        <input type="submit" value="Enregistrer l'AP et passer à la CC" name="next"/>
 </form>
 
 
 
     <p>
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
-    </p>
-
- <script>
-     /* ...known personne... */
-    
-    var toggle = true;
-    var known = $('input#{{ form.ap.knownSignataire2.get('id') }}');
-    var knowned = $('label:contains("{{ form.ap.signataire2.get('label') }}"):first').closest('div')
-    var newed = $('label:contains("{{ form.ap.newSignataire2.get('label') }}"):first').closest('div');
-    
-    known.prop('checked', true);
-
-    known.change(function() {
-
-        if ($(this).is(':checked')) {
-            knowned.find('input').attr('disabled', false);
-            if (toggle) knowned.show();
-
-            newed.find('input').attr('disabled', true);
-            if (toggle) newed.hide();
-        } else {
-            newed.find('input').attr('disabled', false);
-            if (toggle) newed.show();
-
-            knowned.find('input').attr('disabled', true);
-            if (toggle) knowned.hide();
-        }
-
-    }).change();
-</script>    
-    
+    </p>   
     
 {% endblock %}
 
+ {% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.ap }%} 
+{% endblock %}
+    
