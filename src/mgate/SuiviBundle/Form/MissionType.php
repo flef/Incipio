@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
+use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
 class MissionType extends DocTypeType
 {
@@ -15,17 +16,20 @@ class MissionType extends DocTypeType
             ->add('intervenant','entity', 
                 array ('label' => 'Intervenant',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'nom',
+                       'property' => 'prenomNom',
                        'property_path' => true,
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => true))
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
-            ->add('nbjeh','integer',array('label'=>'Nombre de JEH'));
+            ->add('nbjeh','integer',array('label'=>'Nombre de JEH'))
             //->add('avancement','integer',array('label'=>'Avancement en %'))
             //->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
             //->add('rapportRelu','checkbox', array('label'=>'Rapport pédagogique relu','required'=>false))
             //->add('remunere','checkbox', array('label'=>'Intervenant rémunéré','required'=>false));
-            DocTypeType::buildForm($builder, $options);
+            
+        ->add('mission', new DocTypeType('mission'), array('label'=>' '));
+        //DocTypeType::buildForm($builder, $options);
             
             
     }
