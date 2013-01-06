@@ -1,54 +1,67 @@
-{# app/Resources/views/layout.html.twig #}
-
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-<title>{% block title %}My M-GaTE / P-GaTE{% endblock %}</title>
+<title>{% block title %}{% endblock %} - My M-GaTE</title>
+<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}" type="text/css" />
 {% endblock %}
+    
 {% block head %}
-
+{% endblock %}
+    
+{% block javascript_quick %}
 {% endblock %}
 </head>
 
 <body>
-    <div>
-{% block header %}
+{% block body %} 
+        
+    {% block main_header %}
         <div id="header">
-            <h1>header</h1>
+            {% block header %}
+                <h1>header</h1>
+            {% endblock %}
         </div>
-{% endblock %}   
-{% block menu %}
-        <div>
-            <div id="menu">
+    {% endblock %}
+
+    {% block menu_main %}
+        <div id="menu">
+            {% block menu %}
                 <h3>Menu</h3>
                 <ul>
                     <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'étude</a></li>
                     <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Gestion des personnes</a></li>
                 </ul>
-            </div>
-{% endblock %}        
-            <div id="content">
-                {% block body %}
-                {% endblock %}
-            </div>
-        </div>
-
-        <hr>
-
-        <footer>
-            <p>footer</p>
-        </footer>
-        
-    </div>
-
-    {% block javascripts %}
-
+            {% endblock %}
+        </div> 
     {% endblock %}
+
+    {% block content_main %}            
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% block footer_main %}
+        <div id="footer">
+            {% block footer %}
+                <hr>
+                <footer>
+                    <p>footer</p>
+                </footer>
+            {% endblock %}
+        </div>
+    {% endblock %}
+        
+{% endblock %} 
+        
+{% block javascript %}
+{% endblock %}
 
 </body>
 </html>

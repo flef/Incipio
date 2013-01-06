@@ -292,6 +292,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
         
         $this->fraisDossier=90;
+        $this->pourcentageAcompte=0.40;
     }
 
     
