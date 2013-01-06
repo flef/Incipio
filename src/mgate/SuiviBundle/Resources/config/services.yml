@@ -1,5 +1,6 @@
 parameters:
     mgate.etude_manager.class: mgate\SuiviBundle\Manager\EtudeManager
+    mgate.doctype_manager.class: mgate\SuiviBundle\Manager\DocTypeManager
     tva: 0.196
 
 services:
@@ -10,4 +11,8 @@ services:
           - "%tva%"
         tags:
             - { name: twig.extension }
-            
+    mgate.doctype_manager:
+        class: "%mgate.doctype_manager.class%"
+        arguments:
+          - "@doctrine.orm.entity_manager"
+          
