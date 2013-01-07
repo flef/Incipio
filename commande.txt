@@ -17,6 +17,7 @@ php -d memory_limit=-1 app/console cache:clear --env=prod
 php app/console cache:clear
 
 chmod -R 777 app/cache
+chmod -R 777 app/logs
 
 Pour installer un truc, ça fait des copies dans /web
 php app/console assets:install --symlink web		necessite droit admin
