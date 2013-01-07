@@ -131,7 +131,7 @@
         });
         $(window).bind('beforeunload', function(){
             if(isDirty)
-                return "Do you really want to leave now?";
+                return "Voulez-vous quitter sans enregistrer ?";
         });
         $('form').submit(function() {
             isDirty = false;
@@ -183,5 +183,43 @@
     }
     
 </script>
+
+<script>
+     /* ...known personne... */
+ var toggle = new Array();
+ var known = new Array();
+ var knowned = new Array();
+ var newed = new Array();
+ 
+ {% for mission in form.missions %}
+ 
+    toggle[{{ loop.index0 }}] = true;
+    known[{{ loop.index0 }}] = $('input#{{ mission.knownIntervenant.get('id') }}');
+    knowned[{{ loop.index0 }}] = $('#{{ mission.intervenant.get('id') }}').closest('div');
+    newed[{{ loop.index0 }}] = $('#{{ mission.newIntervenant.get('id') }}').closest('div').parent('div').closest('div');
+    
+    known[{{ loop.index0 }}].prop('checked', true);
+
+    known[{{ loop.index0 }}].change(function() {
+
+        if ($(this).is(':checked')) {
+            knowned[{{ loop.index0 }}].find('input').attr('disabled', false);
+            if (toggle) knowned[{{ loop.index0 }}].show();
+
+            newed[{{ loop.index0 }}].find('input').attr('disabled', true);
+            if (toggle) newed[{{ loop.index0 }}].hide();
+        } else {
+            newed[{{ loop.index0 }}].find('input').attr('disabled', false);
+            if (toggle) newed[{{ loop.index0 }}].show();
+
+            knowned[{{ loop.index0 }}].find('input').attr('disabled', true);
+            if (toggle) knowned[{{ loop.index0 }}].hide();
+        }
+
+    }).change();
+{% endfor %}
+
+</script> 
+
 
 {% endblock %}
