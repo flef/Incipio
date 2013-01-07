@@ -1,6 +1,7 @@
 parameters:
     mgate.etude_manager.class: mgate\SuiviBundle\Manager\EtudeManager
     mgate.doctype_manager.class: mgate\SuiviBundle\Manager\DocTypeManager
+    mgate.datevalidation.class: mgate\SuiviBundle\Validation\DateValidation
     tva: 0.196
 
 services:
@@ -16,3 +17,8 @@ services:
         arguments:
           - "@doctrine.orm.entity_manager"
           
+    mgate.validation:
+      class: "%mgate.datevalidation.class%"
+      arguments:
+        - "@doctrine.orm.entity_manager"
+    

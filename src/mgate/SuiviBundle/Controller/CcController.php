@@ -66,9 +66,18 @@ class CcController extends Controller
             if( $form->isValid() )
             {
                 $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getCc());
+                $validation = $this->get('mgate.validation')->CcDate($etude);
+                if($validation == 1)
+                {
+                    $em->flush();
+                    return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+                }
+                else
+                {
+                    $em->flush();
+                    return $this->redirect( $this->generateUrl('mgateSuivi_cc_rediger', array('id' => $etude->getId())) );
+                }
                 
-                $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
             }
                 
         }
