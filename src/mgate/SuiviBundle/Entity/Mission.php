@@ -30,7 +30,7 @@ class Mission extends DocType
     protected $etude;
 
     /** , inversedBy="missions", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Personne")
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
@@ -84,6 +84,26 @@ class Mission extends DocType
      */
     private $nbjeh;
 
+//Block astuce pour ajout direct d'intervenant dans formulaire
+    public function getMission() {
+        return $this;
+    }
+    private $knownIntervenant = false;
+    private $newIntervenant;
+    
+    public function isKnownIntervenant() {
+        return $this->knownIntervenant;
+    }
+    public function setKnownIntervenant($boolean) {
+        $this->knownIntervenant = $boolean;
+    }
+    public function getNewIntervenant() {
+        return $this->newIntervenant;
+    }
+    public function setNewIntervenant($var) {
+        $this->newIntervenant = $var;
+    }
+// Fin du block 
 
     /**
      * Get id
@@ -94,20 +114,14 @@ class Mission extends DocType
     {
         return $this->id;
     }
-    
-    public function getMission()
-    {
-        return $this;
-        
-    }
 
     /**
      * Set intervenant
      *
-     * @param mgate\PersonneBundle\Entity\Personne $intervenant
+     * @param mgate\PersonneBundle\Entity\Membre $intervenant
      * @return Mission
      */
-    public function setIntervenant(\mgate\PersonneBundle\Entity\Personne $intervenant)
+    public function setIntervenant(\mgate\PersonneBundle\Entity\Membre $intervenant)
     {
         $this->intervenant = $intervenant;
     
@@ -117,7 +131,7 @@ class Mission extends DocType
     /**
      * Get intervenant
      *
-     * @return mgate\PersonneBundle\Entity\Personne 
+     * @return mgate\PersonneBundle\Entity\Membre
      */
     public function getIntervenant()
     {
