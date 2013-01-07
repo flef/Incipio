@@ -67,3 +67,9 @@ Clique gauche sur wamp > Apache > Alias directories > http://localhost/phpmyadmi
         Allow from all
 </Directory>
 Autre probl�me courant : il faut pr�f�rer utiliser 127.0.0.1:81 au lieu de localhost:81
+
+# Erreurs possible
+
+In this entry, you embed only one collection, but you are not limited to this. You can also embed nested collection as many level down as you like. But if you use Xdebug in your development setup, you may receive a Maximum function nesting level of '100' reached, aborting! error. This is due to the xdebug.max_nesting_level PHP setting, which defaults to 100.
+
+This directive limits recursion to 100 calls which may not be enough for rendering the form in the template if you render the whole form at once (e.g form_widget(form)). To fix this you can set this directive to a higher value (either via a PHP ini file or via ini_set, for example in app/autoload.php) or render each form field by hand using form_row.
