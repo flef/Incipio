@@ -66,6 +66,12 @@ class MissionsController extends Controller
                             unset($originalMissions[$key]);
                         }
                     }
+                    
+                    if(!$mission->isKnownIntervenant())
+                    {
+                        echo "564654";
+                        $mission->setIntervenant($mission->getNewIntervenant());
+                    }
                 }
                 
                 // remove the relationship between the mission and the etude

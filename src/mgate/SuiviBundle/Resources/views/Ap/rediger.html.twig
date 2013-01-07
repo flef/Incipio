@@ -6,19 +6,12 @@
 
         
 {% block content_bundle %}
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/tiny_mce/jquery.tinymce.js') }}"></script>
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}
 
-<script type="text/javascript"> var tb_pathToImage = "{{ asset('bundles/mgatesuivi/thickbox/loadingAnimation.gif') }}";</script>
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/thickbox/thickbox-compressed.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('bundles/mgatesuivi/thickbox/thickbox.css') }}" type="text/css" media="screen" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
-
-<link href="{{ asset('bundles/mgatesuivi/select2/select2.css') }}" rel="stylesheet"/>
-<script src="{{ asset('bundles/mgatesuivi/select2/select2.min.js') }}"></script>
         
     <h2>Rédiger l'Avant-Projet</h2>
  <a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>
