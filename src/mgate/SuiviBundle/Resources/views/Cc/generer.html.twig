@@ -17,6 +17,11 @@
 
 
      Date de signature: {{ cc.dateSignature|date("d/m/Y") }}
+    <strong>
+        {% if validation == 0 %}
+            DATE DE SIGNATURE INCORRECTE
+        {% endif %}    
+    </strong>
     </p>
     <p>
     Acompte: 
