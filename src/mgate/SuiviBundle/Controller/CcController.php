@@ -66,18 +66,9 @@ class CcController extends Controller
             if( $form->isValid() )
             {
                 $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getCc());
-                $validation = $this->get('mgate.validation')->CcDate($etude);
-                if($validation == 1)
-                {
-                    $em->flush();
-                    return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
-                }
-                else
-                {
-                    $em->flush();
-                    return $this->redirect( $this->generateUrl('mgateSuivi_cc_rediger', array('id' => $etude->getId())) );
-                }
-                
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+                    
             }
                 
         }
@@ -97,6 +88,7 @@ class CcController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
+        $validation = $this->get('mgate.validation')->ValidationCc($etude);
         
         $cc = $etude->getCc();
         $version = $etude->getCc()->getVersion();
@@ -128,7 +120,8 @@ class CcController extends Controller
          return $this->render('mgateSuiviBundle:Cc:generer.html.twig', array(
              'cc' => $cc,
              'manquants' => $manquant,
-             'etude'=> $etude // pour moi faut transmettre que ça, m'enfin
+             'etude'=> $etude,
+             'validation'=> $validation// pour moi faut transmettre que ça, m'enfin
              ));
         
         

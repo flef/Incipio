@@ -7,7 +7,7 @@ use mgate\SuiviBundle\Entity\Etude as Etude;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class DateValidation extends ConstraintValidator
+class Validation extends ConstraintValidator
 {
     protected $em;
     protected $etude;
@@ -17,7 +17,7 @@ class DateValidation extends ConstraintValidator
         $this->em = $em;
     }
     
-    public function CcDate(Etude $etude)
+    public function ValidationCc(Etude $etude)
     {
         $dateSignatureAp = $etude->getAp()->getDateSignature();
         $dateSignatureCc = $etude->getCc()->getDateSignature();
