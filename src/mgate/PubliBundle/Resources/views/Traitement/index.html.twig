@@ -1,1 +1,10 @@
-Hello {{ name }}!
+Les champs suivant n'ont pas été correctement remplis<br/>
+<ul>
+
+{% for champs in champsNonRemplis %}
+    <li>{{loop.index}} - {{champs}}</li>
+{% endfor %}
+</ul>
+<form action="AP/telecharger" method="post" >
+    <input type="submit" value="Telecharger"/>
+</form>
