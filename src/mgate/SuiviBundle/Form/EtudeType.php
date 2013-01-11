@@ -18,11 +18,7 @@ class EtudeType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder
-            /*->add('prospect', 'genemu_jqueryautocompleter_entity',
-                array(  'route_name' => 'ajax_prospect',
-                        'class' => 'mgate\PersonneBundle\Entity\Prospect',
-                        'property' => 'nom',
-                    ))*/
+
             ->add('knownProspect', 'checkbox', array(
                 'required' => false,
                 'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"

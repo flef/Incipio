@@ -17,9 +17,14 @@ class PersonneType extends AbstractType
                 ->add('poste')
                 ->add('sexe', new SexeType())
                 ->add('mobile')
-                ->add('fix')
-                ->add('adresse')
                 ->add('email');
+                        
+        if(!$options['mini'])
+        {
+            $builder
+                ->add('fix')
+                ->add('adresse');
+        }
             
     }
 
@@ -32,6 +37,7 @@ class PersonneType extends AbstractType
     {
         return array(
             'data_class' => 'mgate\PersonneBundle\Entity\Personne',
+            'mini' => false,
         );
     }
 }
