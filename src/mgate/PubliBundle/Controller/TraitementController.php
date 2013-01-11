@@ -6,8 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class TraitementController extends Controller {
 
-    private $SFD = '~'; //
-    private $EFD = '~~';
+    private $SFD = '~'; //Start Field Delimiter
+    private $EFD = '~~'; 
 
     /*
      * private SAD
@@ -15,7 +15,7 @@ class TraitementController extends Controller {
      */
 
     //Repétition des phases
-    private function repeterPhase($templateXML, $nombrePhase) {
+    private function repeterPhase(&$templateXML, $nombrePhase) {
 
 
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
@@ -26,16 +26,27 @@ class TraitementController extends Controller {
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
-                    for ($i = 1; $i <= $nombrePhase; $i++)
+                    
+
+                    if(preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
+                        $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
+                    else
+                        $premiereLigne = $matches[1];
+                    
+                    $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "1", $premiereLigne);
+                            
+                    for ($i = 2; $i <= $nombrePhase; $i++)
                         $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
 
-        return preg_replace_callback($regexpRepeat, $callback, $templateXML);
+        $templateXML =  preg_replace_callback($regexpRepeat, $callback, $templateXML);
+        
+        return $templateXML;
     }
 
     //Remplissage des %champs%
-    private function remplirChamps($templateXML, $fieldValues) {
+    private function remplirChamps(&$templateXML, $fieldValues) {
         $SFD = $this->SFD;
         $EFD = $this->EFD;
 
@@ -59,7 +70,7 @@ class TraitementController extends Controller {
      * ¤%sexe%|rendue|rendu¤
      * ¤%sexe%|e¤
      */
-    private function accorder($templateXML) {
+    private function accorder(&$templateXML) {
         $regexp = array(//Expression régulière filtrage répétition /!\ imbrication interdite !
             '#¤(\d+)\|([^¤.]*)\|([^¤.]*)¤#', //si deux args ¤3|ont|a¤
             '#¤(\d+)\|([^¤.]*)¤#', //si un arg : ¤3|s¤
@@ -72,34 +83,21 @@ class TraitementController extends Controller {
                         return ($matches[1] > 1) ? $matches[2] : '';
                 };
 
-        return preg_replace_callback($regexp, $callback, $templateXML);
+        $templateXML =  preg_replace_callback($regexp, $callback, $templateXML);
+        return $templateXML;
     }
 
     //Traitement du template
     private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
         $templateXML = file_get_contents($templateFullPath); //récup contenu XML
-        // TODO &$templateXML 
-        $templateXML = $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
-        $templateXML = $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
-        $templateXML = $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
+        
+        $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
+        $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
+        $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
 
         return $templateXML;
     }
 
-    //Téléchargement du fichier
-    private function telechargerDocType($templateXML) {
-        /*
-          header('Content-type: text/xml');
-          header('Content-Disposition: attachment; filename="doctype.xml"');
-          echo $templateXML;
-         * 
-         */
-
-        //En attendant
-        echo '<br/>Telecharger le fichier : <br/>';
-        echo '<input type="button" value="Ne pas cliquer" onclick="alert(\'Hum... une page php qui reçoit mon template en post et le dl avec le comment l87-89 pls\');return false;" />';
-        exit;
-    }
 
     //Vérification du fichier
     //if match %   _   % then pasbien
@@ -108,14 +106,8 @@ class TraitementController extends Controller {
         $EFD = $this->EFD;
 
         preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
-        echo 'Les champs suivant n\'ont pas été correctement remplis';
-        echo '<ul>';
-        foreach ($matches[1] as $matche)
-            echo '<li>' . $matche . '</li>';
-        echo '</ul>';
-        echo '<form action="AP/telecharger" method="post" >
-            <input type="submit" value="Telecharger"/>
-        </form>';
+        
+        return $matches[1];
     }
 
     private function getAllChamp($etude) {
@@ -332,11 +324,13 @@ class TraitementController extends Controller {
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
+        if (false)
+            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/FA.xml';
         
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
 
 
-        $this->verifierTemplate($templateXMLtraite);
+        $champsBrut = $this->verifierTemplate($templateXMLtraite);
 
         $repertoire = 'tmp';
         $idDocx = (int) strtotime("now") + rand();
@@ -349,7 +343,7 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, 1);
 
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'ololilioloiol'));
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('champsNonRemplis' => $champsBrut));
     }
 
     public function telechargerAction($docType = 'AP') {
@@ -369,8 +363,13 @@ class TraitementController extends Controller {
             readfile($doc);
             exit();
 
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('name' => 'ololilioloiol'));
+        
         }
+        else
+        {
+            echo 'fail';
+        }
+        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'ololilioloiol'));
     }
 
 }
