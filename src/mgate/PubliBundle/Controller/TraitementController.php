@@ -110,17 +110,27 @@ class TraitementController extends Controller {
     }
 
     private function getAllChamp($etude) {
+//TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
 
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
 
-        $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
+        //EtudeManager
+        $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
+        $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+        $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        
+        $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
+        $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
+        
+        
+        
+        
+                $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
 
         $Nom_Signataire = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
-        $Description_Prestation =  $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
-
-        $Reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
+        
 
         $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
@@ -131,18 +141,16 @@ class TraitementController extends Controller {
         $Tel_suiveur = $this->get('mgate.etude_manager')->getTelSuiveur($etude);
         $Mois_Lancement = $this->get('mgate.etude_manager')->getMoisLancement($etude);
         $Mois_Fin = $this->get('mgate.etude_manager')->getMoisFin($etude);
-
-
-        $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
-        $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
-        $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        
+        
+        
+       
 
         $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
         $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT, 1);
         $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC, 1);
 
-        $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
-        $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
+       
         
         $Frais_HT = $etude->getFraisDossier();
         $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT);
@@ -153,8 +161,7 @@ class TraitementController extends Controller {
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
             'Type_Prestation' => $etude->getTypePrestation(),
-            //'Date_Lancement' => $etude->getDateDebut()->format("m"),
-            //'Date_Fin'=> $etude->getDateFin()->format("m"),
+
 
             'Nbr_JEH_Total' => $Nbr_JEH,
             'Nbr_JEH_Total_Lettres' => $Nbr_JEH_Lettres,
@@ -171,10 +178,150 @@ class TraitementController extends Controller {
             'Frais_HT_Lettres' => $Frais_HT_Lettres,
             
             'Nbr_Phases' => $nombrePhase,
-   
+            
+            
+           /* 
+            
+            
+   "date" => $date,
+            "TVA" => $TVA,
+            "Description_Prestation" => $Description_Prestation,
+         
+        
+            "Total_HT" => $Total_HT,
+            "Montant_Total_HT" => $Montant_Total_HT,
+            "Total_TTC" => $Total_TTC,
+            "Total_HT_Lettres" => $Total_HT_Lettres,
+            "Montant_Total_HT_Lettres" => $Montant_Total_HT_Lettres,
+            "Total_TTC_Lettres" => $Total_TTC_Lettres,
+            "Frais_HT" => $etude->getFraisDossier(),
+            "Frais_HT_Lettres" => $Frais_HT_Lettres,
+            "Acompte_HT" => $Acompte_HT,
+            "Acompte_HT_Lettres" => $Acompte_HT_Lettres,
+            "Acompte_TTC" => $Acompte_TTC,
+            "Acompte_TTC_Lettres" => $Acompte_TTC_Lettres,
+            "Solde_PVR_HT" => $Solde_PVR_HT,
+            "Solde_PVR_HT_Lettres" => $Solde_PVR_HT_Lettres,
+            "Solde_PVR_TTC" => $Solde_PVR_TTC,
+            "Solde_PVR_TTC_Lettres" => $Solde_PVR_TTC_Lettres,
+            "Total_TVA" => $Total_TVA,
+            "Acompte_TVA" => $Acompte_TVA,
+            "Acompte_Pourcentage" => $Acompte_Pourcentage,
+            "Date_Emission" => $Date_Emission,
+            "Date_Limite" => $Date_Limite,
+            "Reference_PVR" => $Reference_PVR,
+            "Date_Debut" => $Date_Debut,
+            "Date_Fin" => $Date_Fin,
+            "Reference_Etude" => $Reference_Etude,
+            "Reference_CC" => $Reference_CC,
+            "Reference_AP" => $Reference_AP,
+            "Reference_OM" => $Reference_OM,
+            "Reference_CE" => $Reference_CE,
+            "Nom_Etudiant" => $Nom_Etudiant,
+            "Prenom_Etudiant" => $Prenom_Etudiant,
+            "Sexe" => $Sexe,
+            "Adresse_Etudiant" => $Adresse_Etudiant,
+            "Montant_JEH_Verse" => $Montant_JEH_Verse,
+            "Montant_JEH_Verse_Lettres" => $Montant_JEH_Verse_Lettres,
+            "Nbre_JEH" => $Nbre_JEH,
+            "Nbre_JEH_Lettres" => $Nbre_JEH_Lettres,
+            "Remuneration_Brut" => $Remuneration_Brut,
+            "Remuneration_Brut_Lettres" => $Remuneration_Brut_Lettres,
+            "Date_Fin_Etude" => $Date_Fin_Etude,
+            "Nom_Client" => $Nom_Client,
+            "Type_Prestation" => $Type_Prestation,
+            "Nbr_JEH_Total" => 6,
+            "Nbr_Developpeurs" => 2,
+            "Nbr_Phases" => $nombrePhase,
+            "Presentation_Projet" => $Presentation_Projet,
+            "Capacites_Dev" => $Capacite_Dev,
+            "Nom_suiveur" => $Nom_suiveur,
+            "Mail_suiveur" => $Mail_suiveur,
+            "Tel_suiveur" => $Tel_suiveur,
+            "Fonction_signataire" => $Fonction_Signataire,
+            "Entite_Sociale" => $Entite_Sociale,
+            "Nom_signataire" => $Nom_Signataire,
+            "Mois_Lancement" => $Mois_Lancement,
+            "Mois_Fin" => $Mois_Fin,
+
+
+
+
+
+
+
+
+    public function getNomClient(Etude $etude)
+    {
+        return $etude->getAp()->getSignataire2()->getNom()." ".$etude->getAp()->getSignataire2()->getPrenom();
+    }
+    
+    public function getDescriptionPrestation(Etude $etude)
+    {
+        return $etude->getDescriptionPrestation();
+    }
+    
+    public function getTypePrestation(Etude $etude)
+    {
+        return $etude->getTypePrestation();
+    }
+    
+    public function getPresentationProjet(Etude $etude)
+    {
+        return $etude->getPresentationProjet();
+    }
+    
+    public function getFonctionSignataire(Etude $etude)
+    {
+        return $etude->getAp()->getSignataire2()->getPoste();
+    }
+    
+    public function getCapaciteDev(Etude $etude)
+    {
+        return $etude->getCompetences();
+    }
+    
+    public function getNomSuiveur(Etude $etude)
+    {
+        return $etude->getSuiveur()->getNom()." ".$etude->getSuiveur()->getPrenomNom();
+    }
+    
+    public function getMailSuiveur(Etude $etude)
+    {
+        return $etude->getSuiveur()->getEmail();
+    }
+    
+    public function getTelSuiveur(Etude $etude)
+    {
+        return $etude->getSuiveur()->getMobile();
+    }
+    
+    public function getEntiteSociale(Etude $etude)
+    {
+        return $etude->getProspect()->getEntite();
+    }
+    
+    public function getMoisLancement(Etude $etude)
+    {
+        $phases = $etude->getPhases();
+        
+        return $phases['0']->getDateDebut()->format('F');
+    }
+    
+    public function getMoisFin(Etude $etude)
+    {
+        $phases = $etude->getPhases();
+        $nbphases = count($phases);
+        //ajouter les délais au début de la phases puis prendre le mois
+        $delai = $phases[$nbphases-1]->getDelai();
+        $DateDebutPhase = $phases[$nbphases-1]->getDateDebut();
+        $DateFin = $DateDebutPhase->modify('+'.$delai.' day');
+        return $DateFin->format('F');
+    }
+   */
         );
 
-
+        
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -188,20 +335,21 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mail_suiveur', $etude->getSuiveur()->getEmail());
             $this->array_push_assoc($champs, 'Nom_suiveur', $etude->getSuiveur()->getPrenomNom());
 
-            if ($etude->getSuiveur()->getFix() != NULL)
-                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getFix());
+            if ($etude->getSuiveur()->getMobile() != NULL)
+                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getMobile());                
             else
-                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getMobile());
+                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getFix());
+                
         }
 
 
         //Avant-Projet
         if ($etude->getAp() != NULL) {
 
-            //Signataire 1
+            //Signataire 1 : P
             if ($etude->getAp()->getSignataire1() != NULL)
                 $this->array_push_assoc($champs, 'Nom_Client', $etude->getAp()->getSignataire1()->getPrenomNom());
-            //Signataire 2
+            //Signataire 2 : Client
             if ($etude->getAp()->getSignataire2() != NULL) {
                 $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getAp()->getSignataire2()->getPrenomNom());
                 $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getAp()->getSignataire2()->getPoste());
@@ -210,7 +358,7 @@ class TraitementController extends Controller {
             if($etude->getAp()->getDateSignature() != NULL)
                 $this->array_push_assoc($champs, 'Date_Signature_AP', $etude->getAp()->getDateSignature()->format("d/m/Y"));
             //Référence AP
-            $referenceAP = $this->get('mgate.etude_manager')->getRefEtude($etude) . '-AP-' . $etude->getAp()->getVersion();
+            $reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
             $this->array_push_assoc($champs, 'Reference_AP', $referenceAP);
         }
 
