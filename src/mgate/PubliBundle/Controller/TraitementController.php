@@ -111,8 +111,7 @@ class TraitementController extends Controller {
     }
 
     private function getAllChamp($etude) {
-
-//TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
+    //TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
 
 
 
@@ -129,25 +128,7 @@ class TraitementController extends Controller {
         $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
         
         
-        
-        
-               
-
-
-        $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
-        $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
-        $Presentation_Projet = $this->get('mgate.etude_manager')->getPresentationProjet($etude);
-        $Capacite_Dev = $this->get('mgate.etude_manager')->getCapaciteDev($etude);
-        $Nom_suiveur = $this->get('mgate.etude_manager')->getNomSuiveur($etude);
-        $Mail_suiveur = $this->get('mgate.etude_manager')->getMailSuiveur($etude);
-        $Tel_suiveur = $this->get('mgate.etude_manager')->getTelSuiveur($etude);
-        $Mois_Lancement = $this->get('mgate.etude_manager')->getMoisLancement($etude);
-        $Mois_Fin = $this->get('mgate.etude_manager')->getMoisFin($etude);
-        
-        
-        
-       
-
+        //Conversion Lettre
         $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
         $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT, 1);
         $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC, 1);
@@ -156,6 +137,8 @@ class TraitementController extends Controller {
         
         $Frais_HT = $etude->getFraisDossier();
         $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT);
+        
+
 
 
         $champs = Array(
@@ -163,6 +146,7 @@ class TraitementController extends Controller {
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
             'Type_Prestation' => $etude->getTypePrestation(),
+            'Capacites_Dev' => $etude->getCompetences(),
 
 
             'Nbr_JEH_Total' => $Nbr_JEH,
@@ -180,6 +164,8 @@ class TraitementController extends Controller {
             'Frais_HT_Lettres' => $Frais_HT_Lettres,
             
             'Nbr_Phases' => $nombrePhase,
+            
+            
             
             
            /* 
@@ -260,81 +246,6 @@ class TraitementController extends Controller {
             "Mois_Lancement" => $Mois_Lancement,
             "Mois_Fin" => $Mois_Fin,
 
-
-
-
-
-
-
-
-
-    public function getNomClient(Etude $etude)
-    {
-        return $etude->getAp()->getSignataire2()->getNom()." ".$etude->getAp()->getSignataire2()->getPrenom();
-    }
-    
-    public function getDescriptionPrestation(Etude $etude)
-    {
-        return $etude->getDescriptionPrestation();
-    }
-    
-    public function getTypePrestation(Etude $etude)
-    {
-        return $etude->getTypePrestation();
-    }
-    
-    public function getPresentationProjet(Etude $etude)
-    {
-        return $etude->getPresentationProjet();
-    }
-    
-    public function getFonctionSignataire(Etude $etude)
-    {
-        return $etude->getAp()->getSignataire2()->getPoste();
-    }
-    
-    public function getCapaciteDev(Etude $etude)
-    {
-        return $etude->getCompetences();
-    }
-    
-    public function getNomSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getNom()." ".$etude->getSuiveur()->getPrenomNom();
-    }
-    
-    public function getMailSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getEmail();
-    }
-    
-    public function getTelSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getMobile();
-    }
-    
-    public function getEntiteSociale(Etude $etude)
-    {
-        return $etude->getProspect()->getEntite();
-    }
-    
-    public function getMoisLancement(Etude $etude)
-    {
-        $phases = $etude->getPhases();
-        
-        return $phases['0']->getDateDebut()->format('F');
-    }
-    
-    public function getMoisFin(Etude $etude)
-    {
-        $phases = $etude->getPhases();
-        $nbphases = count($phases);
-        //ajouter les délais au début de la phases puis prendre le mois
-        $delai = $phases[$nbphases-1]->getDelai();
-        $DateDebutPhase = $phases[$nbphases-1]->getDateDebut();
-        $DateFin = $DateDebutPhase->modify('+'.$delai.' day');
-        return $DateFin->format('F');
-    }
    */
         );
 
@@ -363,10 +274,11 @@ class TraitementController extends Controller {
         //Avant-Projet
         if ($etude->getAp() != NULL) {
 
-            //Signataire 1 : P
+            //Signataire 1 : Suiveur de projet
+            //TODO
             if ($etude->getAp()->getSignataire1() != NULL)
                 $this->array_push_assoc($champs, 'Nom_Client', $etude->getAp()->getSignataire1()->getPrenomNom());
-            //Signataire 2 : Client
+            //Signataire 2 : Signataire Client
             if ($etude->getAp()->getSignataire2() != NULL) {
                 $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getAp()->getSignataire2()->getPrenomNom());
                 $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getAp()->getSignataire2()->getPoste());
@@ -375,17 +287,20 @@ class TraitementController extends Controller {
             if($etude->getAp()->getDateSignature() != NULL)
                 $this->array_push_assoc($champs, 'Date_Signature_AP', $etude->getAp()->getDateSignature()->format("d/m/Y"));
             //Référence AP
-            $reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
-            $this->array_push_assoc($champs, 'Reference_AP', $referenceAP);
+            $this->array_push_assoc($champs, 'Reference_AP', $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion()));
+            //Nombre dev
+            $Nbr_Dev = $etude->getAp()->getNbrDev() + 0;
+            $Nbr_Dev_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_Dev);
+            $this->array_push_assoc($champs, 'Nbr_Developpeurs', $Nbr_Dev);
+            $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbr_Dev);
         }
 
-        //$phase = new \mgate\SuiviBundle\Entity\Phase();
-
+        //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
-            $this->array_push_assoc($champs, 'Phase_' . $i . 'Nbre_JEH', $phase->getNbrJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
