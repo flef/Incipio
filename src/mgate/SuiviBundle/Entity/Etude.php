@@ -5,9 +5,7 @@ namespace mgate\SuiviBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
-
 use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
-
 
 /**
  * mgate\SuiviBundle\Entity\Etude
@@ -16,19 +14,18 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\EtudeRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
-{
+class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
+
     /**
      * @var bool
      */
     private $knownProspect = false;
-        
+
     /**
      *
      */
-    private $newProspect;   
-    
-    
+    private $newProspect;
+
     /**
      * @var integer $id
      *
@@ -43,7 +40,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\JoinColumn(nullable=false)
      */
     protected $prospect;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=true)
@@ -57,8 +54,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\Column(name="dateCreation", type="datetime")
      */
     private $dateCreation;
-    
-        /**
+
+    /**
      * @var \DateTime $dateModification
      *
      * @ORM\Column(name="dateModification", type="datetime")
@@ -86,7 +83,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\Column(name="dossierCree", type="boolean", nullable=true)
      */
     private $dossierCree;
-    
+
     /**
      * @var string $nom
      *
@@ -172,7 +169,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
      */
     private $ap;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -188,13 +185,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist"})
      */
     private $missions;
-    
-     /**
+
+    /**
      * @ORM\OneToOne(targetEntity="FactureAcompte", cascade={"persist"})
      */
     private $factureAcompte;
-    
-     /**
+
+    /**
      * @ORM\OneToOne(targetEntity="FactureSolde", cascade={"persist"})
      */
     private $factureSolde;
@@ -228,44 +225,42 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @ORM\OneToMany(targetEntity="Pvr", mappedBy="etude")
      */
     private $pvrs;
-    
-     /**
+
+    /**
      * @var boolean $acompte
      *
      * @ORM\Column(name="acompte", type="boolean", nullable=true)
      */
-    private $acompte; 
-    
-    
+    private $acompte;
+
     /**
      * @var integer $pourcentageAcompte
      *
      * @ORM\Column(name="pourcentageAcompte", type="integer", nullable=true)
      */
     private $pourcentageAcompte;
-    
+
     /**
      * @var integer $fraisDossier
      *
      * @ORM\Column(name="fraisDossier", type="integer", nullable=true)
      */
     private $fraisDossier;
-    
+
     /**
      * @var text $presentationProjet
      *
      * @ORM\Column(name="presentationProjet", type="text", nullable=true)
      */
     private $presentationProjet;
-    
-    
+
     /**
      * @var text $descriptionPrestation
      *
      * @ORM\Column(name="descriptionPrestation", type="text", nullable=true)
      */
     private $descriptionPrestation;
-    
+
     /**
      * @var text $typePrestation
      *
@@ -274,12 +269,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      */
     private $typePrestation;
 
-    
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
@@ -290,40 +283,45 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
-        
-        $this->fraisDossier=90;
-        $this->pourcentageAcompte=0.40;
+
+        $this->fraisDossier = 90;
+        $this->pourcentageAcompte = 0.40;
     }
 
-    
 /// rajout à la main
-    public function isKnownProspect()
-    {
+    public function isKnownProspect() {
         return $this->knownProspect;
     }
-    public function setKnownProspect($boolean)
-    {
+
+    public function setKnownProspect($boolean) {
         $this->knownProspect = $boolean;
     }
-    
-    public function getNewProspect()
-    {
+
+    public function getNewProspect() {
         return $this->newProspect;
     }
-    public function setNewProspect($var)
-    {
-        $this->newProspect = $var;
 
+    public function setNewProspect($var) {
+        $this->newProspect = $var;
     }
+
+    public function getDoc($doc, $id = 0) {
+        switch ($doc) {
+            case 'AP':
+                return $this->getAp();
+            default:
+                return NULL;
+        }
+    }
+
 /// fin rajout
-    
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -333,10 +331,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \DateTime $dateCreation
      * @return Etude
      */
-    public function setDateCreation($dateCreation)
-    {
+    public function setDateCreation($dateCreation) {
         $this->dateCreation = $dateCreation;
-    
+
         return $this;
     }
 
@@ -345,8 +342,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \DateTime 
      */
-    public function getDateCreation()
-    {
+    public function getDateCreation() {
         return $this->dateCreation;
     }
 
@@ -356,10 +352,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \DateTime $dateModification
      * @return Etude
      */
-    public function setDateModification($dateModification)
-    {
+    public function setDateModification($dateModification) {
         $this->dateModification = $dateModification;
-    
+
         return $this;
     }
 
@@ -368,8 +363,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \DateTime 
      */
-    public function getDateModification()
-    {
+    public function getDateModification() {
         return $this->dateModification;
     }
 
@@ -379,10 +373,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param integer $mandat
      * @return Etude
      */
-    public function setMandat($mandat)
-    {
+    public function setMandat($mandat) {
         $this->mandat = $mandat;
-    
+
         return $this;
     }
 
@@ -391,8 +384,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return integer 
      */
-    public function getMandat()
-    {
+    public function getMandat() {
         return $this->mandat;
     }
 
@@ -402,10 +394,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param integer $num
      * @return Etude
      */
-    public function setNum($num)
-    {
+    public function setNum($num) {
         $this->num = $num;
-    
+
         return $this;
     }
 
@@ -414,8 +405,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return integer 
      */
-    public function getNum()
-    {
+    public function getNum() {
         return $this->num;
     }
 
@@ -425,10 +415,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param boolean $dossierCree
      * @return Etude
      */
-    public function setDossierCree($dossierCree)
-    {
+    public function setDossierCree($dossierCree) {
         $this->dossierCree = $dossierCree;
-    
+
         return $this;
     }
 
@@ -437,8 +426,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return boolean 
      */
-    public function getDossierCree()
-    {
+    public function getDossierCree() {
         return $this->dossierCree;
     }
 
@@ -448,10 +436,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $nom
      * @return Etude
      */
-    public function setNom($nom)
-    {
+    public function setNom($nom) {
         $this->nom = $nom;
-    
+
         return $this;
     }
 
@@ -460,8 +447,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getNom()
-    {
+    public function getNom() {
         return $this->nom;
     }
 
@@ -471,10 +457,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $description
      * @return Etude
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -483,8 +468,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -494,10 +478,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $competences
      * @return Etude
      */
-    public function setCompetences($competences)
-    {
+    public function setCompetences($competences) {
         $this->competences = $competences;
-    
+
         return $this;
     }
 
@@ -506,8 +489,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getCompetences()
-    {
+    public function getCompetences() {
         return $this->competences;
     }
 
@@ -517,10 +499,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param boolean $deonto
      * @return Etude
      */
-    public function setDeonto($deonto)
-    {
+    public function setDeonto($deonto) {
         $this->deonto = $deonto;
-    
+
         return $this;
     }
 
@@ -529,8 +510,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return boolean 
      */
-    public function getDeonto()
-    {
+    public function getDeonto() {
         return $this->deonto;
     }
 
@@ -540,10 +520,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param boolean $mailEntretienEnvoye
      * @return Etude
      */
-    public function setMailEntretienEnvoye($mailEntretienEnvoye)
-    {
+    public function setMailEntretienEnvoye($mailEntretienEnvoye) {
         $this->mailEntretienEnvoye = $mailEntretienEnvoye;
-    
+
         return $this;
     }
 
@@ -552,8 +531,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return boolean 
      */
-    public function getMailEntretienEnvoye()
-    {
+    public function getMailEntretienEnvoye() {
         return $this->mailEntretienEnvoye;
     }
 
@@ -563,10 +541,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param boolean $annonceSelectionne
      * @return Etude
      */
-    public function setAnnonceSelectionne($annonceSelectionne)
-    {
+    public function setAnnonceSelectionne($annonceSelectionne) {
         $this->annonceSelectionne = $annonceSelectionne;
-    
+
         return $this;
     }
 
@@ -575,8 +552,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return boolean 
      */
-    public function getAnnonceSelectionne()
-    {
+    public function getAnnonceSelectionne() {
         return $this->annonceSelectionne;
     }
 
@@ -586,10 +562,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \DateTime $dateDebut
      * @return Etude
      */
-    public function setDateDebut($dateDebut)
-    {
+    public function setDateDebut($dateDebut) {
         $this->dateDebut = $dateDebut;
-    
+
         return $this;
     }
 
@@ -598,8 +573,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \DateTime 
      */
-    public function getDateDebut()
-    {
+    public function getDateDebut() {
         return $this->dateDebut;
     }
 
@@ -609,10 +583,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \DateTime $dateFin
      * @return Etude
      */
-    public function setDateFin($dateFin)
-    {
+    public function setDateFin($dateFin) {
         $this->dateFin = $dateFin;
-    
+
         return $this;
     }
 
@@ -621,8 +594,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \DateTime 
      */
-    public function getDateFin()
-    {
+    public function getDateFin() {
         return $this->dateFin;
     }
 
@@ -632,10 +604,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \DateTime $anneAudit
      * @return Etude
      */
-    public function setAnneAudit($anneAudit)
-    {
+    public function setAnneAudit($anneAudit) {
         $this->anneAudit = $anneAudit;
-    
+
         return $this;
     }
 
@@ -644,8 +615,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \DateTime 
      */
-    public function getAnneAudit()
-    {
+    public function getAnneAudit() {
         return $this->anneAudit;
     }
 
@@ -655,10 +625,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $audit
      * @return Etude
      */
-    public function setAudit($audit)
-    {
+    public function setAudit($audit) {
         $this->audit = $audit;
-    
+
         return $this;
     }
 
@@ -667,8 +636,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getAudit()
-    {
+    public function getAudit() {
         return $this->audit;
     }
 
@@ -678,10 +646,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param boolean $acompte
      * @return Etude
      */
-    public function setAcompte($acompte)
-    {
+    public function setAcompte($acompte) {
         $this->acompte = $acompte;
-    
+
         return $this;
     }
 
@@ -690,8 +657,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return boolean 
      */
-    public function getAcompte()
-    {
+    public function getAcompte() {
         return $this->acompte;
     }
 
@@ -701,10 +667,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param integer $pourcentageAcompte
      * @return Etude
      */
-    public function setPourcentageAcompte($pourcentageAcompte)
-    {
+    public function setPourcentageAcompte($pourcentageAcompte) {
         $this->pourcentageAcompte = $pourcentageAcompte;
-    
+
         return $this;
     }
 
@@ -713,8 +678,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return integer 
      */
-    public function getPourcentageAcompte()
-    {
+    public function getPourcentageAcompte() {
         return $this->pourcentageAcompte;
     }
 
@@ -724,10 +688,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param integer $fraisDossier
      * @return Etude
      */
-    public function setFraisDossier($fraisDossier)
-    {
+    public function setFraisDossier($fraisDossier) {
         $this->fraisDossier = $fraisDossier;
-    
+
         return $this;
     }
 
@@ -736,8 +699,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return integer 
      */
-    public function getFraisDossier()
-    {
+    public function getFraisDossier() {
         return $this->fraisDossier;
     }
 
@@ -747,10 +709,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $presentationProjet
      * @return Etude
      */
-    public function setPresentationProjet($presentationProjet)
-    {
+    public function setPresentationProjet($presentationProjet) {
         $this->presentationProjet = $presentationProjet;
-    
+
         return $this;
     }
 
@@ -759,21 +720,19 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getPresentationProjet()
-    {
+    public function getPresentationProjet() {
         return $this->presentationProjet;
     }
-    
+
     /**
      * Set descriptionPrestation
      *
      * @param string $descriptionPrestation
      * @return Etude
      */
-    public function setDescriptionPrestation($descriptionPrestation)
-    {
+    public function setDescriptionPrestation($descriptionPrestation) {
         $this->descriptionPrestation = $descriptionPrestation;
-    
+
         return $this;
     }
 
@@ -782,8 +741,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getDescriptionPrestation()
-    {
+    public function getDescriptionPrestation() {
         return $this->descriptionPrestation;
     }
 
@@ -793,10 +751,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param string $typePrestation
      * @return Etude
      */
-    public function setTypePrestation($typePrestation)
-    {
+    public function setTypePrestation($typePrestation) {
         $this->typePrestation = $typePrestation;
-    
+
         return $this;
     }
 
@@ -805,8 +762,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return string 
      */
-    public function getTypePrestation()
-    {
+    public function getTypePrestation() {
         return $this->typePrestation;
     }
 
@@ -816,10 +772,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\PersonneBundle\Entity\Prospect $prospect
      * @return Etude
      */
-    public function setProspect(\mgate\PersonneBundle\Entity\Prospect $prospect)
-    {
+    public function setProspect(\mgate\PersonneBundle\Entity\Prospect $prospect) {
         $this->prospect = $prospect;
-    
+
         return $this;
     }
 
@@ -828,8 +783,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\PersonneBundle\Entity\Prospect 
      */
-    public function getProspect()
-    {
+    public function getProspect() {
         return $this->prospect;
     }
 
@@ -839,10 +793,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\PersonneBundle\Entity\Personne $suiveur
      * @return Etude
      */
-    public function setSuiveur(\mgate\PersonneBundle\Entity\Personne $suiveur = null)
-    {
+    public function setSuiveur(\mgate\PersonneBundle\Entity\Personne $suiveur = null) {
         $this->suiveur = $suiveur;
-    
+
         return $this;
     }
 
@@ -851,8 +804,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\PersonneBundle\Entity\Personne
      */
-    public function getSuiveur()
-    {
+    public function getSuiveur() {
         return $this->suiveur;
     }
 
@@ -862,10 +814,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\ClientContact $clientContacts
      * @return Etude
      */
-    public function addClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
-    {
+    public function addClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts) {
         $this->clientContacts[] = $clientContacts;
-    
+
         return $this;
     }
 
@@ -874,8 +825,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\ClientContact $clientContacts
      */
-    public function removeClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts)
-    {
+    public function removeClientContact(\mgate\SuiviBundle\Entity\ClientContact $clientContacts) {
         $this->clientContacts->removeElement($clientContacts);
     }
 
@@ -884,8 +834,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getClientContacts()
-    {
+    public function getClientContacts() {
         return $this->clientContacts;
     }
 
@@ -895,10 +844,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
      * @return Etude
      */
-    public function addCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
-    {
+    public function addCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures) {
         $this->candidatures[] = $candidatures;
-    
+
         return $this;
     }
 
@@ -907,8 +855,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
      */
-    public function removeCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures)
-    {
+    public function removeCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures) {
         $this->candidatures->removeElement($candidatures);
     }
 
@@ -917,8 +864,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCandidatures()
-    {
+    public function getCandidatures() {
         return $this->candidatures;
     }
 
@@ -928,13 +874,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Ap $ap
      * @return Etude
      */
-    public function setAp(\mgate\SuiviBundle\Entity\Ap $ap = null)
-    {
-        if($ap!=null)
+    public function setAp(\mgate\SuiviBundle\Entity\Ap $ap = null) {
+        if ($ap != null)
             $ap->setEtude($this);
-        
+
         $this->ap = $ap;
-    
+
         return $this;
     }
 
@@ -943,8 +888,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\SuiviBundle\Entity\Ap 
      */
-    public function getAp()
-    {
+    public function getAp() {
         return $this->ap;
     }
 
@@ -954,10 +898,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Phase $phases
      * @return Etude
      */
-    public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases)
-    {
+    public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases) {
         $this->phases[] = $phases;
-    
+
         return $this;
     }
 
@@ -966,8 +909,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Phase $phases
      */
-    public function removePhase(\mgate\SuiviBundle\Entity\Phase $phases)
-    {
+    public function removePhase(\mgate\SuiviBundle\Entity\Phase $phases) {
         $this->phases->removeElement($phases);
     }
 
@@ -976,8 +918,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPhases()
-    {
+    public function getPhases() {
         return $this->phases;
     }
 
@@ -987,13 +928,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Cc $cc
      * @return Etude
      */
-    public function setCc(\mgate\SuiviBundle\Entity\Cc $cc = null)
-    {
-        if($cc!=null)
+    public function setCc(\mgate\SuiviBundle\Entity\Cc $cc = null) {
+        if ($cc != null)
             $cc->setEtude($this);
-        
+
         $this->cc = $cc;
-    
+
         return $this;
     }
 
@@ -1002,8 +942,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\SuiviBundle\Entity\Cc 
      */
-    public function getCc()
-    {
+    public function getCc() {
         return $this->cc;
     }
 
@@ -1013,10 +952,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Mission $missions
      * @return Etude
      */
-    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions)
-    {
+    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions) {
         $this->missions[] = $missions;
-    
+
         return $this;
     }
 
@@ -1025,8 +963,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Mission $missions
      */
-    public function removeMission(\mgate\SuiviBundle\Entity\Mission $missions)
-    {
+    public function removeMission(\mgate\SuiviBundle\Entity\Mission $missions) {
         $this->missions->removeElement($missions);
     }
 
@@ -1035,8 +972,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMissions()
-    {
+    public function getMissions() {
         return $this->missions;
     }
 
@@ -1046,10 +982,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Suivi $suivis
      * @return Etude
      */
-    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
-    {
+    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis) {
         $this->suivis[] = $suivis;
-    
+
         return $this;
     }
 
@@ -1058,8 +993,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Suivi $suivis
      */
-    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis)
-    {
+    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis) {
         $this->suivis->removeElement($suivis);
     }
 
@@ -1068,8 +1002,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSuivis()
-    {
+    public function getSuivis() {
         return $this->suivis;
     }
 
@@ -1079,10 +1012,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Pvi $pvis
      * @return Etude
      */
-    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
-    {
+    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvis) {
         $this->pvis[] = $pvis;
-    
+
         return $this;
     }
 
@@ -1091,8 +1023,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Pvi $pvis
      */
-    public function removePvi(\mgate\SuiviBundle\Entity\Pvi $pvis)
-    {
+    public function removePvi(\mgate\SuiviBundle\Entity\Pvi $pvis) {
         $this->pvis->removeElement($pvis);
     }
 
@@ -1101,8 +1032,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPvis()
-    {
+    public function getPvis() {
         return $this->pvis;
     }
 
@@ -1112,10 +1042,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Facture $factures
      * @return Etude
      */
-    public function addFacture(\mgate\SuiviBundle\Entity\Facture $factures)
-    {
+    public function addFacture(\mgate\SuiviBundle\Entity\Facture $factures) {
         $this->factures[] = $factures;
-    
+
         return $this;
     }
 
@@ -1124,8 +1053,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Facture $factures
      */
-    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $factures)
-    {
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $factures) {
         $this->factures->removeElement($factures);
     }
 
@@ -1134,8 +1062,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFactures()
-    {
+    public function getFactures() {
         return $this->factures;
     }
 
@@ -1145,10 +1072,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Av $avs
      * @return Etude
      */
-    public function addAv(\mgate\SuiviBundle\Entity\Av $avs)
-    {
+    public function addAv(\mgate\SuiviBundle\Entity\Av $avs) {
         $this->avs[] = $avs;
-    
+
         return $this;
     }
 
@@ -1157,8 +1083,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Av $avs
      */
-    public function removeAv(\mgate\SuiviBundle\Entity\Av $avs)
-    {
+    public function removeAv(\mgate\SuiviBundle\Entity\Av $avs) {
         $this->avs->removeElement($avs);
     }
 
@@ -1167,8 +1092,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAvs()
-    {
+    public function getAvs() {
         return $this->avs;
     }
 
@@ -1178,10 +1102,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\AvMission $avMissions
      * @return Etude
      */
-    public function addAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
-    {
+    public function addAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions) {
         $this->avMissions[] = $avMissions;
-    
+
         return $this;
     }
 
@@ -1190,8 +1113,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\AvMission $avMissions
      */
-    public function removeAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions)
-    {
+    public function removeAvMission(\mgate\SuiviBundle\Entity\AvMission $avMissions) {
         $this->avMissions->removeElement($avMissions);
     }
 
@@ -1200,8 +1122,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAvMissions()
-    {
+    public function getAvMissions() {
         return $this->avMissions;
     }
 
@@ -1211,10 +1132,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
      * @return Etude
      */
-    public function addPvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
-    {
+    public function addPvr(\mgate\SuiviBundle\Entity\Pvr $pvrs) {
         $this->pvrs[] = $pvrs;
-    
+
         return $this;
     }
 
@@ -1223,8 +1143,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
      */
-    public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs)
-    {
+    public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs) {
         $this->pvrs->removeElement($pvrs);
     }
 
@@ -1233,8 +1152,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getPvrs()
-    {
+    public function getPvrs() {
         return $this->pvrs;
     }
 
@@ -1244,10 +1162,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte
      * @return Etude
      */
-    public function setFactureAcompte(\mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte = null)
-    {
+    public function setFactureAcompte(\mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte = null) {
         $this->factureAcompte = $factureAcompte;
-    
+
         return $this;
     }
 
@@ -1256,8 +1173,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\SuiviBundle\Entity\FactureAcompte 
      */
-    public function getFactureAcompte()
-    {
+    public function getFactureAcompte() {
         return $this->factureAcompte;
     }
 
@@ -1267,10 +1183,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      * @param \mgate\SuiviBundle\Entity\FactureSolde $factureSolde
      * @return Etude
      */
-    public function setFactureSolde(\mgate\SuiviBundle\Entity\FactureSolde $factureSolde = null)
-    {
+    public function setFactureSolde(\mgate\SuiviBundle\Entity\FactureSolde $factureSolde = null) {
         $this->factureSolde = $factureSolde;
-    
+
         return $this;
     }
 
@@ -1279,8 +1194,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware
      *
      * @return \mgate\SuiviBundle\Entity\FactureSolde 
      */
-    public function getFactureSolde()
-    {
+    public function getFactureSolde() {
         return $this->factureSolde;
-    }   
+    }
+
 }

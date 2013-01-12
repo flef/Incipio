@@ -68,27 +68,4 @@ class Ap extends DocType
     {
         return $this->etude;
     }
-
-    /**
-     * Set nbrDev
-     *
-     * @param integer $nbrDev
-     * @return Ap
-     */
-    public function setNbrDev($nbrDev)
-    {
-        $this->nbrDev = $nbrDev;
-    
-        return $this;
-    }
-
-    /**
-     * Get nbrDev
-     *
-     * @return integer 
-     */
-    public function getNbrDev()
-    {
-        return $this->nbrDev;
-    }
 }
