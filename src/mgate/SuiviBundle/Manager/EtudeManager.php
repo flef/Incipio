@@ -110,6 +110,37 @@ class EtudeManager extends \Twig_Extension
             return 1;
     }
     
+    public function getNomClient(Etude $etude)
+    {
+        return $etude->getAp()->getSignataire2()->getNom()." ".$etude->getAp()->getSignataire2()->getPrenom();
+    }
+    
+    public function getDescriptionPrestation(Etude $etude)
+    {
+        return $etude->getDescriptionPrestation();
+    }
+    
+    public function getTypePrestation(Etude $etude)
+    {
+        return $etude->getTypePrestation();
+    }
+    
+    public function getPresentationProjet(Etude $etude)
+    {
+        return $etude->getPresentationProjet();
+    }
+    
+    public function getFonctionSignataire(Etude $etude)
+    {
+        return $etude->getAp()->getSignataire2()->getPoste();
+    }
+    
+    public function getCapaciteDev(Etude $etude)
+    {
+        return $etude->getCompetences();
+    }
+    
+    
 
     public function getRepository()
     {
