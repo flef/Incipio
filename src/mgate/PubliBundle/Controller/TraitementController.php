@@ -127,6 +127,10 @@ class TraitementController extends Controller {
         $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
         
+        $Mois_Lancement = $this->get('mgate.etude_manager')->getDateLancement($etude)->format('F');
+        $Mois_Fin = $this->get('mgate.etude_manager')->getDateFin($etude)->format('F');
+        
+        
         
         //Conversion Lettre
         $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
@@ -139,7 +143,7 @@ class TraitementController extends Controller {
         $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT);
         
 
-
+        
 
         $champs = Array(
 
@@ -165,6 +169,10 @@ class TraitementController extends Controller {
             
             'Nbr_Phases' => $nombrePhase,
             
+            'Mois_Lancement' => $Mois_Lancement,
+            'Mois_Fin' => $Mois_Fin,
+            
+            
             
             
             
@@ -172,13 +180,7 @@ class TraitementController extends Controller {
             
             
    "date" => $date,
-            "TVA" => $TVA,
-            "Description_Prestation" => $Description_Prestation,
-         
 
-        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT);
-        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT);
-        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC);
 
         $champs = Array(
             "date" => $date,
@@ -273,7 +275,13 @@ class TraitementController extends Controller {
 
         //Avant-Projet
         if ($etude->getAp() != NULL) {
-
+            //Référence AP
+            $this->array_push_assoc($champs, 'Reference_AP', $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion()));
+            //Nombre dev
+            $Nbr_Dev = $etude->getAp()->getNbrDev() + 0;
+            $Nbre_Dev_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_Dev);
+            $this->array_push_assoc($champs, 'Nbr_Developpeurs', $Nbr_Dev);
+            $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbr_Dev_Lettres);
             //Signataire 1 : Suiveur de projet
             //TODO
             if ($etude->getAp()->getSignataire1() != NULL)
@@ -286,13 +294,7 @@ class TraitementController extends Controller {
             //Date Signature
             if($etude->getAp()->getDateSignature() != NULL)
                 $this->array_push_assoc($champs, 'Date_Signature_AP', $etude->getAp()->getDateSignature()->format("d/m/Y"));
-            //Référence AP
-            $this->array_push_assoc($champs, 'Reference_AP', $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion()));
-            //Nombre dev
-            $Nbr_Dev = $etude->getAp()->getNbrDev() + 0;
-            $Nbr_Dev_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_Dev);
-            $this->array_push_assoc($champs, 'Nbr_Developpeurs', $Nbr_Dev);
-            $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbr_Dev);
+var_dump($champs);
         }
 
         //Phases
