@@ -114,6 +114,25 @@ class TraitementController extends Controller {
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
 
+        $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
+
+        $Nom_Signataire = $this->get('mgate.etude_manager')->getNomClient($etude);
+        $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
+        $Description_Prestation =  $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
+
+        $Reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
+
+        $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
+        $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
+        $Presentation_Projet = $this->get('mgate.etude_manager')->getPresentationProjet($etude);
+        $Capacite_Dev = $this->get('mgate.etude_manager')->getCapaciteDev($etude);
+        $Nom_suiveur = $this->get('mgate.etude_manager')->getNomSuiveur($etude);
+        $Mail_suiveur = $this->get('mgate.etude_manager')->getMailSuiveur($etude);
+        $Tel_suiveur = $this->get('mgate.etude_manager')->getTelSuiveur($etude);
+        $Mois_Lancement = $this->get('mgate.etude_manager')->getMoisLancement($etude);
+        $Mois_Fin = $this->get('mgate.etude_manager')->getMoisFin($etude);
+
+
         $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
         $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
         $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
@@ -130,6 +149,7 @@ class TraitementController extends Controller {
 
 
         $champs = Array(
+
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
             'Type_Prestation' => $etude->getTypePrestation(),
@@ -151,7 +171,7 @@ class TraitementController extends Controller {
             'Frais_HT_Lettres' => $Frais_HT_Lettres,
             
             'Nbr_Phases' => $nombrePhase,
-            
+   
         );
 
 
@@ -200,8 +220,8 @@ class TraitementController extends Controller {
             $i = $phase->getPosition() + 1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH_HT', $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . 'Nbre_JEH', $phase->getNbrJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
