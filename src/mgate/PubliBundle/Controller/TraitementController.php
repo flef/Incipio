@@ -281,8 +281,8 @@ class TraitementController extends Controller {
             $i = $phase->getPosition() + 1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH_HT', $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . 'Nbre_JEH', $phase->getNbrJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
