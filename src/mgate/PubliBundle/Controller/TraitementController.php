@@ -127,8 +127,8 @@ class TraitementController extends Controller {
         $Entite_Sociale = "Entite_Sociale______DefautValue";
         $Adresse_Client = "Adresse_Client______DefautValue";
         $Nom_Signataire = "Nom_Signataire______DefautValue";
-        $Fonction_Signataire = "Fonction_Signataire______DefautValue";
-        $Description_Prestation = "Description_Prestation______DefautValue";
+        $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
+        $Description_Prestation =  $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
         $Delais_Semaines = "Delais_Semaines______DefautValue";
         $Total_HT = "Total_HT______DefautValue";
         $Nbr_JEH_Total = "Nbr_JEH_Total______DefautValue";
@@ -158,7 +158,7 @@ class TraitementController extends Controller {
         $Date_Fin = "Date_Fin______DefautValue";
         $Reference_Etude = "Reference_Etude______DefautValue";
         $Reference_CC = "Reference_CC______DefautValue";
-        $Reference_AP = "Reference_AP______DefautValue";
+        $Reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
         $Reference_OM = "Reference_OM______DefautValue";
         $Reference_CE = "Reference_CE______DefautValue";
         $Nom_Etudiant = "Nom_Etudiant______DefautValue";
@@ -172,7 +172,10 @@ class TraitementController extends Controller {
         $Remuneration_Brut = "Remuneration_Brut______DefautValue";
         $Remuneration_Brut_Lettres = "Remuneration_Brut_Lettres______DefautValue";
         $Date_Fin_Etude = "Date_Fin_Etude______DefautValue";
-        $Nom_Client = "Nom_Client______DefautValue";
+        $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
+        $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
+        $Presentation_Projet = $this->get('mgate.etude_manager')->getPresentationProjet($etude);
+        $Capacite_Dev = $this->get('mgate.etude_manager')->getCapaciteDev($etude);
 
 
 
@@ -188,7 +191,7 @@ class TraitementController extends Controller {
         $champs = Array(
             "date" => $date,
             "TVA" => $TVA,
-            "Description_Prestation" => $etude->getDescriptionPrestation(),
+            "Description_Prestation" => $Description_Prestation,
             "Delais_Semaines" => $Delais_Semaines,
             "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
             "Montant_TVA" => $Montant_TVA,
@@ -235,10 +238,12 @@ class TraitementController extends Controller {
             "Remuneration_Brut_Lettres" => $Remuneration_Brut_Lettres,
             "Date_Fin_Etude" => $Date_Fin_Etude,
             "Nom_Client" => $Nom_Client,
-            "Description_Prestation" => $etude->getDescriptionPrestation(),
+            "Type_Prestation" => $Type_Prestation,
             "Nbr_JEH_Total" => 6,
             "Nbr_Developpeurs" => 2,
             "Nbr_Phases" => $nombrePhase,
+            "Presentation_Projet" => $Presentation_Projet,
+            "Capacites_Dev" => $Capacite_Dev,
         );
 
         $etude = new \mgate\SuiviBundle\Entity\Etude();
