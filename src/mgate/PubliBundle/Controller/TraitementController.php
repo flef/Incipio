@@ -124,9 +124,9 @@ class TraitementController extends Controller {
         $Montant_TVA_Lettres = "Montant_TVA_Lettres______DefautValue";
         $Total_TTC = "Total_TTC______DefautValue";
         $Total_TTC_Lettres = "Total_TTC_Lettres______DefautValue";
-        $Entite_Sociale = "Entite_Sociale______DefautValue";
+        $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
         $Adresse_Client = "Adresse_Client______DefautValue";
-        $Nom_Signataire = "Nom_Signataire______DefautValue";
+        $Nom_Signataire = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
         $Description_Prestation =  $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
         $Delais_Semaines = "Delais_Semaines______DefautValue";
@@ -176,8 +176,11 @@ class TraitementController extends Controller {
         $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
         $Presentation_Projet = $this->get('mgate.etude_manager')->getPresentationProjet($etude);
         $Capacite_Dev = $this->get('mgate.etude_manager')->getCapaciteDev($etude);
-
-
+        $Nom_suiveur = $this->get('mgate.etude_manager')->getNomSuiveur($etude);
+        $Mail_suiveur = $this->get('mgate.etude_manager')->getMailSuiveur($etude);
+        $Tel_suiveur = $this->get('mgate.etude_manager')->getTelSuiveur($etude);
+        $Mois_Lancement = $this->get('mgate.etude_manager')->getMoisLancement($etude);
+        $Mois_Fin = $this->get('mgate.etude_manager')->getMoisFin($etude);
 
 
         $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
@@ -244,6 +247,14 @@ class TraitementController extends Controller {
             "Nbr_Phases" => $nombrePhase,
             "Presentation_Projet" => $Presentation_Projet,
             "Capacites_Dev" => $Capacite_Dev,
+            "Nom_suiveur" => $Nom_suiveur,
+            "Mail_suiveur" => $Mail_suiveur,
+            "Tel_suiveur" => $Tel_suiveur,
+            "Fonction_signataire" => $Fonction_Signataire,
+            "Entite_Sociale" => $Entite_Sociale,
+            "Nom_signataire" => $Nom_Signataire,
+            "Mois_Lancement" => $Mois_Lancement,
+            "Mois_Fin" => $Mois_Fin,
         );
 
         $etude = new \mgate\SuiviBundle\Entity\Etude();
