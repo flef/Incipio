@@ -28,6 +28,13 @@ class Ap extends DocType
      */
     protected $etude;
     
+    /**
+     * @var integer $nbrDev
+     *
+     * @ORM\Column(name="nbrDev", type="integer")
+     */
+    private $nbrDev;
+    
     
     /**
      * Get id
@@ -60,5 +67,28 @@ class Ap extends DocType
     public function getEtude()
     {
         return $this->etude;
+    }
+
+    /**
+     * Set nbrDev
+     *
+     * @param integer $nbrDev
+     * @return Ap
+     */
+    public function setNbrDev($nbrDev)
+    {
+        $this->nbrDev = $nbrDev;
+    
+        return $this;
+    }
+
+    /**
+     * Get nbrDev
+     *
+     * @return integer 
+     */
+    public function getNbrDev()
+    {
+        return $this->nbrDev;
     }
 }

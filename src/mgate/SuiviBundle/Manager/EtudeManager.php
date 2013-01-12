@@ -110,74 +110,7 @@ class EtudeManager extends \Twig_Extension
             return 1;
     }
     
-    public function getNomClient(Etude $etude)
-    {
-        return $etude->getAp()->getSignataire2()->getNom()." ".$etude->getAp()->getSignataire2()->getPrenom();
-    }
-    
-    public function getDescriptionPrestation(Etude $etude)
-    {
-        return $etude->getDescriptionPrestation();
-    }
-    
-    public function getTypePrestation(Etude $etude)
-    {
-        return $etude->getTypePrestation();
-    }
-    
-    public function getPresentationProjet(Etude $etude)
-    {
-        return $etude->getPresentationProjet();
-    }
-    
-    public function getFonctionSignataire(Etude $etude)
-    {
-        return $etude->getAp()->getSignataire2()->getPoste();
-    }
-    
-    public function getCapaciteDev(Etude $etude)
-    {
-        return $etude->getCompetences();
-    }
-    
-    public function getNomSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getNom()." ".$etude->getSuiveur()->getPrenomNom();
-    }
-    
-    public function getMailSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getEmail();
-    }
-    
-    public function getTelSuiveur(Etude $etude)
-    {
-        return $etude->getSuiveur()->getMobile();
-    }
-    
-    public function getEntiteSociale(Etude $etude)
-    {
-        return $etude->getProspect()->getEntite();
-    }
-    
-    public function getMoisLancement(Etude $etude)
-    {
-        $phases = $etude->getPhases();
-        
-        return $phases['0']->getDateDebut()->format('F');
-    }
-    
-    public function getMoisFin(Etude $etude)
-    {
-        $phases = $etude->getPhases();
-        $nbphases = count($phases);
-        //ajouter les délais au début de la phases puis prendre le mois
-        $delai = $phases[$nbphases-1]->getDelai();
-        $DateDebutPhase = $phases[$nbphases-1]->getDateDebut();
-        $DateFin = $DateDebutPhase->modify('+'.$delai.' day');
-        return $DateFin->format('F');
-    }
-    
+   
     
 
     public function getRepository()
