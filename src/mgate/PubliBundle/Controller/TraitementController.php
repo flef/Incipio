@@ -10,9 +10,9 @@ class TraitementController extends Controller {
     private $EFD = '~~';
 
     /*
-     * private SAD
-     * private EAD
-     */
+* private SAD
+* private EAD
+*/
 
     //Repétition des phases
     private function repeterPhase(&$templateXML, $nombrePhase) {
@@ -21,27 +21,27 @@ class TraitementController extends Controller {
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
         $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
-
+        
         $SFD = $this->SFD;
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
+                    
 
-
-                    if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
+                    if(preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
                     else
                         $premiereLigne = $matches[1];
-
+                    
                     $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "1", $premiereLigne);
-
+                            
                     for ($i = 2; $i <= $nombrePhase; $i++)
                         $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
 
         $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
-
+        
         return $templateXML;
     }
 
@@ -62,14 +62,14 @@ class TraitementController extends Controller {
 
     //Accord en nombre
     /* ¤nombre|pluriel|singulier¤
-     * ¤nombre|pluriel¤ (singulier = '')
-     * ¤genre|feminin|masculin¤
-     * ¤genre|fem¤ (masc = '')
-     * >1 = Femme 
-     * 0||1 = Homme
-     * ¤%sexe%|rendue|rendu¤
-     * ¤%sexe%|e¤
-     */
+* ¤nombre|pluriel¤ (singulier = '')
+* ¤genre|feminin|masculin¤
+* ¤genre|fem¤ (masc = '')
+* >1 = Femme
+* 0||1 = Homme
+* ¤%sexe%|rendue|rendu¤
+* ¤%sexe%|e¤
+*/
     private function accorder(&$templateXML) {
         $regexp = array(//Expression régulière filtrage répétition /!\ imbrication interdite !
             '#¤(\d+)\|([^¤.]*)\|([^¤.]*)¤#', //si deux args ¤3|ont|a¤
@@ -90,7 +90,7 @@ class TraitementController extends Controller {
     //Traitement du template
     private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
         $templateXML = file_get_contents($templateFullPath); //récup contenu XML
-
+        
         $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
         $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
         $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
@@ -98,30 +98,80 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
+
     //Vérification du fichier
-    //if match %   _   % then pasbien
+    //if match % _ % then pasbien
     private function verifierTemplate($templateXML) {
         $SFD = $this->SFD;
         $EFD = $this->EFD;
 
         preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
-
+        
         return $matches[1];
     }
 
     private function getAllChamp($etude) {
+        //$etude = new \mgate\SuiviBundle\Entity\Etude();//Juste pour avoir l'autocompletion :D
 
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
+        $date = date("d/m/Y");
 
+
+        $Total_HT_Lettres = "Total_HT_Lettres______DefautValue";
+        $TVA = "TVA______DefautValue";
+        $Montant_TVA = "Montant_TVA______DefautValue";
+        $Montant_TVA_Lettres = "Montant_TVA_Lettres______DefautValue";
+        $Total_TTC = "Total_TTC______DefautValue";
+        $Total_TTC_Lettres = "Total_TTC_Lettres______DefautValue";
         $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
-
+        $Adresse_Client = "Adresse_Client______DefautValue";
         $Nom_Signataire = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
-        $Description_Prestation =  $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
-
+        $Description_Prestation = $this->get('mgate.etude_manager')->getDescriptionPrestation($etude);
+        $Delais_Semaines = "Delais_Semaines______DefautValue";
+        $Total_HT = "Total_HT______DefautValue";
+        $Nbr_JEH_Total = "Nbr_JEH_Total______DefautValue";
+        $Nbr_JEH_Total_Lettres = "Nbr_JEH_Total_Lettres______DefautValue";
+        $Montant_Total_HT = "Montant_Total_HT______DefautValue";
+        $Montant_Total_HT_Lettres = "Montant_Total_HT_Lettres______DefautValue";
+        $Frais_HT = "Frais_HT______DefautValue";
+        $Frais_HT_Lettres = "Frais_HT_Lettres______DefautValue";
+        $Acompte_HT = "Acompte_HT______DefautValue";
+        $Acompte_HT_Lettres = "Acompte_HT_Lettres______DefautValue";
+        $Acompte_TTC = "Acompte_TTC______DefautValue";
+        $Acompte_TTC_Lettres = "Acompte_TTC_Lettres______DefautValue";
+        $Solde_PVR_HT = "Solde_PVR_HT______DefautValue";
+        $Solde_PVR_HT_Lettres = "Solde_PVR_HT_Lettres______DefautValue";
+        $Solde_PVR_TTC = "Solde_PVR_TTC______DefautValue";
+        $Solde_PVR_TTC_Lettres = "Solde_PVR_TTC_Lettres______DefautValue";
+        $Phase_1_Nbre_JEH = "Phase_1_Nbre_JEH______DefautValue";
+        $Phase_1_Prix_JEH_HT = "Phase_1_Prix_JEH_HT______DefautValue";
+        $Phase_1_Prix_Phase_HT = "Phase_1_Prix_Phase_HT______DefautValue";
+        $Total_TVA = "Total_TVA______DefautValue";
+        $Acompte_TVA = "Acompte_TVA______DefautValue";
+        $Acompte_Pourcentage = "Acompte_Pourcentage______DefautValue";
+        $Date_Emission = "Date_Emission______DefautValue";
+        $Date_Limite = "Date_Limite______DefautValue";
+        $Reference_PVR = "Reference_PVR______DefautValue";
+        $Date_Debut = "Date_Debut______DefautValue";
+        $Date_Fin = "Date_Fin______DefautValue";
+        $Reference_Etude = "Reference_Etude______DefautValue";
+        $Reference_CC = "Reference_CC______DefautValue";
         $Reference_AP = $this->get('mgate.etude_manager')->getRefDoc($etude, "AP", $etude->getAp()->getVersion());
-
+        $Reference_OM = "Reference_OM______DefautValue";
+        $Reference_CE = "Reference_CE______DefautValue";
+        $Nom_Etudiant = "Nom_Etudiant______DefautValue";
+        $Prenom_Etudiant = "Prenom_Etudiant______DefautValue";
+        $Sexe = "Sexe______DefautValue";
+        $Adresse_Etudiant = "Adresse_Etudiant______DefautValue";
+        $Montant_JEH_Verse = "Montant_JEH_Verse______DefautValue";
+        $Montant_JEH_Verse_Lettres = "Montant_JEH_Verse_Lettres______DefautValue";
+        $Nbre_JEH = "Nbre_JEH______DefautValue";
+        $Nbre_JEH_Lettres = "Nbre_JEH_Lettres______DefautValue";
+        $Remuneration_Brut = "Remuneration_Brut______DefautValue";
+        $Remuneration_Brut_Lettres = "Remuneration_Brut_Lettres______DefautValue";
+        $Date_Fin_Etude = "Date_Fin_Etude______DefautValue";
         $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
         $Presentation_Projet = $this->get('mgate.etude_manager')->getPresentationProjet($etude);
@@ -137,85 +187,96 @@ class TraitementController extends Controller {
         $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
         $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
 
-        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
-        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT, 1);
-        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC, 1);
-
-        $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
-        $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
-        
-        $Frais_HT = $etude->getFraisDossier();
-        $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT);
-
+        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT);
+        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT);
+        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC);
 
         $champs = Array(
-
-            'Presentation_Projet' => $etude->getPresentationProjet(),
-            'Description_Prestation' => $etude->getDescriptionPrestation(),
-            'Type_Prestation' => $etude->getTypePrestation(),
-            //'Date_Lancement' => $etude->getDateDebut()->format("m"),
-            //'Date_Fin'=> $etude->getDateFin()->format("m"),
-
-            'Nbr_JEH_Total' => $Nbr_JEH,
-            'Nbr_JEH_Total_Lettres' => $Nbr_JEH_Lettres,
-            
-            'Total_HT' => $Total_HT,
-            'Montant_Total_HT' => $Montant_Total_HT,
-            'Total_TTC' => $Total_TTC,
-            
-            'Total_HT_Lettres' => $Total_HT_Lettres,
-            'Montant_Total_HT_Lettres' => $Montant_Total_HT_Lettres,
-            'Total_TTC_Lettres' => $Total_TTC_Lettres,
-            
-            'Frais_HT' => $Frais_HT,
-            'Frais_HT_Lettres' => $Frais_HT_Lettres,
-            
-            'Nbr_Phases' => $nombrePhase,
-   
+            "date" => $date,
+            "TVA" => $TVA,
+            "Description_Prestation" => $Description_Prestation,
+            "Delais_Semaines" => $Delais_Semaines,
+            "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
+            "Montant_TVA" => $Montant_TVA,
+            "Montant_TVA_Lettres" => $Montant_TVA_Lettres,
+            "Nbr_JEH_Total" => $this->get('mgate.etude_manager')->getNbrJEH($etude),
+            "Total_HT" => $Total_HT,
+            "Montant_Total_HT" => $Montant_Total_HT,
+            "Total_TTC" => $Total_TTC,
+            "Total_HT_Lettres" => $Total_HT_Lettres,
+            "Montant_Total_HT_Lettres" => $Montant_Total_HT_Lettres,
+            "Total_TTC_Lettres" => $Total_TTC_Lettres,
+            "Frais_HT" => $etude->getFraisDossier(),
+            "Frais_HT_Lettres" => $Frais_HT_Lettres,
+            "Acompte_HT" => $Acompte_HT,
+            "Acompte_HT_Lettres" => $Acompte_HT_Lettres,
+            "Acompte_TTC" => $Acompte_TTC,
+            "Acompte_TTC_Lettres" => $Acompte_TTC_Lettres,
+            "Solde_PVR_HT" => $Solde_PVR_HT,
+            "Solde_PVR_HT_Lettres" => $Solde_PVR_HT_Lettres,
+            "Solde_PVR_TTC" => $Solde_PVR_TTC,
+            "Solde_PVR_TTC_Lettres" => $Solde_PVR_TTC_Lettres,
+            "Total_TVA" => $Total_TVA,
+            "Acompte_TVA" => $Acompte_TVA,
+            "Acompte_Pourcentage" => $Acompte_Pourcentage,
+            "Date_Emission" => $Date_Emission,
+            "Date_Limite" => $Date_Limite,
+            "Reference_PVR" => $Reference_PVR,
+            "Date_Debut" => $Date_Debut,
+            "Date_Fin" => $Date_Fin,
+            "Reference_Etude" => $Reference_Etude,
+            "Reference_CC" => $Reference_CC,
+            "Reference_AP" => $Reference_AP,
+            "Reference_OM" => $Reference_OM,
+            "Reference_CE" => $Reference_CE,
+            "Nom_Etudiant" => $Nom_Etudiant,
+            "Prenom_Etudiant" => $Prenom_Etudiant,
+            "Sexe" => $Sexe,
+            "Adresse_Etudiant" => $Adresse_Etudiant,
+            "Montant_JEH_Verse" => $Montant_JEH_Verse,
+            "Montant_JEH_Verse_Lettres" => $Montant_JEH_Verse_Lettres,
+            "Nbre_JEH" => $Nbre_JEH,
+            "Nbre_JEH_Lettres" => $Nbre_JEH_Lettres,
+            "Remuneration_Brut" => $Remuneration_Brut,
+            "Remuneration_Brut_Lettres" => $Remuneration_Brut_Lettres,
+            "Date_Fin_Etude" => $Date_Fin_Etude,
+            "Nom_Client" => $Nom_Client,
+            "Type_Prestation" => $Type_Prestation,
+            "Nbr_JEH_Total" => 6,
+            "Nbr_Developpeurs" => 2,
+            "Nbr_Phases" => $nombrePhase,
+            "Presentation_Projet" => $Presentation_Projet,
+            "Capacites_Dev" => $Capacite_Dev,
+            "Nom_suiveur" => $Nom_suiveur,
+            "Mail_suiveur" => $Mail_suiveur,
+            "Tel_suiveur" => $Tel_suiveur,
+            "Fonction_signataire" => $Fonction_Signataire,
+            "Entite_Sociale" => $Entite_Sociale,
+            "Nom_signataire" => $Nom_Signataire,
+            "Mois_Lancement" => $Mois_Lancement,
+            "Mois_Fin" => $Mois_Fin,
         );
 
-
-
-        //Prospect
+        $etude = new \mgate\SuiviBundle\Entity\Etude();
+        //block dépendant de prospect
         if ($etude->getProspect() != NULL) {
-            $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
-            $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntite());
-            $this->array_push_assoc($champs, 'Adresse_Client', $etude->getProspect()->getAdresse());
+            $this->array_push_assoc($champs, "Entite_Sociale", $etude->getProspect()->getEntite());
+            $this->array_push_assoc($champs, "Adresse_Client", $etude->getProspect()->getAdresse());
         }
 
-        //Suiveur
-        if ($etude->getSuiveur() != NULL) {
-            $this->array_push_assoc($champs, 'Mail_suiveur', $etude->getSuiveur()->getEmail());
-            $this->array_push_assoc($champs, 'Nom_suiveur', $etude->getSuiveur()->getPrenomNom());
-
-            if ($etude->getSuiveur()->getFix() != NULL)
-                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getFix());
-            else
-                $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getMobile());
-        }
-
-
-        //Avant-Projet
+        //block dépendant de AP
         if ($etude->getAp() != NULL) {
-
-            //Signataire 1
-            if ($etude->getAp()->getSignataire1() != NULL)
-                $this->array_push_assoc($champs, 'Nom_Client', $etude->getAp()->getSignataire1()->getPrenomNom());
-            //Signataire 2
-            if ($etude->getAp()->getSignataire2() != NULL) {
-                $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getAp()->getSignataire2()->getPrenomNom());
-                $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getAp()->getSignataire2()->getPoste());
-            }            
-            //Date Signature
-            if($etude->getAp()->getDateSignature() != NULL)
-                $this->array_push_assoc($champs, 'Date_Signature_AP', $etude->getAp()->getDateSignature()->format("d/m/Y"));
-            //Référence AP
-            $referenceAP = $this->get('mgate.etude_manager')->getRefEtude($etude) . '-AP-' . $etude->getAp()->getVersion();
-            $this->array_push_assoc($champs, 'Reference_AP', $referenceAP);
+            //Block dependant de AP->Signataire 2
+            if ($etude->getSignateire2() != NULL) {
+                $this->array_push_assoc($champs, "Nom_Signataire", $etude->getAp()->getSignataire2()->getPrenomNom());
+                $this->array_push_assoc($champs, "Fonction_Signataire", $etude->getAp()->getSignataire2()->getPoste());
+            }
         }
 
 
-        //Phases
+
+        //$phase = new \mgate\SuiviBundle\Entity\Phase();
+
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
 
@@ -275,13 +336,13 @@ class TraitementController extends Controller {
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
 
-
+        
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
         if (false)
             $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/FA.xml';
-
+        
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
 
 
@@ -290,8 +351,8 @@ class TraitementController extends Controller {
         $repertoire = 'tmp';
         $idDocx = (int) strtotime("now") + rand();
         if (!file_exists($repertoire))
-            mkdir($repertoire/* ,0700 */);
-        $handle = fopen($repertoire . '/' . $idDocx, "w+");
+                mkdir ($repertoire/*,0700*/);
+        $handle = fopen($repertoire.'/' . $idDocx, "w+");
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
@@ -303,7 +364,7 @@ class TraitementController extends Controller {
 
     public function telechargerAction($docType = 'AP') {
 
-        if (isset($_SESSION['idDocx']) && preg_split('#.#', $_SESSION['idDocx'][1][0] == 'xml')) {
+        if (isset($_SESSION['idDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = (isset($_SESSION['refDocx']) ? $_SESSION['refDocx'] : $docType);
 
@@ -317,11 +378,14 @@ class TraitementController extends Controller {
             header('Expires: 0');
             readfile($doc);
             exit();
-        } else {
+
+        
+        }
+        else
+        {
             echo 'fail';
         }
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'ololilioloiol'));
     }
 
 }
-
