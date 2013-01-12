@@ -10,9 +10,9 @@ class TraitementController extends Controller {
     private $EFD = '~~';
 
     /*
-     * private SAD
-     * private EAD
-     */
+* private SAD
+* private EAD
+*/
 
     //Repétition des phases
     private function repeterPhase(&$templateXML, $nombrePhase) {
@@ -21,27 +21,27 @@ class TraitementController extends Controller {
         $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
         $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
-
+        
         $SFD = $this->SFD;
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
+                    
 
-
-                    if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
+                    if(preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
                     else
                         $premiereLigne = $matches[1];
-
+                    
                     $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "1", $premiereLigne);
-
+                            
                     for ($i = 2; $i <= $nombrePhase; $i++)
                         $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
 
         $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
-
+        
         return $templateXML;
     }
 
@@ -62,14 +62,14 @@ class TraitementController extends Controller {
 
     //Accord en nombre
     /* ¤nombre|pluriel|singulier¤
-     * ¤nombre|pluriel¤ (singulier = '')
-     * ¤genre|feminin|masculin¤
-     * ¤genre|fem¤ (masc = '')
-     * >1 = Femme 
-     * 0||1 = Homme
-     * ¤%sexe%|rendue|rendu¤
-     * ¤%sexe%|e¤
-     */
+* ¤nombre|pluriel¤ (singulier = '')
+* ¤genre|feminin|masculin¤
+* ¤genre|fem¤ (masc = '')
+* >1 = Femme
+* 0||1 = Homme
+* ¤%sexe%|rendue|rendu¤
+* ¤%sexe%|e¤
+*/
     private function accorder(&$templateXML) {
         $regexp = array(//Expression régulière filtrage répétition /!\ imbrication interdite !
             '#¤(\d+)\|([^¤.]*)\|([^¤.]*)¤#', //si deux args ¤3|ont|a¤
@@ -90,7 +90,7 @@ class TraitementController extends Controller {
     //Traitement du template
     private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
         $templateXML = file_get_contents($templateFullPath); //récup contenu XML
-
+        
         $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
         $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
         $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
@@ -98,22 +98,27 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
+
     //Vérification du fichier
-    //if match %   _   % then pasbien
+    //if match % _ % then pasbien
     private function verifierTemplate($templateXML) {
         $SFD = $this->SFD;
         $EFD = $this->EFD;
 
         preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
-
+        
         return $matches[1];
     }
 
     private function getAllChamp($etude) {
+
 //TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
+
+
 
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
+        $date = date("d/m/Y");
 
         //EtudeManager
         $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
@@ -126,11 +131,8 @@ class TraitementController extends Controller {
         
         
         
-                $Entite_Sociale = $this->get('mgate.etude_manager')->getEntiteSociale($etude);
+               
 
-        $Nom_Signataire = $this->get('mgate.etude_manager')->getNomClient($etude);
-        $Fonction_Signataire = $this->get('mgate.etude_manager')->getFonctionSignataire($etude);
-        
 
         $Nom_Client = $this->get('mgate.etude_manager')->getNomClient($etude);
         $Type_Prestation = $this->get('mgate.etude_manager')->getTypePrestation($etude);
@@ -187,7 +189,21 @@ class TraitementController extends Controller {
             "TVA" => $TVA,
             "Description_Prestation" => $Description_Prestation,
          
-        
+
+        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT);
+        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT);
+        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC);
+
+        $champs = Array(
+            "date" => $date,
+            "TVA" => $TVA,
+            "Description_Prestation" => $Description_Prestation,
+            "Delais_Semaines" => $Delais_Semaines,
+            "Nbr_JEH_Total_Lettres" => $Nbr_JEH_Total_Lettres,
+            "Montant_TVA" => $Montant_TVA,
+            "Montant_TVA_Lettres" => $Montant_TVA_Lettres,
+            "Nbr_JEH_Total" => $this->get('mgate.etude_manager')->getNbrJEH($etude),
+>>>>>>> f2f795868fc3e244c8bd01e3488d0d7e67297ed5
             "Total_HT" => $Total_HT,
             "Montant_Total_HT" => $Montant_Total_HT,
             "Total_TTC" => $Total_TTC,
@@ -243,6 +259,7 @@ class TraitementController extends Controller {
             "Nom_signataire" => $Nom_Signataire,
             "Mois_Lancement" => $Mois_Lancement,
             "Mois_Fin" => $Mois_Fin,
+
 
 
 
@@ -325,10 +342,10 @@ class TraitementController extends Controller {
 
         //Prospect
         if ($etude->getProspect() != NULL) {
-            $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
-            $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntite());
-            $this->array_push_assoc($champs, 'Adresse_Client', $etude->getProspect()->getAdresse());
+            $this->array_push_assoc($champs, "Entite_Sociale", $etude->getProspect()->getEntite());
+            $this->array_push_assoc($champs, "Adresse_Client", $etude->getProspect()->getAdresse());
         }
+
 
         //Suiveur
         if ($etude->getSuiveur() != NULL) {
@@ -362,8 +379,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Reference_AP', $referenceAP);
         }
 
+        //$phase = new \mgate\SuiviBundle\Entity\Phase();
 
-        //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
 
@@ -423,13 +440,13 @@ class TraitementController extends Controller {
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude);
 
-
+        
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
         if (false)
             $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/FA.xml';
-
+        
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs); //Ne sais ou mettre mes ressources
 
 
@@ -438,8 +455,8 @@ class TraitementController extends Controller {
         $repertoire = 'tmp';
         $idDocx = (int) strtotime("now") + rand();
         if (!file_exists($repertoire))
-            mkdir($repertoire/* ,0700 */);
-        $handle = fopen($repertoire . '/' . $idDocx, "w+");
+                mkdir ($repertoire/*,0700*/);
+        $handle = fopen($repertoire.'/' . $idDocx, "w+");
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
@@ -451,7 +468,7 @@ class TraitementController extends Controller {
 
     public function telechargerAction($docType = 'AP') {
 
-        if (isset($_SESSION['idDocx']) && preg_split('#.#', $_SESSION['idDocx'][1][0] == 'xml')) {
+        if (isset($_SESSION['idDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = (isset($_SESSION['refDocx']) ? $_SESSION['refDocx'] : $docType);
 
@@ -465,11 +482,14 @@ class TraitementController extends Controller {
             header('Expires: 0');
             readfile($doc);
             exit();
-        } else {
+
+        
+        }
+        else
+        {
             echo 'fail';
         }
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'ololilioloiol'));
     }
 
 }
-
