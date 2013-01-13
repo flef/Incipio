@@ -12,13 +12,10 @@ use mgate\PersonneBundle\Entity\Prospect as Prospect;
 
 class DocTypeType extends AbstractType
 {
-    private $type;
-    private $prospect;
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $pro=$this->prospect;
-       
+        
         $builder
             ->add('version', 'integer', array('label'=>'Version du document'))
             ->add('signataire1', 'entity', 
@@ -29,8 +26,9 @@ class DocTypeType extends AbstractType
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));
 
-        if($this->type!='mission')
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission')
         {
+            $pro=$options['prospect'];
             $builder->add('knownSignataire2', 'checkbox', array(
                 'required' => false,
                 'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
@@ -49,12 +47,6 @@ class DocTypeType extends AbstractType
             
     }
     
-    public function __construct($type = null, $prospect = null)
-    {
-        $this->type = $type;
-        $this->prospect = $prospect;
-    }
-
     public function getName()
     {
         return 'alex_suivibundle_doctypetype';
@@ -62,16 +54,10 @@ class DocTypeType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
-        if($this->type==null)
-            return array(
-                'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-                /*'cascade_validation' => true,*/
-            );
-        else        
-            return array(
-                'data_class' => 'mgate\SuiviBundle\Entity\\'.$this->type,
-                /*'cascade_validation' => true,*/
-            );
+        return array(
+            'data_class' => 'mgate\SuiviBundle\Entity\DocType',
+            'prospect' => null,
+        );
     }
 }
 
