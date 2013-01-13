@@ -53,7 +53,7 @@ class EtudeManager extends \Twig_Extension {
      * Get montant total TTC
      */
     public function getTotalTTC(Etude $etude) {
-        return $this->getTotalHT($etude) * (1 + $this->tva);
+        return round($this->getTotalHT($etude) * (1 + $this->tva),2);
     }
 
     /**
@@ -63,9 +63,8 @@ class EtudeManager extends \Twig_Extension {
         $total = 0;
 
         foreach ($etude->getPhases() as $phase) {
-            $total += $phase->getPrixJEH();
+            $total += $phase->getNbrJEH();
         }
-
         return $total;
     }
 
@@ -116,9 +115,10 @@ class EtudeManager extends \Twig_Extension {
         $dateFin = array();
         $phases = $etude->getPhases();
 
-        foreach ($phases as $phase) {
-            $dateDebut = $phase->getDateDebut();
-            array_push($dateFin, $dateDebut->modify('+'.$phase->getDelai() . ' day'));
+        foreach ($phases as $p) {
+           $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+           array_push($dateFin, $dateDebut->modify('+'.$p->getDelai() . ' day'));
+           unset($dateDebut);
         }
         return max($dateFin);
     }
