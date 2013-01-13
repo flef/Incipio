@@ -305,10 +305,18 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->newProspect = $var;
     }
 
-    public function getDoc($doc, $id = 0) {
+    public function getDoc($doc, $key = 0) {
         switch ($doc) {
             case 'AP':
                 return $this->getAp();
+            case 'CC':
+                return $this->getCc();
+            case 'FA':
+                return $this->getFactureAcompte();
+            case 'PVR':
+                return $this->getPvrs()->get($key);
+            case 'RM':
+                return $this->getMissions()->get($key);
             default:
                 return NULL;
         }
