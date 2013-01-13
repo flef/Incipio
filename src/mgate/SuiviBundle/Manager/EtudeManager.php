@@ -118,9 +118,7 @@ class EtudeManager extends \Twig_Extension {
 
         foreach ($phases as $phase) {
             $dateDebut = $phase->getDateDebut();
-            //TODO
-            //WARN Ne marche pas
-            array_push($dateFin, $dateDebut->modify('+'.$phase->getDelai() . 'day'));
+            array_push($dateFin, $dateDebut->modify('+'.$phase->getDelai() . ' day'));
         }
         return max($dateFin);
     }
