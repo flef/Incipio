@@ -11,7 +11,7 @@
 {% include "::Tools/select2.html.twig" %}
 {% include "::Tools/datepicker.html.twig" %}   
         
-    <h2>Rédiger le Récapitulatif de Mission de {{mission.intervenant.nom}} {{mission.intervenant.prenom}}</h2>
+    <h2>Rédiger le Récapitulatif de Mission de {{mission.intervenant.personne.prenomNom}} </h2>
 
     {% include "mgateSuiviBundle:Mission:formulaire.html.twig" %} 
 

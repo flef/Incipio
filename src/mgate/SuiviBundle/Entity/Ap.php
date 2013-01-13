@@ -31,7 +31,7 @@ class Ap extends DocType
     /**
      * @var integer $nbrDev
      *
-     * @ORM\Column(name="nbrDev", type="integer")
+     * @ORM\Column(name="nbrDev", type="integer", nullable=true)
      */
     private $nbrDev;
     
