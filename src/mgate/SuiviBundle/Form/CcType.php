@@ -8,12 +8,12 @@ use mgate\SuiviBundle\Entity\Etude;
 
 use mgate\PersonneBundle\Form;
 
-class CcType extends DocTypeType
+class CcType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	   
-            $builder->add('cc', new DocTypeType('Cc', $options['prospect']), array('label'=>' '))
+            $builder->add('cc', new SubCcType(), array('label'=>' ', 'prospect'=>$options['prospect']))
                     ->add('acompte','checkbox',array('label'=>'Acompte', 'required' => false))
                     ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte', 'required' => false));
             
@@ -21,7 +21,7 @@ class CcType extends DocTypeType
 
     public function getName()
     {
-        return 'alex_suivibundle_cctype';
+        return 'mgate_suivibundle_cctype';
     }
 
     public function getDefaultOptions(array $options)
@@ -33,4 +33,22 @@ class CcType extends DocTypeType
     }
 }
 
+class SubCcType extends DocTypeType {
 
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
+        DocTypeType::buildForm($builder, $options);
+        // aucun champ propre a CC
+    }
+
+    public function getName() {
+        return 'mgate_suivibundle_subcctype';
+    }
+
+    public function getDefaultOptions(array $options) {
+        return array(
+            'data_class' => 'mgate\SuiviBundle\Entity\Cc',
+            'prospect' => '',
+        );
+    }
+
+}
