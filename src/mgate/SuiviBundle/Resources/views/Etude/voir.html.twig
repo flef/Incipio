@@ -59,7 +59,7 @@
 <p>
     <h3>Récapitulatif de Mission:</h3>
     {% for mission in etude.missions %}
-        <li>{{ mission.intervenant.prenom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }} <a href="{{ path('mgateSuivi_mission_rediger', {'id': mission.id}) }}">Rédiger l'RM</a></li>
+        <li>{{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }} <a href="{{ path('mgateSuivi_mission_rediger', {'id': mission.id}) }}">Rédiger l'RM</a></li>
     {% endfor %}
     <a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}">Modifier les Intervenants</a>
 </p>
