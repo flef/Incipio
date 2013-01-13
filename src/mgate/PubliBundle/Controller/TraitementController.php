@@ -281,7 +281,7 @@ class TraitementController extends Controller {
             $Nbr_Dev = $etude->getAp()->getNbrDev() + 0;
             $Nbre_Dev_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbr_Developpeurs', $Nbr_Dev);
-            $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbr_Dev_Lettres);
+            $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbre_Dev_Lettres);
             //Signataire 1 : Suiveur de projet
             //TODO
             if ($etude->getAp()->getSignataire1() != NULL)
@@ -294,7 +294,6 @@ class TraitementController extends Controller {
             //Date Signature
             if($etude->getAp()->getDateSignature() != NULL)
                 $this->array_push_assoc($champs, 'Date_Signature_AP', $etude->getAp()->getDateSignature()->format("d/m/Y"));
-var_dump($champs);
         }
 
         //Phases
