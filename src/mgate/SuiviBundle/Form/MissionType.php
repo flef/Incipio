@@ -14,13 +14,6 @@ class MissionType extends DocTypeType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder
-            /*->add('intervenant','entity', 
-                array ('label' => 'Intervenant',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'property_path' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
-                       'required' => true))*/
             ->add('knownIntervenant', 'checkbox', array(
                 'required' => false,
                 'label' => "L'intervenant existe-t-il déjà dans la base de donnée ?"
