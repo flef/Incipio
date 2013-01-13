@@ -10,10 +10,9 @@ use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 
-class ApType extends DocTypeType {
+class ApType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        // DocTypeType::buildForm($builder, $options);
         $builder->add('suiveur', 'entity', array('label' => 'Suiveur de projet',
                     'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                     'property' => 'prenomNom',
@@ -22,17 +21,16 @@ class ApType extends DocTypeType {
                         return $pr->getMembreOnly();
                     },
                     'required' => false))
-                ->add('ap', new DocTypeType('Ap', $options['prospect']), array('label' => ' ')) //<- astuce !
-                ->add('fraisDossier', 'integer', array('label' => 'Frais de dossier'))
-                ->add('presentationProjet', 'textarea', array('label' => 'Présentation du projet'))
-                ->add('descriptionPrestation', 'textarea', array('label' => 'Description de la prestation proposée par M-GaTE'))
-                ->add('typePrestation', new PrestationType(), array('label' => 'Type de prestation'))
-                ->add('nbrDev', 'integer', array('label' => 'Nombre de developpeurs estimé'))
-                ->add('competences', 'textarea', array('label' => 'Capacité des intervenants:'));
+                ->add('ap', new SubApType(), array('label' => ' ', 'prospect'=>$options['prospect']))
+                ->add('fraisDossier', 'integer', array('label' => 'Frais de dossier', 'required' => false))
+                ->add('presentationProjet', 'textarea', array('label' => 'Présentation du projet', 'required' => false))
+                ->add('descriptionPrestation', 'textarea', array('label' => 'Description de la prestation proposée par M-GaTE', 'required' => false))
+                ->add('typePrestation', new PrestationType(), array('label' => 'Type de prestation', 'required' => false))
+                ->add('competences', 'textarea', array('label' => 'Capacité des intervenants:', 'required' => false));
     }
 
     public function getName() {
-        return 'alex_suivibundle_aptype';
+        return 'mgate_suivibundle_aptype';
     }
 
     public function getDefaultOptions(array $options) {
@@ -44,3 +42,22 @@ class ApType extends DocTypeType {
 
 }
 
+class SubApType extends DocTypeType {
+
+    public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
+        DocTypeType::buildForm($builder, $options);
+        $builder->add('nbrDev', 'integer', array('label' => 'Nombre de developpeurs estimé', 'required' => false));
+    }
+
+    public function getName() {
+        return 'mgate_suivibundle_subaptype';
+    }
+
+    public function getDefaultOptions(array $options) {
+        return array(
+            'data_class' => 'mgate\SuiviBundle\Entity\Ap',
+            'prospect' => '',
+        );
+    }
+
+}
