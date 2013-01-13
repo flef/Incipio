@@ -15,8 +15,7 @@ class DocTypeType extends AbstractType
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $pro=$options['prospect'];
-       
+        
         $builder
             ->add('version', 'integer', array('label'=>'Version du document'))
             ->add('signataire1', 'entity', 
@@ -27,8 +26,9 @@ class DocTypeType extends AbstractType
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));
 
-        if($options['type']!='mission')
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission')
         {
+            $pro=$options['prospect'];
             $builder->add('knownSignataire2', 'checkbox', array(
                 'required' => false,
                 'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
@@ -56,8 +56,7 @@ class DocTypeType extends AbstractType
     {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-            'prospest' => null,
-            'type' => null,
+            'prospect' => null,
         );
     }
 }
