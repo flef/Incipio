@@ -12,12 +12,10 @@ use mgate\PersonneBundle\Entity\Prospect as Prospect;
 
 class DocTypeType extends AbstractType
 {
-    private $type;
-    private $prospect;
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        $pro=$this->prospect;
+        $pro=$options['prospect'];
        
         $builder
             ->add('version', 'integer', array('label'=>'Version du document'))
@@ -29,7 +27,7 @@ class DocTypeType extends AbstractType
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));
 
-        if($this->type!='mission')
+        if($options['type']!='mission')
         {
             $builder->add('knownSignataire2', 'checkbox', array(
                 'required' => false,
@@ -49,12 +47,6 @@ class DocTypeType extends AbstractType
             
     }
     
-    public function __construct($type = null, $prospect = null)
-    {
-        $this->type = $type;
-        $this->prospect = $prospect;
-    }
-
     public function getName()
     {
         return 'alex_suivibundle_doctypetype';
@@ -62,16 +54,11 @@ class DocTypeType extends AbstractType
 
     public function getDefaultOptions(array $options)
     {
-        if($this->type==null)
-            return array(
-                'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-                /*'cascade_validation' => true,*/
-            );
-        else        
-            return array(
-                'data_class' => 'mgate\SuiviBundle\Entity\\'.$this->type,
-                /*'cascade_validation' => true,*/
-            );
+        return array(
+            'data_class' => 'mgate\SuiviBundle\Entity\DocType',
+            'prospest' => null,
+            'type' => null,
+        );
     }
 }
 
