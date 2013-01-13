@@ -89,12 +89,8 @@ class FactureAcompteController extends Controller
             throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
         }
         
-        
-       // $factureacompte = new Employe;
-       // $employe->setProspect($prospect);
-
-        $form        = $this->createForm(new FactureAcompteType, $etude);
-        
+  
+        $form = $this->createForm(new FactureAcompteType, $etude, array('prospect'=>$etude->getProspect()));
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
