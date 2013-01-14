@@ -110,7 +110,7 @@ class EtudeManager extends \Twig_Extension {
         
         return min($dateDebut);
     }
-
+    
     public function getDateFin(Etude $etude) {
         $dateFin = array();
         $phases = $etude->getPhases();
@@ -121,6 +121,11 @@ class EtudeManager extends \Twig_Extension {
            unset($dateDebut);
         }
         return max($dateFin);
+    }
+    
+        public function getDelaiEtude(Etude $etude)
+    {
+        return $this->getDateFin($etude)->diff($this->getDateLancement($etude));
     }
 
     public function getRepository() {
