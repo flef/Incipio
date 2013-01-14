@@ -157,7 +157,7 @@ class TraitementController extends Controller {
 
     private function getAllChamp($etude, $doc) {
         //TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
-        setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
+
 
 
         $phases = $etude->getPhases();
@@ -168,21 +168,32 @@ class TraitementController extends Controller {
         $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
         $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
         $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
-
         $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
 
         $Mois_Lancement = $this->nombreVersMois($this->get('mgate.etude_manager')->getDateLancement($etude)->format('m'));
         $Mois_Fin = $this->nombreVersMois($this->get('mgate.etude_manager')->getDateFin($etude)->format('m'));
+        $Delais_Semaines = $this->get('mgate.etude_manager')->getDelaiEtude($etude)->d / 7;
 
         //Etude
-        $Frais_HT = $etude->getFraisDossier();
-
-
-
-        //Autre
         $Taux_TVA = 19.6;
-        $Montant_TVA = round($Taux_TVA * $Montant_Total_HT / 100,2);
+        $Montant_TVA = $Taux_TVA * $Montant_Total_HT / 100;
+        $Frais_HT = $etude->getFraisDossier();
+        $Acompte_Pourcentage = $etude->getPourcentageAcompte();
+        $Acompte_HT = $Montant_Total_HT * $Acompte_Pourcentage / 100;
+        $Acompte_TTC = $Total_TTC * $Acompte_Pourcentage / 100;
+        $Acompte_TVA = $Montant_Total_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
+        $Solde_PVR_HT = $Montant_Total_HT - $Acompte_HT;
+        $Solde_PVR_TTC = $Total_TTC - $Acompte_TTC;
+
+        //Round
+        $Montant_TVA = round($Montant_TVA, 2);
+        $Acompte_HT = round($Acompte_HT, 2);
+        $Acompte_TTC = round($Acompte_TTC, 2);
+        $Acompte_TVA = round($Acompte_TVA, 2);
+        $Solde_PVR_HT = round($Solde_PVR_HT, 2);
+        $Solde_PVR_TTC = round($Solde_PVR_TTC, 2);
+
 
         //Conversion Lettre
         $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
@@ -190,12 +201,16 @@ class TraitementController extends Controller {
         $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC, 1);
         $Montant_TVA_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_TVA, 1);
 
-        $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT);
+        $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT, 1);
+        $Acompte_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_HT, 1);
+        $Acompte_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_TTC, 1);
+        $Acompte_TVA_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_TVA, 1);
+        $Solde_PVR_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Solde_PVR_HT, 1);
+        $Solde_PVR_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Solde_PVR_TTC, 1);
 
 
 
-
-        $champs = Array(
+        $champs = Array(//TODO : ça fait un peu dégueu les round ici...
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
             'Type_Prestation' => $etude->getTypePrestation(),
@@ -216,6 +231,18 @@ class TraitementController extends Controller {
             'Taux_TVA' => $Taux_TVA,
             'Montant_TVA' => $Montant_TVA,
             'Montant_TVA_Lettres' => $Montant_TVA_Lettres,
+            'Delais_Semaines' => $Delais_Semaines,
+            'Acompte_HT' => $Acompte_HT,
+            'Acompte_HT_Lettres' => $Acompte_HT_Lettres,
+            'Acompte_TTC' => $Acompte_TTC,
+            'Acompte_TTC_Lettres' => $Acompte_TTC_Lettres,
+            'Acompte_TVA' => $Acompte_TVA,
+            'Acompte_TVA_Lettres' => $Acompte_TVA_Lettres,
+            'Solde_PVR_HT' => $Solde_PVR_HT,
+            'Solde_PVR_TTC' => $Solde_PVR_TTC,
+            'Solde_PVR_HT_Lettres' => $Solde_PVR_HT_Lettres,
+            'Solde_PVR_TTC_Lettres' => $Solde_PVR_TTC_Lettres,
+            'Acompte_Pourcentage' => $Acompte_Pourcentage,
         );
 
         //Doc
@@ -224,8 +251,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Date_Signature', $etude->getDoc($doc)->getDateSignature()->format("d/m/Y"));
             //Signataire 1 : Signataire M-GaTE
             //if ($etude->getDoc($doc)->getSignataire1() != NULL) {
-                //$this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
-                //$this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire1()->getPoste());
+            //$this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
+            //$this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire1()->getPoste());
             //}
             //Signataire 2 : Signataire Client
             if ($etude->getDoc($doc)->getSignataire2() != NULL) {
@@ -233,13 +260,17 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire2()->getPoste());
             }
         }
-        
-         //Références
-            if($etude->getAp())
+
+
+        //Références
+        $this->array_push_assoc($champs, 'Reference_Etude', $this->get('mgate.etude_manager')->getRefEtude($etude));
+        if ($etude->getAp())
             $this->array_push_assoc($champs, 'Reference_AP', $this->get('mgate.etude_manager')->getRefDoc($etude, 'AP', $etude->getDoc('AP')->getVersion()));
-            if($etude->getCc())
+        if ($etude->getCc())
             $this->array_push_assoc($champs, 'Reference_CC', $this->get('mgate.etude_manager')->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
-          
+        if ($etude->getFactureAcompte())
+            $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
+
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -259,7 +290,7 @@ class TraitementController extends Controller {
             else
                 $this->array_push_assoc($champs, 'Tel_suiveur', $etude->getSuiveur()->getFix());
         }
-        //$etude = new \mgate\SuiviBundle\Entity\Etude;grgreha
+
         //Avant-Projet
         if ($etude->getAp() != NULL) {
             //Nombre dev
@@ -268,10 +299,16 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Nbre_Developpeurs', $Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbre_Dev_Lettres);
         }
-       
-        
+
+
         //Convention Client
-      
+        //Facture Acompte
+        if ($etude->getFactureAcompte() != NULL) {
+            $Date_Limite = clone $etude->getFactureAcompte()->getDateSignature();
+            $Date_Limite->modify('+ 30 day');
+            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+        }
+
 
         //Phases
         foreach ($phases as $phase) {
@@ -288,7 +325,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
-var_dump($champs);
+        var_dump($champs);
         return $champs;
     }
 
@@ -338,7 +375,7 @@ var_dump($champs);
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
         if (true)
-            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/CC.xml';
+            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/FA.xml';
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
 
