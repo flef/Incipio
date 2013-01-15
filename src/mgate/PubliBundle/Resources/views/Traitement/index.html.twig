@@ -1,3 +1,5 @@
+
+{% if nbreChampsNonRemplis > 0 %}
 Les champs suivant n'ont pas été correctement remplis<br/>
 <ul>
 
@@ -5,6 +7,11 @@ Les champs suivant n'ont pas été correctement remplis<br/>
     <li>{{loop.index}} - {{champs}}</li>
 {% endfor %}
 </ul>
+{% else %}
+Congrats, tous les champs sont remplis<br/>
+{% endif %}
+
+
 <form action="AP/telecharger" method="post" >
     <input type="submit" value="Telecharger"/>
 </form>
