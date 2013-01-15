@@ -273,7 +273,7 @@
                                 <w:sz w:val="24"/>
                                 <w:szCs w:val="24"/>
                             </w:rPr>
-                            <w:t>~Date_Emission~~</w:t>
+                            <w:t>~Date_Signature~~</w:t>
                         </w:r>
                        
                         <w:r w:rsidR="00F06BF7" w:rsidRPr="001B5D19">
@@ -333,7 +333,7 @@
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                             </w:rPr>
-                            <w:t>, nous vous prions de nous verser la somme de ~Acompte_TTC~~</w:t>
+                            <w:t>, nous vous prions de nous verser la somme de ~Acompte_TTC~~ €</w:t>
                         </w:r>
                         <w:r w:rsidR="00DC70DF" w:rsidRPr="001B5D19">
                             <w:rPr>
@@ -402,7 +402,7 @@
                                 <w:b/>
                                 <w:bCs/>
                             </w:rPr>
-                            <w:t>, correspondant au règlement de ~Acompte_Pourcentage~~</w:t>
+                            <w:t>, correspondant au règlement de ~Acompte_Pourcentage~~ %</w:t>
                         </w:r>
                     
                         <w:r w:rsidR="008869FD" w:rsidRPr="001B5D19">
@@ -768,7 +768,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Phase_~Phase_Index~~_Prix_JEH~~</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Prix_JEH~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -793,7 +793,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>Phase ~Phase_~Phase_Index~~_Prix_HT~~</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Prix_Phase_HT~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -905,7 +905,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Montant_Total_HT~~</w:t>
+                                        <w:t>~Montant_Total_JEH_HT~~ €</w:t>
                                     </w:r>
                                 
                                 </w:p>
@@ -1017,7 +1017,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Frais_HT~~</w:t>
+                                        <w:t>~Montant_Total_Frais_HT~~ €</w:t>
                                     </w:r>
                                     
                                 </w:p>
@@ -1147,7 +1147,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Total_HT~~</w:t>
+                                        <w:t>~Montant_Total_Etude_HT~~ €</w:t>
                                     </w:r>
                                   
                                 </w:p>
@@ -1228,7 +1228,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>TVA (19.6%) sur les encaissements</w:t>
+                                        <w:t>TVA (~Taux_TVA~~ %) sur les encaissements</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1259,7 +1259,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Total_TVA~~</w:t>
+                                        <w:t>~Part_TVA_Montant_Total_Etude~~ €</w:t>
                                     </w:r>
                                 
                                 </w:p>
@@ -1401,7 +1401,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Total_TTC~~</w:t>
+                                        <w:t>~Montant_Total_Etude_TTC~~ €</w:t>
                                     </w:r>
                                    
                                 </w:p>
@@ -1531,7 +1531,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Acompte_HT~~</w:t>
+                                        <w:t>~Acompte_HT~~ €</w:t>
                                     </w:r>
                                   
                                 </w:p>
@@ -1611,7 +1611,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>TVA (19.6%) sur les encaissements</w:t>
+                                        <w:t>TVA (~Taux_TVA~~ %) sur les encaissements</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1641,7 +1641,7 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Acompte_TVA~~</w:t>
+                                        <w:t>~Acompte_TVA~~ €</w:t>
                                     </w:r>
                                    
                                 </w:p>
@@ -1763,7 +1763,7 @@
                                             <w:b/>
                                             <w:noProof/>
                                         </w:rPr>
-                                        <w:t>~Acompte_TTC~~</w:t>
+                                        <w:t>~Acompte_TTC~~ €</w:t>
                                     </w:r>
                                     
                                 </w:p>
