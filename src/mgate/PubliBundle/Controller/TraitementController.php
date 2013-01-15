@@ -52,7 +52,10 @@ class TraitementController extends Controller {
 
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
             if ($values != NULL) {
-                $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $values, $templateXML);
+                if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
+                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->formaterNombre($values), $templateXML);
+                else
+                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $values, $templateXML);
             }
         }
 
@@ -158,34 +161,34 @@ class TraitementController extends Controller {
     private function getAllChamp($etude, $doc) {
 
         $phases = $etude->getPhases();
-        $nombrePhase = count($phases);
+        $nombrePhase = (int) count($phases);
 
         $date = date("d/m/Y");
 
         //EtudeManager
-        $Taux_TVA = 19.6;
-        $Montant_Total_JEH_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
-        $Montant_Total_Frais_HT = $etude->getFraisDossier();
-        $Montant_Total_Etude_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
-        $Montant_Total_Etude_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
-        $Part_TVA_Montant_Total_Etude = $Taux_TVA * $Montant_Total_Etude_HT / 100;
+        $Taux_TVA = (float) 19.6;
+        $Montant_Total_JEH_HT = (float) $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
+        $Montant_Total_Frais_HT = (float) $etude->getFraisDossier();
+        $Montant_Total_Etude_HT = (float) $this->get('mgate.etude_manager')->getTotalHT($etude);
+        $Montant_Total_Etude_TTC = (float) $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        $Part_TVA_Montant_Total_Etude = (float) $Taux_TVA * $Montant_Total_Etude_HT / 100;
 
 
-        $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
+        $Nbr_JEH = (int) $this->get('mgate.etude_manager')->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
 
         $Mois_Lancement = $this->nombreVersMois($this->get('mgate.etude_manager')->getDateLancement($etude)->format('m'));
         $Mois_Fin = $this->nombreVersMois($this->get('mgate.etude_manager')->getDateFin($etude)->format('m'));
-        $Delais_Semaines = $this->get('mgate.etude_manager')->getDelaiEtude($etude)->d / 7;
+        $Delais_Semaines = (int) $this->get('mgate.etude_manager')->getDelaiEtude($etude)->d / 7;
 
         //Etude
 
-        $Acompte_Pourcentage = $etude->getPourcentageAcompte();
-        $Acompte_HT = $Montant_Total_Etude_HT * $Acompte_Pourcentage / 100;
-        $Acompte_TTC = $Montant_Total_Etude_TTC * $Acompte_Pourcentage / 100;
-        $Acompte_TVA = $Montant_Total_Etude_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
-        $Solde_PVR_HT = $Montant_Total_Etude_HT - $Acompte_HT;
-        $Solde_PVR_TTC = $Montant_Total_Etude_TTC - $Acompte_TTC;
+        $Acompte_Pourcentage = (float) $etude->getPourcentageAcompte();
+        $Acompte_HT = (float) $Montant_Total_Etude_HT * $Acompte_Pourcentage / 100;
+        $Acompte_TTC = (float) $Montant_Total_Etude_TTC * $Acompte_Pourcentage / 100;
+        $Acompte_TVA = (float) $Montant_Total_Etude_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
+        $Solde_PVR_HT = (float) $Montant_Total_Etude_HT - $Acompte_HT;
+        $Solde_PVR_TTC = (float) $Montant_Total_Etude_TTC - $Acompte_TTC;
 
         //Round
         $Part_TVA_Montant_Total_Etude = round($Part_TVA_Montant_Total_Etude, 2);
@@ -248,12 +251,12 @@ class TraitementController extends Controller {
             //Date Signature tout type de doc
             $this->array_push_assoc($champs, 'Date_Signature', $etude->getDoc($doc)->getDateSignature()->format("d/m/Y"));
             //Signataire 1 : Signataire M-GaTE
-            //if ($etude->getDoc($doc)->getSignataire1() != NULL) {
-            //$this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
-            //$this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire1()->getPoste());
-            // }
+            if ($etude->getDoc($doc)->getSignataire1() != NULL) {
+            $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
+            $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPoste());
+            }
             //Signataire 2 : Signataire Client
-            if ($etude->getDoc($doc)->getSignataire2() != NULL) {
+            if ($etude->getDoc($doc)->getSignataire2() != NULL) {//TODO remplacer par Signataire_Client
                 $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire2()->getPrenomNom());
                 $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire2()->getPoste());
             }
@@ -313,9 +316,9 @@ class TraitementController extends Controller {
             $i = $phase->getPosition() + 1;
 
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', $phase->getNbrJEH());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', $phase->getPrixJEH());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', $phase->getNbrJEH() * $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', (int) $phase->getNbrJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', (float) $phase->getPrixJEH());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getDelai());
@@ -370,10 +373,12 @@ class TraitementController extends Controller {
         $champs = $this->getAllChamp($etude, $doc);
 
 
+
+
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-        if (true)
+        if (false)
             $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
@@ -391,7 +396,7 @@ class TraitementController extends Controller {
         //TODO idDocx.$doc
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut),'champsNonRemplis' => $champsBrut));
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut));
     }
 
     public function telechargerAction($docType = 'AP') {
@@ -415,7 +420,7 @@ class TraitementController extends Controller {
             echo 'fail';
         }
 
-        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'ololilioloiol'));
+        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => ' '));
     }
 
     //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de n = 1 jours
@@ -428,6 +433,15 @@ class TraitementController extends Controller {
             if (filemtime($filename) + $oldSec < time())
                 @unlink($filename);
         }
+    }
+
+    //Formate un nombre à la francaise ex 1 234,56 avec deux décimals 
+    //SEE_ALSO moneyformat LC_MONETARY fr_FR
+    private function formaterNombre($number) {
+        if (is_int($number)) // Si entier || partDec() == 0
+            return number_format($number, 0, ',', ' ');
+        else
+            return number_format($number, 2, ',', ' ');
     }
 
 }
