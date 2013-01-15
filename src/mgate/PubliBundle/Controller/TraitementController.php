@@ -156,18 +156,21 @@ class TraitementController extends Controller {
     }
 
     private function getAllChamp($etude, $doc) {
-        //TODO : remplacer getAP / getOM / ... par getDoc($doc,$numero=0)
-
-
 
         $phases = $etude->getPhases();
         $nombrePhase = count($phases);
+
         $date = date("d/m/Y");
 
         //EtudeManager
-        $Total_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
-        $Montant_Total_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
-        $Total_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        $Taux_TVA = 19.6;
+        $Montant_Total_JEH_HT = $this->get('mgate.etude_manager')->getTotalJEHHT($etude);
+        $Montant_Total_Frais_HT = $etude->getFraisDossier();
+        $Montant_Total_Etude_HT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+        $Montant_Total_Etude_TTC = $this->get('mgate.etude_manager')->getTotalTTC($etude);
+        $Part_TVA_Montant_Total_Etude = $Taux_TVA * $Montant_Total_Etude_HT / 100;
+
+
         $Nbr_JEH = $this->get('mgate.etude_manager')->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Nbr_JEH);
 
@@ -176,61 +179,56 @@ class TraitementController extends Controller {
         $Delais_Semaines = $this->get('mgate.etude_manager')->getDelaiEtude($etude)->d / 7;
 
         //Etude
-        $Taux_TVA = 19.6;
-        $Montant_TVA = $Taux_TVA * $Montant_Total_HT / 100;
-        $Frais_HT = $etude->getFraisDossier();
+
         $Acompte_Pourcentage = $etude->getPourcentageAcompte();
-        $Acompte_HT = $Montant_Total_HT * $Acompte_Pourcentage / 100;
-        $Acompte_TTC = $Total_TTC * $Acompte_Pourcentage / 100;
-        $Acompte_TVA = $Montant_Total_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
-        $Solde_PVR_HT = $Montant_Total_HT - $Acompte_HT;
-        $Solde_PVR_TTC = $Total_TTC - $Acompte_TTC;
+        $Acompte_HT = $Montant_Total_Etude_HT * $Acompte_Pourcentage / 100;
+        $Acompte_TTC = $Montant_Total_Etude_TTC * $Acompte_Pourcentage / 100;
+        $Acompte_TVA = $Montant_Total_Etude_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
+        $Solde_PVR_HT = $Montant_Total_Etude_HT - $Acompte_HT;
+        $Solde_PVR_TTC = $Montant_Total_Etude_TTC - $Acompte_TTC;
 
         //Round
-        $Montant_TVA = round($Montant_TVA, 2);
+        $Part_TVA_Montant_Total_Etude = round($Part_TVA_Montant_Total_Etude, 2);
         $Acompte_HT = round($Acompte_HT, 2);
         $Acompte_TTC = round($Acompte_TTC, 2);
         $Acompte_TVA = round($Acompte_TVA, 2);
         $Solde_PVR_HT = round($Solde_PVR_HT, 2);
         $Solde_PVR_TTC = round($Solde_PVR_TTC, 2);
 
-
         //Conversion Lettre
-        $Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_HT, 1);
-        $Montant_Total_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_HT, 1);
-        $Total_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Total_TTC, 1);
-        $Montant_TVA_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_TVA, 1);
+        $Montant_Total_Etude_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_Etude_HT, 1);
+        $Montant_Total_Etude_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_Etude_TTC, 1);
+        $Part_TVA_Montant_Total_Etude_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Part_TVA_Montant_Total_Etude, 1);
+        $Montant_Total_JEH_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_JEH_HT, 1);
 
-        $Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Frais_HT, 1);
+        $Montant_Total_Frais_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Montant_Total_Frais_HT, 1);
         $Acompte_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_HT, 1);
         $Acompte_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_TTC, 1);
         $Acompte_TVA_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Acompte_TVA, 1);
         $Solde_PVR_HT_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Solde_PVR_HT, 1);
         $Solde_PVR_TTC_Lettres = $this->get('mgate.conversionlettre')->ConvNumberLetter($Solde_PVR_TTC, 1);
 
-
-
-        $champs = Array(//TODO : ça fait un peu dégueu les round ici...
+        $champs = Array(
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
             'Type_Prestation' => $etude->getTypePrestation(),
             'Capacites_Dev' => $etude->getCompetences(),
             'Nbr_JEH_Total' => $Nbr_JEH,
             'Nbr_JEH_Total_Lettres' => $Nbr_JEH_Lettres,
-            'Total_HT' => $Total_HT,
-            'Montant_Total_HT' => $Montant_Total_HT,
-            'Total_TTC' => $Total_TTC,
-            'Total_HT_Lettres' => $Total_HT_Lettres,
-            'Montant_Total_HT_Lettres' => $Montant_Total_HT_Lettres,
-            'Total_TTC_Lettres' => $Total_TTC_Lettres,
-            'Frais_HT' => $Frais_HT,
-            'Frais_HT_Lettres' => $Frais_HT_Lettres,
+            'Montant_Total_JEH_HT' => $Montant_Total_JEH_HT,
+            'Montant_Total_JEH_HT_Lettres' => $Montant_Total_JEH_HT_Lettres,
+            'Montant_Total_Frais_HT' => $Montant_Total_Frais_HT,
+            'Montant_Total_Frais_HT_Lettres' => $Montant_Total_Frais_HT_Lettres,
+            'Montant_Total_Etude_HT' => $Montant_Total_Etude_HT,
+            'Montant_Total_Etude_HT_Lettres' => $Montant_Total_Etude_HT_Lettres,
+            'Montant_Total_Etude_TTC' => $Montant_Total_Etude_TTC,
+            'Montant_Total_Etude_TTC_Lettres' => $Montant_Total_Etude_TTC_Lettres,
+            'Taux_TVA' => $Taux_TVA,
+            'Part_TVA_Montant_Total_Etude' => $Part_TVA_Montant_Total_Etude,
+            'Part_TVA_Montant_Total_Etude_Lettres' => $Part_TVA_Montant_Total_Etude_Lettres,
             'Nbr_Phases' => $nombrePhase,
             'Mois_Lancement' => $Mois_Lancement,
             'Mois_Fin' => $Mois_Fin,
-            'Taux_TVA' => $Taux_TVA,
-            'Montant_TVA' => $Montant_TVA,
-            'Montant_TVA_Lettres' => $Montant_TVA_Lettres,
             'Delais_Semaines' => $Delais_Semaines,
             'Acompte_HT' => $Acompte_HT,
             'Acompte_HT_Lettres' => $Acompte_HT_Lettres,
@@ -253,7 +251,7 @@ class TraitementController extends Controller {
             //if ($etude->getDoc($doc)->getSignataire1() != NULL) {
             //$this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
             //$this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire1()->getPoste());
-            //}
+            // }
             //Signataire 2 : Signataire Client
             if ($etude->getDoc($doc)->getSignataire2() != NULL) {
                 $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire2()->getPrenomNom());
@@ -361,13 +359,14 @@ class TraitementController extends Controller {
     }
 
     //publication du doc
-    public function publiposterAction($id_etude, $doc = 'CC') {
+    public function publiposterAction($id_etude, $doc) {
 
 
 
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
+
         $champs = $this->getAllChamp($etude, $doc);
 
 
@@ -375,7 +374,7 @@ class TraitementController extends Controller {
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
         if (true)
-            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/FA.xml';
+            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
 
@@ -389,14 +388,15 @@ class TraitementController extends Controller {
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
+        //TODO idDocx.$doc
         $_SESSION['idDocx'] = $idDocx;
-        $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, 1);
-
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('champsNonRemplis' => $champsBrut));
+        $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut),'champsNonRemplis' => $champsBrut));
     }
 
     public function telechargerAction($docType = 'AP') {
-
+        $this->purge();
+        //TODO idDocx.$doc
         if (isset($_SESSION['idDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = (isset($_SESSION['refDocx']) ? $_SESSION['refDocx'] : $docType);
@@ -405,7 +405,7 @@ class TraitementController extends Controller {
 
             header('Content-Type: application/msword');
             header('Content-Length: ' . filesize($doc));
-            header('Content-disposition: attachment; filename=' . $doc);
+            header('Content-disposition: attachment; filename=' . $refDocx);
             header('Pragma: no-cache');
             header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
             header('Expires: 0');
@@ -414,7 +414,20 @@ class TraitementController extends Controller {
         } else {
             echo 'fail';
         }
+
         return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => 'ololilioloiol'));
+    }
+
+    //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de n = 1 jours
+    private function purge() {
+        $Patern = '*';
+        $oldSec = 86400; // = 1 Jours
+        $path = 'tmp/';
+        clearstatcache();
+        foreach (@glob($path . $Patern) as $filename) {
+            if (filemtime($filename) + $oldSec < time())
+                @unlink($filename);
+        }
     }
 
 }
