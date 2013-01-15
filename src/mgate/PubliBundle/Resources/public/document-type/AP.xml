@@ -492,7 +492,7 @@
                             <w:rPr>
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Calibri" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                             </w:rPr>
-                            <w:t>Obtenu en mars 2011, le label Junior-Entreprise garantit le sérieux et la maturité de notre structure. Avec un chiffre d'affaire de 38 000€, M-GaTE se distingue par son dynamisme et des processus bien établis et audités régul</w:t>
+                            <w:t>Obtenu en mars 2011, le label Junior-Entreprise garantit le sérieux et la maturité de notre structure. Avec un chiffre d'affaire de 38 000 €, M-GaTE se distingue par son dynamisme et des processus bien établis et audités régul</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -742,7 +742,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:lang w:eastAsia="ar-SA"/>
                             </w:rPr>
-                            <w:t>Le¤~Nbr_Developpeurs~~|s¤ réalisateur¤~Nbr_Developpeurs~~|s¤ de cette étude devr¤~Nbr_Developpeurs~~|ont|a¤ donc être capable de :</w:t>
+                            <w:t>Le¤~Nbre_Developpeurs~~|s¤ réalisateur¤~Nbre_Developpeurs~~|s¤ de cette étude devr¤~Nbre_Developpeurs~~|ont|a¤ donc être capable de :</w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00E641BC">
@@ -898,8 +898,8 @@
                             </w:rPr>
                         </w:pPr>
                     </w:p>
-					<w:bookmarkStart w:id="1" w:name="repeatSTART"/>
-                        <w:bookmarkEnd w:id="1"/>
+					<w:bookmarkStart w:id="1" w:name="repeatSTART1"/>
+                    <w:bookmarkEnd w:id="1"/>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00E641BC">
                         <w:pPr>
                             <w:rPr>
@@ -1005,8 +1005,8 @@
                             </w:rPr>
                         </w:pPr>
                     </w:p>
-					<w:bookmarkStart w:id="1" w:name="repeatEND"/>
-                        <w:bookmarkEnd w:id="1"/>
+					<w:bookmarkStart w:id="2" w:name="repeatEND1"/>
+                    <w:bookmarkEnd w:id="2"/>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00E641BC">
                         <w:pPr>
                             <w:pStyle w:val="PhaseSous-Titre"/>
@@ -1087,8 +1087,8 @@
                                 </w:p>
                             </w:tc>
                         </w:tr>
-												<w:bookmarkStart w:id="1" w:name="repeatSTART"/>
-                        <w:bookmarkEnd w:id="1"/>
+						<w:bookmarkStart w:id="3" w:name="repeatSTART2"/>
+                        <w:bookmarkEnd w:id="3"/>
                         <w:tr w:rsidR="00FB63AC">
                             <w:tc>
                                 <w:tcPr>
@@ -1137,8 +1137,8 @@
                                 </w:p>
                             </w:tc>
                         </w:tr>
-												<w:bookmarkStart w:id="1" w:name="repeatSTART"/>
-                        <w:bookmarkEnd w:id="1"/>
+						<w:bookmarkStart w:id="3" w:name="repeatEND2"/>
+                        <w:bookmarkEnd w:id="3"/>
                     </w:tbl>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00FB63AC">
                         <w:pPr>
@@ -1310,7 +1310,7 @@
                                 </w:p>
                             </w:tc>
                         </w:tr>
-						<w:bookmarkStart w:id="1" w:name="repeatSTART"/>
+						<w:bookmarkStart w:id="1" w:name="repeatSTART3"/>
                         <w:bookmarkEnd w:id="1"/>
                         <w:tr w:rsidR="00FB63AC">
                             <w:tc>
@@ -1342,7 +1342,7 @@
                                         <w:rPr>
                                             <w:lang w:val="en-US"/>
                                         </w:rPr>
-                                        <w:t>~Phase_~Phase_Index~~Nbre_JEH~~</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Nbre_JEH~~</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1360,7 +1360,7 @@
                                         <w:rPr>
                                             <w:lang w:val="en-US"/>
                                         </w:rPr>
-                                        <w:t>~Phase_~Phase_Index~~_Prix_JEH~~</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Prix_JEH~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1375,12 +1375,12 @@
                                         </w:rPr>
                                     </w:pPr>
                                     <w:r>
-                                        <w:t>~Phase_~Phase_Index~~_Prix_Phase~~</w:t>
+                                        <w:t>~Phase_~Phase_Index~~_Prix_Phase~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
                         </w:tr>
-						                        <w:bookmarkStart w:id="2" w:name="repeatEND"/>
+						<w:bookmarkStart w:id="2" w:name="repeatEND3"/>
                         <w:bookmarkEnd w:id="2"/>
                     </w:tbl>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00FB63AC">
@@ -1453,7 +1453,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t xml:space="preserve">~Nbr_Developpeurs~~ </w:t>
+                            <w:t xml:space="preserve">~Nbre_Developpeurs~~ </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1468,7 +1468,7 @@
                                 <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                 <w:b/>
                             </w:rPr>
-                            <w:t>¤~Nbr_Developpeurs~~|s¤</w:t>
+                            <w:t>¤~Nbre_Developpeurs~~|s¤</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -1532,14 +1532,14 @@
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t xml:space="preserve"> à ~Nbr_JEH_Total~~ (~Nbr_JEH_Total_Lettres~~) Jour-</w:t>
+                                        <w:t xml:space="preserve"> à ~Nbr_JEH_Total~~ (~Nbr_JEH_Total_Lettres~~) Jour¤~Nbr_JEH_Total~~|s¤-</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t>Étude Homme¤~Nbr_JEH_Total~~|s¤.</w:t>
+                                        <w:t>Étude Homme.</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1723,13 +1723,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>Montant des ~Nbr_JEH_Total~~ Jours-Etude Homme</w:t>
-                                    </w:r>
-                                    <w:r>
-                                        <w:rPr>
-                                            <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
-                                        </w:rPr>
-                                        <w:t>¤~Nbr_JEH_Total~~|s¤:</w:t>
+                                        <w:t>Montant des ~Nbr_JEH_Total~~ Jour¤~Nbr_JEH_Total~~|s¤-Etude Homme :</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1751,7 +1745,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>~Montant_Total_HT~~</w:t>
+                                        <w:t>~Montant_Total_JEH_HT~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1796,7 +1790,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>~Frais_HT~~</w:t>
+                                        <w:t>~Montant_Total_Frais_HT~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1885,7 +1879,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>~Total_HT~~</w:t>
+                                        <w:t>~Montant_Total_Etude_HT~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -1908,7 +1902,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>TVA (~TVA~~)</w:t>
+                                        <w:t>TVA (~Taux_TVA~~ %)</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
@@ -1945,7 +1939,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>~Montant_TVA~~</w:t>
+                                        <w:t>~Part_TVA_Montant_Total_Etude~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -2068,7 +2062,7 @@
                                             <w:b/>
                                             <w:bCs/>
                                         </w:rPr>
-                                        <w:t>~Total_TTC~~</w:t>
+                                        <w:t>~Montant_Total_Etude_TTC~~ €</w:t>
                                     </w:r>
                                 </w:p>
                             </w:tc>
@@ -2234,7 +2228,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">Jour-Etude Homme¤~Nbr_JEH_Total~~|s¤, soit </w:t>
+                            <w:t xml:space="preserve">Jour¤~Nbr_JEH_Total~~|s¤-Etude Homme, soit </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2243,17 +2237,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">~Total_HT~~ </w:t>
-                        </w:r>
-                        <w:r>
-                            <w:rPr>
-                                <w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
-                                <w:b/>
-                                <w:bCs/>
-                                <w:color w:val="000000"/>
-                                <w:lang w:eastAsia="ja-JP"/>
-                            </w:rPr>
-                            <w:t>HT (~Total_HT_Lettres~~ ho</w:t>
+                            <w:t xml:space="preserve">~Montant_Total_Etude_HT~~ € </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2263,7 +2247,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">rs taxes) </w:t>
+                            <w:t>HT (~Montant_Total_Etude_HT_Lettres~~ hors taxes)</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2271,7 +2255,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">dont ~Frais_HT~~ HT (~Frais_HT_Lettres~~ hors taxes) de frais de fonctionnement, soit </w:t>
+                            <w:t xml:space="preserve"> dont ~Montant_Total_Frais_HT~~ € HT (~Montant_Total_Frais_HT_Lettres~~ hors taxes) de frais de fonctionnement, soit </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2280,7 +2264,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t>~Total_TTC~~</w:t>
+                            <w:t>~Montant_Total_Etude_TTC~~ €</w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2290,7 +2274,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> TTC (~Total_TTC_Lettres~~ toutes taxes comprises) </w:t>
+                            <w:t xml:space="preserve"> TTC (~Montant_Total_Etude_TTC_Lettres~~ toutes taxes comprises) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2308,7 +2292,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve"> ~Montant_TVA~~ (~Montant_TVA_Lettres~~) </w:t>
+                            <w:t xml:space="preserve"> ~Part_TVA_Montant_Total_Etude~~ € (~Part_TVA_Montant_Total_Etude_Lettres~~) </w:t>
                         </w:r>
                         <w:r>
                             <w:rPr>
@@ -2326,7 +2310,7 @@
                                 <w:color w:val="000000"/>
                                 <w:lang w:eastAsia="ja-JP"/>
                             </w:rPr>
-                            <w:t xml:space="preserve">~TVA~~ du montant hors taxes. </w:t>
+                            <w:t xml:space="preserve">~Taux_TVA~~ % du montant hors taxes. </w:t>
                         </w:r>
                     </w:p>
                     <w:p w:rsidR="00FB63AC" w:rsidRDefault="00FB63AC">
@@ -2385,7 +2369,7 @@
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>À Gardanne, le ~date~~,</w:t>
+                                        <w:t>À Gardanne, le ~Date_Signature~~,</w:t>
                                     </w:r>
                                 </w:p>
                                 <w:p w:rsidR="00FB63AC" w:rsidRDefault="00FB63AC">
@@ -2443,13 +2427,13 @@
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                             <w:b/>
                                         </w:rPr>
-                                        <w:t>~Nom_signataire~~</w:t>
+                                        <w:t>~Nom_Signataire~~</w:t>
                                     </w:r>
                                     <w:r>
                                         <w:rPr>
                                             <w:rFonts w:asciiTheme="minorHAnsi" w:eastAsia="Times New Roman" w:hAnsiTheme="minorHAnsi" w:cstheme="minorHAnsi"/>
                                         </w:rPr>
-                                        <w:t>, ~Fonction_signataire~~</w:t>
+                                        <w:t>, ~Fonction_Signataire~~</w:t>
                                     </w:r>
                                 </w:p>
                                 <w:p w:rsidR="00FB63AC" w:rsidRDefault="00E641BC">
