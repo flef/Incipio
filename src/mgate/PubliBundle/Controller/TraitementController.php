@@ -164,6 +164,7 @@ class TraitementController extends Controller {
         $nombrePhase = (int) count($phases);
 
         $date = date("d/m/Y");
+        
 
         //EtudeManager
         $Taux_TVA = (float) 19.6;
@@ -252,8 +253,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Date_Signature', $etude->getDoc($doc)->getDateSignature()->format("d/m/Y"));
             //Signataire 1 : Signataire M-GaTE
             if ($etude->getDoc($doc)->getSignataire1() != NULL) {
-            $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
-            $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPoste());
+                $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
+                $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPoste());
             }
             //Signataire 2 : Signataire Client
             if ($etude->getDoc($doc)->getSignataire2() != NULL) {//TODO remplacer par Signataire_Client
@@ -326,7 +327,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
-        var_dump($champs);
+        //var_dump($champs);
         return $champs;
     }
 
@@ -363,16 +364,10 @@ class TraitementController extends Controller {
 
     //publication du doc
     public function publiposterAction($id_etude, $doc) {
-
-
-
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
-
         $champs = $this->getAllChamp($etude, $doc);
-
-
 
 
         //debug
@@ -386,17 +381,27 @@ class TraitementController extends Controller {
         $champsBrut = $this->verifierTemplate($templateXMLtraite);
 
         $repertoire = 'tmp';
-        $idDocx = (int) strtotime("now") + rand();
+        
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
+        $idDocx = $refDocx.'-'.((int) strtotime("now") + rand());
+        
         if (!file_exists($repertoire))
             mkdir($repertoire/* ,0700 */);
         $handle = fopen($repertoire . '/' . $idDocx, "w+");
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
-        //TODO idDocx.$doc
+        
+        
+        //TODO idDocx.$doc 
+        
+        //$telechargerUrl = $this->generateUrl('mgate_publi_telecharger', array('id_etude' => $id_etude, 'doc' => $doc));
+        
+        
         $_SESSION['idDocx'] = $idDocx;
-        $_SESSION['refDocx'] = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut));
+        $_SESSION['refDocx'] = $refDocx;
+        
+        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
     }
 
     public function telechargerAction($docType = 'AP') {
@@ -420,7 +425,7 @@ class TraitementController extends Controller {
             echo 'fail';
         }
 
-        return $this->render('mgatePubliBundle:Default:index.html.twig', array('name' => ' '));
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)) );
     }
 
     //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de n = 1 jours
@@ -438,7 +443,7 @@ class TraitementController extends Controller {
     //Formate un nombre à la francaise ex 1 234,56 avec deux décimals 
     //SEE_ALSO moneyformat LC_MONETARY fr_FR
     private function formaterNombre($number) {
-        if (is_int($number)) // Si entier || partDec() == 0
+        if (is_int($number)) // Si entier
             return number_format($number, 0, ',', ' ');
         else
             return number_format($number, 2, ',', ' ');

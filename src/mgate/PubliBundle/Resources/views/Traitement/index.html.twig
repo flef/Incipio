@@ -4,6 +4,8 @@ Les champs suivant n'ont pas été correctement remplis<br/>
 <ul>
 
 {% for champs in champsNonRemplis %}
+    
+    
     <li>{{loop.index}} - {{champs}}</li>
 {% endfor %}
 </ul>
@@ -12,6 +14,6 @@ Congrats, tous les champs sont remplis<br/>
 {% endif %}
 
 
-<form action="AP/telecharger" method="post" >
+<form action="{{ path('mgate_publi_telecharger')}}" method="post" >
     <input type="submit" value="Telecharger"/>
 </form>
