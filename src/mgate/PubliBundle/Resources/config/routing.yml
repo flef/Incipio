@@ -6,9 +6,12 @@ mgate_publi_homepage:
 mgate_publi_publiposter:
     pattern: /publi/publiposter/{id_etude}/{doc}
     defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
+    requirements:
+        id_etude:  \d+
+        doc: AP|CC|FA
     
 mgate_publi_telecharger:
-    pattern: /publi/publiposter/{id_etude}/{doc}/telecharger
+    pattern: /publi/publiposter/telecharger
     defaults: {_controller: mgatePubliBundle:Traitement:telecharger}
     
 mgate_publi_documenttype_upload:
