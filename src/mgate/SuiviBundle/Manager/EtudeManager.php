@@ -27,6 +27,8 @@ class EtudeManager extends \Twig_Extension {
             'getRefEtude' => new \Twig_Function_Method($this, 'getRefEtude'),
             'getTotalHT' => new \Twig_Function_Method($this, 'getTotalHT'),
             'getNbrJEH' => new \Twig_Function_Method($this, 'getNbrJEH'),
+            'getDateLancement' => new \Twig_Function_Method($this, 'getDateLancement'),
+            'getDateFin' => new \Twig_Function_Method($this, 'getDateFin'),
         );
     }
 
@@ -55,7 +57,7 @@ class EtudeManager extends \Twig_Extension {
      * Get montant total TTC
      */
     public function getTotalTTC(Etude $etude) {
-        return round($this->getTotalHT($etude) * (1 + $this->tva),2);
+        return round($this->getTotalHT($etude) * (1 + $this->tva), 2);
     }
 
     /**
@@ -106,27 +108,34 @@ class EtudeManager extends \Twig_Extension {
     public function getDateLancement(Etude $etude) {
         $dateDebut = array();
         $phases = $etude->getPhases();
+        if (count($phases) > 0) {
+            foreach ($phases as $phase)
+                array_push($dateDebut, $phase->getDateDebut());
 
-        foreach ($phases as $phase)
-            array_push($dateDebut, $phase->getDateDebut());
-        
-        return min($dateDebut);
+            return min($dateDebut);
+        } else {
+            return NULL;
+        }
     }
-    
+
     public function getDateFin(Etude $etude) {
         $dateFin = array();
         $phases = $etude->getPhases();
 
-        foreach ($phases as $p) {
-           $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
-           array_push($dateFin, $dateDebut->modify('+'.$p->getDelai() . ' day'));
-           unset($dateDebut);
+        if (count($phases) > 0) {
+            foreach ($phases as $p) {
+                $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
+                unset($dateDebut);
+            }
+
+            return max($dateFin);
+        } else {
+            return NULL;
         }
-        return max($dateFin);
     }
-    
-        public function getDelaiEtude(Etude $etude)
-    {
+
+    public function getDelaiEtude(Etude $etude) {
         return $this->getDateFin($etude)->diff($this->getDateLancement($etude));
     }
 
