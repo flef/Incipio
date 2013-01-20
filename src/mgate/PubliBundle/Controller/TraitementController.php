@@ -112,6 +112,7 @@ class TraitementController extends Controller {
         return $matches[1];
     }
 
+
     private function nombreVersMois($m) {
         $m %= 12;
         $mois = NULL;
@@ -352,11 +353,8 @@ class TraitementController extends Controller {
         $request = $this->get('request');
 
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
-            echo 'DocumentType[name=' . $doc . '] non trouvé: on utilise un asset<br /><br />';
             $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml';
-            //throw $this->createNotFoundException('DocumentType[name=' . $doc . '] inexistant');
         } else {
-            echo 'DocumentType uploadé trouvé<br /><br />';
             $chemin = $documenttype->getWebPath();
         }
         return $chemin;
@@ -391,11 +389,6 @@ class TraitementController extends Controller {
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
-        
-        
-        //TODO idDocx.$doc 
-        
-        //$telechargerUrl = $this->generateUrl('mgate_publi_telecharger', array('id_etude' => $id_etude, 'doc' => $doc));
         
         
         $_SESSION['idDocx'] = $idDocx;
