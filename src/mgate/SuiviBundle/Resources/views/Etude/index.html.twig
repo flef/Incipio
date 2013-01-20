@@ -3,24 +3,119 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Accueil - {{ parent() }}
+Accueil - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-
-    <h2>Liste des études</h2>
-
-    <ul>
+<style>
+  .ttip {
+    position: relative;
+    text-decoration: none;
+  }
+  .ttip:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 130%;
+    left: 20%;
+    background: #849E2C;
+    padding: 5px 15px;
+    color: black;
+    -webkit-border-radius: 10px;
+    -moz-border-radius   : 10px;
+    border-radius        : 10px;
+    white-space: nowrap;
+    opacity: 0;
+  }
+  .ttip:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-top: 20px solid #849E2C;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    opacity: 0;
+    left: 30%;
+    bottom: 90%;
+  }
+  .ttip:hover:after {
+    bottom: 100%;
+  }
+  .ttip:hover:before {
+    bottom: 70%;
+  }
+  .ttip:hover:after, a:hover:before {
+    opacity: 1;
+  }
+</style>﻿
+Mes études en cours : (Suiveur)<br /><br />
+Mes études terminées : (Suiveur)<br /><br />
+Etudes en cours : (Admin)<br /><br />
+<table border="1">
+    <tr>
+        <td>
+            Statu
+        </td>
+        <td>
+            <div>Nom de l'étude</div>
+            <div>Référence</div>
+        </td>
+        <td>
+            <div>Client</div>
+            <div>Suiveur</div>
+        </td>
+        <td>
+            Avancement
+        </td>
+        <td>
+            Developpeurs
+        </td>
+        <td>
+            <div>Prix H.T</div>
+            <div>Nbre J.E.H.</div>
+        </td>
+    </tr>
+    <!-- Juste un exemple Pour test.... -->
+    {% set valider = "http://passagestecroix.ek.la/images/menubar/icon_tick.png" %}
+    {% set Nvalider = "http://www.neuroscoop.net/images_communes/croix_rouge3D.png" %}
+    {% set options = " no-repeat 0 0.32em ; list-style-type: none; padding-left: 20px;" %}
 
         {% for etude in etudes %}
-            <li>
-                <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> etude n°{{ etude.id }}</a>
-                {{ etude.prospect.nom }} - {{ etude.nom }}
-            </li>
-        {% else %}
-            <li>Pas (encore !) d'études</li>
+    <tr height="75px">
+        <td></td>
+        <td><div class="ttip" data-tooltip="{{ etude.description }}">{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }}</a></div></td>
+        <td><div>{{ etude.prospect.nom }}</div><div>{{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</div></td>
+        <td><div>
+                <ul>
+        {% if etude.ap.dateSignature|default('0') %}
+                        <li style="background: url({{ valider }}) {{ options }}">Avant Projet signé le {{ etude.ap.dateSignature|date("d/m/Y") }}</li>
+                            {% else %}
+                        <li style="background: url({{ Nvalider }}) {{ options }}">Avant Projet non signé</li>
+        {% endif %}
+             {% if etude.cc.dateSignature|default('0') %}
+                        <li style="background: url({{ valider }}) {{ options }}">Convention Client signée le {{ etude.cc.dateSignature|date("d/m/Y") }}</li>
+                            {% else %}
+                        <li style="background: url({{ Nvalider }}) {{ options }}">Convention Client non signée</li>
+
+       {% endif %} 
+
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <ul>
+             {% for mission in etude.missions %}
+                        <li><a href="#">{{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a></li>
+    {% endfor %}</ul>
+                </td>
+                <td>
+                    <div>{{ getTotalHT(etude)|default('') }} €</div>
+                    <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
+                </td>
+            </tr>
         {% endfor %}
-
-    </ul>
-
+        </table>
+<br />Etudes terminées : (Admin)<br />
+<br />
 {% endblock %}
+
