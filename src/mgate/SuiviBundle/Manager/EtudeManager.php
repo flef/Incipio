@@ -24,7 +24,9 @@ class EtudeManager extends \Twig_Extension {
     // Pour utiliser les fonctions depuis twig
     public function getFunctions() {
         return array(
-            'getRefEtude' => new \Twig_Function_Method($this, 'getRefEtude')
+            'getRefEtude' => new \Twig_Function_Method($this, 'getRefEtude'),
+            'getTotalHT' => new \Twig_Function_Method($this, 'getTotalHT'),
+            'getNbrJEH' => new \Twig_Function_Method($this, 'getNbrJEH'),
         );
     }
 

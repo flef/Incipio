@@ -16,16 +16,16 @@
     </div>
 
     <p>
-        Suiveur: {{suiveur.nom}} {{suiveur.prenom}} <br>
-        Téléphone: {{suiveur.mobile}} <br>
-        Mail: {{suiveur.email}}
+        Suiveur: {{suiveur.nom| default('')}} {{suiveur.prenom| default('')}} <br>
+        Téléphone: {{suiveur.mobile| default('')}} <br>
+        Mail: {{suiveur.email| default('')}}
     </p>
     <p>
-    Prospect: {{prospect.nom}} <br>
-    Entité sociale: {{prospect.entite}} <br>
-    Adresse: {{prospect.adresse}} <br>
-    <li>Nom signataire: {{ signataire2.prenomNom }} {{ signataire2.prenomNom }}<br>
-        Fonction signataire: {{ signataire2.poste }}
+    Prospect: {{prospect.nom| default('')}} <br>
+    Entité sociale: {{prospect.entite| default('')}} <br>
+    Adresse: {{prospect.adresse| default('')}} <br>
+    <li>Nom signataire: {{ signataire2.prenomNom | default('') }} {{ signataire2.prenomNom | default('')}}<br>
+        Fonction signataire: {{ signataire2.poste | default('')}}
     </li> 
 
     
