@@ -401,7 +401,17 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
         
-        return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+        
+        if(count($champsBrut))
+        {
+          return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));  
+        }
+        else
+        {
+           return $this->telechargerAction($doc);
+        }
+        
+        
     }
 
     public function telechargerAction($docType = 'AP') {
