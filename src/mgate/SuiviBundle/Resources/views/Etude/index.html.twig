@@ -9,22 +9,22 @@ Accueil - {{ parent() }}
 {% block content_bundle %}
 
 <!-- idem just pour test -->
-    Mes études en cours : (Suiveur)<br /><br />
-    Mes études terminées : (Suiveur)<br /><br />
-    Etudes en cours : (Admin)<br /><br />
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Status
-                </th>
-                <th>
-        <div>Nom de l'étude</div>
-        <div>Référence</div>
-    </th>
-    <th>
-    <div>Client</div>
-    <div>Suiveur</div>
+Mes études en cours : (Suiveur)<br /><br />
+Mes études terminées : (Suiveur)<br /><br />
+Etudes en cours : (Admin)<br /><br />
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Status
+            </th>
+            <th>
+    <div>Nom de l'étude</div>
+    <div>Référence</div>
+</th>
+<th>
+<div>Client</div>
+<div>Suiveur</div>
 </th>
 <th>
 <div>Date de Lancement</div>
@@ -51,13 +51,32 @@ Accueil - {{ parent() }}
         {% for etude in etudes %}
     <tr>
         <td></td>
-        <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }}</a></div></td>
-        <td><div>{{ etude.prospect.nom }}</div><div>{{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</div></td>
+        <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
+        <td><div class="btn-group" style="width : 100%">
+                <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
+                <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="i"></i>Commenter</a></li>
+                </ul>
+            </div>
+            <br /><br />
+            <div class="btn-group" style="width : 100%">
+                <a class="btn btn-success" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</a>
+                <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                </ul>
+            </div>
+
+
+            <div></div></td>
         <td>
             {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
             {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
-        </td>
-        <td><div>
+            </td>
+            <td><div>
                     <ul>
         {% if etude.ap.dateSignature|default('0') %}
                             <li style="background: url({{ valider }}) {{ options }}">Avant Projet signé le {{ etude.ap.dateSignature|date("d/m/Y") }}</li>
@@ -75,31 +94,34 @@ Accueil - {{ parent() }}
                     </div>
                 </td>
                 <td>
-                    <ul>
+
              {% for mission in etude.missions %}
-                                <div class="btn-group">
-  <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
-  <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-  <ul class="dropdown-menu">
-    <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-    <li class="divider"></li>
-    <li><a href="#"><i class="i"></i> autre</a></li>
-  </ul>
-</div>
-                                
-                                
-                                </li>
-    {% endfor %}</ul>
-                    </td>
-                    <td>
-                        <div>{{ getTotalHT(etude)|default('') }} €</div>
-                        <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
-                    </td>
-                </tr>
+                    <div class="btn-group" style="width : 100%">
+                        <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i class="i"></i> autre</a></li>
+                        </ul>
+                    </div>
+                    {% if loop.index != loop.last %}
+                    <br /><br />
+                    {% endif %}
+
+
+
+    {% endfor %}
+                </td>
+                <td>
+                    <div>{{ getTotalHT(etude)|default('') }} €</div>
+                    <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
+                </td>
+            </tr>
         {% endfor %}
-            </tbody>
-        </table>
-        <br />Etudes terminées : (Admin)<br />
-        <br />
+        </tbody>
+    </table>
+    <br />Etudes terminées : (Admin)<br />
+    <br />
 {% endblock %}
 
