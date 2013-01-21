@@ -112,45 +112,215 @@ Affichage d'une étude - {{ parent() }}
                 <div class="row">
 
                     <div class="span4">
-                        <p>
-                        <h3>-Avant-Projet:</h3>
+                        <table class="table table-striped table-bordered">
+                            <tr>
+                                <th colspan="2">
+                            <div class="btn-group btn-large">
+                                <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Avant Projet <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
+                                    <li class="divider"></li>
+                                    {% if etude.ap|default('0') %}
+                                    <li><a href="{{ path('mgateSuivi_ap_generer', {'id': etude.id}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+                                   {% endif %} 
+                                   {% if etude.ap.generer|default('0') %}
+                                    <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi</a></li>
+                                   {% endif %} 
+                                </ul>
+                            </div></th>
+                            </tr>
+                            <tr>
+                                <th>Version</th>
+                                <td>{{etude.ap.version | default('')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Date de signature</th>
+                                <td>
+                                {% if etude.ap and etude.ap.dateSignature %} 
+                                {{etude.ap.dateSignature | date("d/m/Y") }}
+                                {% else %}
+                                        Non signé
+                                {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Nombre de dev. estimé</th>
+                                    <td>{{ etude.ap.nbrDev }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Présentation du projet</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Type de prestation</th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th>Capacité des intervenants</th>
+                                    <td></td>
+                                </tr>
+                            </table>
 
-                        <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}">Rédiger l'Avant-Projet</a></li>
-        {% if etude.ap|default('0') %}
-                        <li><a href="{{ path('mgateSuivi_ap_generer', {'id': etude.id}) }}">Generer l'Avant-Projet</a></li>
-        {% endif %} 
-        {% if etude.ap.generer|default('0') %}
-                        <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi de l'Avant-Projet</a></li>
-        {% endif %} 
-                        </p>
-                    </div>
-                    <div class="span4">
-                        <p>
-                        <h3>-Convention Client:</h3>
-                        <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}">Rédiger la Convention Client</a></li>
+
+
+                            </p>
+                        </div>
+                        <div class="span4">
+                            <table class="table table-striped table-bordered">
+                                <tr>
+                                    <th colspan="2">
+                                <div class="btn-group btn-large">
+                                    <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Convention Client <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+                                        <li class="divider"></li>
         {% if etude.cc|default('0') %}
-                        <li><a href="{{ path('mgateSuivi_cc_generer', {'id': etude.id}) }}">Generer la Convention Client</a></li>
+                                        <li><a href="{{ path('mgateSuivi_cc_generer', {'id': etude.id}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
         {% endif %} 
         {% if etude.cc.generer|default('0') %}
-                        <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi de la Convention Client</a></li>
+                                        <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi</a></li>
         {% endif %} 
-                        </p>
-                    </div>
-                    <div class="span4">
-                        <p>
-                        <h3>Récapitulatif de Mission:</h3>
-    {% for mission in etude.missions %}
-                        <li>{{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }} <a href="{{ path('mgateSuivi_mission_rediger', {'id': mission.id}) }}">Rédiger l'RM</a></li>
-    {% endfor %}
-                        <a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}">Modifier les Intervenants</a>
-                        </p>
+                                    </ul>
+                                </div></th>
+                                </tr>
+                                <tr>
+                                    <th>Version</th>
+                                    <td>{{etude.cc.version | default('')}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Date de signature</th>
+                                    <td>
+                                {% if etude.cc and etude.cc.dateSignature %} 
+                                {{etude.cc.dateSignature | date("d/m/Y") }}
+                                {% else %}
+                                            Non signé
+                                {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Signataire Client</th>
+                                        <td>{{etude.cc.signataire2.prenomnom | default('')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Acompte</th>
+                                        <td>{{etude.acompte | default('')}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Pourcentage Acompte</th>
+                                        <td>{{etude.pourcentageAcompte | default('')}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="span4">
+                                <table class="table table-striped table-bordered">
+                                    <tr>
+                                        <th>
+                                    <div class="btn-group btn-large">
+                                        <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Récapitulatif de Mission <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Modifier les Intervenants</a></li>
+                                        </ul>
+                                    </div></th>
+                                    </tr>
+                                    {% for mission in etude.missions %}
+                                    <tr>
+                                        <td>
+                                            <div class="btn-group" style="width : 100%">
+                                                <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
+                                                <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a href="{{ path('mgateSuivi_mission_rediger', {'id': mission.id}) }}">Rédiger l'RM</a></li>
+                                                    <li class="divider"></li>
+                                                    <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                                                </ul>
+                                            </div>
+                                            rajouter signé or not
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                            <div class="span4">
+                                <table class="table table-striped table-bordered">
+                                    <tr>
+                                        <th colspan="2">
+                                    <div class="btn-group btn-large">
+                                        <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Facture d'Acompte <span class="caret"></span></button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="{{ path('mgateSuivi_factureacompte_modifier', {'id': etude.id}) }}">Modifier la Facture d'Acompte</a></li>
+                                        </ul>
+                                    </div></th>
+                                    </tr>
+                                    <tr>
+                                        <th>Date de signature</th>
+                                        <td>
+                                {% if etude.FactureAcompte and etude.FactureAcompte.dateSignature %} 
+                                {{etude.FactureAcompte.dateSignature | date("d/m/Y") }}
+                                {% else %}
+                                                Non signé
+                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Montant Total H.T</th>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Acompte versé H.T</th>
+                                            <td></td>
+                                        </tr>
 
-                    </div>
-                    <div class="span4">
-                        <p>
-                        <h3>Facture d'Acompte:</h3>
-                        <li><a href="{{ path('mgateSuivi_factureacompte_modifier', {'id': etude.id}) }}">Modifier la Facture d'Acompte</a></li>
-                        </p>
+                                    </table>
+                                </div>
+                            </div>
+
+
+
+
+                            <p>
+                            <h3>PVI:</h3>
+    {% for pvi in etude.pvis %}
+                            <li><a href="{{ path('mgateSuivi_pvi_modifier', {'id': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
+    {% endfor %}
+                            <a href="{{ path('mgateSuivi_pvi_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a>
+                            </p>
+                            <p>
+                            <h3>PVR:</h3>
+    {% for pvr in etude.pvrs %}
+                            <li><a href="{{ path('mgateSuivi_pvr_modifier', {'id': pvr.id}) }}">PVR n°{{pvr.id}}</a></li>
+    {% endfor %}
+                            <a href="{{ path('mgateSuivi_pvr_ajouter', {'id': etude.id}) }}">Ajouter un PVR</a>
+                            </p>
+                            <p>
+                            <h3>Facture de Solde:</h3>
+                            <li><a href="{{ path('mgateSuivi_facturesolde_modifier', {'id': etude.id}) }}">Modifier la Facture de Solde</a></li>
+                            </p>
+                            <p>
+                            <h3>Factures:</h3>
+    {% for facture in etude.factures %}
+                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Facture n°{{facture.id}}</a></li>
+    {% endfor %}
+                            <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture</a>
+                            </p>
+                            <p>
+                            <h3>Avenants:</h3>
+    {% for av in etude.avs %}
+                            <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+    {% endfor %}
+                            <a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a>
+                            </p>
+                            <p>
+                            <h3>Avenants au Récapitulatif de Mission:</h3>
+    {% for av in etude.avMissions %}
+                            <li><a href="{{ path('mgateSuivi_avmission_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+    {% endfor %}
+                            <a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -158,55 +328,9 @@ Affichage d'une étude - {{ parent() }}
 
 
                 <p>
-                <h3>PVI:</h3>
-    {% for pvi in etude.pvis %}
-                <li><a href="{{ path('mgateSuivi_pvi_modifier', {'id': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
-    {% endfor %}
-                <a href="{{ path('mgateSuivi_pvi_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a>
-                </p>
-                <p>
-                <h3>PVR:</h3>
-    {% for pvr in etude.pvrs %}
-                <li><a href="{{ path('mgateSuivi_pvr_modifier', {'id': pvr.id}) }}">PVR n°{{pvr.id}}</a></li>
-    {% endfor %}
-                <a href="{{ path('mgateSuivi_pvr_ajouter', {'id': etude.id}) }}">Ajouter un PVR</a>
-                </p>
-                <p>
-                <h3>Facture de Solde:</h3>
-                <li><a href="{{ path('mgateSuivi_facturesolde_modifier', {'id': etude.id}) }}">Modifier la Facture de Solde</a></li>
-                </p>
-                <p>
-                <h3>Factures:</h3>
-    {% for facture in etude.factures %}
-                <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Facture n°{{facture.id}}</a></li>
-    {% endfor %}
-                <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture</a>
-                </p>
-                <p>
-                <h3>Avenants:</h3>
-    {% for av in etude.avs %}
-                <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
-    {% endfor %}
-                <a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a>
-                </p>
-                <p>
-                <h3>Avenants au Récapitulatif de Mission:</h3>
-    {% for av in etude.avMissions %}
-                <li><a href="{{ path('mgateSuivi_avmission_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
-    {% endfor %}
-                <a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-
-
-
-    <p>
-        <br />
-        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
-        <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
+                    <br />
+                    <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
+                    <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
 
  {#  
         <li>
@@ -216,6 +340,6 @@ Affichage d'une étude - {{ parent() }}
             </form>
         </li>
 #}	
-    </p>
+                </p>
 
 {% endblock %}
