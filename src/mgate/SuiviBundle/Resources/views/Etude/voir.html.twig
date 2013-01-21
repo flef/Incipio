@@ -39,8 +39,12 @@ Affichage d'une étude - {{ parent() }}
             </p>
         </div>
         <div class="tab-pane" id="tab2">
-            <p>
-            <h3>Phases:</h3>
+           <div class="btn-group btn-large">
+                                <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Phases <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les Phases</a></li>
+                                </ul>
+                            </div>
             <div class="row">
 
     {% for phase in etude.phases %}
@@ -104,9 +108,6 @@ Affichage d'une étude - {{ parent() }}
 
 
                 </div>
-                </p>
-                <br />
-                <a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les Phases</a>
             </div>
             <div class="tab-pane" id="tab3">
                 <div class="row">
@@ -199,7 +200,7 @@ Affichage d'une étude - {{ parent() }}
                                 {% else %}
                                             Non signé
                                 {% endif %}
-                                        </td>
+                                     </td>
                                     </tr>
                                     <tr>
                                         <th>Signataire Client</th>
@@ -228,7 +229,7 @@ Affichage d'une étude - {{ parent() }}
                                     </tr>
                                     {% for mission in etude.missions %}
                                     <tr>
-                                        <td>
+                                        <td colspan="2">
                                             <div class="btn-group" style="width : 100%">
                                                 <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
                                                 <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -238,8 +239,16 @@ Affichage d'une étude - {{ parent() }}
                                                     <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
                                                 </ul>
                                             </div>
-                                            rajouter signé or not
+                                            rajouter signé or not + progression
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date de signature</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Progression</th>
+                                        <td></td>
                                     </tr>
                                     {% endfor %}
                                 </table>
