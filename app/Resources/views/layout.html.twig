@@ -23,7 +23,8 @@
 {% endblock %}
 
 {% block javascript_quick %}
-            <script src="http://code.jquery.com/jquery-latest.js"></script>
+            <script src="{{ asset('js/jquery-latest.js') }}"></script>
+            <script src="{{ asset('js/jquery.tablesorter.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
 {% endblock %}
         </head>
