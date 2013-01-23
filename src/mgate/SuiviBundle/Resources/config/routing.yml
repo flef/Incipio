@@ -89,6 +89,12 @@ mgateSuivi_missions_modifier:
     requirements:
         id: \d+
         
+mgateSuivi_missions_generer:
+    pattern: /missions/generer/{id}
+    defaults: {_controller: mgateSuiviBundle:Missions:generer}
+    requirements:
+        id: \d+        
+        
 mgateSuivi_suivi_ajouter:
     pattern: /suivi/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Suivi:add}
