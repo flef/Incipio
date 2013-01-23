@@ -90,6 +90,19 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
+    //effectu les "liaisons" le/l' la/l' ... pattern : µde|d'|variableµ
+    private function liasons(&$templateXML) {
+        $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
+
+        $callback = function ($matches) {//Fonction de callback
+                   return (($this->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]).$matches[3];
+                };
+
+        $templateXML = preg_replace_callback($regexp, $callback, $templateXML);
+        return $templateXML;
+        //commenceParUneVoyelle
+    }
+
     //Traitement du template
     private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
         $templateXML = file_get_contents($templateFullPath); //récup contenu XML
@@ -97,6 +110,7 @@ class TraitementController extends Controller {
         $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
         $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
         $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
+        $this->liasons($templateXML); //liaisons de d'
 
         return $templateXML;
     }
@@ -112,6 +126,9 @@ class TraitementController extends Controller {
         return $matches[1];
     }
 
+    private function commenceParUneVoyelle($mot) {
+        return preg_match('#^[aeiouy]#', $mot);
+    }
 
     private function nombreVersMois($m) {
         $m %= 12;
@@ -163,9 +180,6 @@ class TraitementController extends Controller {
 
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
-
-        $date = date("d/m/Y");
-        
 
         //EtudeManager
         $Taux_TVA = (float) 19.6;
@@ -371,7 +385,7 @@ class TraitementController extends Controller {
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-        if (false)
+        if (true)
             $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
@@ -379,32 +393,27 @@ class TraitementController extends Controller {
         $champsBrut = $this->verifierTemplate($templateXMLtraite);
 
         $repertoire = 'tmp';
-        
+
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
-        $idDocx = $refDocx.'-'.((int) strtotime("now") + rand());
-        
+        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+
         if (!file_exists($repertoire))
             mkdir($repertoire/* ,0700 */);
         $handle = fopen($repertoire . '/' . $idDocx, "w+");
         fwrite($handle, $templateXMLtraite);
         fclose($handle);
 
-        
-        
+
+
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
-        
-        
-        if(count($champsBrut))
-        {
-          return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));  
+
+
+        if (count($champsBrut)) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+        } else {
+            return $this->telechargerAction($doc);
         }
-        else
-        {
-           return $this->telechargerAction($doc);
-        }
-        
-        
     }
 
     public function telechargerAction($docType = 'AP') {
@@ -428,7 +437,7 @@ class TraitementController extends Controller {
             echo 'fail';
         }
 
-        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)) );
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)));
     }
 
     //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de n = 1 jours

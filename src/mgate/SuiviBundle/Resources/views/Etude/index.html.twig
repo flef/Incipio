@@ -12,7 +12,7 @@ Accueil - {{ parent() }}
 Mes études en cours : (Suiveur)<br /><br />
 Mes études terminées : (Suiveur)<br /><br />
 Etudes en cours : (Admin)<br /><br />
-<table class="table table-striped">
+<table class="table table-striped" id="myTable">
     <thead>
         <tr>
             <th>
@@ -123,5 +123,25 @@ Etudes en cours : (Admin)<br /><br />
     </table>
     <br />Etudes terminées : (Admin)<br />
     <br />
+
+    <!--<script>
+$(document).ready(function() { 
+    $("table").tablesorter({ 
+        // pass the headers argument and assing a object 
+        headers: { 
+            // assign the secound column (we start counting zero) 
+            1: { 
+                // disable it by setting the property sorter to false 
+                sorter: false 
+            }, 
+            // assign the third column (we start counting zero) 
+            2: { 
+                // disable it by setting the property sorter to false 
+                sorter: false 
+            } 
+        } 
+    }); 
+});
+    </script>-->
 {% endblock %}
 
