@@ -359,6 +359,8 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs,'Nbre_JEH_Lettres',$this->get('mgate.conversionlettre')->ConvNumberLetter($mission->getNbjeh(), 1));
                 $this->array_push_assoc($champs, 'Date_Fin_Etude', $this->get('mgate.etude_manager')->getDateFin($etude)->format('j')." ".$Mois_Fin." ".$this->get('mgate.etude_manager')->getDateFin($etude)->format('o'));
                 $this->array_push_assoc($champs, 'Reference_CE', $this->get('mgate.etude_manager')->getRefDoc($etude,"CE",0));
+                $this->array_push_assoc($champs, 'Montant_JEH_Verse', $this->get('mgate.etude_manager')->getMontantVerse($etude));
+                $this->array_push_assoc($champs, 'Montant_JEH_Verse_Lettres', $this->get('mgate.conversionlettre')->ConvNumberLetter($this->get('mgate.etude_manager')->getMontantVerse($etude),1));
             }
         }
         //var_dump($champs);
