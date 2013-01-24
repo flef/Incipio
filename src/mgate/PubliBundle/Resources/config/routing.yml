@@ -8,7 +8,7 @@ mgate_publi_publiposter:
     defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
     requirements:
         id_etude:  \d+
-        doc: AP|CC|FA
+        doc: AP|CC|FA|RM
     
 mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger

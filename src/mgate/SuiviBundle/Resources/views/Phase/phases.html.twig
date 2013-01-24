@@ -7,6 +7,7 @@
 
 
 {% block content_bundle %}
+<!-- TODO : a dégager ces script !! -->
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
@@ -14,234 +15,288 @@
 <script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
-    
+<style>
+     input, textarea{
+         width: 95%;
+         height: 100%;
+         }
+         select{
+         width: 98%;
+         }
+
+</style>
+
+        
+
 
 <h2>Modifier les {{ form.phases | length  }} phases</h2>
 <form method="POST" {{ form_enctype(form) }}>
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
-        
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
-    <div class="boutonAdd"></div>
-    <u1 class="phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
+
+        <p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+        <div class="boutonAdd"></div>
+        <div class="row phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
         {# itere sur chaque tag existant et affiche son unique champ : name #}
         {% for phase in form.phases %}
-            <li>
-                <h4 class="titrePhase"></h4>{{ form_widget(phase) }}
-            </li><br />
+                <div class="span6">
+                    <table class="table table-striped table-bordered">
+                        <tr>
+                            <th colspan="2"><h5 class="titrePhase"></h5></th>
+                        </tr>
+                        <tr>
+                            <th>Titre</th>
+                            <td>{{  form_widget(phase.titre)}}</td>
+                        </tr>
+                        <tr>
+                            <th>Objectifs</th>
+                            <td>{{ form_widget(phase.objectif)}}</td>
+                        </tr>
+                        <tr>
+                            <th>Méthodologie</th>
+                            <td>{{ form_widget(phase.methodo)}}</td>
+                        </tr>
+                        <tr>
+                            <th>Validation</th>
+                            <td>
+                                    {{ form_widget(phase.validation)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Nombre JEH</th>
+                                <td>{{ form_widget(phase.nbrJEH)}}</td>
+                            </tr>
+                            <tr>
+                                <th>Prix JEH (€)</th>
+                                <td>{{ form_widget(phase.prixJEH)}}</td>
+                            </tr>
+                            <tr>
+                                <th>Date de Debut</th>
+                                <td>{{ form_widget(phase.dateDebut)}}</td>
+                            </tr>
+                            <tr>
+                                <th>Delai (Jours)</th>
+                                <td>{{ form_widget(phase.delai)}}</td>
+                            </tr>
+                            <tr>
+                                <th>Prix Phase</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
         {% endfor %}
-    </u1>
-    <br />
-    <div class="boutonAdd"></div>
-    {{ form_rest(form) }}
+                </div>
+                <br />
+                <div class="boutonAdd"></div>
+                <div class="boutonDel"></div>
+                <!--{#{ form_rest(form) }#}-->
 
+
+                <script type="text/javascript">
     
-<script type="text/javascript">
+                    // Fenetre resumant
+                    $.ui.dialog.prototype._oldinit = $.ui.dialog.prototype._init;
+                    $.ui.dialog.prototype._init = function() {
+                        $(this.element).parent().css('position', 'fixed');
+                        $(this.element).dialog("option",{
+                            resizeStop: function(event,ui) {
+                                var position = [(Math.floor(ui.position.left) - $(window).scrollLeft()),
+                                                (Math.floor(ui.position.top) - $(window).scrollTop())];
+                                $(event.target).parent().css('position', 'fixed');
+                                $(event.target).parent().dialog('option','position',position);
+                                return true;
+                            }
+                        });
+                        this._oldinit();
+                    };
+                    $(function() {
+                        $( "#dialog" ).dialog({
+                            position: { 
+                                  my: 'right center',
+                                  at: 'right center'
+                            },
+                            height:  $(window).height() * 0.7,
+                            width:  $(window).width() * 0.25
+                        });
+                    });
     
-    // Fenetre resumant
-    $.ui.dialog.prototype._oldinit = $.ui.dialog.prototype._init;
-    $.ui.dialog.prototype._init = function() {
-        $(this.element).parent().css('position', 'fixed');
-        $(this.element).dialog("option",{
-            resizeStop: function(event,ui) {
-                var position = [(Math.floor(ui.position.left) - $(window).scrollLeft()),
-                                (Math.floor(ui.position.top) - $(window).scrollTop())];
-                $(event.target).parent().css('position', 'fixed');
-                $(event.target).parent().dialog('option','position',position);
-                return true;
-            }
-        });
-        this._oldinit();
-    };
-    $(function() {
-        $( "#dialog" ).dialog({
-            position: { 
-                  my: 'right center',
-                  at: 'right center'
-            },
-            height:  $(window).height() * 0.7,
-            width:  $(window).width() * 0.25
-        });
-    });
+                    // Recupere le div qui contient la collection de tags
+                    var collectionHolder = $('.phases');
     
-    // Recupere le div qui contient la collection de tags
-    var collectionHolder = $('.phases');
+                    function updateOrder() {
+                        $('input.position').each(function(i) {
+                            $(this).val( i );
+                        });
+                        $('.titrePhase').each(function(i) {
+                            $(this).text( 'Phase n°'+(i+1) );
+                        });
+                    }
     
-    function updateOrder() {
-        $('input.position').each(function(i) {
-            $(this).val( i );
-        });
-        $('.titrePhase').each(function(i) {
-            $(this).text( 'Phase n°'+(i+1) );
-        });
-    }
-    
-    function updatePrix() {
-        var prix = 0;
-        var phase = 0;
+                    function updatePrix() {
+                        var prix = 0;
+                        var phase = 0;
         
-        $('input.nbrJEH').each(function(i1) {
-            phase=parseInt($(this).val());
+                        $('input.nbrJEH').each(function(i1) {
+                            phase=parseInt($(this).val());
             
-            $('input.prixJEH').each(function(i2) {
-                if(i1==i2)
-                phase*=parseInt($(this).val());           
-            });
-            if(!isNaN(phase))
-                prix+=phase;
-        });
+                            $('input.prixJEH').each(function(i2) {
+                                if(i1==i2)
+                                phase*=parseInt($(this).val());           
+                            });
+                            if(!isNaN(phase))
+                                prix+=phase;
+                        });
 
-       $('.prix').text( prix );
-    }
+                       $('.prix').text( prix );
+                    }
     
-    function updateNbrJEH() {
-        var nbrJEH = 0;
+                    function updateNbrJEH() {
+                        var nbrJEH = 0;
         
-        $('input.nbrJEH').each(function(i) {
-            if(!isNaN(parseInt($(this).val())))
-                nbrJEH+=parseInt($(this).val());
-        });
+                        $('input.nbrJEH').each(function(i) {
+                            if(!isNaN(parseInt($(this).val())))
+                                nbrJEH+=parseInt($(this).val());
+                        });
 
-       $('.nbrJEH').text( nbrJEH );
-    }
+                       $('.nbrJEH').text( nbrJEH );
+                    }
     
-    var isDirty = false;
+                    var isDirty = false;
 
-    jQuery(document).ready(function() {
+                    jQuery(document).ready(function() {
         
-        updateOrder();
-        updatePrix();
-        updateNbrJEH();     
+                        updateOrder();
+                        updatePrix();
+                        updateNbrJEH();     
         
-        //Verification avant de quitter
-        $(':input').change(function(){
-            if(!isDirty){
-               isDirty = true;
-            }
-        });
-        $(window).bind('beforeunload', function(){
-            if(isDirty)
-                return "Do you really want to leave now?";
-        });
-        $('form').submit(function() {
-            isDirty = false;
-            return true;
-        });
+                        //Verification avant de quitter
+                        $(':input').change(function(){
+                            if(!isDirty){
+                               isDirty = true;
+                            }
+                        });
+                        $(window).bind('beforeunload', function(){
+                            if(isDirty)
+                                return "Do you really want to leave now?";
+                        });
+                        $('form').submit(function() {
+                            isDirty = false;
+                            return true;
+                        });
         
-        //Rajout des boutons (X, up, down) pour les phases
-        collectionHolder.find('li').each(function() {
-            addPhaseBouton($(this));
-        });
+                        //Rajout des boutons (X, up, down) pour les phases
+                        collectionHolder.find('li').each(function() {
+                            addPhaseBouton($(this));
+                        });
         
-        //Ajouter le drag and drop
-        collectionHolder.sortable({
-            // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
-            axis: 'y',
+                        //Ajouter le drag and drop
+                        collectionHolder.sortable({
+                            // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
+                            //axis: 'y',
 
-            // Il faut cliquer sur cet element pour pouvoir initier le drag'n'drop
-            //handle: '.sort-button',
+                            // Il faut cliquer sur cet element pour pouvoir initier le drag'n'drop
+                            //handle: '.sort-button',
 
-            // Creons un joli trou style lors des deplacements
-            placeholder: 'ui-state-highlight',
-            forcePlaceholderSize: true,
+                            // Creons un joli trou style lors des deplacements
+                            placeholder: 'ui-state-highlight',
+                            forcePlaceholderSize: true,
 
-            // Cette fonction permet a  notre ligne de conserver son formatage lors du deplacement
-            // Pas vraiment utile, mais plus agreable
-            helper: function(e, tr)
-            {
-              var $originals = tr.children();
-              var $helper = tr.clone();
-              $helper.children().each(function(index)
-              {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width())
-              });
-              return $helper;
-            },
+                            // Cette fonction permet a  notre ligne de conserver son formatage lors du deplacement
+                            // Pas vraiment utile, mais plus agreable
+                            helper: function(e, tr)
+                            {
+                              var $originals = tr.children();
+                              var $helper = tr.clone();
+                              $helper.children().each(function(index)
+                              {
+                                // Set helper cell sizes to match the original sizes
+                                $(this).width($originals.eq(index).width())
+                              });
+                              return $helper;
+                            },
 
-            // La fonction appele quand un element change de position
-            // C'est le code vraiment utile, en fait
-            update: function(){             
-                updateOrder();
-            }
+                            // La fonction appele quand un element change de position
+                            // C'est le code vraiment utile, en fait
+                            update: function(){             
+                                updateOrder();
+                            }
             
-        });
+                        });
         
         
-        $('input.nbrJEH').each(function() {
-            $(this).change(function() { 
-                updatePrix();
-                updateNbrJEH();
-            });
-        });
+                        $('input.nbrJEH').each(function() {
+                            $(this).change(function() { 
+                                updatePrix();
+                                updateNbrJEH();
+                            });
+                        });
         
-        $('input.prixJEH').each(function() {
-            $(this).change(function() { 
-                updatePrix();
-            });
-        });
+                        $('input.prixJEH').each(function() {
+                            $(this).change(function() { 
+                                updatePrix();
+                            });
+                        });
         
-       $('#myButtonUpdate').on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
+                       $('#myButtonUpdate').on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
             
-            updatePrix();
-            updateNbrJEH();
-        });
+                            updatePrix();
+                            updateNbrJEH();
+                        });
         
 
 
-    });
+                    });
     
-    function addPhaseBouton($tagFormLi) {
-        var $delete = $('<button id="myButtonDelete">X</button>');
-        var $up = $('<button id="myButtonUp">▲</button>');
-        var $down = $('<button id="myButtonDown">▼</button>');
-        $tagFormLi.append($delete);
-        $tagFormLi.append($up);
-        $tagFormLi.append($down);
+                    function addPhaseBouton($tagFormLi) {
+                        var $delete = $('<button id="myButtonDelete">X</button>');
+                        var $up = $('<button id="myButtonUp">▲</button>');
+                        var $down = $('<button id="myButtonDown">▼</button>');
+                        $tagFormLi.append($delete);
+                        $tagFormLi.append($up);
+                        $tagFormLi.append($down);
 
-        $delete.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
+                        $delete.on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
 
-            // remove the li for the tag form
-            $tagFormLi.remove();
-            updateOrder();
-            updatePrix();
-            updateNbrJEH();
-        });
+                            // remove the li for the tag form
+                            $tagFormLi.remove();
+                            updateOrder();
+                            updatePrix();
+                            updateNbrJEH();
+                        });
         
-        $up.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
+                        $up.on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
 
-            $tagFormLi.prev().before($tagFormLi);
-            updateOrder();
-        });
-        $down.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
+                            $tagFormLi.prev().before($tagFormLi);
+                            updateOrder();
+                        });
+                        $down.on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
 
-            $tagFormLi.next().after($tagFormLi);
-            updateOrder();
-        });
-    }
+                            $tagFormLi.next().after($tagFormLi);
+                            updateOrder();
+                        });
+                    }
     
-</script>
+                    </script>
 
 
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+                    <p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+                    <p><br /><input type="submit" value="Enregistrer les phases" /></p>
+                </form>
 
-    <p><br /><input type="submit" value="Enregistrer les phases" /></p>
-</form>
-
-<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
+                <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
 
 
-<div id="dialog" title="Aide au chiffrage">
-    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
-    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
-    <p><button id="myButtonUpdate">Raffraichir</button></p>
-</div>
+                <div id="dialog" title="Aide au chiffrage">
+                    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
+                    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
+                    <p><button id="myButtonUpdate">Raffraichir</button></p>
+                </div>
 {% endblock %}

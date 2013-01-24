@@ -110,6 +110,7 @@ class EtudeManager extends \Twig_Extension {
         $phases = $etude->getPhases();
         if (count($phases) > 0) {
             foreach ($phases as $phase)
+                if($phase->getDateDebut() != NULL)
                 array_push($dateDebut, $phase->getDateDebut());
 
             return min($dateDebut);
@@ -124,9 +125,12 @@ class EtudeManager extends \Twig_Extension {
 
         if (count($phases) > 0) {
             foreach ($phases as $p) {
+                if($p->getDateDebut() != NULL)
+                {
                 $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
                 array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
                 unset($dateDebut);
+                }
             }
 
             return max($dateFin);
