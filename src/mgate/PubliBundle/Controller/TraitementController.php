@@ -343,6 +343,24 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
+        //Intervenant
+        if($etude->getMissions()!=NULL)
+        {
+            foreach ($etude->getMissions() as $mission)
+            {
+                $i++; //servira quand on le fera pour plusieurs intervenants
+                $this->array_push_assoc($champs, 'NOM_ETUDIANT', $mission->getIntervenant()->getPersonne()->getNom());
+                $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
+                $this->array_push_assoc($champs, 'Sexe_Etudiant', $mission->getIntervenant()->getPersonne()->getSexe());
+                $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
+                $this->array_push_assoc($champs, 'date', $mission->getDateSignature()->format("d/m/Y"));
+                $this->array_push_assoc($champs, 'Nbre_JEH', $mission->getNbjeh());
+                $this->array_push_assoc($champs, 'Nbre_JEH', $mission->getNbjeh());
+                $this->array_push_assoc($champs,'Nbre_JEH_Lettres',$this->get('mgate.conversionlettre')->ConvNumberLetter($mission->getNbjeh(), 1));
+                $this->array_push_assoc($champs, 'Date_Fin_Etude', $this->get('mgate.etude_manager')->getDateFin($etude)->format('j')." ".$Mois_Fin." ".$this->get('mgate.etude_manager')->getDateFin($etude)->format('o'));
+                $this->array_push_assoc($champs, 'Reference_CE', $this->get('mgate.etude_manager')->getRefDoc($etude,"CE",0));
+            }
+        }
         //var_dump($champs);
         return $champs;
     }
