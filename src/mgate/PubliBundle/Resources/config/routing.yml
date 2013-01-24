@@ -9,6 +9,14 @@ mgate_publi_publiposter:
     requirements:
         id_etude:  \d+
         doc: AP|CC|FA|RM
+        
+mgate_publi_publiposter_key:
+    pattern: /publi/publiposter/{id_etude}/{doc}/{key}
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
+    requirements:
+        id_etude:  \d+
+        key: \d+
+        doc: AP|CC|FA|RM
     
 mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
