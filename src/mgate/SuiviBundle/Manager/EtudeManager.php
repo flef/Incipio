@@ -87,8 +87,16 @@ class EtudeManager extends \Twig_Extension {
         {
             foreach ($etude->getMissions() as $mission)
             {
-             $identifiant=$mission->getIntervenant()->getIdentifiant();
-             return $this->getRefEtude($etude) . "-" . $doc ."-".$identifiant. "-" . $version;
+                $identifiant=$mission->getIntervenant()->getIdentifiant();
+                return $this->getRefEtude($etude) . "-" . $doc ."-".$identifiant. "-" . $version; 
+            }
+        }
+        if($doc=="CE")
+        {
+            foreach ($etude->getMissions() as $mission)
+            {
+                $identifiant=$mission->getIntervenant()->getIdentifiant();
+                return "[M-GaTE]".$etude->getMandat()."-CE-".$identifiant;
             }
         }
                 
