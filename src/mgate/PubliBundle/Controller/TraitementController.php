@@ -385,7 +385,7 @@ class TraitementController extends Controller {
         //debug
         if (false)
             $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-        if (true)
+        if (false)
             $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
