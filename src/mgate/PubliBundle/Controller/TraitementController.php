@@ -287,8 +287,9 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Reference_CC', $this->get('mgate.etude_manager')->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
         if ($etude->getFactureAcompte())
             $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
-
-
+        if ($etude->getMissions())
+            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM')->getVersion()));
+        
         //Prospect
         if ($etude->getProspect() != NULL) {
             $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
