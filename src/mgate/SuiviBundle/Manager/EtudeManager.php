@@ -77,11 +77,12 @@ class EtudeManager extends \Twig_Extension {
      */
     public function getMontantVerse(Etude $etude) {
         $total = 0;
-
+        
         foreach ($etude->getMissions() as $mission) {
             foreach($etude->getPhases() as $phase)
             {
                 $prix = $phase->getPrixJEH();
+                //$mi = $etude->getMissions()->get(1);
                 //TO DO faire le cas des prix de jeh différent
             }
             $total=0.6*$mission->getNbjeh()*$prix;

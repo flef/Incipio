@@ -95,7 +95,7 @@ class TraitementController extends Controller {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
 
         $callback = function ($matches) {//Fonction de callback
-                   return (($this->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]).$matches[3];
+                    return (($this->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
                 };
 
         $templateXML = preg_replace_callback($regexp, $callback, $templateXML);
@@ -176,7 +176,7 @@ class TraitementController extends Controller {
         return $mois;
     }
 
-    private function getAllChamp($etude, $doc) {
+    private function getAllChamp($etude, $doc, $key = 0) {
 
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
@@ -263,18 +263,27 @@ class TraitementController extends Controller {
         );
 
         //Doc
-        if ($etude->getDoc($doc) != NULL) {
+        if ($etude->getDoc($doc, $key) != NULL) {
             //Date Signature tout type de doc
-            $this->array_push_assoc($champs, 'Date_Signature', $etude->getDoc($doc)->getDateSignature()->format("d/m/Y"));
+            $dateSignature = $etude->getDoc($doc, $key)->getDateSignature();
+            if ($dateSignature != NULL)
+                $this->array_push_assoc($champs, 'Date_Signature', $dateSignature->format("d/m/Y"));
+
             //Signataire 1 : Signataire M-GaTE
             if ($etude->getDoc($doc)->getSignataire1() != NULL) {
-                $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPrenomNom());
-                $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $etude->getDoc($doc)->getSignataire1()->getPoste());
+                $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
+                if ($signataire1 != NULL) {
+                    $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $signataire1->getPrenomNom());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $signataire1->getPoste());
+                }
             }
             //Signataire 2 : Signataire Client
             if ($etude->getDoc($doc)->getSignataire2() != NULL) {//TODO remplacer par Signataire_Client
-                $this->array_push_assoc($champs, 'Nom_Signataire', $etude->getDoc($doc)->getSignataire2()->getPrenomNom());
-                $this->array_push_assoc($champs, 'Fonction_Signataire', $etude->getDoc($doc)->getSignataire2()->getPoste());
+                $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
+                if ($signataire1 != NULL) {
+                    $this->array_push_assoc($champs, 'Nom_Signataire', $signataire2->getPrenomNom());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire', $signataire2->getPoste());
+                }
             }
         }
 
@@ -289,7 +298,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
         if ($etude->getMissions())
             $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM')->getVersion()));
-        
+
         //Prospect
         if ($etude->getProspect() != NULL) {
             $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
@@ -343,26 +352,22 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
+
         //Intervenant
-        if($etude->getMissions()!=NULL)
-        {
-            foreach ($etude->getMissions() as $mission)
-            {
-                $i++; //servira quand on le fera pour plusieurs intervenants
-                $this->array_push_assoc($champs, 'NOM_ETUDIANT', $mission->getIntervenant()->getPersonne()->getNom());
-                $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
-                $this->array_push_assoc($champs, 'Sexe_Etudiant', $mission->getIntervenant()->getPersonne()->getSexe());
-                $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
-                $this->array_push_assoc($champs, 'date', $mission->getDateSignature()->format("d/m/Y"));
-                $this->array_push_assoc($champs, 'Nbre_JEH', $mission->getNbjeh());
-                $this->array_push_assoc($champs, 'Nbre_JEH', $mission->getNbjeh());
-                $this->array_push_assoc($champs,'Nbre_JEH_Lettres',$this->get('mgate.conversionlettre')->ConvNumberLetter($mission->getNbjeh(), 1));
-                $this->array_push_assoc($champs, 'Date_Fin_Etude', $this->get('mgate.etude_manager')->getDateFin($etude)->format('j')." ".$Mois_Fin." ".$this->get('mgate.etude_manager')->getDateFin($etude)->format('o'));
-                $this->array_push_assoc($champs, 'Reference_CE', $this->get('mgate.etude_manager')->getRefDoc($etude,"CE",0));
-                $this->array_push_assoc($champs, 'Montant_JEH_Verse', $this->get('mgate.etude_manager')->getMontantVerse($etude));
-                $this->array_push_assoc($champs, 'Montant_JEH_Verse_Lettres', $this->get('mgate.conversionlettre')->ConvNumberLetter($this->get('mgate.etude_manager')->getMontantVerse($etude),1));
-            }
-        }
+        /* if ($etude->getMissions()->get($key) != NULL) {
+          $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
+          $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
+          $this->array_push_assoc($champs, 'Sexe_Etudiant', $mission->getIntervenant()->getPersonne()->getSexe());
+          $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
+          $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $mission->getNbjeh());
+          $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $mission->getNbjeh());
+          $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $this->get('mgate.conversionlettre')->ConvNumberLetter($mission->getNbjeh()));
+          $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $this->get('mgate.etude_manager')->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $this->get('mgate.etude_manager')->getDateFin($etude)->format('o'));
+          $this->array_push_assoc($champs, 'Reference_CE', $this->get('mgate.etude_manager')->getRefDoc($etude, "CE", 0));
+          $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $this->get('mgate.etude_manager')->getMontantVerse($etude));
+          $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $this->get('mgate.conversionlettre')->ConvNumberLetter($this->get('mgate.etude_manager')->getMontantVerse($etude), 1));
+          } */
+
         //var_dump($champs);
         return $champs;
     }
@@ -395,12 +400,23 @@ class TraitementController extends Controller {
         return $chemin;
     }
 
-    //publication du doc
-    public function publiposterAction($id_etude, $doc) {
+    public function publiposterMultiple($id_etude, $doc) {
+        $etude = $this->getEtudeFromID($id_etude);
+        $i = 0;
+        foreach ($etude->getMissions() as $mission) {
+            $this->publipostage($id_etude, $doc, $i);
+            $this->telechargerAction($doc);
+            $i++;
+        }
+    }
+
+    private function publipostage($id_etude, $doc, $key = 0) {
+        $key = intval($key);
+        
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
-        $champs = $this->getAllChamp($etude, $doc);
+        $champs = $this->getAllChamp($etude, $doc, $key);
 
 
         //debug
@@ -415,7 +431,7 @@ class TraitementController extends Controller {
 
         $repertoire = 'tmp';
 
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion());
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
         if (!file_exists($repertoire))
@@ -429,6 +445,16 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
 
+        return $champsBrut;
+    }
+
+    //publication du doc
+    public function publiposterAction($id_etude, $doc, $key = -1) {
+
+        if ($doc == 'RM' && $key == -1)
+            $champsBrut = $this->publiposterMultiple($id_etude, $doc);
+        else
+            $champsBrut = $this->publipostage($id_etude, $doc, $key);
 
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
