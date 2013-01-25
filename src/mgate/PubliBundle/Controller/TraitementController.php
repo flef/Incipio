@@ -297,7 +297,7 @@ class TraitementController extends Controller {
         if ($etude->getFactureAcompte())
             $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
         if ($etude->getMissions())
-            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM')->getVersion()));
+            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM',$key)->getVersion(),$key));
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -353,6 +353,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
 
+        //if($etude->getMissions()->get($key) != NULL)
+        //var_dump($etude->getMissions()->get($key)->getIntervenant());
         //Intervenant
         /* if ($etude->getMissions()->get($key) != NULL) {
           $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
@@ -400,15 +402,6 @@ class TraitementController extends Controller {
         return $chemin;
     }
 
-    public function publiposterMultiple($id_etude, $doc) {
-        $etude = $this->getEtudeFromID($id_etude);
-        $i = 0;
-        foreach ($etude->getMissions() as $mission) {
-            $this->publipostage($id_etude, $doc, $i);
-            $this->telechargerAction($doc);
-            $i++;
-        }
-    }
 
     private function publipostage($id_etude, $doc, $key = 0) {
         $key = intval($key);
@@ -431,7 +424,7 @@ class TraitementController extends Controller {
 
         $repertoire = 'tmp';
 
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion());
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
         if (!file_exists($repertoire))
@@ -448,6 +441,17 @@ class TraitementController extends Controller {
         return $champsBrut;
     }
 
+    
+    public function publiposterMultiple($id_etude, $doc) {
+        $etude = $this->getEtudeFromID($id_etude);
+        $i = 0;
+        foreach ($etude->getMissions() as $mission) {
+            $this->publipostage($id_etude, $doc, $i);
+            echo $i;
+            $i++;
+        }
+    }
+    
     //publication du doc
     public function publiposterAction($id_etude, $doc, $key = -1) {
 
@@ -455,6 +459,7 @@ class TraitementController extends Controller {
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
         else
             $champsBrut = $this->publipostage($id_etude, $doc, $key);
+            
 
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
