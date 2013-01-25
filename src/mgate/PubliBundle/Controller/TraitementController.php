@@ -297,7 +297,8 @@ class TraitementController extends Controller {
         if ($etude->getFactureAcompte())
             $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
         if ($etude->getMissions())
-            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+            if ($etude->getDoc('RM', $key))
+                $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -448,7 +449,7 @@ class TraitementController extends Controller {
         $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
         $_SESSION['idZip'] = $idZip;
 
-        
+
         $i = 0;
         foreach ($etude->getMissions() as $mission) {
             $this->publipostage($id_etude, $doc, $i);
@@ -481,13 +482,13 @@ class TraitementController extends Controller {
         if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = $_SESSION['refDocx'];
-            
+
 
             if ($addZip) {
                 $idZip = $_SESSION['idZip'];
                 $zip = new \ZipArchive;
-                $zip->open('tmp/'.$idZip,  \ZipArchive::CREATE);
-                $zip->addFile('tmp/' . $idDocx, $refDocx .'.xml');
+                $zip->open('tmp/' . $idZip, \ZipArchive::CREATE);
+                $zip->addFile('tmp/' . $idDocx, $refDocx . '.xml');
                 $zip->close();
             } elseif ($dlZip) {
                 $idZip = $_SESSION['idZip'];
