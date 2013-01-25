@@ -71,21 +71,20 @@ class EtudeManager extends \Twig_Extension {
         }
         return $total;
     }
-    
-     /**
+
+    /**
      * Get nombre de JEH
      */
     public function getMontantVerse(Etude $etude) {
         $total = 0;
-        
+
         foreach ($etude->getMissions() as $mission) {
-            foreach($etude->getPhases() as $phase)
-            {
+            foreach ($etude->getPhases() as $phase) {
                 $prix = $phase->getPrixJEH();
                 //$mi = $etude->getMissions()->get(1);
                 //TO DO faire le cas des prix de jeh différent
             }
-            $total=0.6*$mission->getNbjeh()*$prix;
+            $total = 0.6 * $mission->getNbjeh() * $prix;
         }
         return round($total);
     }
@@ -100,24 +99,16 @@ class EtudeManager extends \Twig_Extension {
     /**
      * Get référence document
      */
-    public function getRefDoc(Etude $etude, $doc, $version) {
-        if($doc=="RM")
-        {
-            foreach ($etude->getMissions() as $mission)
-            {
-                $identifiant=$mission->getIntervenant()->getIdentifiant();
-                return $this->getRefEtude($etude) . "-" . $doc ."-".$identifiant. "-" . $version; 
-            }
+    public function getRefDoc(Etude $etude, $doc, $version, $key = 0) {
+        if ($doc == "RM") {
+            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+            return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant . "-" . $version;
         }
-        if($doc=="CE")
-        {
-            foreach ($etude->getMissions() as $mission)
-            {
-                $identifiant=$mission->getIntervenant()->getIdentifiant();
-                return "[M-GaTE]".$etude->getMandat()."-CE-".$identifiant;
-            }
+        if ($doc == "CE") {
+            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
         }
-                
+
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
     }
 
@@ -145,8 +136,8 @@ class EtudeManager extends \Twig_Extension {
         $phases = $etude->getPhases();
         if (count($phases) > 0) {
             foreach ($phases as $phase)
-                if($phase->getDateDebut() != NULL)
-                array_push($dateDebut, $phase->getDateDebut());
+                if ($phase->getDateDebut() != NULL)
+                    array_push($dateDebut, $phase->getDateDebut());
 
             return min($dateDebut);
         } else {
@@ -160,11 +151,10 @@ class EtudeManager extends \Twig_Extension {
 
         if (count($phases) > 0) {
             foreach ($phases as $p) {
-                if($p->getDateDebut() != NULL)
-                {
-                $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
-                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
-                unset($dateDebut);
+                if ($p->getDateDebut() != NULL) {
+                    $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+                    array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
+                    unset($dateDebut);
                 }
             }
 
