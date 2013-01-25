@@ -297,7 +297,7 @@ class TraitementController extends Controller {
         if ($etude->getFactureAcompte())
             $this->array_push_assoc($champs, 'Reference_FA', $this->get('mgate.etude_manager')->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
         if ($etude->getMissions())
-            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM',$key)->getVersion(),$key));
+            $this->array_push_assoc($champs, 'Reference_RM', $this->get('mgate.etude_manager')->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -402,10 +402,9 @@ class TraitementController extends Controller {
         return $chemin;
     }
 
-
     private function publipostage($id_etude, $doc, $key = 0) {
         $key = intval($key);
-        
+
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
@@ -427,6 +426,7 @@ class TraitementController extends Controller {
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
+
         if (!file_exists($repertoire))
             mkdir($repertoire/* ,0700 */);
         $handle = fopen($repertoire . '/' . $idDocx, "w+");
@@ -438,20 +438,26 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
 
+
         return $champsBrut;
     }
 
-    
     public function publiposterMultiple($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
+        $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
+        $_SESSION['idZip'] = $idZip;
+
+        
         $i = 0;
         foreach ($etude->getMissions() as $mission) {
             $this->publipostage($id_etude, $doc, $i);
-            echo $i;
+            $this->telechargerAction('', true);
             $i++;
         }
+        $this->telechargerAction('', false, true);
     }
-    
+
     //publication du doc
     public function publiposterAction($id_etude, $doc, $key = -1) {
 
@@ -459,7 +465,7 @@ class TraitementController extends Controller {
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
         else
             $champsBrut = $this->publipostage($id_etude, $doc, $key);
-            
+
 
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
@@ -468,23 +474,45 @@ class TraitementController extends Controller {
         }
     }
 
-    public function telechargerAction($docType = 'AP') {
+    //A nettoyer !!!
+    public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
         $this->purge();
         //TODO idDocx.$doc
-        if (isset($_SESSION['idDocx'])) {
+        if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
-            $refDocx = (isset($_SESSION['refDocx']) ? $_SESSION['refDocx'] : $docType);
+            $refDocx = $_SESSION['refDocx'];
+            
 
-            $doc = 'tmp/' . $idDocx;
+            if ($addZip) {
+                $idZip = $_SESSION['idZip'];
+                $zip = new \ZipArchive;
+                $zip->open('tmp/'.$idZip,  \ZipArchive::CREATE);
+                $zip->addFile('tmp/' . $idDocx, $refDocx .'.xml');
+                $zip->close();
+            } elseif ($dlZip) {
+                $idZip = $_SESSION['idZip'];
+                $doc = 'tmp/' . $idZip;
 
-            header('Content-Type: application/msword');
-            header('Content-Length: ' . filesize($doc));
-            header('Content-disposition: attachment; filename=' . $refDocx);
-            header('Pragma: no-cache');
-            header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-            header('Expires: 0');
-            readfile($doc);
-            exit();
+                header('Content-Type: application/zip');
+                header('Content-Length: ' . filesize($doc));
+                header('Content-disposition: inline; filename=' . $refDocx . '.zip');
+                header('Pragma: no-cache');
+                header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+                header('Expires: 0');
+                readfile($doc);
+                exit();
+            } else {
+                $doc = 'tmp/' . $idDocx;
+
+                header('Content-Type: application/msword');
+                header('Content-Length: ' . filesize($doc));
+                header('Content-disposition: attachment; filename=' . $refDocx);
+                header('Pragma: no-cache');
+                header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+                header('Expires: 0');
+                readfile($doc);
+                exit();
+            }
         } else {
             echo 'fail';
         }
