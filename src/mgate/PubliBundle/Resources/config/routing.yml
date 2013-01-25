@@ -2,17 +2,10 @@ mgate_publi_homepage:
     pattern:  /hellooo/{name}
     defaults: { _controller: mgatePubliBundle:Default:index }
 
-
+ 
 mgate_publi_publiposter:
-    pattern: /publi/publiposter/{id_etude}/{doc}
-    defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
-    requirements:
-        id_etude:  \d+
-        doc: AP|CC|FA|RM
-        
-mgate_publi_publiposter_key:
     pattern: /publi/publiposter/{id_etude}/{doc}/{key}
-    defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposter, key : -1}
     requirements:
         id_etude:  \d+
         key: \d+
