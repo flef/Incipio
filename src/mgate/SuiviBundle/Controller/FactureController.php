@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use mgate\SuiviBundle\Form\EtudeType;
 
 use mgate\SuiviBundle\Entity\Facture;
-use mgate\SuiviBundle\Form\FactureHandler;
 use mgate\SuiviBundle\Form\FactureType;
 use mgate\SuiviBundle\Entity\Pvr;
 use mgate\SuiviBundle\Form\PvrType;
@@ -30,7 +29,7 @@ class FactureController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        // On vÃ©rifie que l'article d'id $id existe bien, sinon, erreur 404.
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
@@ -39,14 +38,19 @@ class FactureController extends Controller
         
         $facture = new Facture;
         $facture->setEtude($etude);
-        $form        = $this->createForm(new FactureType, $facture);
-        $formHandler = new FactureHandler($form, $this->get('request'), $em);
         
-        if($formHandler->process())
+        $form        = $this->createForm(new FactureType, $facture);      
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-           
-            return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $etude->getId())) );
-            
+            $form->bindRequest($this->get('request'));
+
+            if( $form->isValid() )
+            {
+                $em->persist($facture);
+                $em->flush();
+                
+                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+            }
         }
 
         return $this->render('mgateSuiviBundle:Facture:ajouter.html.twig', array(
@@ -54,32 +58,14 @@ class FactureController extends Controller
         ));
     }
     
-    public function addPvrAction()
-    {
-        $pvr = new Pvr;
-
-        $form        = $this->createForm(new PvrType, $pvr);
-        $formHandler = new FactureHandler($form, $this->get('request'), $this->getDoctrine()->getEntityManager());
-
-        if($formHandler->process())
-        {
-            return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $pvr->getId())) );
-        }
-
-        return $this->render('mgateSuiviBundle:Etude:ajouter.html.twig', array(
-            'form' => $form->createView(),
-        ));
-        
-    }
-
     public function voirAction($id)
     {
        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problÃ¨me
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cc entity.');
+            throw $this->createNotFoundException('Unable to find Facture entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
@@ -116,6 +102,46 @@ class FactureController extends Controller
         return $this->render('mgateSuiviBundle:Facture:modifier.html.twig', array(
             'form' => $form->createView(),
             'facture' => $facture,
+        ));
+    }
+    
+    
+    public function redigerAction($id, $type /*, $keyFi */)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        {
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+        }
+
+        if(!$facture = $etude->getDoc($type))
+        {
+            $facture = new Facture;
+            if($type=="fa")
+                $etude->setFa($facture);
+            if($type=="fs")
+                $etude->setFs($facture);
+        }
+       
+        $form = $this->createForm(new FactureType, $etude, array('type' => $type));
+        
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+            }
+                
+        }
+
+        return $this->render('mgateSuiviBundle:Facture:rediger.html.twig', array(
+            'form' => $form->createView(),
+            'etude' => $etude,
         ));
     }
 }

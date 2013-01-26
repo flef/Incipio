@@ -202,6 +202,12 @@ mgateSuivi_facture_modifier:
     requirements:
         id: \d+
         
+mgateSuivi_facture_rediger:
+    pattern: /facture/rediger/{id}/{type}
+    defaults: {_controller: mgateSuiviBundle:Facture:rediger, type:null}
+    requirements:
+        id: \d+
+ 
 mgateSuivi_facture_voir:
     pattern: /facture/voir/{id}
     defaults: {_controller: mgateSuiviBundle:Facture:voir}

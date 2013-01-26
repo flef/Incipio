@@ -26,7 +26,7 @@ class DocTypeType extends AbstractType
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));
 
-        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission')
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' && $options['data_class']!='mgate\SuiviBundle\Entity\Facture')
         {
             $pro=$options['prospect'];
             $builder->add('knownSignataire2', 'checkbox', array(
