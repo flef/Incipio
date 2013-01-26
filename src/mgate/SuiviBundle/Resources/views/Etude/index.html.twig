@@ -10,16 +10,16 @@ Accueil - {{ parent() }}
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom}})</a></li>
+        <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
         <li><a href="#tab2" data-toggle="tab">Etudes en cours</a></li>
         <li><a href="#tab3" data-toggle="tab">Etudes terminées</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1">
-            {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom, 'modeListe' : 0} %}
+            {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 0} %}
         </div>
         <div class="tab-pane" id="tab2">
-            {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom, 'modeListe' : 1} %}
+            {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 1} %}
         </div>
         <div class="tab-pane" id="tab3">
             {#% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom, 'modeListe' : 1} %#}
