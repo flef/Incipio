@@ -261,7 +261,7 @@ Affichage d'une étude - {{ parent() }}
                                     <div class="btn-group btn-large">
                                         <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Facture d'Acompte <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                            <li><a href="{{ path('mgateSuivi_factureacompte_modifier', {'id': etude.id}) }}">Modifier la Facture d'Acompte</a></li>
+                                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': etude.id, 'type': 'fa'}) }}">Modifier la Facture d'Acompte</a></li>
                                         </ul>
                                     </div></th>
                                     </tr>
@@ -307,7 +307,7 @@ Affichage d'une étude - {{ parent() }}
                             </p>
                             <p>
                             <h3>Facture de Solde:</h3>
-                            <li><a href="{{ path('mgateSuivi_facturesolde_modifier', {'id': etude.id}) }}">Modifier la Facture de Solde</a></li>
+                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': etude.id, 'type': 'fs'}) }}">Modifier la Facture de Solde</a></li>
                             </p>
                             <p>
                             <h3>Factures Intermédiaires:</h3>
