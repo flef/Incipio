@@ -1142,11 +1142,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      /**
      * Add fis
      *
-     * @param \mgate\SuiviBundle\Entity\Facture $fis
+     * @param \mgate\SuiviBundle\Entity\Facture $fi
      * @return Etude
      */
-    public function addFis(\mgate\SuiviBundle\Entity\Facture $fis) {
-        $this->fis[] = $fis;
+    public function addFis(\mgate\SuiviBundle\Entity\Facture $fi) {
+        $this->fis[] = $fi;
+        $fi->setEtude($this);
 
         return $this;
     }
@@ -1154,10 +1155,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Remove fis
      *
-     * @param \mgate\SuiviBundle\Entity\Facture $fis
+     * @param \mgate\SuiviBundle\Entity\Facture $fi
      */
-    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $fis) {
-        $this->fis->removeElement($fis);
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $fi) {
+        $this->fis->removeElement($fi);
     }
 
     /**
@@ -1177,6 +1178,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function setFa(\mgate\SuiviBundle\Entity\Facture $fa = null) {
         $this->fa = $fa;
+        $fa->setEtude($this);
 
         return $this;
     }
@@ -1198,6 +1200,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function setFs(\mgate\SuiviBundle\Entity\Facture $fs = null) {
         $this->fs = $fs;
+        $fs->setEtude($this);
 
         return $this;
     }

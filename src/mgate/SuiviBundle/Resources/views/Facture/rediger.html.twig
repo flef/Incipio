@@ -1,0 +1,37 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Rédiger la Facture - {{ parent() }}
+{% endblock %}
+
+        
+{% block content_bundle %}
+
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}
+
+        
+    <h2>Rédiger la Facture</h2>
+
+<form method="post" {{ form_enctype(form) }}>
+
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer"/>  
+</form>
+
+
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
+    </p>   
+    
+{% endblock %}
+
+ {% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+    
