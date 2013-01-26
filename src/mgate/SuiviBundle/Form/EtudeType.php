@@ -26,6 +26,7 @@ class EtudeType extends AbstractType
              ->add('prospect', 'genemu_jqueryselect2_entity', array(
                 'class' => 'mgate\PersonneBundle\Entity\Prospect',
                 'property' => 'nom',
+                'required' => false,
                 'label' => 'Prospect existant',
                 ))
             ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))                               
