@@ -136,34 +136,34 @@ class EtudeManager extends \Twig_Extension {
     public function getDateLancement(Etude $etude) {
         $dateDebut = array();
         $phases = $etude->getPhases();
-        if (count($phases) > 0) {
-            foreach ($phases as $phase)
-                if ($phase->getDateDebut() != NULL)
-                    array_push($dateDebut, $phase->getDateDebut());
-
+        
+        foreach ($phases as $phase)
+            if ($phase->getDateDebut() != NULL)
+                array_push($dateDebut, $phase->getDateDebut());
+            
+        if (count($dateDebut) > 0)
             return min($dateDebut);
-        } else {
+        else
             return NULL;
-        }
     }
 
     public function getDateFin(Etude $etude) {
         $dateFin = array();
         $phases = $etude->getPhases();
 
-        if (count($phases) > 0) {
-            foreach ($phases as $p) {
-                if ($p->getDateDebut() != NULL) {
-                    $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
-                    array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
-                    unset($dateDebut);
-                }
+        foreach ($phases as $p) {
+            if ($p->getDateDebut() != NULL) {
+                $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
+                unset($dateDebut);
             }
-
-            return max($dateFin);
-        } else {
-            return NULL;
         }
+        
+        if (count($dateFin) > 0)
+            return max($dateFin);
+        else
+            return NULL;
+ 
     }
 
     public function getDelaiEtude(Etude $etude) {
