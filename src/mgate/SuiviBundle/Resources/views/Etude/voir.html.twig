@@ -146,7 +146,7 @@ Affichage d'une étude - {{ parent() }}
                                 </tr>
                                 <tr>
                                     <th>Nombre de dev. estimé</th>
-                                    <td>{{ etude.ap.nbrDev }}</td>
+                                    <td>{{ etude.ap.nbrDev| default('Non estimé') }}</td>
                                 </tr>
                                 <tr>
                                     <th>Présentation du projet</th>
