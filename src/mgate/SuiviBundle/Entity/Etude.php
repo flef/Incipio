@@ -186,15 +186,20 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $missions;
 
-    /**
-     * @ORM\OneToOne(targetEntity="FactureAcompte", cascade={"persist"})
+    /** facture acompte
+     * @ORM\OneToOne(targetEntity="Facture", cascade={"persist"})
      */
-    private $factureAcompte;
+    private $fa;
+    
+    /** facture intermedaire
+     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude")
+     */
+    private $fis;
 
-    /**
-     * @ORM\OneToOne(targetEntity="FactureSolde", cascade={"persist"})
+    /** facture de solde
+     * @ORM\OneToOne(targetEntity="Facture", cascade={"persist"})
      */
-    private $factureSolde;
+    private $fs;
 
     /**
      * @ORM\OneToMany(targetEntity="Suivi", mappedBy="etude")
@@ -206,10 +211,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $pvis;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude")
-     */
-    private $factures;
 
     /**
      * @ORM\OneToMany(targetEntity="Av", mappedBy="etude")
@@ -279,7 +280,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -312,7 +313,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             case 'CC':
                 return $this->getCc();
             case 'FA':
-                return $this->getFactureAcompte();
+                return $this->getFa();
             case 'PVR':
                 return $this->getPvrs()->get($key);
             case 'RM':
@@ -1047,35 +1048,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->pvis;
     }
 
-    /**
-     * Add factures
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $factures
-     * @return Etude
-     */
-    public function addFacture(\mgate\SuiviBundle\Entity\Facture $factures) {
-        $this->factures[] = $factures;
-
-        return $this;
-    }
-
-    /**
-     * Remove factures
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $factures
-     */
-    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $factures) {
-        $this->factures->removeElement($factures);
-    }
-
-    /**
-     * Get factures
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getFactures() {
-        return $this->factures;
-    }
 
     /**
      * Add avs
@@ -1167,46 +1139,76 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->pvrs;
     }
 
-    /**
-     * Set factureAcompte
+     /**
+     * Add fis
      *
-     * @param \mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte
+     * @param \mgate\SuiviBundle\Entity\Facture $fis
      * @return Etude
      */
-    public function setFactureAcompte(\mgate\SuiviBundle\Entity\FactureAcompte $factureAcompte = null) {
-        $this->factureAcompte = $factureAcompte;
+    public function addFis(\mgate\SuiviBundle\Entity\Facture $fis) {
+        $this->fis[] = $fis;
 
         return $this;
     }
 
     /**
-     * Get factureAcompte
+     * Remove fis
      *
-     * @return \mgate\SuiviBundle\Entity\FactureAcompte 
+     * @param \mgate\SuiviBundle\Entity\Facture $fis
      */
-    public function getFactureAcompte() {
-        return $this->factureAcompte;
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $fis) {
+        $this->fis->removeElement($fis);
     }
 
     /**
-     * Set factureSolde
+     * Get fis
      *
-     * @param \mgate\SuiviBundle\Entity\FactureSolde $factureSolde
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFis() {
+        return $this->fis;
+    }
+    
+    /**
+     * Set fa
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $fa
      * @return Etude
      */
-    public function setFactureSolde(\mgate\SuiviBundle\Entity\FactureSolde $factureSolde = null) {
-        $this->factureSolde = $factureSolde;
+    public function setFa(\mgate\SuiviBundle\Entity\Facture $fa = null) {
+        $this->fa = $fa;
 
         return $this;
     }
 
     /**
-     * Get factureSolde
+     * Get fa
      *
-     * @return \mgate\SuiviBundle\Entity\FactureSolde 
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
-    public function getFactureSolde() {
-        return $this->factureSolde;
+    public function getFa() {
+        return $this->fa;
+    }
+
+    /**
+     * Set fs
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $fs
+     * @return Etude
+     */
+    public function setFs(\mgate\SuiviBundle\Entity\Facture $fs = null) {
+        $this->fs = $fs;
+
+        return $this;
+    }
+
+    /**
+     * Get fs
+     *
+     * @return \mgate\SuiviBundle\Entity\Facture
+     */
+    public function getFs() {
+        return $this->fs;
     }
 
 }
