@@ -7,6 +7,7 @@
             <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}"><i class="icon-envelope"></i> Voir</a></li>
                 <li class="divider"></li>
                 <li><a href="#"><i class="i"></i>Commenter</a></li>
             </ul>
@@ -51,6 +52,7 @@
                     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : (mission.id - 1)}) }}"><i class="icon-envelope"></i> Générer</a></li>
                         <li class="divider"></li>
                         <li><a href="#"><i class="i"></i> autre</a></li>
                     </ul>
