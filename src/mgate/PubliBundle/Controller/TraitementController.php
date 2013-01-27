@@ -136,8 +136,7 @@ class TraitementController extends Controller {
 
     private function nombreVersMois($m) {
 
-        $m = intval($m);
-        $m %= 12;
+         $m %= 12;
 
         $mois = NULL;
         switch ($m) {
@@ -205,12 +204,12 @@ class TraitementController extends Controller {
         $Nbr_JEH_Lettres = $converter->ConvNumberLetter($Nbr_JEH);
 
         if ($etudeManager->getDateLancement($etude))
-            $Mois_Lancement = $this->nombreVersMois($etudeManager->getDateLancement($etude)->format('m'));
+            $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
         else
             $Mois_Lancement = NULL;
         if ($etudeManager->getDateFin($etude)) {
-            $Mois_Fin = $this->nombreVersMois($etudeManager->getDateFin($etude)->format('m'));
-            $Date_Fin_Etude = $this->nombreVersMois($etudeManager->getDateFin($etude)->format('d/m/Y'));
+            $Mois_Fin = $this->nombreVersMois(intval($etudeManager->getDateFin($etude)->format('m')));
+            $Date_Fin_Etude = $etudeManager->getDateFin($etude)->format('d/m/Y');
         }
         else
             $Mois_Fin = NULL;
@@ -376,7 +375,6 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
 
-$mission = \mgate\SuiviBundle\Entity\Mission;
         //Intervenant
         if ($etude->getMissions()->get($key) != NULL) {
             if ($mission = $etude->getMissions()->get($key)) {
