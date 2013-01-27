@@ -24,8 +24,8 @@ class ThreadManager
         //$thread = new mgateThread;
         
         $thread = $this->tm->createThread($name.$entity->getId());
-        $thread->setId($name.$entity->getId());
-        $thread->setPermalink( $permaLink );
+        //$thread->setId($name.$entity->getId());
+        //$thread->setPermalink( $permaLink );
         $entity->setThread($thread);
         //$this->em->persist($thread); 
     }
