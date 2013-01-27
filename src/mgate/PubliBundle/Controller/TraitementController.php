@@ -135,12 +135,12 @@ class TraitementController extends Controller {
     }
 
     private function nombreVersMois($m) {
-        //$m %= 12;
-        $m1 = date('m',time($m));
-        $m2 = intval($m1);
-       
+
+        $m = intval($m);
+        $m %= 12;
+
         $mois = NULL;
-        switch ($m2) {
+        switch ($m) {
             case 1:
                 $mois = 'janvier';
                 break;
@@ -187,8 +187,8 @@ class TraitementController extends Controller {
         //External
         $etudeManager = $this->get('mgate.etude_manager');
         $converter = $this->get('mgate.conversionlettre');
-        
-        
+
+
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
 
@@ -204,12 +204,14 @@ class TraitementController extends Controller {
         $Nbr_JEH = (int) $etudeManager->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $converter->ConvNumberLetter($Nbr_JEH);
 
-        if ($this->nombreVersMois($etudeManager->getDateLancement($etude)))
+        if ($etudeManager->getDateLancement($etude))
             $Mois_Lancement = $this->nombreVersMois($etudeManager->getDateLancement($etude)->format('m'));
         else
             $Mois_Lancement = NULL;
-        if ($this->nombreVersMois($etudeManager->getDateFin($etude)))
+        if ($etudeManager->getDateFin($etude)) {
             $Mois_Fin = $this->nombreVersMois($etudeManager->getDateFin($etude)->format('m'));
+            $Date_Fin_Etude = $this->nombreVersMois($etudeManager->getDateFin($etude)->format('d/m/Y'));
+        }
         else
             $Mois_Fin = NULL;
         if ($etudeManager->getDelaiEtude($etude))
@@ -280,6 +282,7 @@ class TraitementController extends Controller {
             'Solde_PVR_HT_Lettres' => $Solde_PVR_HT_Lettres,
             'Solde_PVR_TTC_Lettres' => $Solde_PVR_TTC_Lettres,
             'Acompte_Pourcentage' => $Acompte_Pourcentage,
+            'Date_Fin_Etude' => $Date_Fin_Etude,
         );
 
         //Doc
@@ -327,7 +330,6 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Adresse_Client', $etude->getProspect()->getAdresse());
         }
 
-
         //Suiveur
         if ($etude->getSuiveur() != NULL) {
             $this->array_push_assoc($champs, 'Mail_suiveur', $etude->getSuiveur()->getEmail());
@@ -374,13 +376,13 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
 
-
+$mission = \mgate\SuiviBundle\Entity\Mission;
         //Intervenant
         if ($etude->getMissions()->get($key) != NULL) {
             if ($mission = $etude->getMissions()->get($key)) {
                 if ($mission->getIntervenant()->getPersonne()) {
                     $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
-                    
+
                     $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
                     $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
                     $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
@@ -389,13 +391,14 @@ class TraitementController extends Controller {
             }
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $mission->getNbjeh());
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $converter->ConvNumberLetter($mission->getNbjeh()));
-           /* $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $etudeManager->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $etudeManager->getDateFin($etude)->format('o'));
-            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
-            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $etudeManager->getMontantVerse($etude));
-            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $converter->ConvNumberLetter($etudeManager->getMontantVerse($etude), 1));
-        
-            * }
-            */
+            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $mission->get);
+            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $converter->ConvNumberLetter($etudeManager->getMontantVerse($etude), 1));
+            /* $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $etudeManager->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $etudeManager->getDateFin($etude)->format('o'));
+              $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+              
+
+             * }
+             */
         }
 
         //var_dump($champs);
@@ -453,8 +456,8 @@ class TraitementController extends Controller {
 
         $repertoire = 'tmp';
 
-        if($etude->getDoc($doc, $key))
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
+        if ($etude->getDoc($doc, $key))
+            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         else
             $refDocx = 'ERROR';
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
