@@ -135,9 +135,12 @@ class TraitementController extends Controller {
     }
 
     private function nombreVersMois($m) {
-        $m %= 12;
+        //$m %= 12;
+        $m1 = date('m',time($m));
+        $m2 = intval($m1);
+       
         $mois = NULL;
-        switch ($m) {
+        switch ($m2) {
             case 1:
                 $mois = 'janvier';
                 break;
