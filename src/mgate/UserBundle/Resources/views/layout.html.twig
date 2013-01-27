@@ -1,10 +1,22 @@
 {% extends "::layout.html.twig" %}
 
-{% block title %}dsqfqsdf{% endblock %}
+{% block title %}Identification requise{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+        <style>
+           .centre
+           {
+                position: fixed;
+                left: 50%;
+                top: 50%;
+           }
+        </style>
+{% endblock %}
+
 
 {% block body %}
-qsdfqsdfqsdf
-
+ <div class="centre">
 {# L'utilisateur est-il connecté ? #}
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     {# L'utilisateur est connecté ! #}
@@ -23,4 +35,5 @@ qsdfqsdfqsdf
 
 
     {% block fos_user_content %}qsdfqsdfqsdf{% endblock %}
+</div>
 {% endblock %}
