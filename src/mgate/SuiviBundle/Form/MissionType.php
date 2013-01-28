@@ -30,7 +30,7 @@ class MissionType extends DocTypeType
         
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
-            
+            ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false))
             // Je ne sais pas trop comment faire, Stéphane
             ->add('phaseMission', 'collection', array(
                     'type' => new PhaseMissionType,
