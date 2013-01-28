@@ -310,6 +310,7 @@ class Mission extends DocType
     public function __construct()
     {
         $this->phaseMission = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pourcentageJunior = 40;
     }
     
     /**

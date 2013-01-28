@@ -46,7 +46,7 @@ class Personne
     /**
      * @var string $poste
      *
-     * @ORM\Column(name="poste", type="string", length=255)
+     * @ORM\Column(name="poste", type="string", length=255, nullable=true)
      */
     private $poste;
 
