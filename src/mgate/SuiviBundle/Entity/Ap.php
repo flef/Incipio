@@ -28,7 +28,7 @@ class Ap extends DocType
      */
     protected $etude;
     
-    /**
+    /** nombre de developpeur estimé
      * @var integer $nbrDev
      *
      * @ORM\Column(name="nbrDev", type="integer", nullable=true)
