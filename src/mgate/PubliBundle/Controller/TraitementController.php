@@ -136,7 +136,7 @@ class TraitementController extends Controller {
 
     private function nombreVersMois($m) {
 
-         $m %= 12;
+        $m %= 12;
 
         $mois = NULL;
         switch ($m) {
@@ -191,6 +191,8 @@ class TraitementController extends Controller {
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
 
+        
+        
         //EtudeManager
         $Taux_TVA = (float) 19.6;
         $Montant_Total_JEH_HT = (float) $etudeManager->getTotalJEHHT($etude);
@@ -317,7 +319,7 @@ class TraitementController extends Controller {
         if ($etude->getCc())
             $this->array_push_assoc($champs, 'Reference_CC', $etudeManager->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
         //if ($etude->getFactureAcompte())
-        //    $this->array_push_assoc($champs, 'Reference_FA', $etudeManager->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
+        //    $this->array_push_assoc($champs, 'Reference_FA', $etudeManager->getRefDoc($etude, 'FA', $etude->get('FA')->getVersion()));
         if ($etude->getMissions())
             if ($etude->getDoc('RM', $key))
                 $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
@@ -440,13 +442,14 @@ class TraitementController extends Controller {
         $champs = $this->getAllChamp($etude, $doc, $key);
 
 
-        //debug
-        if (false)
-            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-        if (false)
-            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
-        if (true)
-            $chemin = 'D:\Dropbox\M-GaTE - Suivi d\'Etude\My-M-GaTE\Documents Types/' . $doc . '.xml';
+        //debug plus propre :D        
+        
+        if ($this->container->getParameter('debugEnable')){
+            $path = $this->container->getParameter('pathToDoctype');
+            $chemin = $path . $doc . '.xml';
+        }
+            
+        
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
 
