@@ -53,6 +53,13 @@ class Mission extends DocType
      * @ORM\Column(name="finOm", type="datetime", nullable=true)
      */
     private $finOm;
+    
+    /**
+     * @var integer $pourcentageJunior
+     *
+     * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
+     */
+    private $pourcentageJunior;
 
     /**
      * @var integer $avancement
@@ -337,4 +344,26 @@ class Mission extends DocType
     {
         return $this->phaseMission;
     }
+    
+    /**
+     * Set pourcentageJunior
+     *
+     * @param integer $pourcentageJunior
+     * @return Phase
+     */
+    public function setPourcentageJunior($pourcentageJunior) {
+        $this->pourcentageJunior = $pourcentageJunior;
+
+        return $this;
+    }
+
+    /**
+     * Get pourcentageJunior
+     *
+     * @return integer 
+     */
+    public function getPourcentageJunior() {
+        return $this->pourcentageJunior;
+    }
+    
 }
