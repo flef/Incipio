@@ -101,14 +101,7 @@ class Phase
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
-    
-    /**
-     * @var integer $pourcentageJunior
-     *
-     * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
-     */
-    private $pourcentageJunior;
-    
+        
     
     public function __construct()
     {
@@ -368,27 +361,6 @@ class Phase
         return array_keys(Phase::getValidationChoice());
     }
     
-    /**
-     * Set pourcentageJunior
-     *
-     * @param integer $pourcentageJunior
-     * @return Phase
-     */
-    public function setPourcentageJunior($pourcentageJunior) {
-        $this->pourcentageJunior = $pourcentageJunior;
-
-        return $this;
-    }
-
-    /**
-     * Get pourcentageJunior
-     *
-     * @return integer 
-     */
-    public function getPourcentageJunior() {
-        return $this->pourcentageJunior;
-    }
-
     /**
      * Add phaseMission
      *
