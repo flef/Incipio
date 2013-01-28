@@ -6,3 +6,9 @@ services:
         class: %mgate_comment.thread.class%
         arguments: ['@fos_comment.manager.thread', '@doctrine.orm.entity_manager']
 
+    my.listener:
+        class: mgate\CommentBundle\EventListener\ThreadListener
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
+        arguments:
+          - "@service_container"
