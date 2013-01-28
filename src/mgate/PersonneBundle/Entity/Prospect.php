@@ -55,7 +55,7 @@ class Prospect
      * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
-    
+
     /**
      * Get id
      *

@@ -18,7 +18,7 @@ class ThreadManager
         $this->em = $entitymanager;
     }
     
-    public function ajouterAction($name, $permaLink, $entity)
+    public function creerThread($name, $permaLink, $entity)
     {
         //get('fos_comment.manager.thread')
         //$thread = new mgateThread;
@@ -28,5 +28,7 @@ class ThreadManager
         //$thread->setPermalink( $permaLink );
         $entity->setThread($thread);
         //$this->em->persist($thread); 
+        
+        $this->em->flush();
     }
 }
