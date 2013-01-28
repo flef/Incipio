@@ -135,12 +135,11 @@ class TraitementController extends Controller {
     }
 
     private function nombreVersMois($m) {
-        //$m %= 12;
-        $m1 = date('m',time($m));
-        $m2 = intval($m1);
-       
+
+        $m %= 12;
+
         $mois = NULL;
-        switch ($m2) {
+        switch ($m) {
             case 1:
                 $mois = 'janvier';
                 break;
@@ -187,11 +186,13 @@ class TraitementController extends Controller {
         //External
         $etudeManager = $this->get('mgate.etude_manager');
         $converter = $this->get('mgate.conversionlettre');
-        
-        
+
+
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
 
+        
+        
         //EtudeManager
         $Taux_TVA = (float) 19.6;
         $Montant_Total_JEH_HT = (float) $etudeManager->getTotalJEHHT($etude);
@@ -204,12 +205,14 @@ class TraitementController extends Controller {
         $Nbr_JEH = (int) $etudeManager->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $converter->ConvNumberLetter($Nbr_JEH);
 
-        if ($this->nombreVersMois($etudeManager->getDateLancement($etude)))
-            $Mois_Lancement = $this->nombreVersMois($etudeManager->getDateLancement($etude)->format('m'));
+        if ($etudeManager->getDateLancement($etude))
+            $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
         else
             $Mois_Lancement = NULL;
-        if ($this->nombreVersMois($etudeManager->getDateFin($etude)))
-            $Mois_Fin = $this->nombreVersMois($etudeManager->getDateFin($etude)->format('m'));
+        if ($etudeManager->getDateFin($etude)) {
+            $Mois_Fin = $this->nombreVersMois(intval($etudeManager->getDateFin($etude)->format('m')));
+            $Date_Fin_Etude = $etudeManager->getDateFin($etude)->format('d/m/Y');
+        }
         else
             $Mois_Fin = NULL;
         if ($etudeManager->getDelaiEtude($etude))
@@ -280,6 +283,7 @@ class TraitementController extends Controller {
             'Solde_PVR_HT_Lettres' => $Solde_PVR_HT_Lettres,
             'Solde_PVR_TTC_Lettres' => $Solde_PVR_TTC_Lettres,
             'Acompte_Pourcentage' => $Acompte_Pourcentage,
+            'Date_Fin_Etude' => $Date_Fin_Etude,
         );
 
         //Doc
@@ -315,7 +319,7 @@ class TraitementController extends Controller {
         if ($etude->getCc())
             $this->array_push_assoc($champs, 'Reference_CC', $etudeManager->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
         //if ($etude->getFactureAcompte())
-        //    $this->array_push_assoc($champs, 'Reference_FA', $etudeManager->getRefDoc($etude, 'FA', $etude->getDoc('FA')->getVersion()));
+        //    $this->array_push_assoc($champs, 'Reference_FA', $etudeManager->getRefDoc($etude, 'FA', $etude->get('FA')->getVersion()));
         if ($etude->getMissions())
             if ($etude->getDoc('RM', $key))
                 $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
@@ -326,7 +330,6 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntite());
             $this->array_push_assoc($champs, 'Adresse_Client', $etude->getProspect()->getAdresse());
         }
-
 
         //Suiveur
         if ($etude->getSuiveur() != NULL) {
@@ -374,13 +377,12 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
         }
 
-
         //Intervenant
         if ($etude->getMissions()->get($key) != NULL) {
             if ($mission = $etude->getMissions()->get($key)) {
                 if ($mission->getIntervenant()->getPersonne()) {
                     $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
-                    
+
                     $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
                     $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
                     $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
@@ -389,13 +391,14 @@ class TraitementController extends Controller {
             }
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $mission->getNbjeh());
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $converter->ConvNumberLetter($mission->getNbjeh()));
-           /* $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $etudeManager->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $etudeManager->getDateFin($etude)->format('o'));
-            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
-            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $etudeManager->getMontantVerse($etude));
-            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $converter->ConvNumberLetter($etudeManager->getMontantVerse($etude), 1));
-        
-            * }
-            */
+            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $mission->get);
+            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $converter->ConvNumberLetter($etudeManager->getMontantVerse($etude), 1));
+            /* $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $etudeManager->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $etudeManager->getDateFin($etude)->format('o'));
+              $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+              
+
+             * }
+             */
         }
 
         //var_dump($champs);
@@ -439,13 +442,14 @@ class TraitementController extends Controller {
         $champs = $this->getAllChamp($etude, $doc, $key);
 
 
-        //debug
-        if (false)
-            $chemin = 'C:\wamp\www\My-M-GaTE\src\mgate\PubliBundle\Resources\public\document-type/' . $doc . '.xml';
-        if (false)
-            $chemin = 'C:\Users\flo\Desktop\DocType Fonctionnel/' . $doc . '.xml';
-        if (true)
-            $chemin = 'D:\Dropbox\M-GaTE - Suivi d\'Etude\My-M-GaTE\Documents Types/' . $doc . '.xml';
+        //debug plus propre :D        
+        
+        if ($this->container->getParameter('debugEnable')){
+            $path = $this->container->getParameter('pathToDoctype');
+            $chemin = $path . $doc . '.xml';
+        }
+            
+        
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
 
@@ -453,8 +457,8 @@ class TraitementController extends Controller {
 
         $repertoire = 'tmp';
 
-        if($etude->getDoc($doc, $key))
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
+        if ($etude->getDoc($doc, $key))
+            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         else
             $refDocx = 'ERROR';
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
