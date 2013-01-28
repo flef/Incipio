@@ -28,6 +28,11 @@ class Mission extends DocType
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist"})
+     */
+    private $phaseMission;
 
     /** , inversedBy="missions", cascade={"persist"}
      * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre", cascade={"persist"})
@@ -77,12 +82,6 @@ class Mission extends DocType
      */
     private $remunere;
     
-     /**
-     * @var integer $nbjeh
-     *
-     * @ORM\Column(name="nbjeh", type="integer", nullable=true)
-     */
-    private $nbjeh;
 
 //Block astuce pour ajout direct d'intervenant dans formulaire
     public function getMission() {
@@ -298,27 +297,44 @@ class Mission extends DocType
     {
         return $this->etude;
     }
-
     /**
-     * Set nbjeh
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->phaseMission = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add phaseMission
      *
-     * @param integer $nbjeh
+     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
      * @return Mission
      */
-    public function setNbjeh($nbjeh)
+    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
     {
-        $this->nbjeh = $nbjeh;
+        $this->phaseMission[] = $phaseMission;
     
         return $this;
     }
 
     /**
-     * Get nbjeh
+     * Remove phaseMission
      *
-     * @return integer 
+     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
      */
-    public function getNbjeh()
+    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
     {
-        return $this->nbjeh;
+        $this->phaseMission->removeElement($phaseMission);
+    }
+
+    /**
+     * Get phaseMission
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhaseMission()
+    {
+        return $this->phaseMission;
     }
 }
