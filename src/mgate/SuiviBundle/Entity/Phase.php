@@ -37,6 +37,11 @@ class Phase
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="phase", cascade={"persist"})
+     */
+    private $phaseMission;
 
     /**
      * @var integer $nbrJEH
@@ -97,12 +102,21 @@ class Phase
      */
     private $validation;
     
+    /**
+     * @var integer $pourcentageJunior
+     *
+     * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
+     */
+    private $pourcentageJunior;
+    
+    
     public function __construct()
     {
         $this->voteCount = 0;
         $this->createdAt = new \DateTime('now');
         $this->isEnabled = false;
         $this->prixJEH = 300;
+        $this->partJunior = 40;
     }
 
     /**
@@ -352,5 +366,59 @@ class Phase
     public static function getValidationChoiceAssert()
     {
         return array_keys(Phase::getValidationChoice());
+    }
+    
+    /**
+     * Set pourcentageJunior
+     *
+     * @param integer $pourcentageJunior
+     * @return Phase
+     */
+    public function setPourcentageJunior($pourcentageJunior) {
+        $this->pourcentageJunior = $pourcentageJunior;
+
+        return $this;
+    }
+
+    /**
+     * Get pourcentageJunior
+     *
+     * @return integer 
+     */
+    public function getPourcentageJunior() {
+        return $this->pourcentageJunior;
+    }
+
+    /**
+     * Add phaseMission
+     *
+     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
+     * @return Phase
+     */
+    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
+    {
+        $this->phaseMission[] = $phaseMission;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phaseMission
+     *
+     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
+     */
+    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
+    {
+        $this->phaseMission->removeElement($phaseMission);
+    }
+
+    /**
+     * Get phaseMission
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhaseMission()
+    {
+        return $this->phaseMission;
     }
 }
