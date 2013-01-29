@@ -959,13 +959,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Add missions
+     * Add mission
      *
-     * @param \mgate\SuiviBundle\Entity\Mission $missions
+     * @param \mgate\SuiviBundle\Entity\Mission $mission
      * @return Etude
      */
-    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions) {
-        $this->missions[] = $missions;
+    public function addMission(\mgate\SuiviBundle\Entity\Mission $mission) {
+        $this->missions[] = $mission;
 
         return $this;
     }
