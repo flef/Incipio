@@ -69,7 +69,7 @@ class MissionsController extends Controller
                     
                     if(!$mission->isKnownIntervenant() && $mission->getNewIntervenant()!=null)
                     {
-                        echo "564654";
+                        echo "NEW INTERVENANT";
                         $mission->setIntervenant($mission->getNewIntervenant());
                     }
                 }
