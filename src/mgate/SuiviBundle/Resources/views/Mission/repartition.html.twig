@@ -1,0 +1,188 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block content_bundle %}
+
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}  
+
+    
+
+<h2>Répartition de JEH sur les intervenants</h2>
+<form method="POST" {{ form_enctype(form) }}>
+    {# affiche l'unique champ de la tache : description #}
+    {#{ form_row(form.description) }#}
+        
+<p><br /><input type="submit" value="Enregistrer la repartition" /></p>
+
+    <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">
+        {# itere sur chaque tag existant et affiche son unique champ : name #}
+        {% for mission in form.missions %}
+            <li>
+                <h4 class="titreMission"></h4>{{ form_widget(mission) }}
+            </li><br />
+        {% endfor %}
+    </u1>
+    <br />
+    {{ form_rest(form) }}
+
+
+
+<p><br /><input type="submit" value="Enregistrer la repartition" /></p>
+
+</form>
+
+<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
+
+
+<div id="dialog" title="Résumé et vérification">
+    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
+    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
+    <p><button id="myButtonUpdate">Raffraichir</button></p>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+
+<script type="text/javascript">
+    
+    // Fenetre resumant
+    $.ui.dialog.prototype._oldinit = $.ui.dialog.prototype._init;
+    $.ui.dialog.prototype._init = function() {
+        $(this.element).parent().css('position', 'fixed');
+        $(this.element).dialog("option",{
+            resizeStop: function(event,ui) {
+                var position = [(Math.floor(ui.position.left) - $(window).scrollLeft()),
+                                (Math.floor(ui.position.top) - $(window).scrollTop())];
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().dialog('option','position',position);
+                return true;
+            }
+        });
+        this._oldinit();
+    };
+    $(function() {
+        $( "#dialog" ).dialog({
+            position: { 
+                  my: 'right center',
+                  at: 'right center'
+            },
+            height:  $(window).height() * 0.7,
+            width:  $(window).width() * 0.25
+        });
+    });
+    
+    // Recupere le div qui contient la collection de tags
+    var collectionHolder = $('.missions');
+    
+    function updateOrder() {
+        $('input.position').each(function(i) {
+            $(this).val( i );
+        });
+        $('.titreMission').each(function(i) {
+            $(this).text( 'Mission n°'+(i+1) );
+        });
+    }
+    
+    function updatePrix() {
+        var prix = 0;
+        var mission = 0;
+        
+        $('input.nbrJEH').each(function(i1) {
+            mission=parseInt($(this).val());
+            
+            $('input.prixJEH').each(function(i2) {
+                if(i1==i2)
+                mission*=parseInt($(this).val());           
+            });
+            if(!isNaN(mission))
+                prix+=mission;
+        });
+
+       $('.prix').text( prix );
+    }
+    
+    function updateNbrJEH() {
+        var nbrJEH = 0;
+        
+        $('input.nbrJEH').each(function(i) {
+            if(!isNaN(parseInt($(this).val())))
+                nbrJEH+=parseInt($(this).val());
+        });
+
+       $('.nbrJEH').text( nbrJEH );
+    }
+    
+    var isDirty = false;
+
+    jQuery(document).ready(function() {
+        
+        updatePrix();
+        updateNbrJEH();     
+        
+        //Verification avant de quitter
+        $(':input').change(function(){
+            if(!isDirty){
+               isDirty = true;
+            }
+        });
+        $(window).bind('beforeunload', function(){
+            if(isDirty)
+                return "Voulez-vous quitter sans enregistrer ?";
+        });
+        $('form').submit(function() {
+            isDirty = false;
+            return true;
+        });
+        
+        //Rajout des boutons (X, up, down) pour les missions
+        collectionHolder.find('li').each(function() {
+            addMissionBouton($(this));
+        });      
+        
+        $('input.nbrJEH').each(function() {
+            $(this).change(function() { 
+                updatePrix();
+                updateNbrJEH();
+            });
+        });
+        
+        $('input.prixJEH').each(function() {
+            $(this).change(function() { 
+                updatePrix();
+            });
+        });
+        
+       $('#myButtonUpdate').on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+            
+            updatePrix();
+            updateNbrJEH();
+        });
+
+    });
+    
+    function addMissionBouton($tagFormLi) {
+        var $delete = $('<button id="myButtonDelete">X</button>');
+        $tagFormLi.append($delete);
+
+        $delete.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $tagFormLi.remove();
+            updatePrix();
+            updateNbrJEH();
+        });
+        
+    }
+    
+</script>
+
+
+{% endblock %}
