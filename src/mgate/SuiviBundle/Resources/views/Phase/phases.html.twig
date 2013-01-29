@@ -1,19 +1,13 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-{% block javascript %}
-
-    {{ form_javascript(form) }}
-{% endblock %}
-
-
 {% block content_bundle %}
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/tiny_mce/jquery.tinymce.js') }}"></script>
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}  
 
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+
 <style>
        textarea{
          width: 95%;
@@ -35,7 +29,10 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
+<p><br /><input type="submit" value="Ajouter une phase" name="add"/>
+ - <input type="submit" value="Enregistrer les phases" /></p>
+
+
     <div class="boutonAdd"></div>
         {# itere sur chaque tag existant et affiche son unique champ : name #}
             <div class="row phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
@@ -94,7 +91,25 @@
       {{ form_rest(form) }}
     <div class="boutonAdd"></div>
 
-    
+<p><br /><input type="submit" value="Ajouter une phase" name="add"/>
+ - <input type="submit" value="Enregistrer les phases" /></p>
+
+</form>
+
+<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
+
+
+<div id="dialog" title="Aide au chiffrage">
+    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
+    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
+    <p><button id="myButtonUpdate">Raffraichir</button></p>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
 <script type="text/javascript">
     
     // Fenetre resumant
@@ -254,8 +269,8 @@
     
     function addPhaseBouton($tagFormLi) {
         var $delete = $('<button id="myButtonDelete" class="btn">X</button>');
-        var $up = $('<button id="myButtonUp" class="btn">UP</button>');
-        var $down = $('<button id="myButtonDown" class="btn">DOWN</button>');
+        var $up = $('<button id="myButtonUp" class="btn">▲</button>');
+        var $down = $('<button id="myButtonDown" class="btn">▼</button>');
         $tagFormLi.children().children().children().children().children().first().append($delete);
         $tagFormLi.children().children().children().children().children().first().append($up);
         $tagFormLi.children().children().children().children().children().first().append($down);
@@ -290,17 +305,4 @@
 </script>
 
 
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/></p>
-
-    <p><br /><input type="submit" value="Enregistrer les phases" /></p>
-</form>
-
-<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">Retour à l'étude</a>
-
-
-<div id="dialog" title="Aide au chiffrage">
-    <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
-    <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
-    <p><button id="myButtonUpdate">Raffraichir</button></p>
-</div>
 {% endblock %}
