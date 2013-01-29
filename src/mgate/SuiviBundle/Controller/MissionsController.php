@@ -36,7 +36,7 @@ class MissionsController extends Controller
         
         $originalMissions = array();
         // Create an array of the current Mission objects in the database
-        foreach ($etude->getPhases() as $mission) {
+        foreach ($etude->getMissions() as $mission) {
             $originalMissions[] = $mission;
         }
         
@@ -69,7 +69,6 @@ class MissionsController extends Controller
                     
                     if(!$mission->isKnownIntervenant() && $mission->getNewIntervenant()!=null)
                     {
-                        echo "NEW INTERVENANT";
                         $mission->setIntervenant($mission->getNewIntervenant());
                     }
                 }
