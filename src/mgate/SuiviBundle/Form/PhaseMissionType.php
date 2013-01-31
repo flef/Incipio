@@ -12,13 +12,13 @@ class PhaseMissionType extends AbstractType
     {
 	// Je ne sais pas trop comment faire, Stéphane 
         
-        $builder->add('phase', 'collection', array(
+        $builder /*->add('phase', 'collection', array(
                 'type' => new PhaseType,
                 'allow_add' => false,
                 'allow_delete' => false,
                 'prototype' => true,
                 'by_reference' => false, //indispensable cf doc
-                ))
+                ))*/
           ->add('nbrJEH', 'integer', array('label'=>'Nombre de JEH', 'required'=>false ));
 
     }
@@ -31,7 +31,7 @@ class PhaseMissionType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\Etude',
+            'data_class' => 'mgate\SuiviBundle\Entity\PhaseMission',
         );
     }
 }
