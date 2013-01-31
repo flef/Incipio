@@ -441,9 +441,7 @@ class TraitementController extends Controller {
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude, $doc, $key);
 
-
-        //debug plus propre :D        
-        
+        //DEBUG
         if ($this->container->getParameter('debugEnable')){
             $path = $this->container->getParameter('pathToDoctype');
             $chemin = $path . $doc . '.xml';
