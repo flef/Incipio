@@ -1,0 +1,42 @@
+<?php
+
+namespace mgate\UserBundle\DataFixtures\ORM;
+
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use mgate\UserBundle\Entity\User;
+use mgate\PersonneBundle\Entity\Personne;
+
+class LoadUserData implements FixtureInterface
+{
+    /**
+     * {@inheritDoc}
+     */
+    public function load(ObjectManager $manager)
+    {
+       
+        
+        $personne = new Personne();
+        $personne->setNom('xxxxx');
+        $personne->setPrenom('yyyy');
+        $personne->setAdresse('bbbb');
+        $personne->setEmail('wtf@hh.fr');
+        $personne->setSexe('m');
+        
+        $membre = new Membre();
+        $membre->setPersonne($personne);
+        
+        $su = new User();
+        $su->setUsername('xxxxm'); //mettre le login de l'admin
+        $su->setPassword('yyyyyy'); //mettre le mdp de l'admin
+        $su->setEmail('email@mail.fr');
+        $su->setPersonne($personne);
+        
+        $personne->setUser($su);
+        
+        $manager->persist($membre);
+        $manager->persist($personne);
+        $manager->persist($su);
+        $manager->flush();
+    }
+}
