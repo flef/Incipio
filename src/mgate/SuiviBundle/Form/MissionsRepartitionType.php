@@ -37,10 +37,19 @@ class MissionRepartitionType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('intervenant', 'genemu_jqueryselect2_entity', array(
+                'read_only' =>'true',
+               'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
+               'property' => 'personne.prenomNom',
+               'label' => 'Intervenant',
+               //'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
+               'required' => false
+               ))
             ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false))
             // Je ne sais pas trop comment faire, Stéphane
             ->add('phaseMission', 'collection', array(
                     'type' => new PhaseMissionType,
+                    'label' => 'Phase(s)',
                     'allow_add' => true,
                     'allow_delete' => true,
                     'prototype' => true,

@@ -14,6 +14,13 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
+        {% for phase in etude.phases %}
+            <li>
+                Phase n°{{ phase.position }} avec {{ phase.nbrJEH }} JEH
+            </li><br />
+        {% endfor %}        
+
+        
 <p><br /><input type="submit" value="Enregistrer la repartition" /></p>
 
     <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">

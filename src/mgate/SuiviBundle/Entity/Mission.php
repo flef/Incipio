@@ -89,7 +89,7 @@ class Mission extends DocType
      */
     private $remunere;
     
-
+    
 //Block astuce pour ajout direct d'intervenant dans formulaire
     public function getMission() {
         return $this;
