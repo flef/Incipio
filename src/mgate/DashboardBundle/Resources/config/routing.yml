@@ -1,0 +1,3 @@
+mgate_dashboard_homepage:
+    pattern:  /
+    defaults: { _controller: mgateDashboardBundle:Default:index }
