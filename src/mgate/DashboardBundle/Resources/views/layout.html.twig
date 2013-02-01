@@ -1,0 +1,17 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+    {% block sous_titre %}
+        <h1>Tableau de bord</h1>
+        <hr />
+    {% endblock %}
+
+    {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+    {% block content_bundle %}
+    {% endblock %}
+
+{% endblock %}
