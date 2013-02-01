@@ -428,7 +428,7 @@ class TraitementController extends Controller {
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
             $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml'; //asset
         } else {
-            $chemin = $documenttype->getWebPath(); // on le document type qui est uploadé
+            $chemin = $documenttype->getWebPath(); // on prend le document type qui est uploadé
         }
         return $chemin;
     }
