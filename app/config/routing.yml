@@ -1,3 +1,7 @@
+mgate_dashboard:
+    resource: "@mgateDashboardBundle/Resources/config/routing.yml"
+    prefix:   /
+
 mgate_publi:
     resource: "@mgatePubliBundle/Resources/config/routing.yml"
     prefix:   /

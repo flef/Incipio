@@ -36,6 +36,7 @@ class AppKernel extends Kernel
             new Acme\PizzaBundle\AcmePizzaBundle(),
             new mgate\PubliBundle\mgatePubliBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
+            new mgate\DashboardBundle\mgateDashboardBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
