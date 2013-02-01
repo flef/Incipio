@@ -15,6 +15,10 @@ mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
     defaults: {_controller: mgatePubliBundle:Traitement:telecharger}
     
+mgate_publi_documenttype_index:
+    pattern: /publi/documenttype
+    defaults: {_controller: mgatePubliBundle:DocumentType:index}
+    
 mgate_publi_documenttype_upload:
     pattern: /publi/documenttype/upload
     defaults: {_controller: mgatePubliBundle:DocumentType:upload}
