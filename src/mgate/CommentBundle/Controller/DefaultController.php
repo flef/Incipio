@@ -19,6 +19,7 @@ class DefaultController extends Controller
         $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
 
         foreach ($etudes as $entity) {
+            if(!$em->getRepository('mgateCommentBundle:Thread')->findBy(array('thread_id'=>$entity)))
             $this->container->get('mgate_comment.thread')->creerThread("prospect_", $this->container->get('router')->generate('mgatePersonne_prospect_voir', array('id' => $entity->getId())), $entity);
         }
         
