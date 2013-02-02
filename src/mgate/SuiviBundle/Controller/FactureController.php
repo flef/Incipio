@@ -106,7 +106,7 @@ class FactureController extends Controller
     }
     
     
-    public function redigerAction($id, $type /*, $keyFi */)
+    public function redigerAction($id, $type, $keyFi)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
