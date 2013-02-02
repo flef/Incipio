@@ -1,4 +1,5 @@
-  <table class="table table-striped" id="myTable">
+<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+<table class="table table-striped" id="myTable">
       <thead>
           <tr>
               <th>
@@ -35,7 +36,70 @@
         {% set options = " no-repeat 0 0.32em ; list-style-type: none; padding-left: 20px;" %}
 
         {% for etude in etudes %}
+        {% if modeListe%}
             {% include "mgateSuiviBundle:Etude:Blocks/ligne.html.twig" with  {'etude':  etude, 'modeListe' : modeListe, 'user' : user} %}
+        {% else %}
+            {% include "mgateSuiviBundle:Etude:Blocks/longLine.html.twig" with  {'etude':  etude, 'modeListe' : modeListe, 'user' : user} %}
+        {% endif %}
         {% endfor %}
  	 </tbody>
   </table>
+<script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
+    <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
+    <style>
+            .contain {
+				width: 900px;
+				margin: 0 auto;
+            }</style>
+ <script>
+     {% if modeListe == 0%}
+{% for etude in etudes %}
+    {% if getDateLancement(etude)|default(0) and  getDateFin(etude)|default(0) %}
+		$(function() {
+
+			"use strict";
+                        
+			$("#ganttId{{loop.index}}").gantt({
+				source: [{
+					name: "Etude",
+					desc: "",
+					values: [{
+						from: "/Date({{getDateLancement(etude)|date('U')}}000)/",
+						to: "/Date({{getDateFin(etude)|date('U')}}000)/",
+						label: "Durée de l'Etude", 
+						customClass: "ganttGreen",
+					}]
+				}],
+				navigate: "scroll",
+				scale: "weeks",
+				maxScale: "months",
+				minScale: "days",
+				itemsPerPage: 10,
+				onItemClick: function(data) {
+					alert("Item clicked - show some details");
+				},
+				onAddClick: function(dt, rowId) {
+					alert("Empty space clicked - add an item!");
+				},
+				onRender: function() {
+					if (window.console && typeof console.log === "function") {
+						console.log("chart rendered");
+					}
+				}
+			});
+                        
+/*
+			$(".gantt").popover({
+				selector: ".bar",
+				title: "I'm a popover",
+				content: "And I'm the content of said popover.",
+				trigger: "hover"
+			});
+*/
+			prettyPrint();
+
+		});{% endif %}
+                {% endfor %}
+                {% endif %}
+
+    </script>

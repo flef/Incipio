@@ -378,36 +378,34 @@ class TraitementController extends Controller {
         }
 
         //Intervenant
-        if ($etude->getMissions()->get($key) != NULL) {
-            if ($mission = $etude->getMissions()->get($key)) {
-                if ($mission->getIntervenant()->getPersonne()) {
-                    $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
+        if ($mission = $etude->getMissions()->get($key)) {
+            if ($mission->getIntervenant()->getPersonne()) {
+                $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
 
-                    $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
-                    $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
-                    $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
-                    $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
-                }
-                $Mission_Nbre_JEH = (int) 0;
-                $Mission_Montant_JEH_Verse = (float) 0;
-                foreach ($mission->getPhaseMission() as $phaseMission) {
-                    $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
-                    $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
-                }
-                $Mission_Montant_JEH_Verse *= $mission->getPourcentageJunior() / 100;
-
-                $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
-                $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
-
-                $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $Mission_Nbre_JEH);
-                $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
-                $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
-                $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
-                $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+                $this->array_push_assoc($champs, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
+                $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
+                $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
+                $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
             }
+            $Mission_Nbre_JEH = (int) 0;
+            $Mission_Montant_JEH_Verse = (float) 0;
+            foreach ($mission->getPhaseMission() as $phaseMission) {
+                $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
+                $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
+            }
+            $Mission_Montant_JEH_Verse *= $mission->getPourcentageJunior() / 100;
 
+            $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
+            $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
 
+            $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $Mission_Nbre_JEH);
+            $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
+            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
+            $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
+            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
         }
+
+
 
         //var_dump($champs);
         return $champs;
