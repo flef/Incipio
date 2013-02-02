@@ -202,7 +202,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $missions;
 
     /** facture acompte
-     * @ORM\OneToOne(targetEntity="Facture", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Facture", mappedBy="etude", cascade={"persist"})
      */
     private $fa;
     
@@ -212,7 +212,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $fis;
 
     /** facture de solde
-     * @ORM\OneToOne(targetEntity="Facture", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Facture", mappedBy="etude", cascade={"persist"})
      */
     private $fs;
 
