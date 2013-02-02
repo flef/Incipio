@@ -29,15 +29,32 @@ class DefaultController extends Controller
     
     public function caAction()
     {
+        $em = $this->getDoctrine()->getManager();
+        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+
+        $ca = array();
+        $cumul=0;
+        foreach ($etudes as $etude) {
+            $cumul+= $this->get('mgate.etude_manager')->getTotalHT($etude);
+            $value = array();
+            $value[]=$etude->getDateCreation()->getTimestamp();
+            $value[]=$cumul;
+            $ca[] = $value;
+       }
+        
+        
+        
         // Chart
         $series = array(
-            array("name" => "Chiffre d'Affaire total",    "data" => array(1,2,4,5,6,3,8))
+            array("name" => "Chiffre d'Affaire total",    "data" => $ca)
         );
 
         $ob = new Highchart();
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
         $ob->title->text('Chiffre d\'Affaire titre du graph');
         $ob->xAxis->title(array('text'  => "Horizontal axis title"));
+        $ob->xAxis->type('datetime');
         $ob->yAxis->title(array('text'  => "Vertical axis title"));
         $ob->series($series);
 
