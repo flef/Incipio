@@ -20,15 +20,21 @@ class ThreadManager
     
     public function creerThread($name, $permaLink, $entity)
     {
-        //get('fos_comment.manager.thread')
-        //$thread = new mgateThread;
+         
         
-        $thread = $this->tm->createThread($name.$entity->getId());
-        //$thread->setId($name.$entity->getId());
-        //$thread->setPermalink( $permaLink );
-        $entity->setThread($thread);
-        //$this->em->persist($thread); 
-        
-        $this->em->flush();
+        if(!$entity->getThread())
+        {
+
+            //get('fos_comment.manager.thread')
+            //$thread = new mgateThread;
+
+            $thread = $this->tm->createThread($name.$entity->getId());
+            //$thread->setId($name.$entity->getId());
+            //$thread->setPermalink( $permaLink );
+            $entity->setThread($thread);
+            //$this->em->persist($thread); 
+
+            $this->em->flush();
+        }
     }
 }
