@@ -13,8 +13,6 @@ Affichage d'une étude - {{ parent() }}
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1">
-
-
             <h2>Etude {{ getRefEtude(etude) }}</h2>
             <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
             <li>Client: {{ etude.prospect.nom }} </li>
@@ -93,7 +91,7 @@ Affichage d'une étude - {{ parent() }}
                             </tr>
                             <tr>
                                 <th>Prix Phase</th>
-                                <td></td>
+                                <td>{{phase.nbrJEH * phase.prixJEH}} €</td>
                             </tr>
                             <tr>
                                 <th>Avancement</th>
@@ -135,12 +133,15 @@ Affichage d'une étude - {{ parent() }}
                                 <td>{{etude.ap.version | default('')}}</td>
                             </tr>
                             <tr>
-                                <th>Date de signature</th>
-                                <td>
                                 {% if etude.ap and etude.ap.dateSignature %} 
-                                {{etude.ap.dateSignature | date("d/m/Y") }}
+                                    <th><span class="label label-success">Date de signature</span></th>
+                                <td>
+                                
+                                        {{etude.ap.dateSignature | date("d/m/Y") }}
                                 {% else %}
-                                        Non signé
+                                <th><span class="label label-important">Date de signature</span></th>
+                                    <td>
+                                        Non Signé
                                 {% endif %}
                                     </td>
                                 </tr>
@@ -150,19 +151,19 @@ Affichage d'une étude - {{ parent() }}
                                 </tr>
                                 <tr>
                                     <th>Présentation du projet</th>
-                                    <td></td>
+                                    <td>{{etude.presentationprojet|default('')|nl2br}}</td>
                                 </tr>
                                 <tr>
                                     <th>Description</th>
-                                    <td></td>
+                                    <td>{{etude.description|default('')|nl2br}}</td>
                                 </tr>
                                 <tr>
                                     <th>Type de prestation</th>
-                                    <td></td>
+                                    <td>{{etude.typeprestation|default('')}}</td>
                                 </tr>
                                 <tr>
                                     <th>Capacité des intervenants</th>
-                                    <td></td>
+                                    <td>{{etude.competences|default('')|nl2br}}</td>
                                 </tr>
                             </table>
 
@@ -219,7 +220,7 @@ Affichage d'une étude - {{ parent() }}
                             <div class="span4">
                                 <table class="table table-striped table-bordered">
                                     <tr>
-                                        <th>
+                                        <th colspan="2">
                                     <div class="btn-group btn-large">
                                         <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Récapitulatif de Mission <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
@@ -227,13 +228,14 @@ Affichage d'une étude - {{ parent() }}
                                             <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Répartir les JEH</a></li>
                                             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
                                         </ul>
-                                    </div></th>
+                                    </div>
+                                </th>
                                     </tr>
                                     {% for mission in etude.missions %}
                                     <tr>
                                         <td colspan="2">
-                                            <div class="btn-group" style="width : 100%">
-                                                <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
+                                            <div class="btn-group">
+                                                <a class="btn btn-primary" href="#"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
                                                 <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                                 <ul class="dropdown-menu">
                                                     <li><a href="{{ path('mgateSuivi_mission_rediger', {'id': mission.id}) }}">Rédiger l'RM</a></li>
@@ -241,16 +243,17 @@ Affichage d'une étude - {{ parent() }}
                                                     <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
                                                 </ul>
                                             </div>
-                                            rajouter signé or not + progression
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Date de signature</th>
-                                        <td></td>
+                                        <td>{{mission.dateSignature|default('"now"')|date("d/m/Y")}}</td>
                                     </tr>
                                     <tr>
                                         <th>Progression</th>
-                                        <td></td>
+                                        <td><div class="progress">
+                                    <div class="bar" style="width: {{ mission.avancement|default(10) }}%;"></div>
+                                </div></td>
                                     </tr>
                                     {% endfor %}
                                 </table>
