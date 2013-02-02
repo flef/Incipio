@@ -1,3 +1,7 @@
 mgate_stat_homepage:
-    pattern:  /hello/{name}
+    pattern:  /stat/
     defaults: { _controller: mgateStatBundle:Default:index }
+
+mgate_stat_ca:
+    pattern:  /stat/ca
+    defaults: { _controller: mgateStatBundle:Default:ca }
