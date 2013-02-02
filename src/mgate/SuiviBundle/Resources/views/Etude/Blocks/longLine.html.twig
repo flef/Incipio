@@ -55,9 +55,15 @@
         </td>
     </tr>
     <tr>
-        <td colspan="7"><div class="contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div></td>
+        <td colspan="7">
+            <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{loop.index}}">
+                Avancement
+            </button>
+
+            <div id="demo{{loop.index}}" class="collapse in contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div>
+        </td>
     </tr>
         {% endif %}
 
-    
+
 

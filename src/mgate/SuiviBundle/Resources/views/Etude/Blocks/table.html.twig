@@ -46,59 +46,119 @@
   </table>
 <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
     <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
-    <style>
-            .contain {
-				width: 900px;
-				margin: 0 auto;
-            }</style>
+
  <script>
+     $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'px'});
+     
+     
+     
      {% if modeListe == 0%}
 {% for etude in etudes %}
-    {% if getDateLancement(etude)|default(0) and  getDateFin(etude)|default(0) %}
 		$(function() {
 
 			"use strict";
                         
 			$("#ganttId{{loop.index}}").gantt({
-				source: [{
+				source: [
+                                {% if etude.dateCreation %}   
+                                {
 					name: "Etude",
-					desc: "",
+					desc: "Création",
+					values: [{
+						from: "/Date({{etude.dateCreation|date('U')}}000)/",
+						to: "/Date({{etude.dateCreation|date('U')}}000)/",
+						label: "Start", 
+						customClass: "ganttBlue",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% endif %}
+                                {% if getDateLancement(etude) %}   
+                                {
+					name: "",
+					desc: "Durée",
 					values: [{
 						from: "/Date({{getDateLancement(etude)|date('U')}}000)/",
 						to: "/Date({{getDateFin(etude)|date('U')}}000)/",
 						label: "Durée de l'Etude", 
 						customClass: "ganttGreen",
+                                                dataObj: "Durée de l'étude"
 					}]
-				}],
+				},
+                                {% endif %}
+                                {% if etude.ap and etude.ap.datesignature %}  
+                                {
+					name: "Avant-Projet",
+					desc: "Signé",
+					values: [{
+						from: "/Date({{etude.ap.datesignature|date('U')}}000)/",
+						to: "/Date({{etude.ap.datesignature|date('U')}}000)/",
+						label: "AP", 
+						customClass: "ganttGreen",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% else %}{#else if verifierDate == false affiche Erreur ... gantt RED#}
+                                {
+					name: "Avant-Projet",
+					desc: "Non Signé",
+					values: [{
+						from: "/Date({{"now"|date('U')}}000)/",
+						to: "/Date({{"now"|date('U')}}000)/",
+						label: "AP", 
+						customClass: "ganttRed",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% endif %}
+                                {% if etude.cc and etude.cc.datesignature %}  
+                                {
+					name: "Convention Client",
+					desc: "Signé",
+					values: [{
+						from: "/Date({{etude.cc.datesignature|date('U')}}000)/",
+						to: "/Date({{etude.cc.datesignature|date('U')}}000)/",
+						label: "CC", 
+						customClass: "ganttGreen",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% else %}
+                                {
+					name: "Convention Client",
+					desc: "Non Signé",
+					values: [{
+						from: "/Date({{"now"|date('U')}}000)/",
+						to: "/Date({{"now"|date('U')}}000)/",
+						label: "CC", 
+						customClass: "ganttRed",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% endif %}
+                                {% for clientContact in etude.clientcontacts %}   
+                                {
+					name: {%if loop.index == 1 %}"Contact Client" {%else%} "" {% endif%},
+					desc: "Contact {{loop.index}}",
+					values: [{
+						from: "/Date({{clientContact.date|date('U')}}000)/",
+						to: "/Date({{clientContact.date|date('U')}}000)/",
+						label: "Contact", 
+						customClass: "ganttBlue",
+                                                dataObj: "Durée de l'étude"
+					}]
+				},
+                                {% endfor %}
+                        ],
 				navigate: "scroll",
 				scale: "weeks",
-				maxScale: "months",
+				maxScale: "years",
 				minScale: "days",
 				itemsPerPage: 10,
-				onItemClick: function(data) {
-					alert("Item clicked - show some details");
-				},
-				onAddClick: function(dt, rowId) {
-					alert("Empty space clicked - add an item!");
-				},
-				onRender: function() {
-					if (window.console && typeof console.log === "function") {
-						console.log("chart rendered");
-					}
-				}
 			});
-                        
-/*
-			$(".gantt").popover({
-				selector: ".bar",
-				title: "I'm a popover",
-				content: "And I'm the content of said popover.",
-				trigger: "hover"
-			});
-*/
 			prettyPrint();
 
-		});{% endif %}
+		});
                 {% endfor %}
                 {% endif %}
 
