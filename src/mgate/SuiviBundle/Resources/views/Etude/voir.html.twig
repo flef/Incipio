@@ -224,6 +224,7 @@ Affichage d'une étude - {{ parent() }}
                                         <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Récapitulatif de Mission <span class="caret"></span></button>
                                         <ul class="dropdown-menu">
                                             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Modifier les Intervenants</a></li>
+                                            <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Répartir les JEH</a></li>
                                             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
                                         </ul>
                                     </div></th>
