@@ -1,3 +1,7 @@
 mgateCommentBundle_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: mgateCommentBundle:Default:index }
+
+mgateCommentBundle_maintenance:
+    pattern:  /comment/maintenance
+    defaults: { _controller: mgateCommentBundle:Default:Maintenance }
