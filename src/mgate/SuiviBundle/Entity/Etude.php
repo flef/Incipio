@@ -17,11 +17,6 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
     
-    
-    
-    
-    
-    
     /**
      * @var bool
      */
@@ -61,6 +56,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     protected $suiveur;
 
+    /**
+     * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $thread;
+    
     /**
      * @var \DateTime $dateCreation
      *
@@ -1273,5 +1274,29 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function removeFi(\mgate\SuiviBundle\Entity\Facture $fis)
     {
         $this->fis->removeElement($fis);
+    }
+    
+    
+    /**
+     * Set thread
+     *
+     * @param \mgate\CommentBundle\Entity\Thread $thread
+     * @return Prospect
+     */
+    public function setThread(\mgate\CommentBundle\Entity\Thread $thread)
+    {
+        $this->thread = $thread;
+    
+        return $this;
+    }
+
+    /**
+     * Get thread
+     *
+     * @return mgate\CommentBundle\Entity\Thread 
+     */
+    public function getThread()
+    {
+        return $this->thread;
     }
 }

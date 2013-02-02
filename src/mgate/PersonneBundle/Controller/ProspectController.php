@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use mgate\PersonneBundle\Entity\Prospect;
 use mgate\PersonneBundle\Form\ProspectType;
-use mgate\PersonneBundle\Form\ProspectHandler;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,8 +28,6 @@ class ProspectController extends Controller
             {
                 $em->persist($prospect);    
                 $em->flush();
-                
-                //$em->flush();
                 
                 return $this->redirect( $this->generateUrl('mgatePersonne_prospect_voir', array('id' => $prospect->getId())) );
             }
