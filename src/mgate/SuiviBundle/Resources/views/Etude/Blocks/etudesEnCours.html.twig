@@ -1,4 +1,40 @@
-{% if etude.suiveur.prenomNom == user or modeListe %}
+<table class="table table-striped" id="myTable">
+      <thead>
+          <tr>
+              <th>
+                  Status
+              </th>
+              <th>
+                  <div>Nom de l'étude</div>
+                  <div>Référence</div>
+              </th>
+              <th>
+                  <div>Client</div>
+                  <div>Suiveur</div>
+              </th>
+              <th>
+                  <div>Date de Lancement</div>
+                  <div>Date de Fin</div>
+              </th>
+              <th>
+                   Avancement
+              </th>
+              <th>
+                   Developpeurs
+              </th>
+              <th>
+                   <div>Prix H.T</div>
+                   <div>Nbre J.E.H.</div>
+              </th>
+            </tr>
+ 	 </thead>
+ 	 <tbody>
+        <!-- Juste un exemple Pour test.... -->
+        {% set valider = "http://passagestecroix.ek.la/images/menubar/icon_tick.png" %}
+        {% set Nvalider = "http://www.neuroscoop.net/images_communes/croix_rouge3D.png" %}
+        {% set options = " no-repeat 0 0.32em ; list-style-type: none; padding-left: 20px;" %}
+
+        {% for etude in etudes %}
 <tr>
     <td></td>
     <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
@@ -70,4 +106,6 @@
                 <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
             </td>
         </tr>
-        {% endif %}
+        {% endfor %}
+ 	 </tbody>
+  </table>
