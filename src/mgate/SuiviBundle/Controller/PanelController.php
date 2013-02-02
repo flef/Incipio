@@ -30,7 +30,6 @@ use mgate\SuiviBundle\Entity\AvMission;
 use mgate\SuiviBundle\Form\AvMissionHandler;
 use mgate\SuiviBundle\Form\AvMissionType;
 use mgate\SuiviBundle\Entity\Facture;
-use mgate\SuiviBundle\Form\FactureHandler;
 use mgate\SuiviBundle\Form\FactureType;
 use mgate\SuiviBundle\Entity\Pvr;
 use mgate\SuiviBundle\Form\PvrHandler;

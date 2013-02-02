@@ -10,9 +10,6 @@ use mgate\SuiviBundle\Entity\Suivi;
 use mgate\SuiviBundle\Form\SuiviType;
 use mgate\SuiviBundle\Form\SuiviHandler;
 
-use mgate\SuiviBundle\Form\FactureHandler;
-
-
 use mgate\SuiviBundle\Entity\Pvr;
 use mgate\SuiviBundle\Form\PvrHandler;
 use mgate\SuiviBundle\Form\PvrType;
