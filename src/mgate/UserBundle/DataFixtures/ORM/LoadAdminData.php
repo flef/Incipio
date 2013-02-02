@@ -49,6 +49,7 @@ class LoadAdminData implements FixtureInterface, ContainerAwareInterface
         $su->setPlainPassword($this->container->getParameter('su_password')); //mettre le mdp de l'admin
         $su->setEmail($this->container->getParameter('su_mail'));
         $su->setPersonne($personne);
+        $su->setEnabled(true);
         
         $personne->setUser($su);
         
