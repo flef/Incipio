@@ -16,3 +16,7 @@ parameters:
     secret:            ThisIsNotSecret
     
     tva:  0.196
+
+    pathToDoctype: D:/Dropbox/M-GaTE - Suivi d'Etude/My-M-GaTE/Documents Types/
+    debugEnable: true
+    fileType: .xml

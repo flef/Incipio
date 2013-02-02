@@ -35,7 +35,7 @@
     {% block main_header %}
                 <div id="header">
             {% block header %}
-                        <h1>header</h1>
+                        <!--<h1>header</h1>-->
             {% endblock %}
                     </div>
     {% endblock %}
@@ -47,11 +47,12 @@
             {% block menu %}
                             <div class="navbar">
                                 <div class="navbar-inner">
-                                    <a class="brand" href="#">Accueil</a>
+                                    <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">Tableau de bord</a>
                                     <ul class="nav">
                                         <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'étude</a></li>
                                         <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Gestion des personnes</a></li>
-                                         <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
+                                        <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+                                        <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -71,7 +72,7 @@
             {% block footer %}
                                     <hr>
                                     <footer>
-                                        <p>footer</p>
+                                        <p style="text-align: right"><i>M-GaTE -- Junior-Entreprise © 2013</i></p>
                                     </footer>
             {% endblock %}
                                 </div>

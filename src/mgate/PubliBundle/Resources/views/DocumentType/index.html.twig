@@ -1,7 +1,23 @@
-<h1>Upload File</h1>
+{% extends "mgatePubliBundle::layout.html.twig" %}
 
-<form action="#" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+{% block title %}
+	{{ parent() }} - Liste des documents types
+{% endblock %}
 
-    <input type="submit" value="Upload Document" />
-</form>
+{% block content_bundle %}
+
+    <h2>Liste des Documents Types</h2>
+
+    <ul>
+
+        {% for doc in docs %}
+            <li>
+                <a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ app.request.basepath ~ '/' ~ doc.getWebPath }} ">{{ doc.name }}</a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) de document</li>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}
