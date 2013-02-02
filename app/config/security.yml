@@ -62,4 +62,4 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         
         # PAGES ACCESSIBLES AUX UTILISATEURS CONNECTES
-        #- { path: ^/suivi.*, role: ROLE_USER }
+        - { path: ^/.*, role: ROLE_USER }
