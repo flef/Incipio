@@ -1,10 +1,9 @@
 $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'px'});
-{% for etude in etudes %}
 		$(function() {
 
 			"use strict";
                         
-			$("#ganttId{{loop.index}}").gantt({
+			$("#ganttId{{id}}").gantt({
 				source: [
                                 {% if etude.dateCreation %}   
                                 {
@@ -105,4 +104,3 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 			prettyPrint();
 
 		});
-                {% endfor %}
