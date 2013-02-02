@@ -191,8 +191,8 @@ class TraitementController extends Controller {
         $phases = $etude->getPhases();
         $nombrePhase = (int) count($phases);
 
-        
-        
+
+
         //EtudeManager
         $Taux_TVA = (float) 19.6;
         $Montant_Total_JEH_HT = (float) $etudeManager->getTotalJEHHT($etude);
@@ -388,17 +388,25 @@ class TraitementController extends Controller {
                     $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
                     $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
                 }
-            }
-            $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $mission->getNbjeh());
-            $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $converter->ConvNumberLetter($mission->getNbjeh()));
-            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $mission->get);
-            //$this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $converter->ConvNumberLetter($etudeManager->getMontantVerse($etude), 1));
-            /* $this->array_push_assoc($champs, 'Mission_Date_Fin_Etude', $etudeManager->getDateFin($etude)->format('j') . " " . $Mois_Fin . " " . $etudeManager->getDateFin($etude)->format('o'));
-              $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
-              
+                $Mission_Nbre_JEH = (int) 0;
+                $Mission_Montant_JEH_Verse = (float) 0;
+                foreach ($mission->getPhaseMission() as $phaseMission) {
+                    $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
+                    $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
+                }
+                $Mission_Montant_JEH_Verse *= $mission->getPourcentageJunior() / 100;
 
-             * }
-             */
+                $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
+                $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
+
+                $this->array_push_assoc($champs, 'Mission_Nbre_JEH', $Mission_Nbre_JEH);
+                $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
+                $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
+                $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
+                $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+            }
+
+
         }
 
         //var_dump($champs);
@@ -442,12 +450,12 @@ class TraitementController extends Controller {
         $champs = $this->getAllChamp($etude, $doc, $key);
 
         //DEBUG
-        if ($this->container->getParameter('debugEnable')){
+        if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
             $chemin = $path . $doc . '.xml';
         }
-            
-        
+
+
 
         $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
 
