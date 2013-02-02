@@ -352,5 +352,8 @@ Affichage d'une étude - {{ parent() }}
         </li>
 #}	
                 </p>
+                
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': etude.thread.id} %}
 
 {% endblock %}

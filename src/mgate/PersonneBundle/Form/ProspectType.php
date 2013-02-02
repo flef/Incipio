@@ -12,7 +12,6 @@ class ProspectType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-            //->add('thread', new ThreadType) // délicat 
             ->add('nom', 'text')
             ->add('entite', 'text', array('required'=>false))
             ->add('adresse', 'text', array('required'=>false));
