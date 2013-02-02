@@ -17,32 +17,71 @@ Accueil - {{ parent() }}
     <div class="tab-content">
         <div class="tab-pane active" id="tab1" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 0} %}
-        </div>
-        <div class="tab-pane" id="tab2" style="min-height: 400px;">
+            </div>
+            <div class="tab-pane" id="tab2" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 1} %}
-        </div>
-        <div class="tab-pane" id="tab3" style="min-height: 400px;">
+                </div>
+                <div class="tab-pane" id="tab3" style="min-height: 400px;">
             {#% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom, 'modeListe' : 1} %#}
-        </div>
-    </div>
+                        <div class="accordion" id="accordion2">
+                            <div class="accordion-group">
+                                <div class="accordion-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                        Mandat 6
+                                    </a>
+                                </div>
+                                <div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
+                                    <div class="accordion-inner">
+                                        {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 1} %}
 
-    <!--<script>
-    $(document).ready(function() { 
-    $("table").tablesorter({ 
-        // pass the headers argument and assing a object 
-        headers: { 
-            // assign the secound column (we start counting zero) 
-            1: { 
-                // disable it by setting the property sorter to false 
-                sorter: false 
-            }, 
-            // assign the third column (we start counting zero) 
-            2: { 
-                // disable it by setting the property sorter to false 
-                sorter: false 
-            } 
-        } 
-    }); 
-    });
-    </script>-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+                                            Mandat 5
+                                        </a>
+                                    </div>
+                                    <div id="collapseTwo" class="accordion-body in collapse" style="height: auto;">
+                                        <div class="accordion-inner">
+                                        {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 1} %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="accordion-group">
+                                        <div class="accordion-heading">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+                                                Mandat 4
+                                            </a>
+                                        </div>
+                                        <div id="collapseThree" class="accordion-body collapse">
+                                            <div class="accordion-inner">
+                                        {% include "mgateSuiviBundle:Etude:Blocks/table.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0), 'modeListe' : 1} %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<script>
+                            $(document).ready(function() { 
+                            $("table").tablesorter({ 
+                                // pass the headers argument and assing a object 
+                                headers: { 
+                                    // assign the secound column (we start counting zero) 
+                                    1: { 
+                                        // disable it by setting the property sorter to false 
+                                        sorter: false 
+                                    }, 
+                                    // assign the third column (we start counting zero) 
+                                    2: { 
+                                        // disable it by setting the property sorter to false 
+                                        sorter: false 
+                                    } 
+                                } 
+                            }); 
+                            });
+                            </script>-->
 {% endblock %}
