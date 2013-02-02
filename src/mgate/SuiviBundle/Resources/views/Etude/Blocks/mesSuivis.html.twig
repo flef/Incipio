@@ -1,0 +1,106 @@
+<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+<table class="table table-striped" id="myTable">
+      <thead>
+          <tr>
+              <th>
+                  Status
+              </th>
+              <th>
+                  <div>Nom de l'étude</div>
+                  <div>Référence</div>
+              </th>
+              <th>
+                  <div>Client</div>
+              </th>
+              <th>
+                  <div>Date de Lancement</div>
+                  <div>Date de Fin</div>
+              </th>
+              <th>
+                   Developpeurs
+              </th>
+              <th>
+                  Avancement Dev
+              </th>
+              <th>
+                   <div>Prix H.T</div>
+                   <div>Nbre J.E.H.</div>
+              </th>
+            </tr>
+ 	 </thead>
+ 	 <tbody>
+        {% for etude in etudes %}
+        {% if etude.suiveur.prenomNom == user%}
+        <tr>
+            <td></td>
+            <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
+            <td><div class="btn-group" style="width : 100%">
+                    <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
+                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                        <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}"><i class="icon-envelope"></i> Voir</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="i"></i>Commenter</a></li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                    {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
+                    {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
+                </td>
+                <td colspan="2">
+
+                    <table style="width: 100%;">
+
+                     {% for mission in etude.missions %}
+                        <tr>
+                            <td width="50%">
+                                <div class="btn-group" style="width : 100%;">
+                                    <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
+                                    <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : (mission.id - 1)}) }}"><i class="icon-envelope"></i> Générer</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#"><i class="i"></i> autre</a></li>
+                                    </ul>
+                                </div> 
+
+
+                            </td>
+                            <td width="50%">
+                                <div class="progress">
+                                    <div class="bar" style="width: {{ mission.avancement|default(1) }}%;"></div>
+                                </div>
+
+
+                            </td></tr>
+
+                     {% endfor %}
+                    </table>
+
+                </td>
+                <td>
+                    <div>{{ getTotalHT(etude)|default('') }} €</div>
+                    <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7">
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{loop.index}}">
+                        Avancement
+                    </button>
+
+                    <div id="demo{{loop.index}}" class="collapse in contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div>
+                </td>
+            </tr>
+        {% endif %}
+        {% endfor %}
+ 	 </tbody>
+  </table>
+<script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
+<script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
+<script>
+     {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etudes':  etudes} %}
+</script>
