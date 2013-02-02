@@ -102,5 +102,7 @@
 <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
 <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
 <script>
-     {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etudes':  etudes} %}
+    {%for etude in etudes %}
+     {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : loop.index } %}
+    {%endfor%}
 </script>
