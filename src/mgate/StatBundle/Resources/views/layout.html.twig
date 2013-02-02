@@ -1,0 +1,27 @@
+{# layout père de suivi bundle #}
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+    M-GaTE - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
+    {% block sous_titre %}
+    <h1>Indicateur & Statistique</h1>
+    
+    <h4>Sous-Menu</h4>
+    <ul>
+        <li><a href="{{ path('mgate_publi_documenttype_index') }}">Lister</a></li>
+        <li><a href="{{ path('mgate_publi_documenttype_upload') }}">Ajouter</a></li>
+    </ul>
+
+    <hr>
+    {% endblock %}
+    
+    {# On définit un nouveau block, que les vues du bundle pourront remplir #}
+    {% block content_bundle %}
+    {% endblock %}
+
+{% endblock %}

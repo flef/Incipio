@@ -21,7 +21,7 @@ class DocumentType
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */
-    public $name;
+    private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -99,5 +99,27 @@ class DocumentType
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
+    }
+        
+    
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName() {
+        return $this->name;
+    }
+    
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return DocumentType
+     */
+    public function setName($name) {
+        $this->name = $name;
+
+        return $this;
     }
 }
