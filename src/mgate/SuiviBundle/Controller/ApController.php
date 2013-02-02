@@ -186,7 +186,8 @@ class ApController extends Controller {
 
         $manquant[] = "0"; // nécessaire pour l'initialiser si generer=1    
         $generer = $etude->getAp()->getGenerer(); // ne pas bouger car on doit récupérer la valeur de générer après vérification
-
+        $validation = $this->get('mgate.validation')->prixJEH($etude);
+        
         return $this->render('mgateSuiviBundle:Ap:generer.html.twig', array(
                     'suiveur' => $suiveur,
                     'prospect' => $prospect,
@@ -201,7 +202,8 @@ class ApController extends Controller {
                     'generer' => $generer,
                     'signataire2' => $signataire2,
                     'manquants' => $manquant,
-                    'etude' => $etude // pour moi faut transmettre que ça, m'enfin && Je suis d'accord avec toi sur ce coup...
+                    'etude' => $etude,
+                    'validationJEH' => $validation// pour moi faut transmettre que ça, m'enfin && Je suis d'accord avec toi sur ce coup...
                 ));
     }
 
