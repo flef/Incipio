@@ -209,8 +209,8 @@ mgateSuivi_facture_modifier:
         id: \d+
         
 mgateSuivi_facture_rediger:
-    pattern: /facture/rediger/{id}/{type}
-    defaults: {_controller: mgateSuiviBundle:Facture:rediger, type:null}
+    pattern: /facture/rediger/{id}/{type}/{keyFi}
+    defaults: {_controller: mgateSuiviBundle:Facture:rediger, type:null, keyFi:null}
     requirements:
         id: \d+
  
