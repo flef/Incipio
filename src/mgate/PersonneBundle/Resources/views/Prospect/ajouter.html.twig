@@ -1,13 +1,13 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
-{% if format=='mini' %}
+{# % if 1==2 %}
     {% block menu %}
     {% endblock %}
     {% block submenu %}
     {% endblock %}
-{% else %}
+{% endif % #}
 
-{% endif %}
+
 
 {% block content_bundle %}
 
@@ -15,6 +15,6 @@
 
   {% include "mgatePersonneBundle:Prospect:formulaire.html.twig" %} 
 
-
+{{ format }}
 
 {% endblock %}
