@@ -9,9 +9,16 @@ use mgate\PubliBundle\Entity\DocumentType;
 
 class DocumentTypeController extends Controller
 {
-    public function indexAction($name)
+    public function indexAction()
     {
-        return $this->render('mgatePubliBundle:DocumentType:index.html.twig', array('name' => $name));
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('mgatePubliBundle:DocumentType')->findAll();
+
+        return $this->render('mgatePubliBundle:DocumentType:index.html.twig', array(
+            'docs' => $entities,
+        ));
+       
     }
     
     public function uploadAction()
@@ -20,22 +27,32 @@ class DocumentTypeController extends Controller
         $form = $this->createFormBuilder($document)
             ->add('name')
             ->add('file')
-            ->getForm()
-        ;
-
+            ->getForm();
+        
         if ($this->getRequest()->isMethod('POST')) {
             $form->bind($this->getRequest());
-            if ($form->isValid()) {
+            if ($form->isValid())
+            {
+                $document->setName(strtoupper($document->getName()));
+                
                 $em = $this->getDoctrine()->getManager();
 
+                $docs = $em->getRepository('mgatePubliBundle:DocumentType')->findBy(array('name' => $document->getName() )); // Ligne qui posse problème
+                if ($docs) {
+                    foreach ($docs as $doc) {
+                        $em->remove($doc);
+                    }
+                }
+                
+                
                 $em->persist($document);
                 $em->flush();
 
-                $this->redirect($this->generateUrl('/'));
+                $this->redirect($this->generateUrl('mgate_publi_documenttype_index'));
             }
         }
 
         //return array('form' => $form->createView());
-        return $this->render('mgatePubliBundle:DocumentType:index.html.twig', array('form' => $form->createView()));
+        return $this->render('mgatePubliBundle:DocumentType:upload.html.twig', array('form' => $form->createView()));
     }
 }

@@ -1,0 +1,7 @@
+parameters:
+#    mgate_stat.example.class: mgate\StatBundle\Example
+
+services:
+#    mgate_stat.example:
+#        class: %mgate_stat.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
