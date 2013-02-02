@@ -1,0 +1,22 @@
+{% extends "mgateStatBundle::layout.html.twig" %}
+
+{% block title %}
+	Accueil - {{ parent() }}
+{% endblock %}
+        
+{% block head %}
+        <script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery-1.7.1.min.js') }}"></script>
+{% endblock %}
+
+{% block content_bundle %}    
+    <h2>Statistique- test</h2>
+
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
+    <script type="text/javascript">
+        {{ chart(chart) }}
+    </script>
+
+    <div id="linechart" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+    
+{% endblock %}
