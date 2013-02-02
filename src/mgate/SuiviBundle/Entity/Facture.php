@@ -22,8 +22,8 @@ class Facture extends DocType
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="factures", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Etude", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
     
