@@ -16,6 +16,12 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  */
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
+    
+    
+    
+    
+    
+    
     /**
      * @var bool
      */
@@ -25,6 +31,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      */
     private $newProspect;
+    
+    
+    /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="state", type="integer", nullable=true)
+     */
+    private $state;
 
     /**
      * @var integer $id
@@ -1214,4 +1228,50 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->fs;
     }
 
+
+    /**
+     * Set state
+     *
+     * @param integer $state
+     * @return Etude
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return integer 
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * Add fis
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $fis
+     * @return Etude
+     */
+    public function addFi(\mgate\SuiviBundle\Entity\Facture $fis)
+    {
+        $this->fis[] = $fis;
+    
+        return $this;
+    }
+
+    /**
+     * Remove fis
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $fis
+     */
+    public function removeFi(\mgate\SuiviBundle\Entity\Facture $fis)
+    {
+        $this->fis->removeElement($fis);
+    }
 }
