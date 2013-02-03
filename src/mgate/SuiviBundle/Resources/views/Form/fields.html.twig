@@ -1,0 +1,9 @@
+{% use 'form_div_layout.html.twig' with field_widget as base_field_widget %}
+
+{% block field_widget %}
+    {{ block('base_field_widget') }}
+
+    {% if help is defined %}
+        <span class="help-block" style="margin-top:-13px;">{{ help }}</span>
+    {% endif %}
+{% endblock %}
