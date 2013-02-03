@@ -19,7 +19,7 @@ class MembreType extends AbstractType
                            'class' => 'mgate\\PersonneBundle\\Entity\\Poste',
                            'property' => 'intitule',
                            'property_path' => true,
-                           'required' => true,));
+                           'required' => false,));
 
             
     }
