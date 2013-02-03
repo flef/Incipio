@@ -1,0 +1,16 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}Modifier un poste - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Modifier un poste</h2>
+    {% include "mgatePersonneBundle:Poste:formulaire.html.twig" %}
+
+                
+<p>
+    <a href="{{ path('mgatePersonne_poste_homepage') }}" >Retour à la liste des postes</a>
+</p>
+{% endblock %}
+
+        

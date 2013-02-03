@@ -41,8 +41,8 @@ class LoadAdminData implements FixtureInterface, ContainerAwareInterface
         $personne->setEmail($this->container->getParameter('su_mail'));
         $personne->setSexe('m');
         
-        $membre = new Membre();
-        $membre->setPersonne($personne);
+        //$membre = new Membre();
+        //$membre->setPersonne($personne);
         
         $su = new User();
         $su->setUsername($this->container->getParameter('su_username')); //mettre le login de l'admin
@@ -53,7 +53,7 @@ class LoadAdminData implements FixtureInterface, ContainerAwareInterface
         
         $personne->setUser($su);
         
-        $manager->persist($membre);
+        //$manager->persist($membre);
         $manager->persist($personne);
         $manager->persist($su);
         $manager->flush();
