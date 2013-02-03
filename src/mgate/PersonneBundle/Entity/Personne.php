@@ -102,7 +102,12 @@ class Personne
         if($this->employe)
             return $this->employe->getPoste();
         elseif($this->membre)
-            return $this->membre->getPoste()->getIntitule();
+        {
+            if($this->membre->getPoste())
+                return $this->membre->getPoste()->getIntitule();
+        }
+        else
+            return "";
     }
     
     
