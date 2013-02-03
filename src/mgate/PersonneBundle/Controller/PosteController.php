@@ -32,7 +32,7 @@ class PosteController extends Controller
             }
         }
 
-        return $this->render('mgatePersonneBundle:poste:ajouter.html.twig', array(
+        return $this->render('mgatePersonneBundle:Poste:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
         
