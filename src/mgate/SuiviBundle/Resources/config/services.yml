@@ -21,6 +21,8 @@ services:
       class: "%mgate.validation.class%"
       arguments:
         - "@doctrine.orm.entity_manager"
+      tags:
+        - { name: twig.extension }
         
     form.type_extension.help_message:
         class: mgate\SuiviBundle\Form\Extension\HelpMessageTypeExtension
