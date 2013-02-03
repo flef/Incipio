@@ -22,6 +22,7 @@
 //
 /*jshint shadow:true, unused:false, laxbreak:true, evil:true*/
 /*globals jQuery, alert*/
+
 (function ($) {
 
     "use strict";
