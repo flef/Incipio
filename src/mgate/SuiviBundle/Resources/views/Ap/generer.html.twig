@@ -60,11 +60,6 @@
         <li>Délai: {{phase.delai}}</li>
         <li>Nombre de JEH: {{phase.nbrJEH}}</li>
         <li>Prix du JEH: {{phase.prixJEH}}
-            <strong>
-                {% if validationJEH == 0 %}
-                    <a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}"> PRIX DU JEH INCORRECTE </a>
-                {% endif %}    
-            </strong>
         </li>
     {% endfor %} 
     
