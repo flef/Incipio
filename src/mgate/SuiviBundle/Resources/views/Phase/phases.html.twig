@@ -59,14 +59,14 @@
                             <th>Validation</th>
                             <td>
                                     {{ form_widget(phase.validation)}}
-                                </td>
+                            </td>
                             </tr>
                             <tr>
                                 <th>Nombre JEH</th>
                                 <td>{{ form_widget(phase.nbrJEH)}}</td>
                             </tr>
                             <tr>
-                                <th>Prix JEH (€)</th>
+                                <th>Prix JEH HT Facturé (€)</th>
                                 <td>{{ form_widget(phase.prixJEH)}}</td>
                             </tr>
                             <tr>
@@ -78,8 +78,8 @@
                                 <td>{{ form_widget(phase.delai)}}</td>
                             </tr>
                             <tr>
-                                <th>Prix Phase</th>
-                                <td></td>
+                                <th>Prix Phase <span style="font-size: 9px">id={{ phase.vars.name }}</span> {#{ dump(phase.vars) }#}</th>
+                                <td><span class="prixPhase{{ phase.vars.name }}">//</span></td>
                             </tr>
                         </table>
                     </div>
@@ -162,7 +162,10 @@
                 phase*=parseInt($(this).val());           
             });
             if(!isNaN(phase))
+            {
                 prix+=phase;
+                $('.prixPhase'+i1).text( phase );
+            }
         });
 
        $('.prix').text( prix );
