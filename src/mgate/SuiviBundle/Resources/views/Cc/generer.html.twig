@@ -18,9 +18,10 @@
 
      Date de signature: {{ cc.dateSignature|date("d/m/Y") }}
     <strong>
-        {% if validation == 0 %}
+        {% if {{ getValidationCc(etude) }} == 0 %}
             <a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"> DATE DE SIGNATURE INCORRECTE </a>
         {% endif %}    
+        
     </strong>
     </p>
     <p>

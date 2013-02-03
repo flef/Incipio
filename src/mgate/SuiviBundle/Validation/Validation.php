@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use mgate\SuiviBundle\Entity\Etude as Etude;
 
 
-class Validation
+class Validation extends \Twig_Extension
 {
     protected $em;
     protected $etude;
@@ -14,6 +14,22 @@ class Validation
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+    }
+    
+    // Pour utiliser les fonctions depuis twig
+    public function getName() {
+        return 'mgate_Validation';
+    }
+
+    // Pour utiliser les fonctions depuis twig
+    public function getFunctions() {
+        return array(
+            'prixJEH' => new \Twig_Function_Method($this, 'prixJEH'),
+            'validationCc' => new \Twig_Function_Method($this, 'ValidationCc'),
+            'RmDate' => new \Twig_Function_Method($this, 'RmDate'),
+            'RmDatePhase' => new \Twig_Function_Method($this, 'RmDatePhase'),
+            'ValidationJEH' => new \Twig_Function_Method($this, 'validationJEH'),
+        );
     }
     
     //vérifie 80€ < prix JEH < 300€, contrainte à mettre dans l'entity ?
