@@ -15,7 +15,7 @@
         <h3>Employes:</h3>
         {% for employe in prospect.employes %}
             <li>
-            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.personne.sexe }} {{ employe.personne.prenom }} {{ employe.personne.nom }} - {{ employe.personne.poste }}</a></h4>
+            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.personne.sexe }} {{ employe.personne.prenom }} {{ employe.personne.nom }} - {{ employe.poste }}</a></h4>
             Mobile: {{ employe.personne.mobile }}<br />
             Fix: {{ employe.personne.fix }}<br />
             Email: {{ employe.personne.email }}<br />

@@ -35,7 +35,11 @@ class Membre
      */
     private $identifiant;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="Poste", inversedBy="membres", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $poste;
 
     /**
      * Get id
@@ -92,5 +96,28 @@ class Membre
     public function getPersonne()
     {
         return $this->personne;
+    }
+    
+    /**
+     * Set poste
+     *
+     * @param \mgate\PersonneBundle\Entity\Membre $poste
+     * @return Membre
+     */
+    public function setPoste(\mgate\PersonneBundle\Entity\Poste $poste)
+    {
+        $this->poste = $poste;
+    
+        return $this;
+    }
+
+    /**
+     * Get poste
+     *
+     * @return \mgate\PersonneBundle\Entity\Membre
+     */
+    public function getPoste()
+    {
+        return $this->poste;
     }
 }
