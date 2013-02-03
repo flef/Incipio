@@ -34,8 +34,8 @@
         var settings = {
             source: null,
             itemsPerPage: 7,
-            months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-            dow: ["S", "M", "T", "W", "T", "F", "S"],
+            months: ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Decembre"],
+            dow: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
             startPos: new Date(),
             navigate: "buttons",
             scale: "days",
