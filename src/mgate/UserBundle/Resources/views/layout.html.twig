@@ -17,6 +17,7 @@
 
 {% block body %}
  <div class="centre">
+<p>
 {# L'utilisateur est-il connecté ? #}
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     {# L'utilisateur est connecté ! #}
@@ -32,7 +33,7 @@
     <a href="{{ path('fos_user_security_login') }}">Connexion</a>
     <a href="{{ path('fos_user_registration_register') }}">Inscription</a>
 {% endif %}
-
+</p>
 
     {% block fos_user_content %}qsdfqsdfqsdf{% endblock %}
 </div>

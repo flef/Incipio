@@ -18,11 +18,11 @@
     
  
 <form method="post" {{ form_enctype(form) }}>
+    {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+    {{ form_widget(form) }}
 
-	{{ form_widget(form) }}
-	
-	<input type="submit" value="Enregistrer l'AP"/>
-        <input type="submit" value="Enregistrer l'AP et passer aux Phases" name="phases"/>
+    <input type="submit" value="Enregistrer l'AP"/>
+    <input type="submit" value="Enregistrer l'AP et passer aux Phases" name="phases"/>
 </form>
 
 
