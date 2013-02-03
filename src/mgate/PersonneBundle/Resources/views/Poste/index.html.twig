@@ -1,0 +1,21 @@
+{# layout d'accueil pour les Users  #}
+
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Liste des Postes</h2>
+
+    <ul>
+        {% for poste in postes %}
+            <li>
+            <a href="{{ path('mgatePersonne_poste_voir', {'id': poste.id}) }}"> {{ poste.intitule }} </a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) de Poste</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
