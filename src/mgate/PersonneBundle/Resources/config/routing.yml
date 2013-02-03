@@ -69,3 +69,25 @@ mgatePersonne_membre_modifier:
     defaults: {_controller: mgatePersonneBundle:Membre:modifier}
     requirements:
         id: \d+        
+
+mgatePersonne_poste_homepage:
+    pattern:  /poste
+    defaults: { _controller: mgatePersonneBundle:Poste:index , page: 1 }
+    requirements:
+      page : \d*
+    
+mgatePersonne_poste_ajouter:
+    pattern: /poste/add
+    defaults: {_controller: mgatePersonneBundle:Poste:ajouter}
+
+mgatePersonne_poste_voir:
+    pattern:   /poste/{id}
+    defaults:  { _controller: mgatePersonneBundle:Poste:voir}
+    requirements:
+        id:  \d+
+
+mgatePersonne_poste_modifier:
+    pattern: /poste/modifier/{id}
+    defaults: {_controller: mgatePersonneBundle:Poste:modifier}
+    requirements:
+        id: \d+      

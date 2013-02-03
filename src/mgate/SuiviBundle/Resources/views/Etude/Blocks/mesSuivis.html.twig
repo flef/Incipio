@@ -30,6 +30,7 @@
  	 </thead>
  	 <tbody>
         {% for etude in etudes %}
+        {% if etude.suiveur %}
         {% if etude.suiveur.prenomNom == user%}
         <tr>
             <td></td>
@@ -96,6 +97,7 @@
                     <div id="demo{{loop.index}}" class="collapse in contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div>
                 </td>
             </tr>
+        {% endif %}
         {% endif %}
         {% endfor %}
  	 </tbody>

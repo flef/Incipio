@@ -14,7 +14,6 @@ class PersonneType extends AbstractType
 	    $builder
                 ->add('prenom')
                 ->add('nom')
-                ->add('poste')
                 ->add('sexe', new SexeType())
                 ->add('mobile')
                 ->add('email');

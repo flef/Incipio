@@ -1,0 +1,18 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'un Poste - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+<p>
+	<h2>{{ poste.intitule }}</h2>
+
+</p>
+
+<p>
+    <a href="{{ path('mgatePersonne_poste_modifier', {'id': poste.id}) }}">Modifier le poste</a><br />
+    <a href="{{ path('mgatePersonne_poste_homepage') }}">Retour à la liste des postes</a>
+</p>
+
+{% endblock %}
