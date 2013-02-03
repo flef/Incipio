@@ -30,7 +30,7 @@ class EtudeType extends AbstractType
                 'label' => 'Prospect existant',
                 ))
             ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))                               
-            ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
+            ->add('nom', 'text',array('label'=>'Nom interne de l\'étude', 'help' => 'Test de aide', 'attr' => array('placeholder' => 'First Name')))
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
             ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude'))

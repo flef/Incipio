@@ -11,11 +11,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="{{ asset('css/bootstrap-responsive.css') }}" rel="stylesheet">
         <style>
-                body {
-                    width: 95%;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
+            body {
+                width: 95%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            ul.nav li.dropdown:hover ul.dropdown-menu{
+                display: block;    
+            }
+
+            a.menu:after, .dropdown-toggle:after {
+              content: none;
+            }
         </style>
 {% endblock %}
 
@@ -49,13 +56,37 @@
                                 <div class="navbar-inner">
                                     <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">Tableau de bord</a>
                                     <ul class="nav">
-                                        <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'étude</a></li>
-                                        <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Gestion des personnes</a></li>
+                                        <li class="dropdown">
+                                          <a href="{{ path('mgateSuivi_etude_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown">Suivi d'étude<b class="caret"></b></a>
+                                          <ul class="dropdown-menu">
+                                            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter</a></li>
+                                            <li class="nav-header">Mes Etudes:</li>
+                                          </ul>
+                                        </li>
+                                        <li class="dropdown">
+                                          <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown">Gestion des personnes<b class="caret"></b></a>
+                                          <ul class="dropdown-menu">
+                                            <li class="nav-header">Prospect/Client:</li>
+                                            <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Lister</a></li>
+                                            <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}">Ajouter</a></li>
+                                            <li class="nav-header">Membre:</li>
+                                            <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister</a></li>
+                                            <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter</a></li>
+                                            <li class="nav-header">Poste:</li>
+                                            <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister</a></li>
+                                            <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter</a></li>
+                                          </ul>
+                                        </li>
                                         <li><a href="{{ path('mgate_stat_homepage') }}">Indicateurs</a></li>
                                         <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+                                       
+                                        
+                                    </ul>
+                                    <ul class="nav pull-right">
                                         <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
                                     </ul>
                                 </div>
+
                             </div>
             {% endblock %}
                         </div> 
