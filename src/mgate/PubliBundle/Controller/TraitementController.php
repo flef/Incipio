@@ -98,7 +98,7 @@ class TraitementController extends Controller {
     private function liasons(&$templateXML) {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
 
-        $callback = function ($matches) {//Fonction de callback
+        $callback = function ($matches) use ($this) {//Fonction de callback
                     return (($this->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
                 };
 
