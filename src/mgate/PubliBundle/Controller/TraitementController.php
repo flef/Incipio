@@ -210,12 +210,16 @@ class TraitementController extends Controller {
             $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
         else
             $Mois_Lancement = NULL;
+            
         if ($etudeManager->getDateFin($etude)) {
             $Mois_Fin = $this->nombreVersMois(intval($etudeManager->getDateFin($etude)->format('m')));
             $Date_Fin_Etude = $etudeManager->getDateFin($etude)->format('d/m/Y');
         }
         else
+        {
             $Mois_Fin = NULL;
+            $Date_Fin_Etude = NULL;
+        }
         if ($etudeManager->getDelaiEtude($etude))
             $Delais_Semaines = (int) $etudeManager->getDelaiEtude($etude)->d / 7;
         else

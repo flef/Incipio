@@ -192,6 +192,7 @@ class ApController extends Controller {
         $generer = $etude->getAp()->getGenerer(); // ne pas bouger car on doit récupérer la valeur de générer après vérification
         $validation = $this->get('mgate.validation')->prixJEH($etude);
         
+
         return $this->render('mgateSuiviBundle:Ap:generer.html.twig', array(
                     'suiveur' => $suiveur,
                     'prospect' => $prospect,
@@ -209,7 +210,7 @@ class ApController extends Controller {
                     'etude' => $etude,
                     'validationJEH' => $validation// pour moi faut transmettre que ça, m'enfin && Je suis d'accord avec toi sur ce coup...
                 ));
-    }
+      }
 
     public function SuiviAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
