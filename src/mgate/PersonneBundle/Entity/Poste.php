@@ -32,7 +32,7 @@ class Poste
     
     /**
      * @ORM\OneToMany(targetEntity="Membre", mappedBy="poste")
-     * @ORM\JoinColumn(nullable=true)
+        * @ORM\JoinColumn(nullable=true)
      */
     private $membres;
 
