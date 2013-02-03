@@ -28,11 +28,11 @@ mgateSuivi_etude_panel:
     requirements:
       page : \d* 
         
-mgateSuivi_ap_generer:
-    pattern: /ap/generer/{id}
-    defaults: {_controller: mgateSuiviBundle:Ap:generer}
-    requirements:
-        id: \d+  
+#mgateSuivi_ap_generer:
+#    pattern: /ap/generer/{id}
+#    defaults: {_controller: mgateSuiviBundle:Ap:generer}
+#    requirements:
+#        id: \d+  
         
 mgateSuivi_ap_voir:
     pattern: /ap/voir/{id}
@@ -64,11 +64,11 @@ mgateSuivi_cc_voir:
     requirements:
         id: \d+
        
-mgateSuivi_cc_generer:
-    pattern: /cc/generer/{id}
-    defaults: {_controller: mgateSuiviBundle:Cc:generer}
-    requirements:
-        id: \d+  
+#mgateSuivi_cc_generer:
+#    pattern: /cc/generer/{id}
+#    defaults: {_controller: mgateSuiviBundle:Cc:generer}
+#    requirements:
+#        id: \d+  
         
 mgateSuivi_cc_suivi:
     pattern: /cc/suivi/{id}
@@ -89,12 +89,12 @@ mgateSuivi_missions_modifier:
     requirements:
         id: \d+
         
-mgateSuivi_missions_generer:
-    pattern: /missions/generer/{id}
-    defaults: {_controller: mgateSuiviBundle:Missions:generer}
-    requirements:
-        id: \d+
-        
+#mgateSuivi_missions_generer:
+#    pattern: /missions/generer/{id}
+#    defaults: {_controller: mgateSuiviBundle:Missions:generer}
+#    requirements:
+#        id: \d+
+       
 mgateSuivi_missions_repartition:
     pattern: /missions/repartition/{id}
     defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
