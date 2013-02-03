@@ -35,7 +35,12 @@ class Employe
      */
     private $personne;
 
-
+    /**
+     * @var string $poste
+     *
+     * @ORM\Column(name="poste", type="string", length=255, nullable=true)
+     */
+    private $poste;
 
     /**
      * Get id
@@ -93,5 +98,28 @@ class Employe
     public function getPersonne()
     {
         return $this->personne;
+    }
+    
+    /**
+     * Set poste
+     *
+     * @param string $poste
+     * @return Employe
+     */
+    public function setPoste($poste)
+    {
+        $this->poste = $poste;
+    
+        return $this;
+    }
+
+    /**
+     * Get poste
+     *
+     * @return string 
+     */
+    public function getPoste()
+    {
+        return $this->poste;
     }
 }
