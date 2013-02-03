@@ -375,6 +375,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', (float) $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
+            if($phase->getDateDebut())
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getDelai());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
