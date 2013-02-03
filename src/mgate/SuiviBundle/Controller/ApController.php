@@ -68,7 +68,11 @@ class ApController extends Controller {
                 $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getAp());
 
                 $em->flush();
-                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                
+                if($this->get('request')->get('phases'))
+                    return $this->redirect($this->generateUrl('mgateSuivi_phases_modifier', array('id' => $etude->getId())));
+                else
+                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
             }
         }
 
