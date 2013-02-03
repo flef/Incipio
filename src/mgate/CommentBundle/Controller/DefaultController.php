@@ -20,7 +20,7 @@ class DefaultController extends Controller
 
         foreach ($etudes as $entity) {
             if(!$em->getRepository('mgateCommentBundle:Thread')->findBy(array('id'=>$entity)))
-            $this->container->get('mgate_comment.thread')->creerThread("prospect_", $this->container->get('router')->generate('mgatePersonne_prospect_voir', array('id' => $entity->getId())), $entity);
+            $this->container->get('mgate_comment.thread')->creerThread("etude_", $this->container->get('router')->generate('mgatePersonne_prospect_voir', array('id' => $entity->getId())), $entity);
         }
         
         
