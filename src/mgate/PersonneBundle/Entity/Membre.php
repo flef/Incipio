@@ -37,7 +37,7 @@ class Membre
 
     /**
      * @ORM\ManyToOne(targetEntity="Poste", inversedBy="membres", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $poste;
 
