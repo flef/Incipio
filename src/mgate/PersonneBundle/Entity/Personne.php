@@ -44,13 +44,6 @@ class Personne
     private $sexe;
     
     /**
-     * @var string $poste
-     *
-     * @ORM\Column(name="poste", type="string", length=255, nullable=true)
-     */
-    private $poste;
-
-    /**
      * @var string $mobile
      *
      * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
@@ -102,6 +95,14 @@ class Personne
     public function getPrenomNom()
     {
         return $this->prenom.' '.$this->nom;
+    }
+    
+    public function getPoste()
+    {
+        if($employe)
+            return $this->employe->getPoste();
+        elseif($membre)
+            return $this->membre->getPoste()->getIntitule();
     }
     
     
@@ -184,29 +185,6 @@ class Personne
     public function getSexe()
     {
         return $this->sexe;
-    }
-
-    /**
-     * Set poste
-     *
-     * @param string $poste
-     * @return Personne
-     */
-    public function setPoste($poste)
-    {
-        $this->poste = $poste;
-    
-        return $this;
-    }
-
-    /**
-     * Get poste
-     *
-     * @return string 
-     */
-    public function getPoste()
-    {
-        return $this->poste;
     }
 
     /**
