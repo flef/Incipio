@@ -131,7 +131,7 @@ class TraitementController extends Controller {
         return $matches[1];
     }
 
-    private function commenceParUneVoyelle($mot) {
+    public function commenceParUneVoyelle($mot) {
         return preg_match('#^[aeiouy]#', $mot);
     }
 
