@@ -99,9 +99,9 @@ class Personne
     
     public function getPoste()
     {
-        if($employe)
+        if($this->employe)
             return $this->employe->getPoste();
-        elseif($membre)
+        elseif($this->membre)
             return $this->membre->getPoste()->getIntitule();
     }
     
