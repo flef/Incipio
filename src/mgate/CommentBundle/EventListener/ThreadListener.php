@@ -4,7 +4,7 @@ namespace mgate\CommentBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
-use mgate\PersonneBundle\Entity\Prospect as Etude;
+use mgate\SuiviBundle\Entity\Etude as Etude;
 
 class ThreadListener
 {
