@@ -1,8 +1,10 @@
 {# Formulaire d'ajout d'une étude #}
 
 <form method="post" {{ form_enctype(form) }}>
-	
-	{{ form_widget(form) }}
+    
+    {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+    {{ form_widget(form) }}
+    
 	
 	<input type="submit" value="Enregistrer l'étude"/>
         <input type="submit" value="Enregistrer l'étude et passer à l'AP" name="ap" id="ap"/>
