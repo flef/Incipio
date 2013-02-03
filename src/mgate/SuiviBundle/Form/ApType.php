@@ -46,7 +46,7 @@ class SubApType extends DocTypeType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         DocTypeType::buildForm($builder, $options);
-        $builder->add('nbrDev', 'integer', array('label' => 'Nombre de developpeurs estimé', 'required' => false));
+        $builder->add('nbrDev', 'integer', array('label' => 'Nombre de developpeurs estimé', 'required' => false, 'attr' => array('title' => 'Mettre 0 pour ne pas afficher la phrase indiquant le nombre d\'intervenant')));
     }
 
     public function getName() {

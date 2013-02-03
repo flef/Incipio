@@ -1,7 +1,7 @@
-{% use 'form_div_layout.html.twig' with field_widget as base_field_widget %}
+{% extends 'form_div_layout.html.twig' %}
 
-{% block field_widget %}
-    {{ block('base_field_widget') }}
+{% block form_widget_simple %}
+    {{ parent() }}
 
     {% if help is defined %}
         <span class="help-block" style="margin-top:-13px;">{{ help }}</span>
