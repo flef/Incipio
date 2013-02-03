@@ -4,10 +4,9 @@ namespace mgate\SuiviBundle\Validation;
 
 use Doctrine\ORM\EntityManager;
 use mgate\SuiviBundle\Entity\Etude as Etude;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
 
-class Validation extends ConstraintValidator
+
+class Validation
 {
     protected $em;
     protected $etude;
@@ -20,11 +19,13 @@ class Validation extends ConstraintValidator
     //vérifie 80€ < prix JEH < 300€, contrainte à mettre dans l'entity ?
     public function prixJEH(Etude $etude)
     {
+        $array = array();
         foreach($etude->getPhases() as $phase)
         {
-            if(!($phase->getPrixJEH()<=300 && 80<=$phase->getPrixJEH())){ return 0;}//algo moisi car dit pas la phase qui foire
+            if(!($phase->getPrixJEH()<=300 && 80<=$phase->getPrixJEH())) array_push($array,($phase->getPosition()+1));
+           
         }
-        return 1;//pas de ret avant donc ok
+        return $array;//pas de ret avant donc ok
     }
     
     public function ValidationCc(Etude $etude)
