@@ -97,9 +97,10 @@ class TraitementController extends Controller {
     //effectu les "liaisons" le/l' la/l' ... pattern : µde|d'|variableµ
     private function liasons(&$templateXML) {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
-
-        $callback = function ($matches) use ($this) {//Fonction de callback
-                    return (($this->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
+        
+        $that = $this;
+        $callback = function ($matches) use ($that) {//Fonction de callback
+                    return (($that->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
                 };
 
         $templateXML = preg_replace_callback($regexp, $callback, $templateXML);
