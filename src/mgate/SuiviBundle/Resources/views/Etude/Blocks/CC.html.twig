@@ -1,0 +1,44 @@
+<table class="table table-striped table-bordered">
+    <tr>
+        <th colspan="2">
+    <div class="btn-group btn-large">
+        <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Convention Client <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+            <li class="divider"></li>
+        {% if etude.cc|default('0') %}
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'CC'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+        {% endif %} 
+        {% if etude.cc.generer|default('0') %}
+            <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi</a></li>
+        {% endif %} 
+        </ul>
+    </div></th>
+</tr>
+<tr>
+    <th>Version</th>
+    <td>{{etude.cc.version | default('')}}</td>
+</tr>
+<tr>
+    <th>Date de signature</th>
+    <td>
+                                {% if etude.cc and etude.cc.dateSignature %} 
+                                {{etude.cc.dateSignature | date("d/m/Y") }}
+                                {% else %}
+            Non signé
+                                {% endif %}
+        </td>
+    </tr>
+    <tr>
+        <th>Signataire Client</th>
+        <td>{{etude.cc.signataire2.prenomnom | default('')}}</td>
+    </tr>
+    <tr>
+        <th>Acompte</th>
+        <td>{{etude.acompte | default('')}}</td>
+    </tr>
+    <tr>
+        <th>Pourcentage Acompte</th>
+        <td>{{etude.pourcentageAcompte | default('')}}</td>
+    </tr>
+</table>
