@@ -124,7 +124,7 @@ Affichage d'une étude - {{ parent() }}
                                     <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
                                     <li class="divider"></li>
                                     {% if etude.ap|default('0') %}
-                                    <li><a href="{{ path('mgateSuivi_ap_generer', {'id': etude.id}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+                                    <li><a href="{{ path('mgate_publi_publiposter', {'id': etude.id, 'doc' => 'AP'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
                                    {% endif %} 
                                    {% if etude.ap.generer|default('0') %}
                                     <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi</a></li>
@@ -185,7 +185,7 @@ Affichage d'une étude - {{ parent() }}
                                         <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
                                         <li class="divider"></li>
         {% if etude.cc|default('0') %}
-                                        <li><a href="{{ path('mgateSuivi_cc_generer', {'id': etude.id}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+                                        <li><a href="{{ path('mgate_publi_publiposter', {'id': etude.id, 'doc' => 'CC'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
         {% endif %} 
         {% if etude.cc.generer|default('0') %}
                                         <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi</a></li>
