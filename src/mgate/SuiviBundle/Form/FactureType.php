@@ -11,11 +11,10 @@ use mgate\PersonneBundle\Form;
 class FactureType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        $builder->add('fa', new SubFactureType(), array('label' => ' ', 'type'=>$options['type']));
+        $builder->add(strtolower($options['type']), new SubFactureType(), array('label' => ' ', 'type'=>$options['type']));
         
-        if($options['type']=="fa")
+        if(strtolower($options['type'])=="fa")
                 $builder->add('pourcentageAcompte', 'percent', array('label' => 'Pourcentage de l\'Acompte', 'required' => false));
-        echo $options['type'];
         
     }
 
@@ -37,7 +36,7 @@ class SubFactureType extends DocTypeType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         DocTypeType::buildForm($builder, $options);
-	$builder->add('type');
+	//$builder->add('type');
         //$builder->add('montantHT');
     }
 
