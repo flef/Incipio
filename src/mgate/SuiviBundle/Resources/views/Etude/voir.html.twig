@@ -89,7 +89,7 @@ Affichage d'une étude - {{ parent() }}
     {% for facture in etude.fis %}
                             <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
     {% endfor %}
-                            <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture</a>
+                            <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture intermédiaire</a>
                             </p>
                             <p>
                             <h3>Avenants:</h3>

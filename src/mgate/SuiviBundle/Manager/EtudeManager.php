@@ -33,7 +33,7 @@ class EtudeManager extends \Twig_Extension {
     }
 
     /**
-     * Get montant total HT
+     * Get montant total des JEH HT
      */
     public function getTotalJEHHT(Etude $etude) {
         $total = 0;
