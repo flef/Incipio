@@ -228,9 +228,9 @@ class TraitementController extends Controller {
         //Etude
 
         $Acompte_Pourcentage = (float) $etude->getPourcentageAcompte();
-        $Acompte_HT = (float) $Montant_Total_Etude_HT * $Acompte_Pourcentage / 100;
-        $Acompte_TTC = (float) $Montant_Total_Etude_TTC * $Acompte_Pourcentage / 100;
-        $Acompte_TVA = (float) $Montant_Total_Etude_HT * ($Acompte_Pourcentage / 100) * $Taux_TVA / 100;
+        $Acompte_HT = (float) $Montant_Total_Etude_HT * $Acompte_Pourcentage ;
+        $Acompte_TTC = (float) $Montant_Total_Etude_TTC * $Acompte_Pourcentage ;
+        $Acompte_TVA = (float) $Montant_Total_Etude_HT * ($Acompte_Pourcentage) * $Taux_TVA / 100;
         $Solde_PVR_HT = (float) $Montant_Total_Etude_HT - $Acompte_HT;
         $Solde_PVR_TTC = (float) $Montant_Total_Etude_TTC - $Acompte_TTC;
 
