@@ -121,11 +121,8 @@ class FactureController extends Controller
             if(strtoupper($type)=="FA")
                 $etude->setFa($facture);
             elseif(strtoupper($type)=="FS")
-            {
                 $etude->setFs($facture);
-                echo "qsdf";
-            }
-            var_dump("caaca");
+
             $facture->setType($type);
         }
 
