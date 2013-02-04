@@ -9,22 +9,28 @@ use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
 use mgate\PersonneBundle\Form\PersonneType as PersonneType;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
+use mgate\PersonneBundle\Entity\Personne as Personne;
 
 class DocTypeType extends AbstractType
 {
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        
+
         $builder
-            ->add('version', 'integer', array('label'=>'Version du document'))
-            ->add('signataire1', 'entity', 
+            ->add('version', 'integer', array('label'=>'Version du document'));
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Facture')
+        {
+             $builder->add('signataire1', 'entity', 
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
-                       'required' => false));
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getPresidentFirst(); },
+                       'required' => true));
+        }
+
+        //var_dump(function(PersonneRepository $pr) { return reset($pr->getMembreOnly()); });
 
         if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' && $options['data_class']!='mgate\SuiviBundle\Entity\Facture')
         {
