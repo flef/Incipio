@@ -252,7 +252,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * @var integer $pourcentageAcompte
      *
-     * @ORM\Column(name="pourcentageAcompte", type="integer", nullable=true)
+     * @ORM\Column(name="pourcentageAcompte", type="decimal", scale=2, nullable=true)
      */
     private $pourcentageAcompte;
 

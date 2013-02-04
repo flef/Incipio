@@ -15,7 +15,7 @@ class CcType extends AbstractType
 	   
             $builder->add('cc', new SubCcType(), array('label'=>' ', 'prospect'=>$options['prospect']))
                     ->add('acompte','checkbox',array('label'=>'Acompte', 'required' => false))
-                    ->add('pourcentageAcompte','integer',array('label'=>'Pourcentage acompte', 'required' => false));
+                    ->add('pourcentageAcompte', 'percent',array('label'=>'Pourcentage acompte', 'required' => false));
             
     }
 

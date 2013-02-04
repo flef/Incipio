@@ -97,7 +97,7 @@ class FactureController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
-               
+
         if(!$facture = $etude->getDoc($type))
         {
             $facture = new Facture;

@@ -42,7 +42,7 @@
     function updatePrix() {
         var prix = 0;
         
-        prix=$('input.pourcentageAcompte').val()*0.01*{{ getTotalHT(etude)|default(0) }};
+        prix=$('input.pourcentageAcompte').val()*{{ getTotalHT(etude)|default(0) }};
         $('input.montantHT').val( prix );
 
         

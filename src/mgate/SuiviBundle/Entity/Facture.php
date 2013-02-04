@@ -37,7 +37,7 @@ class Facture extends DocType
     /**
      * @var integer $montantHT
      *
-     * @ORM\Column(name="montantHT", type="integer", nullable=true)
+     * @ORM\Column(name="montantHT", type="decimal", scale=2, nullable=true)
      */
     private $montantHT;
 
