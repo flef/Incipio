@@ -34,6 +34,12 @@ class Facture extends DocType
      */
     private $type;
 
+    /**
+     * @var integer $montantHT
+     *
+     * @ORM\Column(name="montantHT", type="integer", nullable=true)
+     */
+    private $montantHT;
 
     /**
      * Get id
@@ -89,5 +95,28 @@ class Facture extends DocType
     public function getType()
     {
         return $this->type;
+    }
+    
+    /**
+     * Get montantHT
+     *
+     * @return integer 
+     */
+    public function getMontantHT()
+    {
+        return $this->montantHT;
+    }
+
+    /**
+     * Set montantHT
+     *
+     * @param string $montantHT
+     * @return Facture
+     */
+    public function setMontantHT($montantHT)
+    {
+        $this->montantHT = $montantHT;
+    
+        return $this;
     }
 }

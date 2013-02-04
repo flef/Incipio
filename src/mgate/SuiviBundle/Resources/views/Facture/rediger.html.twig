@@ -30,8 +30,39 @@
     
 {% endblock %}
 
- {% block javascript %}
+{% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
+<script type="text/javascript">
+    
+    
+    {% if type == 'fa' %}
+    
+    
+    function updatePrix() {
+        var prix = 0;
+        
+        prix=$('input.pourcentageAcompte').val()*0.01*{{ getTotalHT(etude)|default(0) }};
+        $('input.montantHT').val( prix );
+
+        
+    }
+
+    jQuery(document).ready(function() {
+        
+        updatePrix();    
+         
+        $('input.pourcentageAcompte').each(function() {
+            $(this).change(function() { 
+                updatePrix();
+            });
+        });
+                
+    });
+    {% endif %}
+    
+</script>
+
+
 {% endblock %}
     
