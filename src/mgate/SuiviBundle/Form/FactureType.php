@@ -15,7 +15,7 @@ class FactureType extends AbstractType {
         $builder->add(strtolower($options['type']), new FactureSubType(), array('label' => ' ', 'type'=>$options['type']));
         
         if(strtolower($options['type'])=="fa")
-                $builder->add('pourcentageAcompte', 'integer', array('label' => 'Pourcentage de l\'Acompte', 'required' => false));
+                $builder->add('pourcentageAcompte', 'integer', array('label' => 'Pourcentage de l\'Acompte', 'required' => false, 'attr' => array('class' => 'pourcentageAcompte')));
         
     }
 

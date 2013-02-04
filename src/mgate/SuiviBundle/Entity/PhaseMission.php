@@ -51,7 +51,7 @@ class PhaseMission
     /**
      * Get nbrJEH
      *
-     * @return string 
+     * @return integer 
      */
     public function getNbrJEH()
     {
