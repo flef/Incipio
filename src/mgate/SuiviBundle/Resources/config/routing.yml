@@ -203,7 +203,7 @@ mgateSuivi_facture_ajouter:
         id: \d+
         
 mgateSuivi_facture_modifier:
-    pattern: /facture/modifier/{id}/{type}
+    pattern: /facture/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Facture:modifier, type:null}
     requirements:
         id: \d+
