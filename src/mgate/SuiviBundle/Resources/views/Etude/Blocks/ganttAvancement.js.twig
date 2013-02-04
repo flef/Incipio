@@ -9,26 +9,27 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                 {
 					name: "Etude",
 					desc: "Création",
-					values: [{ title : "Création de l'Etude",
-                                                content : "Créée le {{etude.dateCreation|date('d/m/Y')}}",
+					values: [{ title : "Création&nbsp;de&nbsp;l'Etude",
+                                                content : "Créée&nbsp;le&nbsp;{{etude.dateCreation|date('d/m/Y')}}",
 						from: "/Date({{etude.dateCreation|date('U') - 86400}}000)/",
 						to: "/Date({{etude.dateCreation|date('U') - 86400}}000)/",
 						label: "Start", 
 						customClass: "ganttBlue",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}"
 					}]
 				},
                                 {% endif %}
-                                {% if getDateLancement(etude) %}   
+                                {% if getDateLancement(etude) and  getDateFin(etude)%}   
                                 {
 					name: "",
 					desc: "Durée",
-					values: [{ title : "Durée", content : "Lancée le terminé le",
+					values: [{ title : "Durée&nbsp;de&nbsp;déroulement&nbsp;des&nbsp;phases&nbsp;",
+                                                content : "Debut&nbsp;le&nbsp;{{getDateLancement(etude)|date('d/m/y') }}&#10;Fin&nbsp;le&nbsp;{{getDateFin(etude)|date('d/m/Y')}}",
 						from: "/Date({{getDateLancement(etude)|date('U') - 86400}}000)/",
 						to: "/Date({{getDateFin(etude)|date('U') - 86400}}000)/",
-						label: "Durée de l'Etude", 
+						label: "Durée de déroulement des phases", 
 						customClass: "ganttGreen",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}"
 					}]
 				},
                                 {% endif %}
@@ -36,24 +37,26 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                 {
 					name: "Avant-Projet",
 					desc: "Signé",
-					values: [{ title : "blabla", content : "fdsfds",
+                                        values: [{ title : "Avant&nbsp;Projet",
+                                                content : "Signé&nbsp;le&nbsp;{{etude.ap.datesignature|date('d/m/y')}}",
 						from: "/Date({{etude.ap.datesignature|date('U') - 86400}}000)/",
 						to: "/Date({{etude.ap.datesignature|date('U') - 86400}}000)/",
 						label: "AP", 
 						customClass: "ganttGreen",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_ap_voir', {'id': etude.id}) }}"
 					}]
 				},
                                 {% else %}{#else if verifierDate == false affiche Erreur ... gantt RED#}
                                 {
 					name: "Avant-Projet",
 					desc: "Non Signé",
-					values: [{ title : "fdsfds", content : "fdsfds",
+					values: [{ title : "",
+                                                content : "",
 						from: "/Date({{"now"|date('U') - 86400}}000)/",
 						to: "/Date({{"now"|date('U') - 86400}}000)/",
 						label: "AP", 
 						customClass: "ganttRed",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"
 					}]
 				},
                                 {% endif %}
@@ -61,24 +64,26 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                 {
 					name: "Convention Client",
 					desc: "Signé",
-					values: [{ title : "fdsfds", content : "fdsfds",
+                                        values: [{ title : "Convention&nbsp;Client",
+                                                content : "Signée&nbsp;le&nbsp;{{etude.ap.datesignature|date('d/m/y')}}",
 						from: "/Date({{etude.cc.datesignature|date('U') - 86400}}000)/",
 						to: "/Date({{etude.cc.datesignature|date('U') - 86400}}000)/",
 						label: "CC", 
 						customClass: "ganttGreen",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_cc_voir', {'id': etude.id}) }}"
 					}]
 				},
                                 {% else %}
                                 {
 					name: "Convention Client",
 					desc: "Non Signé",
-					values: [{ title : "fdsfds", content : "fdsfds",
+					values: [{ title : "",
+                                                content : "",
 						from: "/Date({{"now"|date('U') - 86400}}000)/",
 						to: "/Date({{"now"|date('U') - 86400}}000)/",
 						label: "CC", 
 						customClass: "ganttRed",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"
 					}]
 				},
                                 {% endif %}
@@ -86,12 +91,13 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                 {
 					name: {%if loop.index == 1 %}"Contact Client" {%else%} "" {% endif%},
 					desc: "Contact {{loop.index}}",
-					values: [{ title : "", content : "",
+                                        values: [{ title : "Contact&nbsp;Client",
+                                                content : "Pris&nbsp;le&nbsp;{{clientContact.date|date('d/m/Y')}}",
 						from: "/Date({{clientContact.date|date('U') - 86400}}000)/",
 						to: "/Date({{clientContact.date|date('U') - 86400}}000)/",
 						label: "C{{loop.index}}", 
 						customClass: "ganttBlue",
-                                                dataObj: "Durée de l'étude"
+                                                dataObj: "{{ path('mgateSuivi_clientcontact_voir', {'id': clientContact.id }) }}"
 					}]
 				},
                                 {% endfor %}
@@ -105,7 +111,7 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 						to: "/Date({{suivi.date.date|date('U') - 86400}}000)/",
 						label: "S{{suivi.id}}", 
 						customClass: "ganttBlue",
-                                                dataObj: "{{ path('mgateSuivi_suivi_modifier', {'id': suivi.id}) }}"
+                                                dataObj: "{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}"
 					}]
 				},
                                 {% endfor %}
@@ -116,7 +122,8 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 				minScale: "hours",
 				itemsPerPage: 10,
 				onItemClick: function(data) {
-					document.location.href= data;
+                                if(data)
+					document.location.href = data;
 				},
 				onAddClick: function(dt, rowId) {
 					alert("Empty space clicked - add an item!");
