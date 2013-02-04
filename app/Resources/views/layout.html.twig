@@ -16,13 +16,6 @@
                 margin-left: auto;
                 margin-right: auto;
             }
-            ul.nav li.dropdown:hover ul.dropdown-menu{
-                display: block;    
-            }
-
-            a.menu:after, .dropdown-toggle:after {
-              content: none;
-            }
         </style>
 {% endblock %}
 
@@ -33,6 +26,7 @@
             <script src="{{ asset('js/jquery-latest.js') }}"></script>
             <script src="{{ asset('js/jquery.tablesorter.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.hover.dropdown.min.js') }}"></script>
 {% endblock %}
         </head>
 
@@ -57,14 +51,14 @@
                                     <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">Tableau de bord</a>
                                     <ul class="nav">
                                         <li class="dropdown">
-                                          <a href="{{ path('mgateSuivi_etude_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown">Suivi d'étude<b class="caret"></b></a>
+                                          <a href="{{ path('mgateSuivi_etude_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'étude<b class="caret"></b></a>
                                           <ul class="dropdown-menu">
                                             <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter</a></li>
                                             <li class="nav-header">Mes Etudes:</li>
                                           </ul>
                                         </li>
                                         <li class="dropdown">
-                                          <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown">Gestion des personnes<b class="caret"></b></a>
+                                          <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Gestion des personnes<b class="caret"></b></a>
                                           <ul class="dropdown-menu">
                                             <li class="nav-header">Prospect/Client:</li>
                                             <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Lister</a></li>
