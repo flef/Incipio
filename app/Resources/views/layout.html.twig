@@ -48,37 +48,16 @@
             {% block menu %}
                             <div class="navbar">
                                 <div class="navbar-inner">
-                                    <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">Tableau de bord</a>
-                                    <ul class="nav">
-                                        <li class="dropdown">
-                                          <a href="{{ path('mgateSuivi_etude_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'étude<b class="caret"></b></a>
-                                          <ul class="dropdown-menu">
-                                            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter</a></li>
-                                            <li class="nav-header">Mes Etudes:</li>
-                                          </ul>
-                                        </li>
-                                        <li class="dropdown">
-                                          <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Gestion des personnes<b class="caret"></b></a>
-                                          <ul class="dropdown-menu">
-                                            <li class="nav-header">Prospect/Client:</li>
-                                            <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Lister</a></li>
-                                            <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}">Ajouter</a></li>
-                                            <li class="nav-header">Membre:</li>
-                                            <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister</a></li>
-                                            <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter</a></li>
-                                            <li class="nav-header">Poste:</li>
-                                            <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister</a></li>
-                                            <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter</a></li>
-                                          </ul>
-                                        </li>
-                                        <li><a href="{{ path('mgate_stat_homepage') }}">Indicateurs</a></li>
-                                        <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
-                                       
-                                        
-                                    </ul>
-                                    <ul class="nav pull-right">
-                                        <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
-                                    </ul>
+                                    <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">My M-GaTE</a>
+                                    
+{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+    {# L'utilisateur est connecté ! #}
+    {% include "::Menus/staff.html.twig" with  {'nothing':  'test'} %}
+    {% include "::Menus/compte.html.twig" %}
+{% else %}
+    {# L'utilisateur n'est pas connecté ! #}
+
+{% endif %}
                                 </div>
 
                             </div>
