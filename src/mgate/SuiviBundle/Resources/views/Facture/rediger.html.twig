@@ -13,7 +13,7 @@
 {% include "::Tools/datepicker.html.twig" %}
 
         
-    <h2>Rédiger la Facture</h2>
+    <h2>Rédiger la Facture {% if type=="fs" %}de Solde{%elseif type=="fa"%}d'Acompte{%endif%}</h2>
 
 <form method="post" {{ form_enctype(form) }}>
 
