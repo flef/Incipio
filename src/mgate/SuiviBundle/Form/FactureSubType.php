@@ -11,9 +11,15 @@ class FactureSubType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
+        
+        if($options['type']=="fa" || $options['type']=="fs")
+            $readOnly=true;
+        else
+            $readOnly=false;
+        
+        $builder->add('montantHT', 'integer', array( 'label'=>'Montant HT', 'required'=>false, 'read_only'=>$readOnly, 'attr' => array('class' => 'montantHT')));
+        
         DocTypeType::buildForm($builder, $options);
-	//$builder->add('type');
-        //$builder->add('montantHT');
     }
 
     public function getName() {

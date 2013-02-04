@@ -6,17 +6,17 @@
 
 {% block content_bundle %}
 
-    <h2>Facture n°{{ facture.id }}</h2>
+    <h2>Facture {% if facture.type=="fs" %}de Solde{%elseif facture.type=="fa"%}d'Acompte{%endif%} (id:{{ facture.id }})</h2>
     
     <i>Version {{facture.version}}</i>
 
     <div>
-
+        <p>Montant HT: {{facture.montantHT}}</p>
     </div>
 
     <p>
-        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a>
-        <a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Modifier la Facture</a>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a><br />
+        <a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Rédiger la Facture</a>
 	
     </p>
 
