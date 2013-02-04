@@ -22,6 +22,7 @@ chmod -R 777 app/logs
 Pour installer un truc, ça fait des copies dans /web
 php app/console assets:install --symlink web		necessite droit admin
 php app/console assets:install web                   pour jQuery
+php app/console assetic:dump --env=prod --no-debug   pour commentbundle
 
 Générateur de bundle / entity
 php app/console generate:bundle  (mgate/PubliBundle, enter, enter, yml, no)
