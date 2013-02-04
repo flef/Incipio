@@ -83,24 +83,9 @@ class FactureController extends Controller
         {
             throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
         }
+        
+        return $this->redigerAction($facture->getEtude()->getId(), $facture->getType(), 0);
 
-        $form = $this->createForm(new FactureType, $facture, array('type' => 'fi'));
-        if( $this->get('request')->getMethod() == 'POST' )
-        {
-            $form->bindRequest($this->get('request'));
-               
-            if( $form->isValid() )
-            {
-                $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
-            }
-                
-        }
-
-        return $this->render('mgateSuiviBundle:Facture:modifier.html.twig', array(
-            'form' => $form->createView(),
-            'facture' => $facture,
-        ));
     }
     
     
@@ -117,7 +102,10 @@ class FactureController extends Controller
         {
             $facture = new Facture;
             if(strtoupper($type)=="FA")
+            {
                 $etude->setFa($facture);
+                $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
+            }
             elseif(strtoupper($type)=="FS")
                 $etude->setFs($facture);
 
@@ -131,6 +119,8 @@ class FactureController extends Controller
             
             if( $form->isValid() )
             {
+                $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
+                
                 $em->persist($etude);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
