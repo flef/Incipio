@@ -29,7 +29,8 @@ class EtudeType extends AbstractType
                 'required' => true,
                 'label' => 'Prospect existant',
                 ))
-            ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))                               
+            ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))
+            ->add('dateCreation', 'genemu_jquerydate', array('label'=>'Date de création', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
             ->add('mandat', 'integer' )
@@ -40,8 +41,8 @@ class EtudeType extends AbstractType
                        'property' => 'prenomNom',
                        'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
-                       'required' => false));            
-    }
+                       'required' => false));        
+              }
 
     public function getName()
     {
