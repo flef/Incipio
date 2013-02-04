@@ -82,7 +82,7 @@ class FactureController extends Controller
 
         if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
         {
-            throw $this->createNotFoundException('Cc[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
         }
 
         $form        = $this->createForm(new FactureType, $facture);
@@ -118,12 +118,17 @@ class FactureController extends Controller
         if(!$facture = $etude->getDoc($type))
         {
             $facture = new Facture;
-            if($type=="fa")
+            if(strtoupper($type)=="FA")
                 $etude->setFa($facture);
-            if($type=="fs")
+            elseif(strtoupper($type)=="FS")
+            {
                 $etude->setFs($facture);
+                echo "qsdf";
+            }
+            var_dump("caaca");
+            $facture->setType($type);
         }
-       
+
         $form = $this->createForm(new FactureType, $etude, array('type' => $type));
         
         if( $this->get('request')->getMethod() == 'POST' )

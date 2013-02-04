@@ -329,6 +329,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
                 return $this->getCc();
             case 'FA':
                 return $this->getFa();
+            case 'FS':
+                return $this->getFs();
             case 'PVR':
                 return $this->getPvrs()->get($key);
             case 'RM':
@@ -1192,8 +1194,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return Etude
      */
     public function setFa(\mgate\SuiviBundle\Entity\Facture $fa = null) {
+        if ($fa != null)
+            $fa->setEtude($this);
+
         $this->fa = $fa;
-        $fa->setEtude($this);
 
         return $this;
     }
@@ -1214,8 +1218,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return Etude
      */
     public function setFs(\mgate\SuiviBundle\Entity\Facture $fs = null) {
+        if ($fs != null)
+            $fs->setEtude($this);
+
         $this->fs = $fs;
-        $fs->setEtude($this);
 
         return $this;
     }
