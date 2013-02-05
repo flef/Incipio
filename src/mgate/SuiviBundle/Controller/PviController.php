@@ -32,7 +32,6 @@ class PviController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-        
         $pvi = new Pvi;
         $etude->addPvi($pvi);
 
@@ -52,9 +51,7 @@ class PviController extends Controller
 
         return $this->render('mgateSuiviBundle:Pvi:ajouter.html.twig', array(
             'form' => $form->createView(),
-        ));
-        
-        
+        )); 
     }
   
     public function voirAction($id)
@@ -78,34 +75,25 @@ class PviController extends Controller
     
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $pvi = $em->getRepository('mgate\SuiviBundle\Entity\Pvi')->find($id) )
         {
             throw $this->createNotFoundException('Pvi[id='.$id.'] inexistant');
         }
-
-        $form        = $this->createForm(new PviType, $pvi);
         
+        
+        $form = $this->createForm(new PviType, $pvi, array('prospect' => $pvi->getEtude()->getProspect()) );
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
-               
+            
             if( $form->isValid() )
             {
-                if($this->get('request')->get('pvr'))
-                {
-               
-                    $em->flush();
-                    return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $pvi->getId())));
-                }
-                else
-                {
-                    $em->flush();
-                    return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $pvi->getId())) );
-                }
                 
-               
+                $em->persist($pvi);
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $pvi->getId())) );
             }
                 
         }
@@ -114,5 +102,8 @@ class PviController extends Controller
             'form' => $form->createView(),
             'pvi' => $pvi,
         ));
+        
+        return $this->redigerAction($pvi->getEtude()->getId());
     }
+    
 }
