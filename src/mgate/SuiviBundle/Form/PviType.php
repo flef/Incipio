@@ -33,6 +33,7 @@ class PviType extends DocTypeType
     {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Pvi',
+            'prospect' => '',
         );
     }
 }
