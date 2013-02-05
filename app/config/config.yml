@@ -113,9 +113,16 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main # Nom du firewall security.yml
     user_class: mgate\UserBundle\Entity\User # La classe de l'entité User a modifier
+    service:
+        mailer: fos_user.mailer.twig_swift
     registration:
       form:
         type: mgate_user_registration
+      confirmation:
+        enabled:    true
+    from_email:
+        address:        mgate.je@gmail.com
+        sender_name:    My M-GaTE
 
 
 
