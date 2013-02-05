@@ -26,29 +26,27 @@ class PviController extends Controller
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
+        
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
         
         $pvi = new Pvi;
-        $pvi->setEtude($etude);
-        $form        = $this->createForm(new PviType, $pvi);
-        $formHandler = new PviHandler($form, $this->get('request'), $em);
-        
-        if($formHandler->process())
+        $etude->addPvi($pvi);
+
+        $form = $this->createForm(new PviType, $pvi, array('prospect' => $etude->getProspect()));      
+        if( $this->get('request')->getMethod() == 'POST' )
         {
-            if($this->get('request')->get('pvr'))
+            $form->bindRequest($this->get('request'));
+
+            if( $form->isValid() )
             {
-               
-                return $this->redirect($this->generateUrl('mgateSuivi_pvr_ajouter',array('id' => $etude->getId())));
-            }
-            else
-            {
-                return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $etude->getId())) );
+                $em->persist($pvi);
+                $em->flush();
+                
+                return $this->redirect( $this->generateUrl('mgateSuivi_pvi_voir', array('id' => $pvi->getId())) );
             }
         }
 

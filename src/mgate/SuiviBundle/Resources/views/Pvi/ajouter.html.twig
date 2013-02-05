@@ -1,17 +1,17 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-{% block javascript %}
-    {{ form_javascript(form) }}
+{% block title %}
+	Rédiger l'Avant-Projet - {{ parent() }}
 {% endblock %}
 
+        
 {% block content_bundle %}
-<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/tiny_mce/jquery.tinymce.js') }}"></script>
-<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
-
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+{% include "::Tools/jquery.html.twig" %}  
+{% include "::Tools/jqueryui.html.twig" %}  
+{% include "::Tools/select2.html.twig" %}
+{% include "::Tools/datepicker.html.twig" %}
+        
 
 
     <h2>Ajouter un PVI</h2>
@@ -20,4 +20,10 @@
 
     <p>---  </p>
 
+{% endblock %}
+
+ {% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form }%} 
 {% endblock %}

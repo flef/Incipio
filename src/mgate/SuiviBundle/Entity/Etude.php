@@ -1038,11 +1038,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Add pvis
      *
-     * @param \mgate\SuiviBundle\Entity\Pvi $pvis
+     * @param \mgate\SuiviBundle\Entity\Pvi $pvi
      * @return Etude
      */
-    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvis) {
-        $this->pvis[] = $pvis;
+    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvi) {
+        $this->pvis[] = $pvi;
+        $pvi->setEtude($this);
 
         return $this;
     }
