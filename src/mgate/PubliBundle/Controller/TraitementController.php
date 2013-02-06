@@ -221,10 +221,15 @@ class TraitementController extends Controller {
             $Date_Fin_Etude = NULL;
         }
         if ($etudeManager->getDelaiEtude($etude))
-            $Delais_Semaines = (int) $etudeManager->getDelaiEtude($etude)->d / 7;
+
+        {
+            $Delais = $etudeManager->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
+            $Delais_Semaines = $Delais[0];
+        }
         else
             $Delais_Semaines = NULL;
 
+         
         //Etude
 
         $Acompte_Pourcentage = (float) $etude->getPourcentageAcompte();
@@ -377,7 +382,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             if($phase->getDateDebut())
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $phase->getDelai());
+            $Delai = $etudeManager->jourVersSemaine($phase->getDelai());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai[0]); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());

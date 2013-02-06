@@ -177,11 +177,10 @@ class EtudeManager extends \Twig_Extension {
     
     public function jourVersSemaine($j)
     {
-        $semaine = floor($j);
-        $jour %= 7;
+        $semaine = (int)floor($j/7);
+        $jour = $semaine % 7;
         
-        $jourVersSemaine=array();
-        array_push($jourVersSemaine, $semaine, $jour);
+        $jourVersSemaine=array($semaine,$jour);
         
         return $jourVersSemaine;
     }
