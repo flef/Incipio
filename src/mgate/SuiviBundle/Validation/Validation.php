@@ -111,7 +111,10 @@ class Validation extends \Twig_Extension
     
     public function PviDate(Etude $etude)
     {
-        
+       // foreach($phase as $etude->getPhases())
+       // {
+            
+       // }
     }
     
    
