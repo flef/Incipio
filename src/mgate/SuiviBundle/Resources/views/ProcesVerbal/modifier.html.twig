@@ -1,0 +1,31 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier un Procès-Verbal - {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ form_javascript(form) }}
+{% endblock %}
+        
+{% block content_bundle %}
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/tiny_mce/jquery.tinymce.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/mgatesuivi/js/jquery.ui.datepicker-fr.js') }}"></script>
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
+        
+        
+    <h2>Modifier un Procès-Verbal</h2>
+
+    {% include "mgateSuiviBundle:ProcesVerbal:formulaire.html.twig" %} 
+
+
+    <p>
+        <a href="{{ path('mgateSuivi_procesverbal_voir', {'id': facture.id}) }}" >Retour</a>
+    </p>
+
+{% endblock %}
+
