@@ -6,6 +6,8 @@ namespace mgate\UserBundle\Entity;
 use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Yaml\Parser; 
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="fos_user")
@@ -59,5 +61,34 @@ class User extends BaseUser
     public function getPersonne()
     {
         return $this->personne;
+    }
+    
+    
+    static function getRolesNames()
+    {
+        $pathToSecurity = __DIR__ . '/../../../..' . '/app/config/security.yml';
+        $yaml = new Parser();
+        $rolesArray = $yaml->parse(file_get_contents($pathToSecurity));
+        $arrayKeys = array();
+        foreach ($rolesArray['security']['role_hierarchy'] as $key => $value)
+        {
+            //never allow assigning super admin
+            if ($key != 'ROLE_SUPER_ADMIN')
+                $arrayKeys[$key] = User::convertRoleToLabel($key);
+            //skip values that are arrays --- roles with multiple sub-roles
+            if (!is_array($value))
+                if ($value != 'ROLE_SUPER_ADMIN')
+                    $arrayKeys[$value] = User::convertRoleToLabel($value);
+        }
+        //sort for display purposes
+        asort($arrayKeys);
+        return $arrayKeys;
+    }
+
+    static private function convertRoleToLabel($role)
+    {
+        $roleDisplay = str_replace('ROLE_', '', $role);
+        $roleDisplay = str_replace('_', ' ', $roleDisplay);
+        return ucwords(strtolower($roleDisplay));
     }
 }

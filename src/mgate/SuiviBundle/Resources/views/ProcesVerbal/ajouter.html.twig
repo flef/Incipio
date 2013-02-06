@@ -1,28 +1,26 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Ajouter un PVI - {{ parent() }}
+	Rédiger un Procès-Verbal - {{ parent() }}
 {% endblock %}
 
-        
 {% block content_bundle %}
 
 {% include "::Tools/jquery.html.twig" %}  
 {% include "::Tools/jqueryui.html.twig" %}  
 {% include "::Tools/select2.html.twig" %}
 {% include "::Tools/datepicker.html.twig" %}
-        
 
+    <h2>Ajouter un Procès-Verbal</h2>
 
-    <h2>Ajouter un PVI</h2>
-
-    {% include "mgateSuiviBundle:Pvi:formulaire.html.twig" %} 
+    {% include "mgateSuiviBundle:ProcesVerbal:formulaire.html.twig" %} 
 
     <p>---  </p>
 
 {% endblock %}
 
- {% block javascript %}
+    
+{% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
     {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form }%} 

@@ -125,7 +125,6 @@ fos_user:
         sender_name:    My M-GaTE
 
 
-
 #CommentBundle
 fos_comment:
     db_driver: orm
