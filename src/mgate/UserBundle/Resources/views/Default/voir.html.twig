@@ -1,0 +1,17 @@
+{% extends "mgateUserBundle::layout.html.twig" %}
+
+{% block title %}
+	Afficher un utilisateur - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <h2>Afficher un utilisateur</h2>
+
+    <ul>
+
+                <a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">Id {{ user.id }}</a> {{ user.username }}
+
+    </ul>
+
+{% endblock %}

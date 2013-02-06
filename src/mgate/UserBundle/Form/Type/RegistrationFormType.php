@@ -13,19 +13,7 @@ class RegistrationFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('personne', 'entity', 
-                array ('label' => 'Séléctionner la personne',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'property_path' => true,
-                       'required' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getNotUser(); },));   
-                       
-       $builder->add('roles', 'choice', array(
-        'choices' => User::getRolesNames(),
-        'required' => false,'label'=>'Roles','multiple'=>true
-    ));   
-                       
+    
         parent::buildForm($builder, $options);
         
     }
