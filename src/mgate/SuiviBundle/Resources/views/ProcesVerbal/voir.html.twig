@@ -1,0 +1,19 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage d'une Facture - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Procès-Verbal {% if procesverbal.type=="pvi" %}Intermédiaire{%elseif procesverbal.type=="pvr"%}de Recette{%endif%} (id:{{ procesverbal.id }})</h2>
+    
+    <i>Version {{procesverbal.version}}</i>
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a><br />
+        <a href="{{ path('mgateSuivi_procesverbal_modifier', {'id': procesverbal.id}) }}">Rédiger le Procès-Verbal</a>
+	
+    </p>
+
+{% endblock %}

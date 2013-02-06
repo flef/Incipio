@@ -8,9 +8,10 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
+        ROLE_ELEVES:      ROLE_USER
+        ROLE_CA:          [ROLE_USER, ROLE_ELEVES]
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-
 
     providers:
 #        in_memory:
