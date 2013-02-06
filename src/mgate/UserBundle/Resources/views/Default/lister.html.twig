@@ -1,0 +1,23 @@
+{% extends "mgateUserBundle::layout.html.twig" %}
+
+{% block title %}
+	Lister les utilisateurs - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <h2>Liste des utilisateurs</h2>
+
+    <ul>
+
+        {% for user in users %}
+            <li>
+                Id {{ user.id }} : {{ user.username }} - <a href="{{ path('mgate_user_voir', {'id': user.id}) }}">voir</a> <a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a>
+            </li>
+        {% else %}
+            <li>Pas (encore !) d'utilisateur</li>
+        {% endfor %}
+
+    </ul>
+
+{% endblock %}

@@ -1,3 +1,16 @@
 mgate_user_homepage:
     pattern:  /hello/{name}
     defaults: { _controller: mgateUserBundle:Default:index }
+
+mgate_user_lister:
+    pattern:  /user/lister
+    defaults: { _controller: mgateUserBundle:Default:lister }
+    
+mgate_user_voir:
+    pattern:  /user/voir/{id}
+    defaults: { _controller: mgateUserBundle:Default:voir }
+    
+mgate_user_modifier:
+    pattern:  /user/modifier/{id}
+    defaults: { _controller: mgateUserBundle:Default:modifier }
+

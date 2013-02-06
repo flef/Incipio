@@ -1,0 +1,19 @@
+{% extends "mgateUserBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier un utilisateur - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+    <h2>Modifier un utilisateur</h2>
+
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	{{ form_rest(form) }}
+	<input type="submit" value="Enregistrer l'Utilisateur"/>
+</form>
+
+
+{% endblock %}
