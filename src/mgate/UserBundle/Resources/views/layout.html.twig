@@ -26,7 +26,7 @@
     {# L'utilisateur est-il admin ? #}
     {% if is_granted('ROLE_ADMIN') %}
         {# L'utilisateur est admin ! #}
-        <a href="{{ path('admin') }}">Administration</a>
+
     {% endif %}
 {% else %}
     {# L'utilisateur n'est pas connecté ! #}
