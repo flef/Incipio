@@ -120,4 +120,41 @@ class PvrController extends Controller
             'pvr' => $pvr,
         ));
     }
+    
+    
+    public function redigerAction($id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
+            throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+        }
+
+        if (!$ap = $etude->getAp()) {
+            $ap = new Ap;
+            $etude->setAp($ap);
+        }
+
+        $form = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()));
+
+        if ($this->get('request')->getMethod() == 'POST') {
+            $form->bindRequest($this->get('request'));
+
+            if ($form->isValid()) {
+                $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getAp());
+
+                $em->flush();
+                
+                if($this->get('request')->get('phases'))
+                    return $this->redirect($this->generateUrl('mgateSuivi_phases_modifier', array('id' => $etude->getId())));
+                else
+                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+            }
+        }
+
+        return $this->render('mgateSuiviBundle:Ap:rediger.html.twig', array(
+                    'form' => $form->createView(),
+                    'etude' => $etude,
+                ));
+    }
 }

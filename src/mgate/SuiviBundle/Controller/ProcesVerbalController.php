@@ -6,12 +6,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use mgate\SuiviBundle\Form\EtudeType;
 
-use mgate\SuiviBundle\Entity\Facture;
-use mgate\SuiviBundle\Form\FactureType;
-use mgate\SuiviBundle\Form\FactureSubType;
+use mgate\SuiviBundle\Entity\ProcesVerbal;
+use mgate\SuiviBundle\Form\ProcesVerbalType;
+use mgate\SuiviBundle\Form\ProcesVerbalSubType;
 
 
-class FactureController extends Controller
+class ProcesVerbalController extends Controller
 {
     public function indexAction($page)
     {
@@ -35,24 +35,25 @@ class FactureController extends Controller
         }
         
         
-        $facture = new Facture;
-        $etude->addFi($facture);
+        $proces = new ProcesVerbal;
+        $proces->setType("pvi");
+        $etude->addPvi($proces);
         
-        $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));      
+        $form = $this->createForm(new ProcesVerbalSubType, $proces, array('type' => 'pvi', 'prospect' => $etude->getProspect()));      
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
 
             if( $form->isValid() )
             {
-                $em->persist($facture);
+                $em->persist($proces);
                 $em->flush();
                 
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_procesverbal_voir', array('id' => $proces->getId())) );
             }
         }
 
-        return $this->render('mgateSuiviBundle:Facture:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:ProcesVerbal:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -61,16 +62,16 @@ class FactureController extends Controller
     {
        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problÃ¨me
+        $entity = $em->getRepository('mgateSuiviBundle:ProcesVerbal')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Facture entity.');
+            throw $this->createNotFoundException('Unable to find ProcesVerbal entity.');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
-            'facture'      => $entity,
+        return $this->render('mgateSuiviBundle:ProcesVerbal:voir.html.twig', array(
+            'procesverbal'      => $entity,
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -79,17 +80,21 @@ class FactureController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
+        if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id) )
         {
-            throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('ProcesVerbal[id='.$id.'] inexistant');
         }
         
-        return $this->redigerAction($facture->getEtude()->getId(), $facture->getType(), 0);
+        //$procesverbal->getEtude()
+        //aah
+        
+        
+        return $this->redigerAction($procesverbal->getEtude()->getId(), $procesverbal->getType(), 0);
 
     }
     
     
-    public function redigerAction($id, $type, $keyFi)
+    public function redigerAction($id, $type, $keyPv)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -98,38 +103,33 @@ class FactureController extends Controller
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
 
-        if(!$facture = $etude->getDoc($type))
+        if(!$procesverbal = $etude->getDoc($type))
         {
-            $facture = new Facture;
-            if(strtoupper($type)=="FA")
+            $procesverbal = new ProcesVerbal;
+            if(strtoupper($type)=="PVR")
             {
-                $etude->setFa($facture);
-                $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
+                $etude->setPvr($procesverbal);
             }
-            elseif(strtoupper($type)=="FS")
-                $etude->setFs($facture);
 
-            $facture->setType($type);
+            $procesverbal->setType($type);
         }
-
-        $form = $this->createForm(new FactureType, $etude, array('type' => $type));
+        
+        $form = $this->createForm(new ProcesVerbalType, $etude, array('type' => $type, 'prospect' => $etude->getProspect()));
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
             
             if( $form->isValid() )
             {
-                if(strtoupper($type)=="FA")
-                    $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
                 
                 $em->persist($etude);
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_procesverbal_voir', array('id' => $procesverbal->getId())) );
             }
                 
         }
 
-        return $this->render('mgateSuiviBundle:Facture:rediger.html.twig', array(
+        return $this->render('mgateSuiviBundle:ProcesVerbal:rediger.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,
             'type' => $type,
