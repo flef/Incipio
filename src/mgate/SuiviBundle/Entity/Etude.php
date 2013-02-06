@@ -221,11 +221,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $suivis;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Pvi", mappedBy="etude")
+    /** proces verbal intermedaire
+     * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude")
      */
     private $pvis;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Av", mappedBy="etude")
@@ -237,10 +236,11 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $avMissions;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Pvr", mappedBy="etude")
+
+    /** proces verbal recette
+     * @ORM\OneToOne(targetEntity="ProcesVerbal", inversedBy="etude", cascade={"persist"})
      */
-    private $pvrs;
+    private $pvr;
 
     /**
      * @var boolean $acompte
@@ -298,7 +298,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->fis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pvrs = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->fraisDossier = 90;
         $this->pourcentageAcompte = 0.40;
@@ -329,10 +328,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
                 return $this->getCc();
             case 'FA':
                 return $this->getFa();
+            case 'FI':
+                return $this->getFis()->get($key);
             case 'FS':
                 return $this->getFs();
             case 'PVR':
-                return $this->getPvrs()->get($key);
+                return $this->getPvr();
+            case 'PVI':
+                return $this->getPvis()->get($key);
             case 'RM':
                 if ($key == -1)
                     return NULL;
@@ -1038,10 +1041,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Add pvis
      *
-     * @param \mgate\SuiviBundle\Entity\Pvi $pvi
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $pvi
      * @return Etude
      */
-    public function addPvi(\mgate\SuiviBundle\Entity\Pvi $pvi) {
+    public function addPvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvi) {
         $this->pvis[] = $pvi;
         $pvi->setEtude($this);
 
@@ -1051,9 +1054,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Remove pvis
      *
-     * @param \mgate\SuiviBundle\Entity\Pvi $pvis
+     * @param \mgate\SuiviBundle\Entity\PvProcesVerbali $pvis
      */
-    public function removePvi(\mgate\SuiviBundle\Entity\Pvi $pvis) {
+    public function removePvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvis) {
         $this->pvis->removeElement($pvis);
     }
 
@@ -1128,33 +1131,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Add pvrs
+     * Set pvr
      *
-     * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $pvr
      * @return Etude
      */
-    public function addPvr(\mgate\SuiviBundle\Entity\Pvr $pvrs) {
-        $this->pvrs[] = $pvrs;
+    public function setPvr(\mgate\SuiviBundle\Entity\ProcesVerbal $pvr) {
+        if ($pvr != null)
+            $pvr->setEtude($this);
+
+        $this->pvr = $pvr;
 
         return $this;
     }
 
     /**
-     * Remove pvrs
+     * Get pvr
      *
-     * @param \mgate\SuiviBundle\Entity\Pvr $pvrs
+     * @return \mgate\SuiviBundle\Entity\ProcesVerbal
      */
-    public function removePvr(\mgate\SuiviBundle\Entity\Pvr $pvrs) {
-        $this->pvrs->removeElement($pvrs);
-    }
-
-    /**
-     * Get pvrs
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPvrs() {
-        return $this->pvrs;
+    public function getPvr() {
+        return $this->pvr;
     }
 
      /**
