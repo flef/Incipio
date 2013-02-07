@@ -4,8 +4,9 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use mgate\SuiviBundle\Entity\Etude;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
+use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\ClientContactHandler;
@@ -16,6 +17,9 @@ use mgate\SuiviBundle\Form\ClientContactType;
 
 class ClientContactController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -28,6 +32,9 @@ class ClientContactController extends Controller
          
     }  
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -57,6 +64,9 @@ class ClientContactController extends Controller
         
     }
 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -75,6 +85,9 @@ class ClientContactController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

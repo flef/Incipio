@@ -4,6 +4,8 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\PhasesType;
@@ -12,7 +14,10 @@ use mgate\SuiviBundle\Entity\Phase;
 
 class PhasesController extends Controller
 {
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -24,7 +29,10 @@ class PhasesController extends Controller
         ));
          
     }
-
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

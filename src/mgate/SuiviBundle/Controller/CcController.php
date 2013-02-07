@@ -3,15 +3,19 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 use Symfony\Component\HttpFoundation\Response;
-use mgate\SuiviBundle\Entity\Etude;
 
+use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Cc;
 use mgate\SuiviBundle\Form\CcType;
 
 class CcController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -22,8 +26,11 @@ class CcController extends Controller
             'etudes' => $entities,
         ));
          
-    }  
+    } 
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -41,7 +48,10 @@ class CcController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-       
+   
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function redigerAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -79,6 +89,9 @@ class CcController extends Controller
         ));
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function genererAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

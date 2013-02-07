@@ -4,6 +4,8 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Ap;
@@ -39,7 +41,10 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class PanelController extends Controller
 {
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -51,7 +56,10 @@ class PanelController extends Controller
         ));
          
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function testAction()
     {
         // Chart

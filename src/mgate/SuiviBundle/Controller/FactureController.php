@@ -3,8 +3,7 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-use mgate\SuiviBundle\Form\EtudeType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\SuiviBundle\Entity\Facture;
 use mgate\SuiviBundle\Form\FactureType;
@@ -12,7 +11,10 @@ use mgate\SuiviBundle\Form\FactureSubType;
 
 
 class FactureController extends Controller
-{
+{    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -24,7 +26,10 @@ class FactureController extends Controller
         ));
          
     }  
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -56,7 +61,10 @@ class FactureController extends Controller
             'form' => $form->createView(),
         ));
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
        $em = $this->getDoctrine()->getManager();
@@ -74,7 +82,10 @@ class FactureController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -88,7 +99,10 @@ class FactureController extends Controller
 
     }
     
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function redigerAction($id, $type, $keyFi)
     {
         $em = $this->getDoctrine()->getEntityManager();
