@@ -16,7 +16,7 @@ class ProspectController extends Controller
 {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
-     */    
+     */   
     public function ajouterAction($format)
     {
         $em = $this->getDoctrine()->getEntityManager();

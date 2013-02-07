@@ -3,6 +3,7 @@
 namespace mgate\PubliBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
 
@@ -511,7 +512,9 @@ class TraitementController extends Controller {
         $this->telechargerAction('', false, true);
     }
 
-    //publication du doc
+    /** publication du doc
+     * @Secure(roles="ROLE_SUIVEUR")
+     */  
     public function publiposterAction($id_etude, $doc, $key = -1) {
 
         if ($doc == 'RM' && $key == -1)
@@ -527,7 +530,9 @@ class TraitementController extends Controller {
         }
     }
 
-    //A nettoyer !!!
+    /** A nettoyer !!
+     * @Secure(roles="ROLE_SUIVEUR")
+     */  
     public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
         $this->purge();
         //TODO idDocx.$doc
