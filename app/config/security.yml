@@ -8,7 +8,7 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ELEVE:      ROLE_USER
+        ROLE_ELEVE:       ROLE_USER
         ROLE_SUIVEUR:     [ROLE_USER, ROLE_ELEVE]
         ROLE_CA:          [ROLE_USER, ROLE_ELEVE, ROLE_SUIVEUR]
         ROLE_ADMIN:       ROLE_USER

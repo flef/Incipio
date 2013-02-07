@@ -4,11 +4,15 @@ namespace mgate\PubliBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Acme\DemoBundle\Entity\Document;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\PubliBundle\Entity\DocumentType;
 
 class DocumentTypeController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -21,6 +25,9 @@ class DocumentTypeController extends Controller
        
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function uploadAction()
     {
         $document = new DocumentType();
