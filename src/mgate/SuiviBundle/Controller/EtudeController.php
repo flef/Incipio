@@ -4,43 +4,19 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
-use mgate\SuiviBundle\Form\EtudePhasesHandler;
-use mgate\SuiviBundle\Entity\Ap;
-use mgate\SuiviBundle\Form\ApType;
-use mgate\SuiviBundle\Form\ApHandler;
-use mgate\SuiviBundle\Entity\Cc;
-use mgate\SuiviBundle\Form\CcType;
-use mgate\SuiviBundle\Entity\Mission;
-use mgate\SuiviBundle\Form\MissionType;
-use mgate\SuiviBundle\Form\MissionHandler;
-use mgate\SuiviBundle\Entity\Suivi;
-use mgate\SuiviBundle\Form\SuiviType;
-use mgate\SuiviBundle\Form\SuiviHandler;
-use mgate\SuiviBundle\Entity\ClientContact;
-use mgate\SuiviBundle\Form\ClientContactHandler;
-use mgate\SuiviBundle\Form\ClientContactType;
-use mgate\SuiviBundle\Entity\Pvi;
-use mgate\SuiviBundle\Form\PviHandler;
-use mgate\SuiviBundle\Form\PviType;
-use mgate\SuiviBundle\Entity\Av;
-use mgate\SuiviBundle\Form\AvHandler;
-use mgate\SuiviBundle\Form\AvType;
-use mgate\SuiviBundle\Entity\AvMission;
-use mgate\SuiviBundle\Form\AvMissionHandler;
-use mgate\SuiviBundle\Form\AvMissionType;
-use mgate\SuiviBundle\Entity\Facture;
-use mgate\SuiviBundle\Form\FactureType;
-use mgate\SuiviBundle\Entity\Pvr;
-use mgate\SuiviBundle\Form\PvrHandler;
-use mgate\SuiviBundle\Form\PvrType;
 
 //use mgate\UserBundle\Entity\User;
 
 class EtudeController extends Controller
 {
-    
+ 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -53,6 +29,9 @@ class EtudeController extends Controller
          
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction()
     {
         $etude = new Etude;
@@ -97,7 +76,10 @@ class EtudeController extends Controller
         ));
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -114,7 +96,10 @@ class EtudeController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

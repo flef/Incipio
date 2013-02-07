@@ -3,9 +3,9 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\SuiviBundle\Form\EtudeType;
-
 use mgate\SuiviBundle\Entity\Suivi;
 use mgate\SuiviBundle\Form\SuiviType;
 use mgate\SuiviBundle\Form\SuiviHandler;
@@ -15,7 +15,10 @@ use mgate\SuiviBundle\Form\PvrHandler;
 use mgate\SuiviBundle\Form\PvrType;
 
 class PvrController extends Controller
-{
+{    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -27,7 +30,10 @@ class PvrController extends Controller
         ));
          
     }  
-   
+       
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -62,7 +68,10 @@ class PvrController extends Controller
         ));
     }
     
-
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -80,7 +89,10 @@ class PvrController extends Controller
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -121,7 +133,10 @@ class PvrController extends Controller
         ));
     }
     
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function redigerAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

@@ -3,14 +3,18 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use mgate\SuiviBundle\Form\EtudeType;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
+use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Pvi;
 use mgate\SuiviBundle\Form\PviHandler;
 use mgate\SuiviBundle\Form\PviType;
 
 class PviController extends Controller
-{
+{    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -22,7 +26,10 @@ class PviController extends Controller
         ));
          
     }  
-        
+          
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */  
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -53,7 +60,10 @@ class PviController extends Controller
             'form' => $form->createView(),
         )); 
     }
-  
+      
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -72,7 +82,10 @@ class PviController extends Controller
         
         
     }
-    
+       
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */ 
     public function modifierAction($id)
     {
          $em = $this->getDoctrine()->getEntityManager();

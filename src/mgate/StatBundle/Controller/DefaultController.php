@@ -3,11 +3,15 @@
 namespace mgate\StatBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction()
     {
         // Chart
@@ -27,6 +31,9 @@ class DefaultController extends Controller
         ));
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function caAction()
     {
         $em = $this->getDoctrine()->getManager();

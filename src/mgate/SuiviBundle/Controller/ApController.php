@@ -4,6 +4,8 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Ap;
 use mgate\SuiviBundle\Entity\Etude;
@@ -15,7 +17,10 @@ use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
 
 class ApController extends Controller {
-
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */   
     public function indexAction($page) {
         $em = $this->getDoctrine()->getManager();
 
@@ -26,6 +31,9 @@ class ApController extends Controller {
                 ));
     }
 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id) {
         $em = $this->getDoctrine()->getManager();
 
@@ -47,6 +55,9 @@ class ApController extends Controller {
                 /* 'delete_form' => $deleteForm->createView(),  */                ));
     }
 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function redigerAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -82,6 +93,9 @@ class ApController extends Controller {
                 ));
     }
 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function genererAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -212,6 +226,9 @@ class ApController extends Controller {
                 ));
       }
 
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function SuiviAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
