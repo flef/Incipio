@@ -50,6 +50,7 @@ class LoadAdminData implements FixtureInterface, ContainerAwareInterface
         $su->setEmail($this->container->getParameter('su_mail'));
         $su->setPersonne($personne);
         $su->setEnabled(true);
+        $su->setRoles(array('ROLE_SUPER_ADMIN'));        
         
         $personne->setUser($su);
         
