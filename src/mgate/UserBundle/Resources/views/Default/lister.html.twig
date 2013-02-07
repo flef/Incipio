@@ -10,14 +10,26 @@
 
     <ul>
 
+<table width="100%" border="0">
+  <tr>
+    <td>Id</td>
+    <td>Nom d'utilisateur</td>
+    <td>Adresse email du compte</td>
+    <td>Droit</td>
+    <td>Action</td>
+  </tr>
         {% for user in users %}
-            <li>
-                Id {{ user.id }} : {{ user.username }} - <a href="{{ path('mgate_user_voir', {'id': user.id}) }}">voir</a> <a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a>
-            </li>
+    <tr>
+    <td>{{ user.id }}</td>
+    <td>{{ user.username }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.rolesDisplay }}</td>
+    <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
+  </tr>
         {% else %}
             <li>Pas (encore !) d'utilisateur</li>
         {% endfor %}
-
+</table>
     </ul>
 
 {% endblock %}

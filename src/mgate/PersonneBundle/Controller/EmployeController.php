@@ -4,12 +4,17 @@ namespace mgate\PersonneBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\PersonneBundle\Entity\Employe;
 use mgate\PersonneBundle\Form\EmployeType;
 
 class EmployeController extends Controller
 {
-    
+
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function ajouterAction($prospect_id, $format)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -49,6 +54,9 @@ class EmployeController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */     
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -61,6 +69,9 @@ class EmployeController extends Controller
                 
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */     
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -77,7 +88,10 @@ class EmployeController extends Controller
             'employe'      => $entity,
             /*'delete_form' => $deleteForm->createView(),        */));
     }
-    
+
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */ 
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
