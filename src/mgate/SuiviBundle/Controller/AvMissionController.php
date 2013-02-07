@@ -3,15 +3,18 @@
 namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\SuiviBundle\Form\EtudeType;
-
 use mgate\SuiviBundle\Entity\AvMission;
 use mgate\SuiviBundle\Form\AvMissionHandler;
 use mgate\SuiviBundle\Form\AvMissionType;
 
 class AvMissionController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -23,7 +26,10 @@ class AvMissionController extends Controller
         ));
          
     }  
-       
+
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction($id)
     {
        $em = $this->getDoctrine()->getEntityManager();
@@ -52,6 +58,9 @@ class AvMissionController extends Controller
         ));
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -70,6 +79,9 @@ class AvMissionController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

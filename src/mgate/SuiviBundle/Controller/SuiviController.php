@@ -4,8 +4,9 @@ namespace mgate\SuiviBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use mgate\SuiviBundle\Entity\Etude;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
+use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Suivi;
 use mgate\SuiviBundle\Form\SuiviType;
@@ -13,7 +14,10 @@ use mgate\SuiviBundle\Form\SuiviHandler;
 
 
 class SuiviController extends Controller
-{
+{    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -25,7 +29,10 @@ class SuiviController extends Controller
         ));
          
     }  
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function addAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -57,7 +64,10 @@ class SuiviController extends Controller
         ));
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -76,7 +86,10 @@ class SuiviController extends Controller
         
         
     }
-    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
