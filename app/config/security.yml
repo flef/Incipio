@@ -8,8 +8,9 @@ security:
         FOS\UserBundle\Model\UserInterface: sha512
 
     role_hierarchy:
-        ROLE_ELEVES:      ROLE_USER
-        ROLE_CA:          [ROLE_USER, ROLE_ELEVES]
+        ROLE_ELEVE:      ROLE_USER
+        ROLE_SUIVEUR:     [ROLE_USER, ROLE_ELEVE]
+        ROLE_CA:          [ROLE_USER, ROLE_ELEVE, ROLE_SUIVEUR]
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
@@ -61,6 +62,13 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+
+        # PAGES ACCESSIBLES AUX CA
+
+
+        # PAGES ACCESSIBLES AUX SUIVEUR
+        - { path: ^/suivi/*, role: ROLE_SUIVEUR }
         
+       
         # PAGES ACCESSIBLES AUX UTILISATEURS CONNECTES
         - { path: ^/.*, role: ROLE_USER }

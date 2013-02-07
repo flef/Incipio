@@ -91,4 +91,23 @@ class User extends BaseUser
         $roleDisplay = str_replace('_', ' ', $roleDisplay);
         return ucwords(strtolower($roleDisplay));
     }
+    
+    
+    /** pour afficher les roles
+     * Get getRolesDisplay
+     *
+     * @return string
+     */
+    public function getRolesDisplay()
+    {
+        $rolesArray = $this->getRoles();
+               
+        $liste="";
+        foreach ($rolesArray as $role) 
+        {
+            $liste .= " " . User::convertRoleToLabel($role);
+        }
+        
+        return $liste;
+    }
 }

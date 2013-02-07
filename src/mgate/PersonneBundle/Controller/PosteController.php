@@ -4,13 +4,17 @@ namespace mgate\PersonneBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\PersonneBundle\Entity\Poste;
 use mgate\PersonneBundle\Entity\Personne;
 use mgate\PersonneBundle\Form\PosteType;
 
 class PosteController extends Controller
 {
-    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */     
     public function ajouterAction()
     {
         $em = $this->getDoctrine()->getEntityManager();    
@@ -38,6 +42,9 @@ class PosteController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -50,6 +57,9 @@ class PosteController extends Controller
                 
     }
     
+    /**
+     * @Secure(roles="ROLE_ELEVE")
+     */    
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -67,6 +77,9 @@ class PosteController extends Controller
             /*'delete_form' => $deleteForm->createView(),        */));
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();

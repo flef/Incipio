@@ -4,6 +4,8 @@ namespace mgate\PersonneBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use JMS\SecurityExtraBundle\Annotation\Secure;
+
 use mgate\PersonneBundle\Entity\Prospect;
 use mgate\PersonneBundle\Form\ProspectType;
 
@@ -12,7 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProspectController extends Controller
 {
-    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function ajouterAction($format)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -42,6 +46,9 @@ class ProspectController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function indexAction($page)
     {
         $em = $this->getDoctrine()->getManager();
@@ -54,6 +61,9 @@ class ProspectController extends Controller
                 
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */       
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -72,6 +82,9 @@ class ProspectController extends Controller
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */       
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -104,9 +117,10 @@ class ProspectController extends Controller
         ));
     }
     
-    
-     /**
+ 
+    /**
      * @Route("/ajax_prospect", name="ajax_prospect")
+     * @Secure(roles="ROLE_SUIVEUR")
      */
     public function ajaxProspectAction(Request $request)
     {
