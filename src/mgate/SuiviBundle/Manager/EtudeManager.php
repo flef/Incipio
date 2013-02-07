@@ -175,14 +175,6 @@ class EtudeManager extends \Twig_Extension {
         return $this->em->getRepository('mgateSuiviBundle:Etude');
     }
     
-    public function jourVersSemaine($j)
-    {
-        $semaine = (int)floor($j/7);
-        $jour = $semaine % 7;
-        
-        $jourVersSemaine=array($semaine,$jour);
-        
-        return $jourVersSemaine;
-    }
+    
 
 }

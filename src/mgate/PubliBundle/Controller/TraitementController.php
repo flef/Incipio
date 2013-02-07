@@ -224,8 +224,7 @@ class TraitementController extends Controller {
         if ($etudeManager->getDelaiEtude($etude))
 
         {
-            $Delais = $etudeManager->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
-            $Delais_Semaines = $Delais[0];
+            $Delais_Semaines= $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
         }
         else
             $Delais_Semaines = NULL;
@@ -383,8 +382,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             if($phase->getDateDebut())
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
-            $Delai = $etudeManager->jourVersSemaine($phase->getDelai());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai[0]); //délai en semaine
+            $Delai = $this->jourVersSemaine($phase->getDelai());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
@@ -597,6 +596,18 @@ class TraitementController extends Controller {
             return number_format($number, 0, ',', ' ');
         else
             return number_format($number, 2, ',', ' ');
+    }
+    
+    private function jourVersSemaine($j)
+    {
+        $semaine = (int)floor($j/7);
+        $converter = $this->get('mgate.conversionlettre');
+        $semaine_str = $converter->ConvNumberLetter($semaine);
+        //$jour = $semaine % 7;
+        if($semaine==1) $jourVersSemaine=$semaine_str."e semaine";
+        else $jourVersSemaine=$semaine_str." semaines";
+        
+        return $jourVersSemaine;
     }
 
 }
