@@ -26,10 +26,6 @@ mgatePersonneBundle:
     resource: "@mgatePersonneBundle/Resources/config/routing.yml"
     prefix:   /personne
 
-mgateTestBundle:
-    resource: "@mgateTestBundle/Resources/config/routing.yml"
-    prefix:   /
-
 # Internal routing configuration to handle ESI
 #_internal:
 #    resource: "@FrameworkBundle/Resources/config/routing/internal.xml"
@@ -65,13 +61,9 @@ fos_comment_api:
     
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
-    
+
+### Pour requete AJAX
 prospect:
     resource: "@mgatePersonneBundle/Controller/ProspectController.php"
     type:     annotation
     
-    
-AcmePizzaBundle:
-    resource: "@AcmePizzaBundle/Controller/"
-    type:     annotation
-    prefix:   /acme-pizza

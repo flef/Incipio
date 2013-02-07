@@ -20,7 +20,6 @@ class AppKernel extends Kernel
             new JMS\DiExtraBundle\JMSDiExtraBundle($this),
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new FOS\UserBundle\FOSUserBundle(),
-            new mgate\TestBundle\mgateTestBundle(),
             new FOS\CommentBundle\FOSCommentBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle($this),
@@ -33,7 +32,6 @@ class AppKernel extends Kernel
             new Genemu\Bundle\FormBundle\GenemuFormBundle(),
             new mgate\UserBundle\mgateUserBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-            new Acme\PizzaBundle\AcmePizzaBundle(),
             new mgate\PubliBundle\mgatePubliBundle(),
             new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new mgate\DashboardBundle\mgateDashboardBundle(),
@@ -41,7 +39,6 @@ class AppKernel extends Kernel
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
