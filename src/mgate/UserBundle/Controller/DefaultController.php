@@ -3,16 +3,23 @@
 namespace mgate\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\UserBundle\Form\UserAdminType;
 
 class DefaultController extends Controller
 {
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
     public function indexAction($name)
     {
         return $this->render('mgateUserBundle:Default:index.html.twig', array('name' => $name));
     }
     
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
     public function listerAction()
     {
         $em = $this->getDoctrine()->getManager();
@@ -23,6 +30,9 @@ class DefaultController extends Controller
         return $this->render('mgateUserBundle:Default:lister.html.twig', array('users' => $entities));
     }
     
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
@@ -35,6 +45,9 @@ class DefaultController extends Controller
         return $this->render('mgateUserBundle:Default:voir.html.twig', array('user' => $user));
     }
     
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
     public function modifierAction($id)
     {
         $em = $this->getDoctrine()->getManager();
