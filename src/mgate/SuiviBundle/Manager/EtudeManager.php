@@ -167,8 +167,15 @@ class EtudeManager extends \Twig_Extension {
     }
 
     public function getDelaiEtude(Etude $etude) {
-        if($this->getDateFin($etude))
-        return $this->getDateFin($etude)->diff($this->getDateLancement($etude));
+        /*$phases = $etude->getPhases();
+        $delai = 0;
+        foreach ($phases as $phase)
+        {
+           $delai+=$phase->getDelai();
+        }
+        return $this->jourVersSemaine($delai);*/
+       if($this->getDateFin($etude))
+       return $this->getDateFin($etude)->diff($this->getDateLancement($etude));
     }
 
     public function getRepository() {
