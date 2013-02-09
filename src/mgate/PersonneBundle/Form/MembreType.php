@@ -12,7 +12,7 @@ class MembreType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-                ->add('personne', new PersonneType(), array('label'=>' '))
+                ->add('personne', new PersonneType(), array('label'=>' ', 'user'=>true))
                 ->add('identifiant', 'text', array('required'=>false))
                 ->add('poste', 'entity', 
                     array ('label' => 'Séléctionner un poste',
@@ -20,7 +20,6 @@ class MembreType extends AbstractType
                            'property' => 'intitule',
                            'property_path' => true,
                            'required' => false,));
-
             
     }
 

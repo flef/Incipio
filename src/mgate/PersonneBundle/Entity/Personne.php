@@ -316,6 +316,9 @@ class Personne
     public function setUser(\mgate\UserBundle\Entity\User $user = null)
     {
         $this->user = $user;
+        
+        if($user)
+            $user->setPersonne($this);
     
         return $this;
     }
