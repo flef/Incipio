@@ -1163,6 +1163,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function addFi(\mgate\SuiviBundle\Entity\Facture $fi) {
         $this->fis[] = $fi;
         $fi->setEtude($this);
+        $fi->setType('fi');
 
         return $this;
     }
@@ -1182,7 +1183,15 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getFis() {
-        return $this->fis;
+        $fis = array();
+        
+        foreach ($this->fis as $value)
+        {
+            if($value->getType()=="fi")
+                $fis[]=$value;
+        }
+        
+        return $fis;
     }
     
     /**
