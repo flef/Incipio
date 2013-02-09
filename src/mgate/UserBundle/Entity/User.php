@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Yaml\Parser; 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mgate\UserBundle\Entity\UserRepository")
  * @ORM\Table(name="fos_user")
  */
 class User extends BaseUser
@@ -45,9 +45,7 @@ class User extends BaseUser
      * @return User
      */
     public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
-    {
-        $personne->setUser($this);
-        
+    {        
         $this->personne = $personne;
      
         return $this;

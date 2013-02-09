@@ -4,7 +4,14 @@ namespace mgate\PersonneBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
+
 use mgate\PersonneBundle\Form\Type\SexeType as SexeType;
+use mgate\UserBundle\Entity\UserRepository;
+use mgate\PersonneBundle\Entity\Membre;
+use mgate\PersonneBundle\Form\EventListener\AddUserFieldSubscriber;
 
 
 class PersonneType extends AbstractType
@@ -15,14 +22,18 @@ class PersonneType extends AbstractType
                 ->add('prenom')
                 ->add('nom')
                 ->add('sexe', new SexeType())
-                ->add('mobile')
-                ->add('email');
-                        
+                ->add('mobile');
+            
+
+        if(!$options['mini'] && !$options['user'])
+            $builder->add('fix');
         if(!$options['mini'])
+            $builder->add('adresse');
+
+        if($options['user'])
         {
-            $builder
-                ->add('fix')
-                ->add('adresse');
+            $subscriber = new AddUserFieldSubscriber($builder->getFormFactory());
+            $builder->addEventSubscriber($subscriber);
         }
             
     }
@@ -37,6 +48,8 @@ class PersonneType extends AbstractType
         return array(
             'data_class' => 'mgate\PersonneBundle\Entity\Personne',
             'mini' => false,
+            'user' => false,
+            'personne' => null
         );
     }
 }
