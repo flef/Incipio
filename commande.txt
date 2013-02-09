@@ -24,6 +24,9 @@ php app/console assets:install --symlink web		necessite droit admin
 php app/console assets:install web                   pour jQuery
 php app/console assetic:dump --env=prod --no-debug   pour commentbundle
 
+rm -rf app/cache/dev
+rm -rf app/cache/prod
+
 Générateur de bundle / entity
 php app/console generate:bundle  (mgate/PubliBundle, enter, enter, yml, no)
 php app/console generate:doctrine:entity  (annotation)

@@ -13,7 +13,7 @@ class UserAdminType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('personne', 'entity', 
+        /*$builder->add('personne', 'entity', 
                 array ('label' => 'Séléctionner la personne',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
@@ -21,7 +21,7 @@ class UserAdminType extends BaseType
                        'required' => false,
                        //'query_builder' => function(PersonneRepository $pr) { return $pr->getNotUser(); },
                                
-                               ));   
+                               ));   */
                        
        $builder->add('roles', 'choice', array(
         'choices' => User::getRolesNames(),
