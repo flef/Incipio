@@ -245,14 +245,14 @@ mgateSuivi_procesverbal_ajouter:
         id: \d+
         
 mgateSuivi_procesverbal_modifier:
-    pattern: /procesverbal/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:ProcesVerbal:modifier, type:null}
+    pattern: /procesverbal/modifier/{id_pv}
+    defaults: {_controller: mgateSuiviBundle:ProcesVerbal:modifier}
     requirements:
         id: \d+
         
 mgateSuivi_procesverbal_rediger:
-    pattern: /procesverbal/rediger/{id}/{type}/{keyPv}
-    defaults: {_controller: mgateSuiviBundle:ProcesVerbal:rediger, type:null, keyPv:null}
+    pattern: /procesverbal/rediger/{id_etude}/{type}
+    defaults: {_controller: mgateSuiviBundle:ProcesVerbal:rediger}
     requirements:
         id: \d+
  

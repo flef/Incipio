@@ -88,35 +88,45 @@ class ProcesVerbalController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function modifierAction($id)
+    public function modifierAction($id_pv)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id) )
-        {
-            throw $this->createNotFoundException('ProcesVerbal[id='.$id.'] inexistant');
-        }
-        
-        //$procesverbal->getEtude()
-        //aah
-        
-        
-        return $this->redigerAction($procesverbal->getEtude()->getId(), $procesverbal->getType(), 0);
+        if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
+            throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
 
+        $form = $this->createForm(new ProcesVerbalSubType, $procesverbal, array('type' => $procesverbal->getType(), 'prospect' => $procesverbal->getEtude()->getProspect()));
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+            
+            if( $form->isValid() )
+            {
+                
+                $em->persist($procesverbal);
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_procesverbal_voir', array('id' => $procesverbal->getId())) );
+            }
+                
+        }
+
+        return $this->render('mgateSuiviBundle:ProcesVerbal:rediger.html.twig', array(
+            'form' => $form->createView(),
+            'etude' => $procesverbal->getEtude(),
+            'type' => $procesverbal->getType(),
+        ));
     }
     
         
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function redigerAction($id, $type, $keyPv)
+    public function redigerAction($id_etude, $type)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
-        }
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
+            throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
 
         if(!$procesverbal = $etude->getDoc($type))
         {
@@ -150,4 +160,5 @@ class ProcesVerbalController extends Controller
             'type' => $type,
         ));
     }
+    
 }

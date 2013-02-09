@@ -67,13 +67,13 @@ Affichage d'une étude - {{ parent() }}
                             <p>
                             <h3>Procès-Verbal Intermédiaire:</h3>
     {% for pvi in etude.pvis %}
-                            <li><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
+                            <li><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
     {% endfor %}
                             <a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a>
                             </p>
                             <p>
                             <h3>Procès-Verbal de Recette:</h3>
-                            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
+                            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
                             </p>
                             <p>
                             <h3>Facture de Solde:</h3>
