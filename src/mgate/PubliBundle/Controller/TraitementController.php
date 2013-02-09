@@ -225,6 +225,7 @@ class TraitementController extends Controller {
 
         {
             $Delais_Semaines= $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
+            var_dump($Delais_Semaines);
         }
         else
             $Delais_Semaines = NULL;
@@ -383,6 +384,7 @@ class TraitementController extends Controller {
             if($phase->getDateDebut())
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
             $Delai = $this->jourVersSemaine($phase->getDelai());
+            var_dump($Delai);
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
@@ -603,10 +605,14 @@ class TraitementController extends Controller {
         $semaine = (int)floor($j/7);
         $converter = $this->get('mgate.conversionlettre');
         $semaine_str = $converter->ConvNumberLetter($semaine);
-        //$jour = $semaine % 7;
-        if($semaine==1) $jourVersSemaine=$semaine_str."e semaine";
-        else $jourVersSemaine=$semaine_str." semaines";
-        
+        $jour=$semaine % 7;
+        $jour_str = $converter->ConvNumberLetter($jour);
+        if($semaine==1 && $jour==0) $jourVersSemaine=$semaine_str."e semaine";
+        else if($jour==0)$jourVersSemaine=$semaine_str." semaines";
+        else if($semaine==1 && $jour>1) $jourVersSemaine=$semaine_str." semaine et ".$jour_str." jours";
+        else if($semaine==1 && $jour==1) $jourVersSemaine=$semaine_str." semaine et ".$jour_str." jour"; 
+        else if($semaine>1 && $jour>1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jours";
+        else if($semaine>1 && $jour==1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jour"; 
         return $jourVersSemaine;
     }
 
