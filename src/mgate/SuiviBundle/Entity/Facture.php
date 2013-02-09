@@ -30,7 +30,7 @@ class Facture extends DocType
     /**
      * @var string $type
      *
-     * @ORM\Column(name="type", type="text", nullable=true)
+     * @ORM\Column(name="type", type="text", nullable=false)
      */
     private $type;
 
