@@ -1066,7 +1066,16 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getPvis() {
-        return $this->pvis;
+        $pvis = array();
+        
+        // En fait pvis ca prend toutes les PV qui sont lié a l'etude $this
+        // C'est le principe de OneToMany, d'ou la selection ci-dessous
+        foreach ($this->pvis as $value)
+        {
+            if($value->getType()=="pvi")
+                $pvis[]=$value;
+        }
+        return $pvis;
     }
 
 
@@ -1185,6 +1194,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getFis() {
         $fis = array();
         
+        // En fait fis ca prend toutes les facture qui sont lié a l'etude $this
+        // C'est le principe de OneToMany, d'ou la selection ci-dessous
         foreach ($this->fis as $value)
         {
             if($value->getType()=="fi")

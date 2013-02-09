@@ -33,5 +33,7 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.pvr }%} 
+     {% if type=="pvi" %}{% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form }%}
+    {%elseif type=="pvr"%}{% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.pvr }%}{%endif%}
+     
 {% endblock %}
