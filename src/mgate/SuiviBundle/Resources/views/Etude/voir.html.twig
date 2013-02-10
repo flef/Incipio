@@ -77,12 +77,12 @@ Affichage d'une étude - {{ parent() }}
                             </p>
                             <p>
                             <h3>Facture de Solde:</h3>
-                            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id': etude.id, 'type': 'fs'}) }}">Rediger la Facture de Solde</a></li>
+                            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}">Rediger la Facture de Solde</a></li>
                             </p>
                             <p>
                             <h3>Factures Intermédiaires:</h3>
     {% for facture in etude.fis %}
-                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
+                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
     {% endfor %}
                             <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture intermédiaire</a>
                             </p>
