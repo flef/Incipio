@@ -45,7 +45,7 @@ class DefaultController extends Controller
         foreach ($etudes as $etude) {
             $cumul+= $this->get('mgate.etude_manager')->getTotalHT($etude);
             $value = array();
-            $value[]=$etude->getDateCreation()->getTimestamp();
+            $value[]=$etude->getDateCreation()->getTimestamp()*1000;
             $value[]=$cumul;
             $ca[] = $value;
        }
@@ -58,6 +58,7 @@ class DefaultController extends Controller
         );
 
         $ob = new Highchart();
+        $ob->global->useUTC(false);
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
         $ob->title->text('Chiffre d\'Affaire titre du graph');
         $ob->xAxis->title(array('text'  => "Horizontal axis title"));
