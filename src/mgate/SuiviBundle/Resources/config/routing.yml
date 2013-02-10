@@ -195,7 +195,7 @@ mgateSuivi_avmission_modifier:
     defaults: {_controller: mgateSuiviBundle:AvMission:modifier}
     requirements:
         id: \d+
-        
+
 mgateSuivi_facture_ajouter:
     pattern: /facture/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Facture:add}
@@ -203,14 +203,14 @@ mgateSuivi_facture_ajouter:
         id: \d+
         
 mgateSuivi_facture_modifier:
-    pattern: /facture/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:modifier, type:null}
+    pattern: /facture/modifier/{id_facture}
+    defaults: {_controller: mgateSuiviBundle:Facture:modifier}
     requirements:
         id: \d+
         
 mgateSuivi_facture_rediger:
-    pattern: /facture/rediger/{id}/{type}/{keyFi}
-    defaults: {_controller: mgateSuiviBundle:Facture:rediger, type:null, keyFi:null}
+    pattern: /facture/rediger/{id_etude}/{type}
+    defaults: {_controller: mgateSuiviBundle:Facture:rediger}
     requirements:
         id: \d+
  
@@ -243,7 +243,7 @@ mgateSuivi_procesverbal_ajouter:
     defaults: {_controller: mgateSuiviBundle:ProcesVerbal:add}
     requirements:
         id: \d+
-        
+      
 mgateSuivi_procesverbal_modifier:
     pattern: /procesverbal/modifier/{id_pv}
     defaults: {_controller: mgateSuiviBundle:ProcesVerbal:modifier}
@@ -259,5 +259,11 @@ mgateSuivi_procesverbal_rediger:
 mgateSuivi_procesverbal_voir:
     pattern: /procesverbal/voir/{id}
     defaults: {_controller: mgateSuiviBundle:ProcesVerbal:voir}
+    requirements:
+        id: \d+
+        
+mgateSuivi_procesverbal_supprimer:
+    pattern: /procesverbal/supprimer/{id_pv}
+    defaults: {_controller: mgateSuiviBundle:ProcesVerbal:delete}
     requirements:
         id: \d+
