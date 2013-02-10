@@ -27,7 +27,28 @@ class ProcesVerbalController extends Controller
         ));
          
     }  
+                
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function voirAction($id)
+    {
+       $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('mgateSuiviBundle:ProcesVerbal')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ProcesVerbal entity.');
+        }
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('mgateSuiviBundle:ProcesVerbal:voir.html.twig', array(
+            'procesverbal'      => $entity,
+            /*'delete_form' => $deleteForm->createView(),  */      ));
         
+    }
+    
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
@@ -67,27 +88,6 @@ class ProcesVerbalController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function voirAction($id)
-    {
-       $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('mgateSuiviBundle:ProcesVerbal')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ProcesVerbal entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('mgateSuiviBundle:ProcesVerbal:voir.html.twig', array(
-            'procesverbal'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
-        
-    }
-        
-    /**
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
     public function modifierAction($id_pv)
     {
         $em = $this->getDoctrine()->getEntityManager();
@@ -96,6 +96,7 @@ class ProcesVerbalController extends Controller
             throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
 
         $form = $this->createForm(new ProcesVerbalSubType, $procesverbal, array('type' => $procesverbal->getType(), 'prospect' => $procesverbal->getEtude()->getProspect()));
+        $deleteForm = $this->createDeleteForm($id_pv);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -110,10 +111,12 @@ class ProcesVerbalController extends Controller
                 
         }
 
-        return $this->render('mgateSuiviBundle:ProcesVerbal:rediger.html.twig', array(
+        return $this->render('mgateSuiviBundle:ProcesVerbal:modifier.html.twig', array(
             'form' => $form->createView(),
+            'delete_form' => $deleteForm->createView(),
             'etude' => $procesverbal->getEtude(),
             'type' => $procesverbal->getType(),
+            'procesverbal' => $procesverbal,
         ));
     }
     
@@ -159,6 +162,37 @@ class ProcesVerbalController extends Controller
             'etude' => $etude,
             'type' => $type,
         ));
+    }
+    
+    
+    public function deleteAction($id_pv)
+    {
+        $form = $this->createDeleteForm($id_pv);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
+                throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
+
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $entity->getEtude()->getId())));
+    }
+
+    private function createDeleteForm($id_pv)
+    {
+        return $this->createFormBuilder(array('id' => $id_pv))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
     }
     
 }

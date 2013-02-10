@@ -24,8 +24,17 @@
 
 
     <p>
-        <a href="{{ path('mgateSuivi_procesverbal_voir', {'id': facture.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_procesverbal_voir', {'id': procesverbal.id}) }}" >Retour</a>
     </p>
+    
+<ul class="record_actions">
+    <li>
+        <form action="{{ path('mgateSuivi_procesverbal_supprimer', { 'id_pv': procesverbal.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
 
 {% endblock %}
 

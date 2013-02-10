@@ -26,7 +26,28 @@ class FactureController extends Controller
         ));
          
     }  
+               
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function voirAction($id)
+    {
+       $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problÃ¨me
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Facture entity.');
+        }
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
+            'facture'      => $entity,
+            /*'delete_form' => $deleteForm->createView(),  */      ));
         
+    }
+ 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
@@ -61,55 +82,49 @@ class FactureController extends Controller
             'form' => $form->createView(),
         ));
     }
-        
-    /**
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function voirAction($id)
-    {
-       $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problÃ¨me
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Facture entity.');
-        }
-
-        //$deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
-            'facture'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
-        
-    }
-        
-    /**
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function modifierAction($id)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
-        {
-            throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
-        }
-        
-        return $this->redigerAction($facture->getEtude()->getId(), $facture->getType(), 0);
-
-    }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function modifierAction($id_facture)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id_facture) )
+            throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
+
+        $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+            
+            if( $form->isValid() )
+            {
+                
+                $em->persist($facture);
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+            }
+                
+        }
+
+        return $this->render('mgateSuiviBundle:Facture:rediger.html.twig', array(
+            'form' => $form->createView(),
+            'etude' => $facture->getEtude(),
+            'type' => $facture->getType(),
+        ));
+    }   
         
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function redigerAction($id, $type, $keyFi)
+    public function redigerAction($id_etude, $type)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
         {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
         }
 
         if(!$facture = $etude->getDoc($type))
