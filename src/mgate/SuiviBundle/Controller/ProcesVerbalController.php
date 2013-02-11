@@ -164,7 +164,9 @@ class ProcesVerbalController extends Controller
         ));
     }
     
-    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
     public function deleteAction($id_pv)
     {
         $form = $this->createDeleteForm($id_pv);
