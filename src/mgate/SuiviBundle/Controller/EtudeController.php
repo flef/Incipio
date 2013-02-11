@@ -110,7 +110,7 @@ class EtudeController extends Controller
         }
 
         $form = $this->createForm(new EtudeType, $etude);
-
+        $deleteForm = $this->createDeleteForm($id);
         if($this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -127,7 +127,39 @@ class EtudeController extends Controller
         return $this->render('mgateSuiviBundle:Etude:modifier.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,
+            'delete_form' => $deleteForm->createView(),
         ));
     }
-    
+
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+                throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage'));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
+    }
 }

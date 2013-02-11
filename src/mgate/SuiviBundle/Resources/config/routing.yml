@@ -27,6 +27,12 @@ mgateSuivi_etude_panel:
     defaults: {_controller: mgateSuiviBundle:Panel:test , page: 1}
     requirements:
       page : \d* 
+       
+mgateSuivi_etude_supprimer:
+    pattern: /etude/supprimer/{id}
+    defaults: {_controller: mgateSuiviBundle:Etude:delete}
+    requirements:
+        id: \d+
         
 #mgateSuivi_ap_generer:
 #    pattern: /ap/generer/{id}
@@ -136,33 +142,14 @@ mgateSuivi_clientcontact_voir:
     pattern: /clientcontact/voir/{id}
     defaults: {_controller: mgateSuiviBundle:ClientContact:voir}
     requirements:
-        id: \d+
-        
-mgateSuivi_pvi_ajouter:
-    pattern: /pvi/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvi:add}
-    requirements:
-        id: \d+
-        
-mgateSuivi_pvi_modifier:
-    pattern: /pvi/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvi:modifier}
-    requirements:
-        id: \d+
-        
-mgateSuivi_pvi_voir:
-    pattern: /pvi/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvi:voir}
-    requirements:
-        id: \d+
-        
+        id: \d+     
+    
         
 mgateSuivi_av_ajouter:
     pattern: /av/ajouter/{id}
     defaults: {_controller: mgateSuiviBundle:Av:add}
     requirements:
         id: \d+
-        
         
 mgateSuivi_av_modifier:
     pattern: /av/modifier/{id}
@@ -220,17 +207,6 @@ mgateSuivi_facture_voir:
     requirements:
         id: \d+
          
-mgateSuivi_pvr_rediger:
-    pattern: /pvr/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvr:rediger}
-    requirements:
-        id: \d+
-        
-mgateSuivi_pvr_voir:
-    pattern: /pvr/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Pvr:voir}
-    requirements:
-        id: \d+
                 
 mgateSuivi_phases_modifier:
     pattern: /phases/modifier/{id}
