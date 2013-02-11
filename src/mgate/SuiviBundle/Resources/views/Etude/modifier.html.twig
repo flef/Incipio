@@ -18,5 +18,15 @@
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'article</a>
     </p>
     
+    
+        <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    
+  
+  <button type="submit" class="alert">test</button>
+  
+  <script>$(".alert").alert()</script>
 {% endblock %}
 
