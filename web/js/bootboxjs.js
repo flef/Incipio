@@ -605,7 +605,8 @@ window.bootbox = bootbox;
 //WARN INSER EXT
     $('#confirm').submit(function() {
     var currentForm = this;
-    bootbox.confirm("Êtes vous sûr ?", function(result) {
+    var message = $(currentForm).data("content") || "Êtes vous sûr ?";
+    bootbox.confirm(message, function(result) {
         if (result) {
             currentForm.submit();
         }
