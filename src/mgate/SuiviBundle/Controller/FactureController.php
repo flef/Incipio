@@ -94,6 +94,7 @@ class FactureController extends Controller
             throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
 
         $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
+        $deleteForm = $this->createDeleteForm($id_facture);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -108,10 +109,12 @@ class FactureController extends Controller
                 
         }
 
-        return $this->render('mgateSuiviBundle:Facture:rediger.html.twig', array(
+        return $this->render('mgateSuiviBundle:Facture:modifier.html.twig', array(
             'form' => $form->createView(),
             'etude' => $facture->getEtude(),
             'type' => $facture->getType(),
+            'facture' => $facture,
+            'delete_form' => $deleteForm->createView(),
         ));
     }   
         
@@ -163,5 +166,37 @@ class FactureController extends Controller
             'etude' => $etude,
             'type' => $type,
         ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
+                throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $entity->getEtude()->getId())));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
     }
 }

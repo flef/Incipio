@@ -27,5 +27,11 @@
         <a href="{{ path('mgateSuivi_facture_voir', {'id': facture.id}) }}" >Retour</a>
     </p>
 
+        <form action="{{ path('mgateSuivi_facture_supprimer', { 'id': facture.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    
+    
 {% endblock %}
 

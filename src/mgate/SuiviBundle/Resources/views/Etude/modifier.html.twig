@@ -7,6 +7,7 @@
 {% block content_bundle %}
 <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<!-- WARN DOUBLE INCLUDE-->
 
     <h2>Modifier l'étude</h2>
     {% include "::Tools/datepicker.html.twig" %}
@@ -26,9 +27,7 @@
                 <button>Delete</button>
         </form>
 
-   <button onclick="">test</button>
-   
    <script src="{{ asset('js/bootstrap.js')}}"></script>
    <script src="{{ asset('js/bootboxjs.js')}}"></script>
-{% endblock %}
 
+{% endblock %}
