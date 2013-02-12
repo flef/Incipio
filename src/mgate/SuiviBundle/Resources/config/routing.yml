@@ -206,6 +206,12 @@ mgateSuivi_facture_voir:
     defaults: {_controller: mgateSuiviBundle:Facture:voir}
     requirements:
         id: \d+
+        
+mgateSuivi_facture_supprimer:
+    pattern: /facture/supprimer/{id}
+    defaults: {_controller: mgateSuiviBundle:Facture:delete}
+    requirements:
+        id: \d+
          
                 
 mgateSuivi_phases_modifier:
