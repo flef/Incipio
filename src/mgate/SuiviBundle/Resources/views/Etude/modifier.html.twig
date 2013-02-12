@@ -14,19 +14,21 @@
 
     <p>Modification d'une étude</p>
 
+
+
     <p>
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'article</a>
     </p>
     
     
-        <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
+        <form id="confirm" action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+                <button>Delete</button>
         </form>
-    
-  
-  <button type="submit" class="alert">test</button>
-  
-  <script>$(".alert").alert()</script>
+
+   <button onclick="">test</button>
+   
+   <script src="{{ asset('js/bootstrap.js')}}"></script>
+   <script src="{{ asset('js/bootboxjs.js')}}"></script>
 {% endblock %}
 
