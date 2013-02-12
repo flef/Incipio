@@ -614,6 +614,16 @@ class TraitementController extends Controller {
         else if($semaine>1 && $jour>1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jours";
         else if($semaine>1 && $jour==1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jour"; 
         return $jourVersSemaine;
+
+        /* OU
+        $jourVersSemaine = "";
+        if($semaine)
+            $jourVersSemaine = $semaine_str.($semaine > 1 ? " semaines" : "e semaine");
+        if($jour)
+            $jourVersSemaine .= " et ".$jours_str . " jour".($jours > 1 ? "s" :"");
+         *
+         */
+  
     }
 
 }
