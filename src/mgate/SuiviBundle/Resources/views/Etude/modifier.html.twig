@@ -22,7 +22,7 @@
     </p>
     
     
-        <form id="confirm" action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
+        <form id="confirm" data-content="Pas de connerie !" action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
             {{ form_widget(delete_form) }}
                 <button>Delete</button>
         </form>
