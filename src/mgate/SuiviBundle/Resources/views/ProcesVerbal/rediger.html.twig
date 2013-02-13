@@ -7,8 +7,6 @@
         
 {% block content_bundle %}
 
-{% include "::Tools/jquery.html.twig" %}  
-{% include "::Tools/jqueryui.html.twig" %}  
 {% include "::Tools/select2.html.twig" %}
 {% include "::Tools/datepicker.html.twig" %}
 
@@ -16,9 +14,7 @@
     <h2>Rédiger le Procès-Verbal {% if type=="pvi" %}Intermédiaire{%elseif type=="pvr"%}de Recette{%endif%}</h2>
 
 <form method="post" {{ form_enctype(form) }}>
-
 	{{ form_widget(form) }}
-	
 	<input type="submit" value="Enregistrer"/>  
 </form>
 
@@ -33,7 +29,7 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-     {% if type=="pvi" %}{% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form }%}
-    {%elseif type=="pvr"%}{% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.pvr }%}{%endif%}
+    {% if type=="pvi" %}  {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 }%} 
+    {%elseif type=="pvr"%}{% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.pvr.knownSignataire2, knowned: form.pvr.signataire2, newed: form.pvr.newSignataire2 }%} {%endif%}
      
 {% endblock %}
