@@ -27,7 +27,8 @@
 </tr>
 <tr>
     <th>Date de signature</th>
-    <td>{{mission.dateSignature|default('"now"')|date("d/m/Y")}}</td>
+    
+    <td>{% if mission.dateSignature %} {{mission.dateSignature|date("d/m/Y")}}{% else %}non renseigné{% endif %}</td>
 </tr>
 <tr>
     <th>Progression</th>
