@@ -94,6 +94,10 @@ mgateSuivi_missions_modifier:
     defaults: {_controller: mgateSuiviBundle:Missions:modifier}
     requirements:
         id: \d+
+
+mgateSuivi_mission_avancement:
+    pattern: /missions/modifier/avancement/
+    defaults: {_controller: mgateSuiviBundle:Mission:avancement}
         
 #mgateSuivi_missions_generer:
 #    pattern: /missions/generer/{id}
