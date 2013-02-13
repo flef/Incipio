@@ -602,7 +602,7 @@ var bootbox = window.bootbox || (function(document, $) {
 // @see https://github.com/makeusabrew/bootbox/issues/71
 window.bootbox = bootbox;
 
-//WARN INSER EXT
+//CONFIRM WARN INSER EXT
     $('#confirm').submit(function() {
     var currentForm = this;
     var message = $(currentForm).data("content") || "Êtes vous sûr ?";
