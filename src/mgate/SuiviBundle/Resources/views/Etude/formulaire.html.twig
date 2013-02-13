@@ -9,33 +9,3 @@
 	<input type="submit" value="Enregistrer l'étude"/>
         <input type="submit" value="Enregistrer l'étude et passer à l'AP" name="ap" id="ap"/>
 </form>
-
-
- <script>
-     /* ...known personne... */
-    
-    var toggle = true;
-    var known = $('input#{{ form.knownProspect.get('id') }}');
-    var knowned = $('label:contains("{{ form.prospect.get('label') }}"):first').closest('div')
-    var newed = $('label:contains("{{ form.newProspect.get('label') }}"):first').closest('div');
-    
-    known.prop('checked', true);
-
-    known.change(function() {
-
-        if ($(this).is(':checked')) {
-            knowned.find('input').attr('disabled', false);
-            if (toggle) knowned.show();
-
-            newed.find('input').attr('disabled', true);
-            if (toggle) newed.hide();
-        } else {
-            newed.find('input').attr('disabled', false);
-            if (toggle) newed.show();
-
-            knowned.find('input').attr('disabled', true);
-            if (toggle) knowned.hide();
-        }
-
-    }).change();
-</script>

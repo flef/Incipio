@@ -6,8 +6,6 @@
 
 {% block content_bundle %}
       
-{% include "::Tools/jquery.html.twig" %}  
-{% include "::Tools/jqueryui.html.twig" %}  
 {% include "::Tools/select2.html.twig" %}
 {% include "::Tools/datepicker.html.twig" %}  
 
@@ -27,5 +25,5 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { doc: form.cc } %} 
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.cc.knownSignataire2, knowned: form.cc.signataire2, newed: form.cc.newSignataire2 }%} 
 {% endblock %}
