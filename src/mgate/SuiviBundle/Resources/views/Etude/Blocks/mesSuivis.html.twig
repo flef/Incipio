@@ -1,34 +1,34 @@
 <link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
 <table class="table table-striped" id="myTable">
-      <thead>
-          <tr>
-              <th>
-                  Status
-              </th>
-              <th>
-                  <div>Nom de l'étude</div>
-                  <div>Référence</div>
-              </th>
-              <th>
-                  <div>Client</div>
-              </th>
-              <th>
-                  <div>Date de Lancement</div>
-                  <div>Date de Fin</div>
-              </th>
-              <th>
-                   Developpeurs
-              </th>
-              <th>
-                  Avancement Dev
-              </th>
-              <th>
-                   <div>Prix H.T</div>
-                   <div>Nbre J.E.H.</div>
-              </th>
-            </tr>
- 	 </thead>
- 	 <tbody>
+    <thead>
+        <tr>
+            <th>
+                Status
+            </th>
+            <th>
+    <div>Nom de l'étude</div>
+    <div>Référence</div>
+</th>
+<th>
+<div>Client</div>
+</th>
+<th>
+<div>Date de Lancement</div>
+<div>Date de Fin</div>
+</th>
+<th>
+    Developpeurs
+</th>
+<th>
+    Avancement Dev
+</th>
+<th>
+<div>Prix H.T</div>
+<div>Nbre J.E.H.</div>
+</th>
+</tr>
+</thead>
+<tbody>
         {% for etude in etudes %}
         {% if etude.suiveur %}
         {% if etude.suiveur.prenomNom == user%}
@@ -62,8 +62,8 @@
                                     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-                                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : (mission.id - 1)}) }}"><i class="icon-envelope"></i> Générer</a></li>
-                                        <li><i class="icon-envelope"></i> Modifier l'avancement</li>
+                                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : loop.index0}) }}"><i class="icon-envelope"></i> Générer</a></li>
+                                        <li><a href="#" id="avancement" data-title="{{etude.id}}" data-content="{{ loop.index0 }}"><i class="icon-envelope"></i> Modifier l'avancement</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#"><i class="i"></i> autre</a></li>
                                     </ul>
@@ -73,7 +73,7 @@
                             </td>
                             <td width="50%">
                                 <div class="progress">
-                                    <div class="bar" style="width: {{ mission.avancement|default(1) }}%;"></div>
+                                    <div class="bar" id="avancementBar{{ loop.index0 }}" style="width: {{ mission.avancement }}%;"></div>
                                 </div>
 
 
@@ -100,12 +100,38 @@
         {% endif %}
         {% endif %}
         {% endfor %}
- 	 </tbody>
-  </table>
-<script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-<script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
-<script>
-    {%for etude in etudes %}
-     {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : loop.index } %}
+        </tbody>
+    </table>
+    <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
+    <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
+
+    <script src="{{ asset('js/bootboxjs.js')}}"></script>
+    <script>
+        {%for etude in etudes %}
+         {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : loop.index } %}
+    
+                             
     {%endfor%}
-</script>
+        </script>
+        <script>
+    $('#avancement').click(
+
+
+    function(sender) {
+        var that = $('#avancement');
+        bootbox.prompt("Avancement du developpeur (%) ?", function(result) {
+          if (result !== null) {                                             
+            var requete = $.ajax({
+            url: "{{ path('mgateSuivi_mission_avancement') }}",
+            type: "POST",
+            data: "avancement=" + result +"&id=" + $(that).data("title") + "&intervenant=" + $(that).data("content"),
+            success: function(){
+            },
+            });
+             $("#avancementBar"+$(that).data("content")).css("width",  result + "%");
+            }
+            })
+            });
+
+                  
+            </script>
