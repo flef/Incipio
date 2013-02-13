@@ -109,6 +109,8 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
+   <script src="{{ asset('js/bootstrap.js')}}"></script>
+   <script src="{{ asset('js/bootboxjs.js')}}"></script>
 <script type="text/javascript">
     
     // Fenetre resumant
@@ -280,13 +282,19 @@
         $delete.on('click', function(e) {
             // prevent the link from creating a "#" on the URL
             e.preventDefault();
-
-            // remove the li for the tag form
-            $tagFormLi.remove();
-            updateOrder();
-            updatePrix();
-            updateNbrJEH();
-        });
+            
+            //CONFIRM confirmation suppression
+            var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
+            bootbox.confirm(message, function(result) {
+                if (result) {
+                                // remove the li for the tag form
+                    $tagFormLi.remove();
+                    updateOrder();
+                    updatePrix();
+                    updateNbrJEH();
+                }
+            });
+           });
         
         $up.on('click', function(e) {
             // prevent the link from creating a "#" on the URL
