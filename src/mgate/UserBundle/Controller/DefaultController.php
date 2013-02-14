@@ -58,6 +58,7 @@ class DefaultController extends Controller
         }
         
         $form = $this->createForm(new UserAdminType('mgate\UserBundle\Entity\User'), $user);
+        $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -72,8 +73,44 @@ class DefaultController extends Controller
                 
         }
         
-        return $this->render('mgateUserBundle:Default:modifier.html.twig', array('form' => $form->createView()));       
+        return $this->render('mgateUserBundle:Default:modifier.html.twig', array(
+            'form' => $form->createView(), 
+            'delete_form' => $deleteForm->createView(),
+            ));       
         
     }
     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\UserBundle\Entity\User')->find($id) )
+                throw $this->createNotFoundException('User[id='.$id.'] inexistant');
+            
+            $entity->getPersonne()->setUser(null);
+            $entity->setPersonne(null);
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgate_user_lister'));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
+    }
 }

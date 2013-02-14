@@ -23,10 +23,14 @@ class UserAdminType extends BaseType
                                
                                ));   */
                        
+       $builder->add('enabled', 'checkbox', array(
+            'label'     => 'Adresse email validé ?',
+            'required'  => false,
+       ));   
        $builder->add('roles', 'choice', array(
         'choices' => User::getRolesNames(),
         'required' => false,'label'=>'Roles','multiple'=>true
-    ));   
+        ));   
                        
         parent::buildForm($builder, $options);
         
