@@ -128,7 +128,11 @@ class MembreController extends Controller
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id) )
                 throw $this->createNotFoundException('Membre[id='.$id.'] inexistant');
-
+            
+            $entity->getPersonne()->setMembre(null);
+            $entity->setPersonne(null);
+            //est-ce qu'on supprime la personne aussi ?
+            
             $em->remove($entity);
             $em->flush();
         }

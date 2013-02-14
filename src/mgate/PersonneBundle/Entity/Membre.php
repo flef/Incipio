@@ -80,8 +80,9 @@ class Membre
      * @param \mgate\PersonneBundle\Entity\Personne $personne
      * @return Membre
      */
-    public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
+    public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne=null)
     {
+        if($personne!=null)
         $personne->setMembre($this);
         $this->personne = $personne;
     
@@ -104,7 +105,7 @@ class Membre
      * @param \mgate\PersonneBundle\Entity\Membre $poste
      * @return Membre
      */
-    public function setPoste(\mgate\PersonneBundle\Entity\Poste $poste)
+    public function setPoste(\mgate\PersonneBundle\Entity\Poste $poste=null)
     {
         $this->poste = $poste;
     

@@ -85,13 +85,11 @@ class PosteController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
-        {
             throw $this->createNotFoundException('Poste [id='.$id.'] inexistant');
-        }
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new PosteType, $poste);
-        
+        $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -108,7 +106,44 @@ class PosteController extends Controller
 
         return $this->render('mgatePersonneBundle:Poste:modifier.html.twig', array(
             'form' => $form->createView(),
-            'poste'      => $poste,
+            'delete_form' => $deleteForm->createView(),
         ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
+                throw $this->createNotFoundException('Poste[id='.$id.'] inexistant');
+            
+            foreach($entity->getMembres() as $membre)
+                    $membre->setPoste(null);
+
+            //$entity->setMembres(null);
+            
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgatePersonne_poste_homepage'));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
     }
 }

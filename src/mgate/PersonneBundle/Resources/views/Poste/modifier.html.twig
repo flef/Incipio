@@ -5,9 +5,19 @@
 {% block content_bundle %}
 
     <h2>Modifier un poste</h2>
-    {% include "mgatePersonneBundle:Poste:formulaire.html.twig" %}
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" />
+</form>
 
-                
+
+    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_poste_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+        <button>Supprimer le poste</button>
+    </form>    
+                                
 <p>
     <a href="{{ path('mgatePersonne_poste_homepage') }}" >Retour à la liste des postes</a>
 </p>
