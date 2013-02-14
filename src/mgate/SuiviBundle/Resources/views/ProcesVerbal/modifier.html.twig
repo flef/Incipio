@@ -8,28 +8,24 @@
 {% block content_bundle %}
         
     <h2>Modifier un Procès-Verbal</h2>
+    
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer le Procès-Verbal"/>
+</form>
 
-    {% include "mgateSuiviBundle:ProcesVerbal:formulaire.html.twig" %} 
 
 
     <p>
         <a href="{{ path('mgateSuivi_procesverbal_voir', {'id': procesverbal.id}) }}" >Retour</a>
     </p>
     
-<ul class="record_actions">
-    <li>
-        <form action="{{ path('mgateSuivi_procesverbal_supprimer', { 'id_pv': procesverbal.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
-
-        <form action="{{ path('mgateSuivi_procesverbal_supprimer', { 'id_pv': procesverbal.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    
+    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgateSuivi_procesverbal_supprimer', { 'id_pv': form.vars.value.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+        <button>Supprimer le Procès-Verbal</button>
+    </form>        
     
 {% endblock %}
 
