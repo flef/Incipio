@@ -6,11 +6,7 @@
 
         
 {% block content_bundle %}
-
-{% include "::Tools/select2.html.twig" %}
-{% include "::Tools/datepicker.html.twig" %}
-
-        
+       
     <h2>Rédiger le Procès-Verbal {% if type=="pvi" %}Intermédiaire{%elseif type=="pvr"%}de Recette{%endif%}</h2>
 
 <form method="post" {{ form_enctype(form) }}>
