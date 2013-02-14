@@ -47,9 +47,8 @@ class MissionController extends Controller {
                 $em->flush();
             }
         
-        //A dégager
- return $this->render('mgateSuiviBundle:Etude:null.html.twig', array(  )
-                );
+        return new Response('ok !');
+         
     }
 
     /**
