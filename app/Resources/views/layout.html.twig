@@ -23,7 +23,10 @@
 
 {% block head %}
 {% endblock %}
+        </head>
 
+        <body>
+            
 {% block javascript_quick %}
             <script src="{{ asset('js/jquery-1.9.1.min.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
@@ -33,10 +36,8 @@
             <script src="{{ asset('js/bootboxjs.js')}}"></script>
             <script src="{{ asset('js/jquery.ui.datepicker-fr.js')}}"></script>
             <script src="{{ asset('js/select2.min.js')}}"></script>
-{% endblock %}
-        </head>
-
-        <body>
+{% endblock %}            
+            
 {% block body %} 
 
     {% block main_header %}
@@ -92,6 +93,7 @@
 {% endblock %} 
 
 {% block javascript %}
+    <script src="{{ asset('js/bootboxjs.js')}}"></script>
     <script>
         $(function() {
             $( document ).tooltip();
