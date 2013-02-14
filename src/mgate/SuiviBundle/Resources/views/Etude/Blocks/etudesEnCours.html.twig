@@ -110,27 +110,3 @@
  	 </tbody>
   </table>
 
-<!-- block JS -->
-    <script src="{{ asset('js/bootboxjs.js')}}"></script>
-        <script>
-        $('body').click(function(e){
-        var Elem = e.target;
-        if (Elem.id == 'commentaire'){
-            console.log(Elem);
-           bootbox.prompt("Commentaire :", function(result) {
-          if (result !== null) {                                             
-            var requete = $.ajax({
-            url: "{{ path('mgateSuivi_state') }}",
-            type: "POST",
-            data: "state=" + result +"&etude=" + $(Elem).data("title") + "&id=" + $(Elem).data("content"),
-            success: function(){
-            },
-            });
-            }
-            })
-       }
-       });
-            
-
-                  
-            </script>
