@@ -97,7 +97,8 @@ class DefaultController extends Controller
             if( ! $entity = $em->getRepository('mgate\UserBundle\Entity\User')->find($id) )
                 throw $this->createNotFoundException('User[id='.$id.'] inexistant');
             
-            $entity->getPersonne()->setUser(null);
+            if($entity->getPersonne())
+                $entity->getPersonne()->setUser(null);
             $entity->setPersonne(null);
             $em->remove($entity);
             $em->flush();
