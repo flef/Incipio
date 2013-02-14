@@ -30,15 +30,8 @@ class MissionType extends DocTypeType
         
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
-            ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false))
-            // Je ne sais pas trop comment faire, Stéphane
-            ->add('phaseMission', 'collection', array(
-                    'type' => new PhaseMissionType,
-                    'allow_add' => true,
-                    'allow_delete' => true,
-                    'prototype' => true,
-                    'by_reference' => false, //indispensable cf doc
-                    ));
+            ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false));
+
             //->add('avancement','integer',array('label'=>'Avancement en %'))
             //->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
             //->add('rapportRelu','checkbox', array('label'=>'Rapport pédagogique relu','required'=>false))
