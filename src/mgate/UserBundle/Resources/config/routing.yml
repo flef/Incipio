@@ -13,4 +13,8 @@ mgate_user_voir:
 mgate_user_modifier:
     pattern:  /user/modifier/{id}
     defaults: { _controller: mgateUserBundle:Default:modifier }
+    
+mgate_user_supprimer:
+    pattern:  /user/supprimer/{id}
+    defaults: { _controller: mgateUserBundle:Default:delete }
 

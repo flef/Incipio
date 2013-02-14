@@ -15,5 +15,12 @@
 	<input type="submit" value="Enregistrer l'Utilisateur"/>
 </form>
 
+    
+    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+        <button>Supprimer l'utilisateur</button>
+    </form>
+    <script src="{{ asset('js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('js/bootboxjs.js')}}"></script>
 
 {% endblock %}
