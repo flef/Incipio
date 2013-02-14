@@ -44,7 +44,7 @@ class User extends BaseUser
      * @param \mgate\PersonneBundle\Entity\Personne $personne
      * @return User
      */
-    public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne)
+    public function setPersonne(\mgate\PersonneBundle\Entity\Personne $personne = null)
     {        
         $this->personne = $personne;
      

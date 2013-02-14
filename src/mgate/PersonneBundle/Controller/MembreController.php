@@ -87,13 +87,11 @@ class MembreController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id) )
-        {
             throw $this->createNotFoundException('Membre [id='.$id.'] inexistant');
-        }
 
         // On passe l'$article récupéré au formulaire
-        $form        = $this->createForm(new MembreType, $membre);
-        
+        $form = $this->createForm(new MembreType, $membre);
+        $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -110,7 +108,39 @@ class MembreController extends Controller
 
         return $this->render('mgatePersonneBundle:Membre:modifier.html.twig', array(
             'form' => $form->createView(),
-            'membre'      => $membre,
+            'delete_form' => $deleteForm->createView(),
         ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id) )
+                throw $this->createNotFoundException('Membre[id='.$id.'] inexistant');
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgatePersonne_membre_homepage'));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
     }
 }

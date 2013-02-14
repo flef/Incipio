@@ -4,7 +4,12 @@
 
   <h2>Ajouter un Membre M-GaTE</h2>
 
-  {% include "mgatePersonneBundle:Membre:formulaire.html.twig" %} 
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" />
+</form>
 
 
 
