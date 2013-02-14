@@ -31,6 +31,7 @@ class Mission extends DocType
     
     /**
      * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $phaseMission;
 
