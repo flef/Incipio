@@ -12,7 +12,7 @@
 	<input type="submit" />
 </form>
 
-    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
         <button>Supprimer le membre</button>
     </form>    

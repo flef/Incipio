@@ -4,7 +4,13 @@
 
   <h2>Ajouter un Poste M-GaTE</h2>
 
-  {% include "mgatePersonneBundle:Poste:formulaire.html.twig" %} 
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" />
+</form>
+ 
 
 
 
