@@ -29,6 +29,38 @@ class EtudeController extends Controller
          
     }
     
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function stateAction()
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $stateDescription = isset($_POST['state']) ? $_POST['state'] : "";
+        $stateID = isset($_POST['id']) ? $_POST['id'] : 0;
+        $etudeID = isset($_POST['etude']) ? intval($_POST['etude']) : 0;
+        
+
+            if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($etudeID)) {
+                throw $this->createNotFoundException('Etude[id=' . $etudeID . '] inexistant');
+            } else {
+                $etude = new Etude;
+                $etude->setStateDescription($stateDescription);
+                $etude->setStateID($stateID);
+                $em->persist($etude->getStateDescription());
+                $em->persist($etude->getStateID());
+                $em->flush();
+            }
+            
+            
+            return new Response('ok !');
+         
+    }
+    
+    
+    
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
