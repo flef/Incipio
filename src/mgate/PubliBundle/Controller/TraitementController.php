@@ -225,7 +225,6 @@ class TraitementController extends Controller {
 
         {
             $Delais_Semaines= $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
-            var_dump($Delais_Semaines);
         }
         else
             $Delais_Semaines = NULL;
@@ -384,7 +383,6 @@ class TraitementController extends Controller {
             if($phase->getDateDebut())
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
             $Delai = $this->jourVersSemaine($phase->getDelai());
-            var_dump($Delai);
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
@@ -573,7 +571,6 @@ class TraitementController extends Controller {
                 exit();
             }
         } else {
-            echo 'fail';
         }
 
         return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)));
