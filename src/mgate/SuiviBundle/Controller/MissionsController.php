@@ -61,7 +61,6 @@ class MissionsController extends Controller
                 if($this->get('request')->get('add'))
                 {
                     $missionNew = new Mission;
-                    //$missionNew->setPosition(count($etude->getMissions()));
                     $missionNew->setEtude($etude);
                     $etude->addMission($missionNew);
                 }
@@ -91,9 +90,10 @@ class MissionsController extends Controller
                 $em->flush();
                 
                 //Necessaire pour refraichir l ordre
-                $em->refresh($etude);
-                $form = $this->createForm(new MissionsType, $etude);
-                //return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
+                //$em->refresh($etude);
+                //$form2 = $this->createForm(new MissionsType, $etude);
+                // ci dessus ca bug, pourtant c'est similaire a PhasesController. Autre méthode :
+                return $this->redirect( $this->generateUrl('mgateSuivi_missions_modifier', array('id' => $etude->getId())) );
 
             }
         }
