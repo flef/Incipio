@@ -46,19 +46,6 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                                 dataObj: "{{ path('mgateSuivi_ap_voir', {'id': etude.id}) }}"
 					}]
 				},
-                                {% else %}{#else if verifierDate == false affiche Erreur ... gantt RED#}
-                                {
-					name: "Avant-Projet",
-					desc: "Non Signé",
-					values: [{ title : "",
-                                                content : "",
-						from: "/Date({{"now"|date('U') - 86400}}000)/",
-						to: "/Date({{"now"|date('U') - 86400}}000)/",
-						label: "AP", 
-						customClass: "ganttRed",
-                                                dataObj: "{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"
-					}]
-				},
                                 {% endif %}
                                 {% if etude.cc and etude.cc.datesignature %}  
                                 {
@@ -71,19 +58,6 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 						label: "CC", 
 						customClass: "ganttGreen",
                                                 dataObj: "{{ path('mgateSuivi_cc_voir', {'id': etude.id}) }}"
-					}]
-				},
-                                {% else %}
-                                {
-					name: "Convention Client",
-					desc: "Non Signé",
-					values: [{ title : "",
-                                                content : "",
-						from: "/Date({{"now"|date('U') - 86400}}000)/",
-						to: "/Date({{"now"|date('U') - 86400}}000)/",
-						label: "CC", 
-						customClass: "ganttRed",
-                                                dataObj: "{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"
 					}]
 				},
                                 {% endif %}
@@ -112,6 +86,20 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 						label: "S{{suivi.id}}", 
 						customClass: "ganttBlue",
                                                 dataObj: "{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}"
+					}]
+				},
+                                {% endfor %}
+                                {% for phase in etude.phases %}   
+                                {
+					name: {%if loop.index == 1 %}"Phases" {%else%} "" {% endif%},
+					desc: "Phase {{loop.index}}",
+                                        values: [{ title : "{{phase.titre}}",
+                                                content : "{{ phase.objectif }}",
+						from: "/Date({{phase.dateDebut|date('U') - 86400}}000)/",
+						to: "/Date({{phase.dateDebut|date('U') + 86400 * ( phase.delai - 2) }}000)/",
+						label: "Phase {{loop.index}}", 
+						customClass: "ganttBlue",
+                                                dataObj: ""
 					}]
 				},
                                 {% endfor %}

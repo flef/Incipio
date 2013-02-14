@@ -95,9 +95,15 @@ mgateSuivi_missions_modifier:
     requirements:
         id: \d+
 
+#AJOUT AJAX
+
 mgateSuivi_mission_avancement:
     pattern: /missions/modifier/avancement/
     defaults: {_controller: mgateSuiviBundle:Mission:avancement}
+    
+mgateSuivi_state:
+    pattern: /suivi/state/
+    defaults: {_controller: mgateSuiviBundle:Etude:state}
         
 #mgateSuivi_missions_generer:
 #    pattern: /missions/generer/{id}

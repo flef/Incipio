@@ -936,6 +936,7 @@
             createProgressBar: function (days, cls, desc, label, dataObj, title, content) {
                 var cellWidth = tools.getCellSize();
                 var barMarg = tools.getProgressBarMargin() || 0;
+                //AJOUT POPOVER WARN IMPORT EXT
                 var bar = $('<div class="bar" rel="popover" data-original-title='+ title +' data-content='+ content +'><div class="fn-label" >' + label + '</div></div>')
                         .addClass(cls)
                         .css({

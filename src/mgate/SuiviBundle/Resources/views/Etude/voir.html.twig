@@ -13,14 +13,39 @@ Affichage d'une étude - {{ parent() }}
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1">
+            
+            {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+            {% if etude.stateDescription %}
+            <div class="alert alert-block alert-success">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Information Suiveur</h4>
+                {{ etude.stateDescription }}
+            </div>
+            {% endif %}
             <h2>Etude {{ getRefEtude(etude) }}</h2>
             <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
-            <li>Client: {{ etude.prospect.nom }} </li>
-            <li>Suiveur: {{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</li>
+            <li>Client : <div class="btn-group" style="width : 200px">
+                    <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
+                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+                        <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}"><i class="icon-envelope"></i> Voir</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#"><i class="i"></i>Commenter</a></li>
+                    </ul>
+                </div></li>
+                <br/>
+            <li>Suiveur: <div class="btn-group" style="width : 200px">
+            <a class="btn btn-success" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</a>
+            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+            </ul>
+        </div></li>
             <li>Description de l'étude: <br />{{etude.description }}</li>
             <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">modifier</a>
             <br>
-
+            {% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}
             <p>
             <h3>Etat de l'étude:</h3>
     {% for suivi in etude.suivis %}
@@ -35,7 +60,7 @@ Affichage d'une étude - {{ parent() }}
     {% for contact in etude.clientContacts %}
             <li><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': contact.id}) }}">Contact n°{{contact.id}}</a> effectué le {{ contact.date|date("d/m/Y") }}</li>
     {% endfor %}
-            
+            {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
 
         </div>
             <div class="tab-pane" id="tab2" style="min-height:200px;">
