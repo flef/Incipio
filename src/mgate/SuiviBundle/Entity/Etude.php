@@ -16,7 +16,8 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  */
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
-    
+
+        
     /**
      * @var bool
      */
@@ -29,11 +30,19 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     
     
     /**
-     * @var integer $id
+     * @var integer $stateID
      *
-     * @ORM\Column(name="state", type="integer", nullable=true)
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    private $state;
+    private $stateID;
+    
+    /**
+     * @var string $Description
+     *
+     * @ORM\Column(name="stateDescription", type="text", nullable=true)
+     */
+    private $stateDescription;
+
 
     /**
      * @var integer $id
@@ -1254,28 +1263,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
 
-    /**
-     * Set state
-     *
-     * @param integer $state
-     * @return Etude
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-    
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return integer 
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
 
 
     /**
@@ -1310,5 +1297,57 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getThread()
     {
         return $this->thread;
+    }
+    
+    
+    
+    
+    
+    
+
+    /**
+     * Set stateID
+     *
+     * @param integer $stateID
+     * @return Etude
+     */
+    public function setStateID($stateID)
+    {
+        $this->stateID = $stateID;
+    
+        return $this;
+    }
+
+    /**
+     * Get stateID
+     *
+     * @return integer 
+     */
+    public function getStateID()
+    {
+        return $this->stateID;
+    }
+
+    /**
+     * Set stateDescription
+     *
+     * @param string $stateDescription
+     * @return Etude
+     */
+    public function setStateDescription($stateDescription)
+    {
+        $this->stateDescription = $stateDescription;
+    
+        return $this;
+    }
+
+    /**
+     * Get stateDescription
+     *
+     * @return string 
+     */
+    public function getStateDescription()
+    {
+        return $this->stateDescription;
     }
 }

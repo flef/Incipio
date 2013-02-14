@@ -62,7 +62,7 @@
                                     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-                                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : loop.index0}) }}"><i class="icon-envelope"></i> Générer</a></li>
+                                        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : etude.id , 'doc': 'RM', 'key' : loop.index0 }) }}"><i class="icon-envelope"></i> Générer</a></li>
                                         <li><a href="#" id="avancement" data-title="{{etude.id}}" data-content="{{ loop.index0 }}"><i class="icon-envelope"></i> Modifier l'avancement</a></li>
                                         <li class="divider"></li>
                                         <li><a href="#"><i class="i"></i> autre</a></li>
@@ -73,7 +73,7 @@
                             </td>
                             <td width="50%">
                                 <div class="progress">
-                                    <div class="bar" id="avancementBar{{ loop.index0 }}" style="width: {{ mission.avancement }}%;"></div>
+                                    <div class="bar" id="avancementBar{{etude.id}}{{ loop.index0 }}" style="width: {{ mission.avancement }}%;"></div>
                                 </div>
 
 
@@ -113,7 +113,7 @@
     {%endfor%}
         </script>
         <script>
-    $('#avancement').click(
+/*    $('#avancement').click(
 
 
     function(sender) {
@@ -130,7 +130,27 @@
              $("#avancementBar"+$(that).data("content")).css("width",  result + "%");
             }
             })
-            });
+            });*/
 
+ $('body').click(function(e){
+        var Elem = e.target;
+        if (Elem.id == 'avancement'){
+            console.log(Elem);
+            bootbox.prompt("Avancement du developpeur (%) ?", function(result) {
+          if (result !== null) {                                             
+            var requete = $.ajax({
+            url: "{{ path('mgateSuivi_mission_avancement') }}",
+            type: "POST",
+            data: "avancement=" + result +"&id=" + $(Elem).data("title") + "&intervenant=" + $(Elem).data("content"),
+            success: function(){
+            },
+            });
+             $("#avancementBar"+$(Elem).data("title")+$(Elem).data("content")).css("width",  result + "%");
+            }
+            })
+            }});
+            
+            
+ 
                   
             </script>
