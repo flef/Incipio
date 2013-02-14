@@ -39,18 +39,17 @@ class EtudeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $stateDescription = isset($_POST['state']) ? $_POST['state'] : "";
-        $stateID = isset($_POST['id']) ? $_POST['id'] : 0;
+        $stateID = isset($_POST['id']) ? intval($_POST['id']) : 0;
         $etudeID = isset($_POST['etude']) ? intval($_POST['etude']) : 0;
         
-
             if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($etudeID)) {
                 throw $this->createNotFoundException('Etude[id=' . $etudeID . '] inexistant');
             } else {
-                $etude = new Etude;
+
                 $etude->setStateDescription($stateDescription);
                 $etude->setStateID($stateID);
-                $em->persist($etude->getStateDescription());
-                $em->persist($etude->getStateID());
+                $em->persist($etude);
+
                 $em->flush();
             }
             
