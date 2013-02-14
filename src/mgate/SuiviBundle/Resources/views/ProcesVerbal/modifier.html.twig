@@ -4,10 +4,7 @@
 	Modifier un Procès-Verbal - {{ parent() }}
 {% endblock %}
 
-{% block javascript %}
-    {{ form_javascript(form) }}
-{% endblock %}
-        
+
 {% block content_bundle %}
         
     <h2>Modifier un Procès-Verbal</h2>
@@ -36,3 +33,8 @@
     
 {% endblock %}
 
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 }%}
+{% endblock %}
