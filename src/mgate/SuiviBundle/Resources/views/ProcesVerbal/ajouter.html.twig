@@ -6,12 +6,15 @@
 
 {% block content_bundle %}
 
-{% include "::Tools/select2.html.twig" %}
-{% include "::Tools/datepicker.html.twig" %}
-
     <h2>Ajouter un Procès-Verbal</h2>
 
-    {% include "mgateSuiviBundle:ProcesVerbal:formulaire.html.twig" %} 
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer le Procès-Verbal"/> 
+</form>
+
 
     <p>---  </p>
 
