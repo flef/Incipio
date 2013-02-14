@@ -68,7 +68,13 @@ mgatePersonne_membre_modifier:
     pattern: /membre/modifier/{id}
     defaults: {_controller: mgatePersonneBundle:Membre:modifier}
     requirements:
-        id: \d+        
+        id: \d+
+        
+mgatePersonne_membre_supprimer:
+    pattern: /membre/supprimer/{id}
+    defaults: {_controller: mgatePersonneBundle:Membre:delete}
+    requirements:
+        id: \d+      
 
 mgatePersonne_poste_homepage:
     pattern:  /poste
@@ -90,4 +96,10 @@ mgatePersonne_poste_modifier:
     pattern: /poste/modifier/{id}
     defaults: {_controller: mgatePersonneBundle:Poste:modifier}
     requirements:
-        id: \d+      
+        id: \d+
+        
+mgatePersonne_poste_supprimer:
+    pattern: /poste/supprimer/{id}
+    defaults: {_controller: mgatePersonneBundle:Poste:delete}
+    requirements:
+        id: \d+     
