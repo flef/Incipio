@@ -1,7 +1,9 @@
 <!-- alert-block -->
 
+{% for warning in getWarnings(etude) %}
 <div class="alert">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <h4>Warning!</h4>
-  Best check yo self, you're not...
+  <h4>{{ warning.titre }}</h4>
+  {{ warning.message }}
 </div>
+{% endfor %}

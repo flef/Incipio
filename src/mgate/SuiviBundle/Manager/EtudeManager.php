@@ -29,6 +29,9 @@ class EtudeManager extends \Twig_Extension {
             'getNbrJEH' => new \Twig_Function_Method($this, 'getNbrJEH'),
             'getDateLancement' => new \Twig_Function_Method($this, 'getDateLancement'),
             'getDateFin' => new \Twig_Function_Method($this, 'getDateFin'),
+            'getErrors' => new \Twig_Function_Method($this, 'getErrors'),
+            'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
+            'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
         );
     }
 
@@ -182,6 +185,39 @@ class EtudeManager extends \Twig_Extension {
         return $this->em->getRepository('mgateSuiviBundle:Etude');
     }
     
+    
+    public  function getErrors(Etude $etude)
+    {
+        $errors = array();
+        
+        //$error = array('titre' => 'Mon Titre', 'message' => 'Mon message');        
+        //array_push($errors, $error);
+        
+        return $errors;
+        
+    }
+    
+    public  function getWarnings(Etude $etude)
+    {
+        $warnings = array();
+        
+        //$warning = array('titre' => 'Mon Titre', 'message' => 'Mon message');        
+        //array_push($warnings, $warning);
+        
+        return $warnings;
+        
+    }
+    
+    public  function getInfos(Etude $etude)
+    {
+        $infos = array();
+        
+        $info = array('titre' => 'Mise à jours', 'message' => 'Message de test :D');    
+        array_push($infos, $info);
+        
+        return $infos;
+        
+    }
     
 
 }

@@ -36,7 +36,7 @@
             <td></td>
             <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
             <td><div class="btn-group" style="width : 100%">
-                    <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
+                    <a class="btn btn-warning" href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
                     <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
@@ -58,7 +58,7 @@
                         <tr>
                             <td width="50%">
                                 <div class="btn-group" style="width : 100%;">
-                                    <a class="btn btn-primary" href="#"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
+                                    <a class="btn btn-primary" href="{{ path('mgatePersonne_membre_voir', {'id': mission.intervenant.id}) }}"style="width : 60%"><i class="icon-user icon-white"></i> {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</a>
                                     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
