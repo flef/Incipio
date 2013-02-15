@@ -1,7 +1,8 @@
 <!-- alert-block -->
-
+{% for error in getErrors(etude) %}
 <div class="alert alert-error">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  <h4>Warning!</h4>
-  Best check yo self, you're not...
+  <h4>{{ error.titre }}</h4>
+  {{ error.message }}
 </div>
+{% endfor %}

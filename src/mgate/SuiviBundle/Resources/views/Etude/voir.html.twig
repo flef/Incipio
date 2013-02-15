@@ -15,6 +15,7 @@ Affichage d'une étude - {{ parent() }}
         <div class="tab-pane active" id="tab1">
             
             {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+            <h2>Etude {{ getRefEtude(etude) }}</h2>
             {% if etude.stateDescription %}
             <div class="alert alert-block alert-success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -22,7 +23,6 @@ Affichage d'une étude - {{ parent() }}
                 {{ etude.stateDescription }}
             </div>
             {% endif %}
-            <h2>Etude {{ getRefEtude(etude) }}</h2>
             <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
             <li>Client : <div class="btn-group" style="width : 200px">
                     <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
@@ -154,6 +154,7 @@ Affichage d'une étude - {{ parent() }}
 
 
 <link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+<script src="{{ asset('js/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
 <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
                 <script>
