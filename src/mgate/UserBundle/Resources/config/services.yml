@@ -2,12 +2,13 @@ parameters:
 #    mgate_user.example.class: mgate\UserBundle\Example
 
 services:
-#    mgate_user.example:
-#        class: %mgate_user.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
-
     mgate_user.registration.form.type:
-        class: mgate\UserBundle\Form\Type\RegistrationFormType
-        arguments: [%fos_user.model.user.class%]
-        tags:
-            - { name: form.type, alias: mgate_user_registration }
+      class: mgate\UserBundle\Form\Type\RegistrationFormType
+      arguments: [%fos_user.model.user.class%]
+      tags:
+          - { name: form.type, alias: mgate_user_registration }
+    mgate_user.password_resetting:
+      class: mgate\UserBundle\EventListener\RegistrationListener
+      arguments: [ @mailer, @templating ]
+      tags:
+        - { name: kernel.event_subscriber }
