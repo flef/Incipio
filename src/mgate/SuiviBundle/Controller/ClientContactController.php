@@ -8,7 +8,6 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
-use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\ClientContactHandler;
 
 use mgate\SuiviBundle\Entity\ClientContact;
