@@ -9,21 +9,21 @@
 <div class="row">
                     {% for phase in etude.phases %}
         <div class="span4">
-            <table id="phase" class="table table-striped table-bordered" >
-                <tr id="phaseRow1">
+            <table class="table table-striped table-bordered" >
+                <tr>
                     <th colspan="2">Phase n°{{phase.position+1}}</th>
                 </tr>
-                <tr id="phaseRow2">
+                <tr>
                     <th>Titre</th>
                     <td>{{phase.titre}}</td>
                 </tr>
-                <tr id="phaseRow3">
+                <tr>
                     <th>Objectifs</th>
                     <td>{{phase.objectif}}</td>
                 </tr>
                 <tr>
                     <th>Méthodologie</th>
-                    <td><div class="ligne4">{{phase.methodo}}</div></td>
+                    <td>{{phase.methodo}}</td>
                 </tr>
                 <tr>
                     <th>Validation</th>
