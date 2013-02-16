@@ -259,3 +259,9 @@ mgateSuivi_procesverbal_supprimer:
     defaults: {_controller: mgateSuiviBundle:ProcesVerbal:delete}
     requirements:
         id: \d+
+        
+mgateSuivi_etude_suivi_update:
+    pattern:  /suivi/update/{id}
+    defaults: { _controller: mgateSuiviBundle:Etude:suiviUpdate }
+    requirements:
+        _method:  POST
