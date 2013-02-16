@@ -184,9 +184,9 @@ $(document).ready(function() {
 
 });
     </script>
-
-<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formApSuivi) }}>
-    {{ form_widget(formApSuivi) }}
-</form>    
+    
+<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
+    {{ form_widget(formSuivi) }}
+</form>   
     
 {% endblock %}
