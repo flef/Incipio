@@ -117,24 +117,6 @@ mgateSuivi_missions_repartition:
     requirements:
         id: \d+        
         
-mgateSuivi_suivi_ajouter:
-    pattern: /suivi/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:add}
-    requirements:
-        id: \d+
-        
-mgateSuivi_suivi_voir:
-    pattern: /suivi/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:voir}
-    requirements:
-        id: \d+
-        
-mgateSuivi_suivi_modifier:
-    pattern: /suivi/modifier/{id}
-    defaults: {_controller: mgateSuiviBundle:Suivi:modifier}
-    requirements:
-        id: \d+
-
 
 mgateSuivi_clientcontact_ajouter:
     pattern: /clientcontact/ajouter/{id}
