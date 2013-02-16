@@ -9,6 +9,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
+use mgate\SuiviBundle\Form\SuiviType;
 
 //use mgate\UserBundle\Entity\User;
 
@@ -122,11 +123,10 @@ class EtudeController extends Controller
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
         //$deleteForm = $this->createDeleteForm($id);
-        $formApSuivi = $this->createForm(new DocTypeSuiviType, $entity->getAp(), array('data_class'=> 'mgate\SuiviBundle\Entity\Ap'));
-
+        $formSuivi = $this->createForm(new SuiviType, $entity);
         return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
             'etude'      => $entity,
-            'formApSuivi'      => $formApSuivi->createView(),
+            'formSuivi'      => $formSuivi->createView(),
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }
@@ -208,26 +208,21 @@ class EtudeController extends Controller
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
-        if($etude->getAp())
+        $formSuivi = $this->createForm(new SuiviType, $etude);
+        if($this->get('request')->getMethod() == 'POST' )
         {
-            $formApSuivi = $this->createForm(new DocTypeSuiviType, $etude->getAp(), array('data_class'=> 'mgate\SuiviBundle\Entity\Ap'));
-            if($this->get('request')->getMethod() == 'POST' )
+            $formSuivi->bind($this->get('request'));
+
+            if( $formSuivi->isValid() )
             {
-                $formApSuivi->bind($this->get('request'));
+                $em->persist($etude);
+                $em->flush();
 
-                if( $formApSuivi->isValid() )
-                {
-                    $em->persist($etude->getAp());
-                    $em->flush();
-
-                   $return=array("responseCode"=>100, "msg"=>"ok");
-                }
-                else
-                    $return=array("responseCode"=>200, "msg"=>"Erreur:".$formApSuivi->getErrorsAsString());
+               $return=array("responseCode"=>100, "msg"=>"ok");
             }
+            else
+                $return=array("responseCode"=>200, "msg"=>"Erreur:".$formSuivi->getErrorsAsString());
         }
-        else
-            $return=array("responseCode"=>300, "msg"=>"Erreur: Ap n'existe pas");
             
 
         $return=json_encode($return);//jscon encode the array

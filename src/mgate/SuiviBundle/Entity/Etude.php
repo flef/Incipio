@@ -225,11 +225,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $fs;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Suivi", mappedBy="etude")
-     */
-    private $suivis;
-
     /** proces verbal intermedaire
      * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude")
      */
@@ -302,7 +297,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1015,36 +1009,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getMissions() {
         return $this->missions;
-    }
-
-    /**
-     * Add suivis
-     *
-     * @param \mgate\SuiviBundle\Entity\Suivi $suivis
-     * @return Etude
-     */
-    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis) {
-        $this->suivis[] = $suivis;
-
-        return $this;
-    }
-
-    /**
-     * Remove suivis
-     *
-     * @param \mgate\SuiviBundle\Entity\Suivi $suivis
-     */
-    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivis) {
-        $this->suivis->removeElement($suivis);
-    }
-
-    /**
-     * Get suivis
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSuivis() {
-        return $this->suivis;
     }
 
     /**

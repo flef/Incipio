@@ -75,20 +75,6 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 					}]
 				},
                                 {% endfor %}
-                                {% for suivi in etude.suivis %}
-                                {
-					name: {%if loop.index == 1 %}"Suivi client" {%else%} "" {% endif%},
-					desc: "Event {{loop.index}}",
-					values: [{ title : "Suivi client n°{{suivi.id}}",
-                                                content : "{{suivi.contenu}}",
-						from: "/Date({{suivi.date.date|date('U')  - 86400}}000)/",
-						to: "/Date({{suivi.date.date|date('U') - 86400}}000)/",
-						label: "S{{suivi.id}}", 
-						customClass: "ganttBlue",
-                                                dataObj: "{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}"
-					}]
-				},
-                                {% endfor %}
                                 {% for phase in etude.phases %}   
                                 {
 					name: {%if loop.index == 1 %}"Phases" {%else%} "" {% endif%},
