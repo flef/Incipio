@@ -9,7 +9,6 @@ use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Entity\Mission;
 use mgate\SuiviBundle\Form\MissionType;
-use mgate\SuiviBundle\Form\MissionHandler;
 
 class MissionController extends Controller {
 
