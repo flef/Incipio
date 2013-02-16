@@ -48,10 +48,6 @@ Affichage d'une étude - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}
             <p>
             <h3>Etat de l'étude:</h3>
-    {% for suivi in etude.suivis %}
-            <li><a href="{{ path('mgateSuivi_suivi_modifier', {'id': suivi.id}) }}">Evènement n°{{suivi.id}}</a> le {{ suivi.date|date("d/m/Y") }}: {{suivi.contenu}}</li>
-    {% endfor %}
-            <a href="{{ path('mgateSuivi_suivi_ajouter', {'id': etude.id}) }}">Ajouter un nouvel évènement</a>
             <br>
             <a href="{{ path('mgateSuivi_clientcontact_ajouter', {'id': etude.id}) }}">Ajouter un nouveau contact client</a>
             <div class="gantt" id="ganttId0"></div>

@@ -13,7 +13,6 @@ use mgate\SuiviBundle\Entity\Prospect;
 use mgate\SuiviBundle\Entity\Personne;
 use mgate\PersonneBundle\Entity\Employe;
 use mgate\SuiviBundle\Form\ApType;
-use mgate\SuiviBundle\Form\ApHandler;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
 
 class ApController extends Controller {
