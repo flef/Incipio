@@ -159,10 +159,8 @@ Affichage d'une étude - {{ parent() }}
     
     </script>
 <script>
-    //Calcul des tailles max des par lignes des tables
-//$(selector).height()    
-    /*
-   function equalHeight(group) {
+//Egalisation de la hauteur des lignes des phases
+function equalHeight(group) {
    var tallest = 0;
    group.each(function() {
        console.log(this);
@@ -172,17 +170,17 @@ Affichage d'une étude - {{ parent() }}
          tallest = thisHeight;
       }
    });
-   console.log(tallest);
-   group.height(tallest);
+   group.css("height" , tallest);
 }
 
-
-$(document).ready(function() {
-   equalHeight($("#ligne4"));
-});
-    */
+$(window).load(function(){
+    var nombrePhase = $(".egalize tr").length / $(".egalize").length;
     
-</script>
+    for( var i = 1; i <= nombrePhase; i++){
+        equalHeight($(".egalize tr:nth-child("+i+") th"));
+    };
+});
+ </script>
 
 <script>
 $(document).ready(function() {
