@@ -148,13 +148,11 @@ Affichage d'une étude - {{ parent() }}
                 </p>
 
         {% if etude.thread|default('0') %}
-            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
             {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': etude.thread.id} %}
         {% endif %} 
 
 
 <link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
-<script src="{{ asset('js/bootstrap.min.js')}}"></script>
 <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
 <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
                 <script>
@@ -162,4 +160,34 @@ Affichage d'une étude - {{ parent() }}
     </script>
 
 
+<script>
+$(document).ready(function() {
+
+    //listen for the form beeing submitted
+    $("#myForm :input").change(function(){
+        $(".loading").show();
+        var $form = $(this).closest("form");
+        $.post($form.attr("action"), $form.serialize(), 
+        function(data){
+            $(".loading").hide();
+            
+            if(data.responseCode!=100 ){
+               alert("An unexpeded error occured.");
+               bootbox.alert(data, function() { });
+               $('#output').html(data.msg);
+            }
+        });
+
+        //we dont what the browser to submit the form
+        return false;
+    });
+
+
+});
+    </script>
+
+<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formApSuivi) }}>
+    {{ form_widget(formApSuivi) }}
+</form>    
+    
 {% endblock %}
