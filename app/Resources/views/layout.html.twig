@@ -17,6 +17,10 @@
                 width: 95%;
                 margin-left: auto;
                 margin-right: auto;
+                padding-top: 40px;
+            }
+            @media screen and (max-width: 768px) {
+                body { padding-top: 0px; }
             }
         </style>
 {% endblock %}
@@ -51,9 +55,8 @@
     {% block menu_main %}
 
 
-                    <div id="menu">
             {% block menu %}
-                            <div class="navbar">
+                            <div class="navbar navbar-fixed-top">
                                 <div class="navbar-inner">
                                     <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">My M-GaTE</a>
                                     
@@ -69,7 +72,7 @@
 
                             </div>
             {% endblock %}
-                        </div> 
+
     {% endblock %}
 
     {% block content_main %}            
@@ -98,6 +101,7 @@
         $(function() {
             $( document ).tooltip();
         });
+        $(".loading").hide();
     </script>
 {% endblock %}
 
