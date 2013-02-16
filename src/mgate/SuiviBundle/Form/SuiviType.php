@@ -10,8 +10,16 @@ class SuiviType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         
-        $builder->add('ap', new DocTypeSuiviType(), array('label' => ' ', 'data_class'=>'mgate\SuiviBundle\Entity\Ap'));
-        $builder->add('cc', new DocTypeSuiviType(), array('label' => ' ', 'data_class'=>'mgate\SuiviBundle\Entity\Cc'));
+        $builder->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class'=>'mgate\SuiviBundle\Entity\Ap'));
+        $builder->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class'=>'mgate\SuiviBundle\Entity\Cc'));
+        
+        $builder->add('missions', 'collection', array(
+                'type' => new DocTypeSuiviType,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false, //indispensable cf doc
+                ));
     }
 
     public function getName() {
