@@ -22,13 +22,14 @@ class PersonneType extends AbstractType
                 ->add('prenom')
                 ->add('nom')
                 ->add('sexe', new SexeType())
-                ->add('mobile');
+                ->add('mobile', 'text', array('attr'=>array('title'=>'Sous la forme: 06 78 39 .. ')))
+                ->add('email', 'email', array('attr'=>array('title'=>"Pas d'adresse etu. Cette adresse est utlisée pour les clients.")));
             
 
         if(!$options['mini'] && !$options['user'])
             $builder->add('fix');
         if(!$options['mini'])
-            $builder->add('adresse');
+            $builder->add('adresse', 'text', array('attr'=>array('title'=>'Sous la forme: Appartement 3114, 879 Route de Mimet, 13120 Gardanne')));
 
         if($options['user'])
         {
