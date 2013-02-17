@@ -5,6 +5,10 @@ Affichage d'une étude - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
+<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+
+
+
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif de l'étude</a></li>
@@ -148,23 +152,25 @@ Affichage d'une étude - {{ parent() }}
         {% endif %} 
 
 
-<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+
+
+<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
+    {{ form_widget(formSuivi) }}
+</form>   
+
+ 
+
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
 <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-<script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
-                <script>
-{% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
-    
-    
-    
-    
-    </script>
 <script>
 //Egalisation de la hauteur des lignes des phases
 function equalHeight(group) {
    var tallest = 0;
    group.each(function() {
-       console.log(this);
-      thisHeight = $(this).height();
+      thisHeight = $(this).height();     
       console.log(thisHeight);
       if(thisHeight > tallest) {
          tallest = thisHeight;
@@ -174,14 +180,22 @@ function equalHeight(group) {
 }
 
 $(window).load(function(){
+    $("#tab2").addClass("active");
     var nombrePhase = $(".egalize tr").length / $(".egalize").length;
-    
+    console.log( $(".egalize tr").length / $(".egalize").length);
     for( var i = 1; i <= nombrePhase; i++){
-        equalHeight($(".egalize tr:nth-child("+i+") th"));
+        console.log($(".egalize tr:nth-child("+i+") td"));
+        equalHeight($(".egalize tr:nth-child("+i+") td"));
     };
+    $("#tab2").removeClass("active");
 });
- </script>
+</script>
+{% endblock %}
 
+ {% block javascript %}
+{{ parent() }}
+
+<!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
 <script>
 $(document).ready(function() {
 
@@ -206,10 +220,9 @@ $(document).ready(function() {
 
 
 });
-    </script>
-    
-<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
-    {{ form_widget(formSuivi) }}
-</form>   
-    
+
+
+{% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
+</script>
+
 {% endblock %}
