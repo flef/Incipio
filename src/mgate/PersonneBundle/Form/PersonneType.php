@@ -29,7 +29,7 @@ class PersonneType extends AbstractType
         if(!$options['mini'] && !$options['user'])
             $builder->add('fix');
         if(!$options['mini'])
-            $builder->add('adresse', 'text', array('attr'=>array('title'=>'Sous la forme: Appartement 3114, 879 Route de Mimet, 13120 Gardanne')));
+            $builder->add('adresse', 'text', array('required'=>false, 'attr'=>array('title'=>'Sous la forme: Appartement 3114, 879 Route de Mimet, 13120 Gardanne')));
 
         if($options['user'])
         {
