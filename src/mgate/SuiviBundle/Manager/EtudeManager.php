@@ -34,7 +34,20 @@ class EtudeManager extends \Twig_Extension {
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
         );
     }
-
+    
+    /***
+     * 
+     * Juste un test
+     */
+     public function getFilters() {
+        return array(
+            'nbsp' => new \Twig_Filter_Method($this, 'nonBreakingSpace'),
+        );
+    }
+ 
+    public function nonBreakingSpace($string) {
+        return preg_replace('#\s#', '&nbsp;', $string);    
+    }
     /**
      * Get montant total des JEH HT
      */
