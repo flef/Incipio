@@ -47,6 +47,16 @@ class SubApType extends DocTypeType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         DocTypeType::buildForm($builder, $options);
         $builder->add('nbrDev', 'integer', array('label' => 'Nombre de developpeurs estimé', 'required' => false, 'attr' => array('title' => 'Mettre 0 pour ne pas afficher la phrase indiquant le nombre d\'intervenant')));
+        $builder->add('contactMgate', 'entity', array('label' => 'Contact M-GaTE',
+                    'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                    'property' => 'prenomNom',
+                    'property_path' => true,
+                    'attr' => array('title' => "Dans l'AP: 'En cas d’absence ou de problème, il est également possible de joindre le ...'"),
+                    'query_builder' => function(PersonneRepository $pr) {
+                        return $pr->getPresidentFirst();
+                    },
+                    'required' => true));
+        
     }
 
     public function getName() {

@@ -35,6 +35,11 @@ class Ap extends DocType
      */
     private $nbrDev;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $contactMgate;
     
     /**
      * Get id
@@ -90,5 +95,26 @@ class Ap extends DocType
     public function getNbrDev()
     {
         return $this->nbrDev;
+    }
+    
+    /**
+     * Set contactMgate
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $contactMgate
+     * @return Ap
+     */
+    public function setContactMgate(\mgate\PersonneBundle\Entity\Personne $contactMgate = null) {
+        $this->contactMgate = $contactMgate;
+
+        return $this;
+    }
+
+    /**
+     * Get contactMgate
+     *
+     * @return \mgate\PersonneBundle\Entity\Personne
+     */
+    public function getContactMgate() {
+        return $this->contactMgate;
     }
 }
