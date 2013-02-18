@@ -284,7 +284,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * @var text $typePrestation
      *
-     * @ORM\Column(name="prestation", type="integer", nullable=false)
+     * @ORM\Column(name="prestation", type="integer", nullable=true)
      *
      */
     private $typePrestation;
