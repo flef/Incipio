@@ -364,7 +364,8 @@ class Phase
     
     public function getValidationToString()
     {
-        return $this->getValidationChoice()[$this->validation];
+        $tab = $this->getValidationChoice();
+        return $tab[$this->validation];
     }
     
     /**
