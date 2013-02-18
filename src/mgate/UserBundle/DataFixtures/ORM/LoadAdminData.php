@@ -32,30 +32,39 @@ class LoadAdminData implements FixtureInterface, ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
-       
+     
+        $su = $manager->getRepository('mgate\UserBundle\Entity\User')->findOneBy(array('username' => $this->container->getParameter('su_username')) );
+        if( !$su )
+        {
+            $su = new User();
+        }
+
+        if($su->getPersonne())
+            $personne = $su->getPersonne();
+        else
+        {
+            $personne = new Personne();
+            $personne->setUser($su);
+            $su->setPersonne($personne);
+        }
+            
         
-        $personne = new Personne();
         $personne->setNom('Super');
         $personne->setPrenom('Admin');
         $personne->setAdresse('879 route de Mimet - 13120');
         $personne->setEmail($this->container->getParameter('su_mail'));
         $personne->setSexe('m');
         
-        //$membre = new Membre();
-        //$membre->setPersonne($personne);
+
         
-        $su = new User();
         $su->setUsername($this->container->getParameter('su_username')); //mettre le login de l'admin
         $su->setPlainPassword($this->container->getParameter('su_password')); //mettre le mdp de l'admin
         $su->setEmail($this->container->getParameter('su_mail'));
-        $su->setPersonne($personne);
         $su->setEnabled(true);
         $su->setRoles(array('ROLE_SUPER_ADMIN'));        
         
-        $personne->setUser($su);
         
-        //$manager->persist($membre);
-        $manager->persist($personne);
+        //$manager->persist($personne);
         $manager->persist($su);
         $manager->flush();
     }

@@ -130,7 +130,12 @@ class MembreController extends Controller
                 throw $this->createNotFoundException('Membre[id='.$id.'] inexistant');
             
             if($entity->getPersonne())
+            {
                 $entity->getPersonne()->setMembre(null);
+                if($entity->getPersonne()->getUser())// pour pouvoir réattribuer le compte
+                    $entity->getPersonne()->getUser()->setPersonne(null);
+                $entity->getPersonne()->setUser(null); 
+            }
             $entity->setPersonne(null);
             //est-ce qu'on supprime la personne aussi ?
             
