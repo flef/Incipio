@@ -1,16 +1,15 @@
 <?php
-
-namespace mgate\PersonneBundle\Form\EventListener;
+namespace mgate\UserBundle\Form\EventListener;
 
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-use mgate\UserBundle\Entity\UserRepository;
-use mgate\UserBundle\Entity\User;
+use mgate\PersonneBundle\Entity\PersonneRepository;
+use mgate\PersonneBundle\Entity\Personne;
 
-class AddUserFieldSubscriber implements EventSubscriberInterface
+class AddMembreFieldSubscriber implements EventSubscriberInterface
 {
     private $factory;
 
@@ -38,17 +37,20 @@ class AddUserFieldSubscriber implements EventSubscriberInterface
         // over the null condition.
         //if (null === $data)
             //return;
-
-        $personne=$data;
-        $form->add($this->factory->createNamed('user', 'entity', null,  //attention ne pas oublier null !
-                    array ('label' => "Séléctionner un compte d'utilisateur associé s'il existe déjà",
-                           'class' => 'mgate\\UserBundle\\Entity\\User',
-                           'property' => 'username',
-                           'property_path' => true,
-                           'required' => false,
-                           'query_builder' => function(UserRepository $ur) use($personne) { return $ur->getNotPersonne($personne); },
-                                   ))); 
-       
+        
+        //if (!$data->getId())
+        {
+        $user=$data;
+        $form->add($this->factory->createNamed('personne', 'entity', null,
+                array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
+                       'class' => 'mgate\PersonneBundle\Entity\Personne',
+                       'property' => 'prenomNom',
+                       'property_path' => true,
+                       'required' => false,
+                       'query_builder' => function(PersonneRepository $pr) use($user) { return $pr->getMembreNotUser($user); },
+                        )));
+                       
+        }
         // check if the product object is "new"
         /*
         if (!$data->getId())

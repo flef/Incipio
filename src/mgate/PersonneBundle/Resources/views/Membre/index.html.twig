@@ -9,13 +9,32 @@
     <h2>Liste des Membres</h2>
 
     <ul>
-        {% for membre in membres %}
-            <li>
-            <a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}"> {{ membre.personne.prenomNom }} </a>
-            </li>
-        {% else %}
-            <li>Pas (encore !) de Membre</li>
-        {% endfor %}
+        <table width="100%" border="0">
+          <tr>
+            <td>Id</td>
+            <td>Nom d'utilisateur</td>
+            <td>Identifiant</td>
+            <td>Adresse email du compte</td>
+            <td>Mobile</td>
+            <td>Adresse</td>
+            <td>Action</td>
+          </tr>
+                {% for membre in membres %}
+          <tr>
+            <td>{{ membre.id }}</td>
+            <td>{{ membre.personne.prenomNom }}</td>
+            <td>{{ membre.identifiant }}</td>
+            <td>{{ membre.personne.email }}</td>
+            <td>{{ membre.personne.mobile }}</td>
+            <td>{{ membre.personne.adresse }}</td>
+            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">modifier</a></td>
+          </tr>
+                {% else %}
+                    <li>Pas (encore !) de Membre</li>
+                {% endfor %}
+        </table>
+        
+
     </ul>
 
 {% endblock %}
