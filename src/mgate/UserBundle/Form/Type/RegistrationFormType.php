@@ -13,9 +13,10 @@ class RegistrationFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-       $builder->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
-            ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'));
-        parent::buildForm($builder, $options);    
+        parent::buildForm($builder, $options); 
+        
+       $builder->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle', 'attr'=>array("title"=>"prenom.nom")))
+            ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle', 'attr'=>array("title"=>"Utilisé seulement pour les notifications My M-GaTE")));   
         
         // changement de stratégie, plus grande indépendance des comptes utilisateurs
         //$builder->add('personne', new PersonneType(), array('label' => ' ', 'user' => true));
