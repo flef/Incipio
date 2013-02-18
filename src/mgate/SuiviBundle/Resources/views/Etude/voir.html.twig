@@ -47,6 +47,7 @@ Affichage d'une étude - {{ parent() }}
                 <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
             </ul>
         </div></li>
+            <li>test:{{ etude.typePrestationToString }}</li>
             <li>Description de l'étude: <br />{{etude.description }}</li>
             <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">modifier</a>
             <br>
