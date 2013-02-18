@@ -15,8 +15,12 @@ class UserRepository extends EntityRepository
     public function getNotPersonne($personne)
     {
         $qb = $this->_em->createQueryBuilder();
-        $query = $qb->select('n')->from('mgateUserBundle:User', 'n')
-          ->where('n.personne IS NULL');
+        $query = $qb->select('n')->from('mgateUserBundle:User', 'u')
+          ->leftJoin('u.personne', 'p')
+          //->addSelect('m')
+          ->where('u.personne IS NULL')
+          ->andWhere('p.membre IS NOT NULL');
+       
         
         if($personne)
         {
