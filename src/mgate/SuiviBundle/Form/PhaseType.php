@@ -16,7 +16,7 @@ class PhaseType extends AbstractType
                     ->add('titre', 'text')
                     ->add('objectif', 'textarea', array( 'label'=>'Objectif', 'required'=>false))
                     ->add('methodo', 'textarea', array( 'label'=>'Méthodologie', 'required'=>false))
-                    ->add('validation', 'choice', array('choices'=>Phase::getValidationChoice(),'required'=>false))
+                    ->add('validation', 'choice', array('choices'=>Phase::getValidationChoice(),'required'=>true))
                     ->add('nbrJEH', 'integer', array('label'=>'Nombre de JEH', 'required'=>false, 'attr' => array('class' => 'nbrJEH')))
                     //money fait planter, intl :
                     ->add('prixJEH', 'integer', array( 'label'=>'Prix du JEH HT', 'required'=>false, 'attr' => array('class' => 'prixJEH')))
