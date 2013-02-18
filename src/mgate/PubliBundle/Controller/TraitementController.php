@@ -311,16 +311,17 @@ class TraitementController extends Controller {
             if ($etude->getDoc($doc)->getSignataire1() != NULL) {
                 $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
                 if ($signataire1 != NULL) {
-                    $this->array_push_assoc($champs, 'Nom_Signataire_MGaTE', $signataire1->getPrenomNom());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire_MGaTE', $signataire1->getPoste());
+                    $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire1->getPrenomNom());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', $signataire1->getPoste());
+                    $this->array_push_assoc($champs, 'Sexe_Signataire_Mgate', ($signataire1->getSexe() == 'M.' ? 1 : 2 ));
                 }
             }
             //Signataire 2 : Signataire Client
-            if ($etude->getDoc($doc)->getSignataire2() != NULL) {//TODO remplacer par Signataire_Client
+            if ($etude->getDoc($doc)->getSignataire2() != NULL) {
                 $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
-                if ($signataire1 != NULL) {
-                    $this->array_push_assoc($champs, 'Nom_Signataire', $signataire2->getPrenomNom());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire', $signataire2->getPoste());
+                if ($signataire2 != NULL) {
+                    $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getPrenomNom());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Client', $signataire2->getPoste());
                 }
             }
         }
@@ -332,11 +333,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Reference_AP', $etudeManager->getRefDoc($etude, 'AP', $etude->getDoc('AP')->getVersion()));
         if ($etude->getCc())
             $this->array_push_assoc($champs, 'Reference_CC', $etudeManager->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
-        //if ($etude->getFactureAcompte())
-        //    $this->array_push_assoc($champs, 'Reference_FA', $etudeManager->getRefDoc($etude, 'FA', $etude->get('FA')->getVersion()));
-        if ($etude->getMissions())
-            if ($etude->getDoc('RM', $key))
-                $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+        if ($etude->getDoc('RM', $key))
+            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -363,6 +361,16 @@ class TraitementController extends Controller {
             $Nbre_Dev_Lettres = $converter->ConvNumberLetter($Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbre_Developpeurs', $Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbre_Dev_Lettres);
+            
+            if($etude->getAp()->getContactMgate())
+            {
+                $this->array_push_assoc($champs, 'Nom_Contact_Mgate', $etude->getAp()->getContactMgate()->getNom());
+                $this->array_push_assoc($champs, 'Prenom_Contact_Mgate', $etude->getAp()->getContactMgate()->getPrenom());
+                $this->array_push_assoc($champs, 'Mail_Contact_Mgate', $etude->getAp()->getContactMgate()->getEmail());
+                $this->array_push_assoc($champs, 'Tel_Contact_Mgate', $etude->getAp()->getContactMgate()->getMobile());
+                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', $etude->getAp()->getContactMgate()->getPoste());
+            }
+            
         }
 
 
@@ -379,6 +387,8 @@ class TraitementController extends Controller {
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
 
+            $validation = $phase->getValidationChoice();
+            
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', (int) $phase->getNbrJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', (float) $phase->getPrixJEH());
@@ -390,11 +400,12 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $phase->getValidation());
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);         
         }
-
+        
         //Intervenant
-        if ($mission = $etude->getMissions()->get($key)) {
+        $mission = $etude->getMissions()->get($key);
+        if ($mission) {
             if ($mission->getIntervenant()->getPersonne()) {
                 $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
 
@@ -455,9 +466,9 @@ class TraitementController extends Controller {
         return $chemin;
     }
 
-    private function publipostage($id_etude, $doc, $key = 0) {
+    private function publipostage($id_etude, $doc, $key) {
         $key = intval($key);
-
+        
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
@@ -469,13 +480,10 @@ class TraitementController extends Controller {
             $chemin = $path . $doc . '.xml';
         }
 
+     $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
+     $champsBrut = $this->verifierTemplate($templateXMLtraite);
 
-
-        $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
-
-        $champsBrut = $this->verifierTemplate($templateXMLtraite);
-
-        $repertoire = 'tmp';
+     $repertoire = 'tmp';
 
         if ($etude->getDoc($doc, $key))
             $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
@@ -518,7 +526,7 @@ class TraitementController extends Controller {
     /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
      */  
-    public function publiposterAction($id_etude, $doc, $key = -1) {
+    public function publiposterAction($id_etude, $doc, $key) {
 
         if ($doc == 'RM' && $key == -1)
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
@@ -604,28 +612,21 @@ class TraitementController extends Controller {
     
     private function jourVersSemaine($j)
     {
-        $semaine = (int)floor($j/7);
         $converter = $this->get('mgate.conversionlettre');
-        $semaine_str = $converter->ConvNumberLetter($semaine);
-        $jour=$semaine % 7;
+        
+        $jour= $j % 7;
+        $semaine = (int)floor( $j / 7 );
+        
         $jour_str = $converter->ConvNumberLetter($jour);
-        if($semaine==1 && $jour==0) $jourVersSemaine=$semaine_str."e semaine";
-        else if($jour==0)$jourVersSemaine=$semaine_str." semaines";
-        else if($semaine==1 && $jour>1) $jourVersSemaine=$semaine_str." semaine et ".$jour_str." jours";
-        else if($semaine==1 && $jour==1) $jourVersSemaine=$semaine_str." semaine et ".$jour_str." jour"; 
-        else if($semaine>1 && $jour>1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jours";
-        else if($semaine>1 && $jour==1) $jourVersSemaine=$semaine_str." semaines et ".$jour_str." jour"; 
-        return $jourVersSemaine;
+        $semaine_str = $converter->ConvNumberLetter($semaine);
 
-        /* OU
         $jourVersSemaine = "";
         if($semaine)
             $jourVersSemaine = $semaine_str.($semaine > 1 ? " semaines" : "e semaine");
         if($jour)
-            $jourVersSemaine .= " et ".$jours_str . " jour".($jours > 1 ? "s" :"");
-         *
-         */
-  
+            $jourVersSemaine .= ($semaine > 0 ? " et " : "" ).$jour_str . " jour".($jour > 1 ? "s" :"");
+          return $jourVersSemaine;
+
     }
 
 }
