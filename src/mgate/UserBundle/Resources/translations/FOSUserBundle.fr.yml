@@ -1,5 +1,8 @@
 # Registration
 registration:
+    check_email: | 
+            Un e-mail a été envoyé à l'adresse %email%. Il contient un lien d'activation sur lequel il vous faudra cliquer afin d'activer votre compte. 
+            Regardez dans vos SPAMs !
     email:
         subject: Bienvenue %username% !
         message: |
@@ -12,6 +15,9 @@ registration:
 
 # Password resetting
 resetting:
+    check_email: |
+            Un e-mail a été envoyé à l'adresse %email%. Il contient un lien sur lequel il vous faudra cliquer afin de réinitialiser votre mot de passe.
+            Regardez dans vos SPAMs !
     email:
         subject: Réinitialisation de votre mot de passe
         message: |
