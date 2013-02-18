@@ -2,8 +2,12 @@
 
 namespace mgate\PubliBundle\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
+
+
+
 
 class TraitementController extends Controller {
 
@@ -538,8 +542,9 @@ class TraitementController extends Controller {
         if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = $_SESSION['refDocx'];
-
-
+            
+           
+            
             if ($addZip) {
                 $idZip = $_SESSION['idZip'];
                 $zip = new \ZipArchive;
