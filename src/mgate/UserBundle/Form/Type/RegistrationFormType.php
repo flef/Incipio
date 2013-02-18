@@ -13,7 +13,8 @@ class RegistrationFormType extends BaseType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-    
+       $builder->add('username', null, array('label' => 'form.username', 'translation_domain' => 'FOSUserBundle'))
+            ->add('email', 'email', array('label' => 'form.email', 'translation_domain' => 'FOSUserBundle'));
         parent::buildForm($builder, $options);    
         
         // changement de stratégie, plus grande indépendance des comptes utilisateurs
