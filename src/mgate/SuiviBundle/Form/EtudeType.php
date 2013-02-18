@@ -31,9 +31,9 @@ class EtudeType extends AbstractType
                 ))
             ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
-            ->add('description','textarea',array('label'=>'Présentation interne de l\'étude'))
+            ->add('description','textarea',array('label'=>'Présentation interne de l\'étude', 'required' => false))
             ->add('mandat', 'integer' )
-            ->add('num', 'integer', array('label'=>'Numéro de l\'étude'))
+            ->add('num', 'integer', array('label'=>'Numéro de l\'étude', 'required' => false))
             ->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
