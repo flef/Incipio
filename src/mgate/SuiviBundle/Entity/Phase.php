@@ -97,7 +97,7 @@ class Phase
     /**
      * @var integer $validation
      *
-     * @ORM\Column(name="validation", type="integer", nullable=true)
+     * @ORM\Column(name="validation", type="integer", nullable=false)
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
@@ -353,11 +353,18 @@ class Phase
     
     public static function getValidationChoice()
     {
-        return array( 0 => "Aucune", 1 => "Cette phase sera soumise à une validation orale lors d’un entretien avec le client.", 2 => "Cette phase sera soumise à une validation écrite qui prend la forme d’un Procès-Verbal Intermédiaire signé par le client.");
+        return array(   //0 => "Aucune", //Inutile
+                        1 => "Cette phase sera soumise à une validation orale lors d’un entretien avec le client.",
+                        2 => "Cette phase sera soumise à une validation écrite qui prend la forme d’un Procès-Verbal Intermédiaire signé par le client.");
     }
     public static function getValidationChoiceAssert()
     {
         return array_keys(Phase::getValidationChoice());
+    }
+    
+    public function getValidationToString()
+    {
+        return $this->getValidationChoice()[$this->validation];
     }
     
     /**
