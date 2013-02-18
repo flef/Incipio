@@ -14,6 +14,7 @@ Affichage d'une étude - {{ parent() }}
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif de l'étude</a></li>
         <li><a href="#tab2" data-toggle="tab">Phases</a></li>
         <li><a href="#tab3" data-toggle="tab">Suivi</a></li>
+        <li><a href="#tab4" data-toggle="tab">Documents Types</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1">
@@ -63,9 +64,11 @@ Affichage d'une étude - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
 
         </div>
+            <!-- PHASES -->
             <div class="tab-pane" id="tab2" style="min-height:200px;">
                        {% include "mgateSuiviBundle:Etude:Blocks/Phase.html.twig" with  {'etude':  etude} %}
             </div>
+            <!-- SUIVI -->
             <div class="tab-pane" id="tab3">
                 <div class="row">
                     <!-- AVANT PROJET -->
@@ -126,6 +129,19 @@ Affichage d'une étude - {{ parent() }}
                             <a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a>
                             </p>
                         </div>
+              <!-- DOCUMENTS TYPES -->
+            <div class="tab-pane" id="tab4">              
+                <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
+
+                           {{ form_widget(formSuivi.ap) }}
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    {{ form_widget(formSuivi.cc) }}
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    {{ dump(formSuivi.missions) }}
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+     {{ form_rest(formSuivi) }}
+                </form>   
+            </div>
                     </div>
                 </div>
 
@@ -137,7 +153,7 @@ Affichage d'une étude - {{ parent() }}
                     <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
                     <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
 
- {#  
+ {# 
         <li>
             <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
                 {{ form_widget(delete_form) }}
@@ -154,9 +170,6 @@ Affichage d'une étude - {{ parent() }}
 
 
 
-<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
-    {{ form_widget(formSuivi) }}
-</form>   
 
  
 
@@ -171,7 +184,6 @@ function equalHeight(group) {
    var tallest = 0;
    group.each(function() {
       thisHeight = $(this).height();     
-      console.log(thisHeight);
       if(thisHeight > tallest) {
          tallest = thisHeight;
       }
@@ -181,11 +193,9 @@ function equalHeight(group) {
 
 $(window).load(function(){
     $("#tab2").addClass("active");
-    var nombrePhase = $(".egalize tr").length / $(".egalize").length;
-    console.log( $(".egalize tr").length / $(".egalize").length);
-    for( var i = 1; i <= nombrePhase; i++){
-        console.log($(".egalize tr:nth-child("+i+") td"));
-        equalHeight($(".egalize tr:nth-child("+i+") td"));
+    var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
+    for( var i = 1; i <= nombreDeLigneParPhase; i++){
+        equalHeight($(".egalize tr:nth-child("+i+") th"));
     };
     $("#tab2").removeClass("active");
 });
