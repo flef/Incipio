@@ -284,7 +284,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * @var text $typePrestation
      *
-     * @ORM\Column(name="prestation", type="text", nullable=true)
+     * @ORM\Column(name="prestation", type="integer", nullable=true)
      *
      */
     private $typePrestation;
@@ -800,7 +800,25 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getTypePrestation() {
         return $this->typePrestation;
     }
-
+ 
+    public static function getTypePrestationChoice()
+    {
+        return array(   '1' => 'ingénieur informatique',
+                        '2' => 'ingénieur électronique',
+                        '3' => 'ingénieur informatique et électronique',
+                        '4'=> 'ingénieur microélectronique');
+    }
+    public static function getTypePrestationChoiceAssert()
+    {
+        return array_keys(Etude::getTypePrestationChoice());
+    }
+    
+    public function getTypePrestationToString()
+    {
+        $tab = $this->getTypePrestationChoice();
+        return $tab[$this->typePrestation];
+    }
+    
     /**
      * Set prospect
      *
