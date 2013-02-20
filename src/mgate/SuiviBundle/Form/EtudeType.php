@@ -9,8 +9,6 @@ use mgate\PersonneBundle\Form;
 use mgate\PersonneBundle\Entity\Prospect as Prospect;
 use mgate\PersonneBundle\Entity\Personne as Personne;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
-
-use mgate\SuiviBundle\Form\Type\PrestationType as PrestationType;
 use mgate\PersonneBundle\Form\ProspectType as ProspectType;
 
 class EtudeType extends AbstractType
