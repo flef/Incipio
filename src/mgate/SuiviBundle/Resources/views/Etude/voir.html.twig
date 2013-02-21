@@ -47,7 +47,7 @@ Affichage d'une étude - {{ parent() }}
                 <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
             </ul>
         </div></li>
-            <li>test:{{ etude.typePrestationToString }}</li>
+            <li>test:{#{ etude.typePrestationToString }#}</li>
             <li>Description de l'étude: <br />{{etude.description }}</li>
             <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">modifier</a>
             <br>
@@ -133,13 +133,56 @@ Affichage d'une étude - {{ parent() }}
               <!-- DOCUMENTS TYPES -->
             <div class="tab-pane" id="tab4">              
                 <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
-
-                           {{ form_widget(formSuivi.ap) }}
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                    {{ form_widget(formSuivi.cc) }}
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-     {{ form_rest(formSuivi) }}
+                    <table class="table table-striped table-bordered"  onclick="docStateChange();">
+                        <tr>
+                            <th>Document</th>
+                            <th>Statut</th>
+                            <th>Rédigé</th>
+                            <th>Relu</th>
+                            <th>SPT M-GaTE</th>
+                            <th>SPT Client</th>
+                            <th>Envoyé</th>
+                            <th>Réceptionné</th>
+                        </tr>
+                        <!-- AVANT PROJET -->
+                        <tr class="docTabRow">
+                            <th>Avant-Projet</td>
+                            <td class="state">Incomplet</td>
+                            <td>{{ form_widget(formSuivi.ap.redige) }}</td>
+                            <td>{{ form_widget(formSuivi.ap.relu) }}</td>
+                            <td>{{ form_widget(formSuivi.ap.spt1) }}</td>
+                            <td>{{ form_widget(formSuivi.ap.spt2) }}</td>
+                            <td>{{ form_widget(formSuivi.ap.envoye) }}</td>
+                            <td>{{ form_widget(formSuivi.ap.receptionne) }}</td>
+                            
+                        </tr>
+                        <!-- CONVENTION CLIENT-->
+                        {#PS : ça fait chier de ne pas pouvoir boucler sur les doctypeForms ... #}
+                        <tr class="docTabRow">
+                            <th>Convention Client</td>
+                            <td class="state">Incomplet</td>
+                            <td>{{ form_widget(formSuivi.cc.redige) }}</td>
+                            <td>{{ form_widget(formSuivi.cc.relu) }}</td>
+                            <td>{{ form_widget(formSuivi.cc.spt1) }}</td>
+                            <td>{{ form_widget(formSuivi.cc.spt2) }}</td>
+                            <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
+                            <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
+                        </tr>
+                        <!--RECAPITULATIFS DE MISSION-->
+                        {% for mission in formSuivi.missions %}
+                        <tr class="docTabRow">
+                            <th>RM n° {{ loop.index }} {# not sure ! #}</td>
+                            <td class="state">Incomplet</td>
+                            <td>{{ form_widget(mission.redige) }}</td>
+                            <td>{{ form_widget(mission.relu) }}</td>
+                            <td>{{ form_widget(mission.spt1) }}</td>
+                            <td>{{ form_widget(mission.spt2) }}</td>
+                            <td>{{ form_widget(mission.envoye) }}</td>
+                            <td>{{ form_widget(mission.receptionne) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                        {{ form_rest(formSuivi) }}
                 </form>   
             </div>
                     </div>
@@ -207,8 +250,33 @@ $(window).load(function(){
 
 <!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
 <script>
+function docStateChange()
+{
+$('.docTabRow').each(
+    function(i, e)
+    {
+        var ok = true;
+        console.log(e.children);
+        $(e).children().children('input[type=checkbox]').each(
+            function(index, elem)
+            {
+                ok = ok && elem.checked;
+            }
+        );
+        if(!ok)
+        {
+            $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
+        }
+        else
+            $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
+        ok = true;
+    }
+);
+};
+    
+    
 $(document).ready(function() {
-
+    docStateChange();
     //listen for the form beeing submitted
     $("#myForm :input").change(function(){
         $(".loading").show();
@@ -234,5 +302,4 @@ $(document).ready(function() {
 
 {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
 </script>
-
 {% endblock %}

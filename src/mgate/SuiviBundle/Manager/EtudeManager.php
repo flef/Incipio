@@ -32,6 +32,7 @@ class EtudeManager extends \Twig_Extension {
             'getErrors' => new \Twig_Function_Method($this, 'getErrors'),
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
+            'convertSpaceToHTML' => new \Twig_Function_Method($this, 'nbsp'),
         );
     }
     
@@ -223,6 +224,11 @@ class EtudeManager extends \Twig_Extension {
         
         return $infos;
         
+    }
+    
+    public  function convertSpaceToHTML($str)
+    {
+        return preg_replace("#\s#", '&nbsp;', $str);
     }
     
 

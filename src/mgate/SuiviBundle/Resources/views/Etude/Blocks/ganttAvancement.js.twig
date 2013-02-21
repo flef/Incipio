@@ -79,8 +79,8 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                 {
 					name: {%if loop.index == 1 %}"Phases" {%else%} "" {% endif%},
 					desc: "Phase {{loop.index}}",
-                                        values: [{ title : "{{phase.titre }}",
-                                                content : "{{ phase.objectif }}",
+                                        values: [{ title : "{{phase.titre | nbsp }}",
+                                        content : "Commence&nbsp;le&nbsp;{{phase.dateDebut|date('U')}}",
 						from: "/Date({{phase.dateDebut|date('U')}}000)/",
 						to: "/Date({{phase.dateDebut|date('U') + 86400 * ( phase.delai ) }}000)/",
 						label: "Phase {{loop.index}}", 
