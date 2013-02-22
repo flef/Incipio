@@ -32,7 +32,7 @@ class EtudeManager extends \Twig_Extension {
             'getErrors' => new \Twig_Function_Method($this, 'getErrors'),
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
-            'convertSpaceToHTML' => new \Twig_Function_Method($this, 'nbsp'),
+            'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
         );
     }
     
@@ -225,11 +225,23 @@ class EtudeManager extends \Twig_Extension {
         return $infos;
         
     }
-    
-    public  function convertSpaceToHTML($str)
+      
+    public  function getEtatDoc($doc)
     {
-        return preg_replace("#\s#", '&nbsp;', $str);
+        if($doc != null)
+        {
+            $ok =  $doc->getRedige()
+                && $doc->getRelu()
+                && $doc->getSpt1()
+                && $doc->getSpt2()
+                && $doc->getEnvoye()
+                && $doc->getReceptionne();
+        }
+        else
+        {
+            $ok = false;
+        }
+        return $ok;
     }
-    
 
 }

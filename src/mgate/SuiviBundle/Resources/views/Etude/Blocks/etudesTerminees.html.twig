@@ -2,7 +2,7 @@
       <thead>
           <tr>
               <th>
-                  Statuts
+                  Status
               </th>
               <th>
                   <div>Nom de l'étude</div>
@@ -17,22 +17,7 @@
                   <div>Date de Fin</div>
               </th>
               <th>
-                   AP
-              </th>
-              <th>
-                   CC
-              </th>
-              <th>
-                   FA
-              </th>
-              <th>
-                   RM
-              </th>
-              <th>
-                   PVR
-              </th>
-              <th>
-                   FS
+                   Avancement
               </th>
               <th>
                    Developpeurs
@@ -47,6 +32,7 @@
         <!-- Juste un exemple Pour test.... -->
         {% set valider = "http://passagestecroix.ek.la/images/menubar/icon_tick.png" %}
         {% set Nvalider = "http://www.neuroscoop.net/images_communes/croix_rouge3D.png" %}
+        {% set options = " no-repeat 0 0.32em ; list-style-type: none; padding-left: 20px;" %}
 
         {% for etude in etudes %}
 <tr>
@@ -77,52 +63,22 @@
             {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
             {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
         </td>
-        <td>
-        {% if getEtatDoc(etude.ap) %} {#pas les bonnes conditions#}
-                        <img src="{{ valider }}" />
+        <td><div>
+                <ul>
+        {% if etude.ap.dateSignature|default('0') %}
+                        <li style="background: url({{ valider }}) {{ options }}">Avant Projet signé le {{ etude.ap.dateSignature|date("d/m/Y") }}</li>
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                        <li style="background: url({{ Nvalider }}) {{ options }}">Avant Projet non signé</li>
         {% endif %}
-            </td>
-       
-            <td>
-        {% if getEtatDoc(etude.cc) %}
-                        <img src="{{ valider }}" />
+        {% if etude.cc.dateSignature|default('0') %}
+                        <li style="background: url({{ valider }}) {{ options }}">Convention Client signée le {{ etude.cc.dateSignature|date("d/m/Y") }}</li>
         {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% if getEtatDoc(etude.fa) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% set validation = true %}
-        {% for mission in etude.missions %}
-             {% set validation = validation * getEtatDoc(mission) %}                    
-        {% endfor %}
-        {% if  validation %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% if getEtatDoc(etude.pvr) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% if getEtatDoc(etude.fs) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
+                        <li style="background: url({{ Nvalider }}) {{ options }}">Convention Client non signée</li>
+
+        {% endif %} 
+
+                    </ul>
+                </div>
             </td>
             <td>
 
@@ -153,4 +109,3 @@
         {% endfor %}
  	 </tbody>
   </table>
-
