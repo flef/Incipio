@@ -311,8 +311,8 @@ class TraitementController extends Controller {
             if ($etude->getDoc($doc)->getSignataire1() != NULL) {
                 $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
                 if ($signataire1 != NULL) {
-                    $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire1->getPrenomNom());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', $signataire1->getPoste());
+                    $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire1->getNomFormel());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', mb_strtolower($signataire1->getPoste(),'UTF-8'));
                     $this->array_push_assoc($champs, 'Sexe_Signataire_Mgate', ($signataire1->getSexe() == 'M.' ? 1 : 2 ));
                 }
             }
@@ -320,8 +320,9 @@ class TraitementController extends Controller {
             if ($etude->getDoc($doc)->getSignataire2() != NULL) {
                 $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
                 if ($signataire2 != NULL) {
-                    $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getPrenomNom());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire_Client', $signataire2->getPoste());
+                    $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getNomFormel());
+                    $this->array_push_assoc($champs, 'Nom_Formel_Client', $signataire2->getNomFormel());
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Client', mb_strtolower($signataire2->getPoste(),'UTF-8'));
                 }
             }
         }
@@ -368,7 +369,7 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Prenom_Contact_Mgate', $etude->getAp()->getContactMgate()->getPrenom());
                 $this->array_push_assoc($champs, 'Mail_Contact_Mgate', $etude->getAp()->getContactMgate()->getEmail());
                 $this->array_push_assoc($champs, 'Tel_Contact_Mgate', $etude->getAp()->getContactMgate()->getMobile());
-                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', $etude->getAp()->getContactMgate()->getPoste());
+                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', strtolower($etude->getAp()->getContactMgate()->getPoste()));
             }
             
         }
