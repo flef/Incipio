@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th>
-                Status
+                Statuts
             </th>
             <th>
     <div>Nom de l'étude</div>
@@ -35,16 +35,8 @@
         <tr>
             <td></td>
             <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
-            <td><div class="btn-group" style="width : 100%">
-                    <a class="btn btn-warning" href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
-                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-                        <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}"><i class="icon-envelope"></i> Voir</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="i"></i>Commenter</a></li>
-                    </ul>
-                </div>
+            <td>
+                {% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
             </td>
             <td>
                     {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
@@ -113,25 +105,6 @@
     {%endfor%}
         </script>
         <script>
-/*    $('#avancement').click(
-
-
-    function(sender) {
-        var that = $('#avancement');
-        bootbox.prompt("Avancement du developpeur (%) ?", function(result) {
-          if (result !== null) {                                             
-            var requete = $.ajax({
-            url: "{{ path('mgateSuivi_mission_avancement') }}",
-            type: "POST",
-            data: "avancement=" + result +"&id=" + $(that).data("title") + "&intervenant=" + $(that).data("content"),
-            success: function(){
-            },
-            });
-             $("#avancementBar"+$(that).data("content")).css("width",  result + "%");
-            }
-            })
-            });*/
-
  $('body').click(function(e){
         var Elem = e.target;
         if (Elem.id == 'avancement'){
