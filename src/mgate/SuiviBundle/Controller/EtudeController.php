@@ -23,10 +23,18 @@ class EtudeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
-
+        //Inserer mes etudes à suivre
+        
+        //A remplacer par en cours
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+        
+        $etudesParMandat = array();
+        for($i = 1; $i < 10; $i++) //Ne sais trop que mettre...
+            array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i))); // A remplacer par : par mandat && terminées
+        
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
-            'etudes' => $entities,
+            'etudes' => $etudesEnCours,
+            'etudesParMandat' => $etudesParMandat,
         ));
          
     }

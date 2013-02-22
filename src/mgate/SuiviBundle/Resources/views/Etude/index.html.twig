@@ -22,44 +22,28 @@ Accueil - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:Blocks/etudesEnCours.html.twig" with  {'etudes':  etudes} %}
                 </div>
                 <div class="tab-pane" id="tab3" style="min-height: 400px;">
-                        <div class="accordion" id="accordion2">
-                            <div class="accordion-group">
-                                <div class="accordion-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-                                        Mandat 6
-                                    </a>
-                                </div>
-                                <div id="collapseOne" class="accordion-body collapse" style="height: 0px;">
-                                    <div class="accordion-inner">
-                                        {% include "mgateSuiviBundle:Etude:Blocks/etudesEnCours.html.twig" with  {'etudes':  etudes} %}
-
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="accordion" id="accordion">
+                            {% for mandat in etudesParMandat |reverse %}
+                                {% if mandat | length %}
                                 <div class="accordion-group">
                                     <div class="accordion-heading">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                                            Mandat 5
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{loop.index}}">
+                                            Mandat {{ etudesParMandat | length - loop.index0 }}
                                         </a>
                                     </div>
-                                    <div id="collapseTwo" class="accordion-body in collapse" style="height: auto;">
+                                    {%if loop.index == 5 %}
+                                    <div id="collapse{{loop.index}}" class="accordion-body in collapse" style="height: auto;">
+                                    {% else %}
+                                    <div id="collapse{{loop.index}}" class="accordion-body collapse" style="height: 0px;">
+                                    {% endif %}
                                         <div class="accordion-inner">
-                                       {% include "mgateSuiviBundle:Etude:Blocks/etudesTerminees.html.twig" with  {'etudes':  etudes} %}
+                                       {% include "mgateSuiviBundle:Etude:Blocks/etudesTerminees.html.twig" with  {'etudes':  mandat } %}
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-                                                Mandat 4
-                                            </a>
-                                        </div>
-                                        <div id="collapseThree" class="accordion-body collapse">
-                                            <div class="accordion-inner">
-                                        {% include "mgateSuiviBundle:Etude:Blocks/etudesEnCours.html.twig" with  {'etudes':  etudes} %}
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {% endif %}
+                                {% endfor%}
+                                    
                                     </div>
                                 </div>
                             </div>
