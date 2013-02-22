@@ -3,16 +3,15 @@
 {% block title %}Suivi:{% endblock %}
 
 {% block content %}
-
-    {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
-    {% block sous_titre %}
-        <h1>Suivi d'étude</h1>
-        <h4>Sous-Menu</h4>
-        <ul>
-            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Accueil</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter une étude</a></li>
+       
+    {% block breadcrumb %}
+        <ul class="breadcrumb">
+            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a> <span class="divider">/</span></li>
+            {% if etude is defined %}
+                <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }}</a> <span class="divider">/</span></li>
+                <li class="active">-</li>
+            {% endif %}
         </ul>
-        <hr />
     {% endblock %}
 
     {# On définit un nouveau block, que les vues du bundle pourront remplir #}
