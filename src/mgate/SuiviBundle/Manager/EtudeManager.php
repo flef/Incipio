@@ -219,8 +219,8 @@ class EtudeManager extends \Twig_Extension {
     {
         $infos = array();
         
-        $info = array('titre' => 'Mise à jours', 'message' => 'Message de test :D');    
-        array_push($infos, $info);
+        //$info = array('titre' => 'Mise à jours', 'message' => 'Message de test :D');    
+        //array_push($infos, $info);
         
         return $infos;
         

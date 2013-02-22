@@ -29,25 +29,13 @@ Affichage d'une étude - {{ parent() }}
             </div>
             {% endif %}
             <li>Par le mandat {{ etude.mandat }}, créée le {{ etude.dateCreation|date("d/m/Y") }}</li>
-            <li>Client : <div class="btn-group" style="width : 200px">
-                    <a class="btn btn-warning" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{ etude.prospect.nom }}</a>
-                    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-                        <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': etude.prospect.id}) }}"><i class="icon-envelope"></i> Voir</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#"><i class="i"></i>Commenter</a></li>
-                    </ul>
-                </div></li>
+            <li>Client : 
+                {% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
+            </li>
                 <br/>
-            <li>Suiveur: <div class="btn-group" style="width : 200px">
-            <a class="btn btn-success" href="#" style="width : 60%"><i class="icon-user icon-white"></i>{{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</a>
-            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
-            </ul>
-        </div></li>
-            <li>test:{#{ etude.typePrestationToString }#}</li>
+            <li>Suiveur: 
+                {% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
+            </li>
             <li>Description de l'étude: <br />{{etude.description }}</li>
             <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">modifier</a>
             <br>
