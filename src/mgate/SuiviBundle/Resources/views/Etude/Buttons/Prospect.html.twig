@@ -1,0 +1,16 @@
+{# Boutton Client :
+ # Input : prospect
+ # use : {% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
+ #}
+<div class="btn-group" style="min-width: 220px;">
+    <a class="btn btn-warning" href="{{ path('mgatePersonne_prospect_voir', {'id': prospect.id}) }}" style="width : 60%"><i class="icon-user icon-white"></i>{{ prospect.nom }}</a>
+    <a class="btn btn-warning dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="{{ path('mgatePersonne_prospect_voir', {'id': prospect.id}) }}"><i class="icon-info-sign" ></i> Voir</a></li>
+        <li><a href="#"><i class="icon-envelope" ></i> Contacter</a></li>
+        <li><a href="#"><i class="icon-comment" ></i> Commenter</a></li>
+        <li class="divider"></li>
+        <li><a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id': prospect.id}) }}"><i class="icon-plus" ></i> Ajouter un employé</a></li>
+        <li><a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}"><i class="icon-pencil" ></i> Modifier</a></li>
+    </ul>
+</div>
