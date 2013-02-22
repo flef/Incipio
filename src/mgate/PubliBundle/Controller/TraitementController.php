@@ -372,7 +372,7 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Prenom_Contact_Mgate', $etude->getAp()->getContactMgate()->getPrenom());
                 $this->array_push_assoc($champs, 'Mail_Contact_Mgate', $etude->getAp()->getContactMgate()->getEmail());
                 $this->array_push_assoc($champs, 'Tel_Contact_Mgate', $etude->getAp()->getContactMgate()->getMobile());
-                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', strtolower($etude->getAp()->getContactMgate()->getPoste()));
+                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', mb_strtolower($etude->getAp()->getContactMgate()->getPoste(),'UTF-8'));
             }
             
         }
@@ -417,6 +417,7 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
                 $this->array_push_assoc($champs, 'Sexe_Etudiant', $sexe);
                 $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
+                $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $mission->getIntervenant()->getPersonne()->getNomFormel());
             }
             $Mission_Nbre_JEH = (int) 0;
             $Mission_Montant_JEH_Verse = (float) 0;
