@@ -97,6 +97,11 @@ class Personne
         return $this->prenom.' '.$this->nom;
     }
     
+    public function getNomFormel()
+    {
+        return $this->sexe.' '.strtoupper($this->nom).' '.$this->prenom;
+    }
+    
     public function getPoste()
     {
         if($this->employe)
