@@ -104,26 +104,4 @@
                              
     {%endfor%}
         </script>
-        <script>
- $('body').click(function(e){
-        var Elem = e.target;
-        if (Elem.id == 'avancement'){
-            console.log(Elem);
-            bootbox.prompt("Avancement du developpeur (%) ?", function(result) {
-          if (result !== null) {                                             
-            var requete = $.ajax({
-            url: "{{ path('mgateSuivi_mission_avancement') }}",
-            type: "POST",
-            data: "avancement=" + result +"&id=" + $(Elem).data("title") + "&intervenant=" + $(Elem).data("content"),
-            success: function(){
-            },
-            });
-             $("#avancementBar"+$(Elem).data("title")+$(Elem).data("content")).css("width",  result + "%");
-            }
-            })
-            }});
-            
-            
- 
-                  
-            </script>
+
