@@ -3,7 +3,11 @@ mgateSuivi_etude_homepage:
     defaults: {_controller: mgateSuiviBundle:Etude:index , page: 1}
     requirements:
       page : \d*
-    
+
+mgateSuivi_etude_suivi:
+    pattern: /etude/ajouter
+    defaults: {_controller: mgateSuiviBundle:Etude:suivi}
+        
 mgateSuivi_etude_ajouter:
     pattern: /etude/ajouter
     defaults: {_controller: mgateSuiviBundle:Etude:add}
