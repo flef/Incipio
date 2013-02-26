@@ -23,7 +23,7 @@ class EtudeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        //Inserer mes etudes à suivre
+        //TODO Inserer mes etudes à suivre
         
         //A remplacer par en cours
         $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
@@ -203,6 +203,22 @@ class EtudeController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function suiviAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        // TODO A remplacer par en cours
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+       
+        return $this->render('mgateSuiviBundle:Etude:suiviEtudes.html.twig', array(
+            'etudes' => $etudesEnCours,
+        ));
+         
     }
     
     /**
