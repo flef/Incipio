@@ -8,7 +8,7 @@
 {% block content_bundle %}
         
     <h2>Rédiger l'Avant-Projet</h2>
- <a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>
+<!--<a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id':etude.prospect.id, 'format':'mini'}) }}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Ajouter un signataire" class="thickbox">Ajouter un signataire</a>-->
     
  
 <form method="post" {{ form_enctype(form) }}>
@@ -18,12 +18,6 @@
     <input type="submit" value="Enregistrer l'AP"/>
     <input type="submit" value="Enregistrer l'AP et passer aux Phases" name="phases"/>
 </form>
-
-
-
-    <p>
-        <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
-    </p>   
     
 {% endblock %}
 
