@@ -109,6 +109,7 @@ class Phase
         $this->createdAt = new \DateTime('now');
         $this->isEnabled = false;
         $this->prixJEH = 300;
+        $this->validation = 1;
     }
 
     /**
