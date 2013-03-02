@@ -22,10 +22,10 @@ class ApType extends AbstractType {
                     'required' => false))
                 ->add('ap', new SubApType(), array('label' => ' ', 'prospect'=>$options['prospect']))
                 ->add('fraisDossier', 'integer', array('label' => 'Frais de dossier', 'required' => false))
-                ->add('presentationProjet', 'textarea', array('label' => 'Présentation du projet', 'required' => false))
-                ->add('descriptionPrestation', 'textarea', array('label' => 'Description de la prestation proposée par M-GaTE', 'required' => false))
+                ->add('presentationProjet', 'textarea', array('label' => 'Présentation du projet', 'required' => false, 'attr'=>array("title"=>"La phrase commence par 'Dans le cadre de son activité professionnelle, \"NomDuClient\" ... '. Il faut la continuer en décrivant le projet. Le début de la phrase est déjà généré.")))
+                ->add('descriptionPrestation', 'textarea', array('label' => 'Description de la prestation proposée par M-GaTE', 'required' => false, 'attr'=>array("title"=>"La phrase commence par 'La prestation proposée par M-GaTE consiste à réaliser ...'. Il faut continuer la continuer en décrivant la prestation proposée. Le début de la phrase est déjà généré.")))
                 ->add('typePrestation', 'choice', array('choices'=>Etude::getTypePrestationChoice(), 'label' => 'Type de prestation', 'required' => false))
-                ->add('competences', 'textarea', array('label' => 'Capacité des intervenants:', 'required' => false));
+                ->add('competences', 'textarea', array('label' => 'Capacité des intervenants:', 'required' => false, 'attr'=>array("title"=>"La phrase commence par 'Les réalisateurs de cette étude devront donc être capables :'. Listez donc les capacités des intervenants sous la forme '- maitriser HTML/CSS', avec des sauts à la ligne.")));
     }
 
     public function getName() {
