@@ -1,5 +1,23 @@
 {% extends "mgateUserBundle::layout.html.twig" %}
 
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                    $('#example').dataTable({
+                        "bPaginate": false,
+                    });
+            } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
 {% block title %}
 	Lister les utilisateurs - {{ parent() }}
 {% endblock %}
@@ -10,25 +28,31 @@
 
     <ul>
 
-<table width="100%" border="0">
-  <tr>
-    <td>Id</td>
-    <td>Nom d'utilisateur</td>
-    <td>Adresse email du compte</td>
-    <td>Droit</td>
-    <td>Action</td>
-  </tr>
-        {% for user in users %}
+<table style="width: 100%;" aria-describedby="example_info" class="display dataTable" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+  <thead>
     <tr>
-    <td>{{ user.id }}</td>
-    <td>{{ user.username }}</td>
-    <td>{{ user.email }}</td>
-    <td>{{ user.rolesDisplay }}</td>
-    <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
-  </tr>
-        {% else %}
-            <li>Pas (encore !) d'utilisateur</li>
-        {% endfor %}
+      <!--<td>Id</td>-->
+      <td>Nom d'Utilisateur</td>
+      <td>Liée à</td>
+      <td>Email du compte</td>
+      <td>Droit</td>
+      <td>Action</td>
+    </tr>
+  </thead>
+  <tbody>
+          {% for user in users %}
+    <tr>
+      <!--<td>{{ user.id }}</td>-->
+      <td>{{ user.username }}</td>
+      <td>{% if user.personne %}{% if user.personne.membre %}<a href="{{ path('mgatePersonne_membre_voir', {'id': user.personne.membre.id}) }}">{{user.personne.prenomNom}}</a>{% else %}exception{% endif %}{% else %}-{% endif %}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.rolesDisplay }}</td>
+      <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
+    </tr>
+          {% else %}
+              <li>Pas (encore !) d'utilisateur</li>
+          {% endfor %}
+  </tbody>
 </table>
     </ul>
 
