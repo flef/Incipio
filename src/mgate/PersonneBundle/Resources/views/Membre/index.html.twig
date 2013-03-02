@@ -2,37 +2,61 @@
 
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                    $('#example').dataTable({
+                        "bPaginate": false,
+                    });
+            } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
 {% block title %}Accueil - {{ parent() }}{% endblock %}
 
 {% block content_bundle %}
 
     <h2>Liste des Membres</h2>
 
-    <ul>
-        <table width="100%" border="0">
+<ul>
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
           <tr>
-            <td>Id</td>
-            <td>Nom d'utilisateur</td>
-            <td>Identifiant</td>
-            <td>Adresse email du compte</td>
-            <td>Mobile</td>
-            <td>Adresse</td>
-            <td>Action</td>
+            <!--<th>Id</th>-->
+            <th>Prénom Nom</th>
+            <th>Poste</th>
+            <th>Identifiant</th>
+            <th>Email</th>
+            <th>Mobile</th>
+            <th>Adresse</th>
+            <th>Action</th>
           </tr>
+        </thead>
+        <tbody>
                 {% for membre in membres %}
           <tr>
-            <td>{{ membre.id }}</td>
+            <!--<td>{{ membre.id }}</td>-->
             <td>{{ membre.personne.prenomNom }}</td>
+            <td>{% if membre.poste %} {{membre.poste.intitule}}{% else %}-{% endif %}</td>
             <td>{{ membre.identifiant }}</td>
             <td>{{ membre.personne.email }}</td>
             <td>{{ membre.personne.mobile }}</td>
             <td>{{ membre.personne.adresse }}</td>
-            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">modifier</a></td>
+            <td><a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">modifier</a></td>
           </tr>
                 {% else %}
                     <li>Pas (encore !) de Membre</li>
                 {% endfor %}
-        </table>
+        </tbody>
+    </table>
         
 
     </ul>
