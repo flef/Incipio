@@ -26,34 +26,30 @@
 
     <h2>Liste des utilisateurs</h2>
 
-    <ul>
-
-<table style="width: 100%;" aria-describedby="example_info" class="display dataTable" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
-  <thead>
-    <tr>
-      <!--<td>Id</td>-->
-      <td>Nom d'Utilisateur</td>
-      <td>Liée à</td>
-      <td>Email du compte</td>
-      <td>Droit</td>
-      <td>Action</td>
-    </tr>
-  </thead>
-  <tbody>
-          {% for user in users %}
-    <tr>
-      <!--<td>{{ user.id }}</td>-->
-      <td>{{ user.username }}</td>
-      <td>{% if user.personne %}{% if user.personne.membre %}<a href="{{ path('mgatePersonne_membre_voir', {'id': user.personne.membre.id}) }}">{{user.personne.prenomNom}}</a>{% else %}exception{% endif %}{% else %}-{% endif %}</td>
-      <td>{{ user.email }}</td>
-      <td>{{ user.rolesDisplay }}</td>
-      <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
-    </tr>
-          {% else %}
-              <li>Pas (encore !) d'utilisateur</li>
-          {% endfor %}
-  </tbody>
-</table>
-    </ul>
-
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+      <thead>
+        <tr>
+          <!--<td>Id</td>-->
+          <th>Nom d'Utilisateur</th>
+          <th>Liée à</th>
+          <th>Email du compte</th>
+          <th>Droit</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+              {% for user in users %}
+        <tr>
+          <!--<td>{{ user.id }}</td>-->
+          <td>{{ user.username }}</td>
+          <td>{% if user.personne %}{% if user.personne.membre %}<a href="{{ path('mgatePersonne_membre_voir', {'id': user.personne.membre.id}) }}">{{user.personne.prenomNom}}</a>{% else %}exception{% endif %}{% else %}-{% endif %}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.rolesDisplay }}</td>
+          <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
+        </tr>
+              {% else %}
+                  <li>Pas (encore !) d'utilisateur</li>
+              {% endfor %}
+      </tbody>
+    </table>
 {% endblock %}
