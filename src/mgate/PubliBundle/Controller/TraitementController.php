@@ -11,29 +11,30 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
 
-    private $SFD = '~'; //Start Field Delimiter
+    private $SFD = '~';
     private $EFD = '~~';
+    
+    private $STRD = '<repeatTR>';
+    private $ETRD = '</repeatTR>';
+    
+    private $SPD = '<repeatP>';
+    private $EPD = '</repeatP>';
 
-    /*
-     * private SAD
-     * private EAD
-     */
-
-    //Repétition des phases
-    private function repeterPhase(&$templateXML, $nombrePhase) {
-
-
-        $regexRepeatSTART = '<w:bookmarkStart w:id="\d+" w:name="repeatSTART\d?"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de début de repeat
-        $regexRepeatEND = '<w:bookmarkStart w:id="\d+" w:name="repeatEND\d?"/>\s*\S*<w:bookmarkEnd w:id="\d+"/>'; //Marqueur de fin de repeat
+ 
+    
+    private function repeatTR(&$templateXML, $nombrePhase)
+    {
+        $regexRepeatSTART = $this->STRD; //Marqueur de début de repeat
+        $regexRepeatEND = $this->ETRD; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
 
         $SFD = $this->SFD;
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
+                    
 
-
-                    if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Rowspan ?
+                    if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Vérification de rowspan
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
                     else
                         $premiereLigne = $matches[1];
@@ -47,6 +48,35 @@ class TraitementController extends Controller {
 
         $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
 
+        return $templateXML;
+    }
+    
+    private function repeatP(&$templateXML, $nombrePhase)
+    {
+        $regexRepeatSTART = $this->SPD; //Marqueur de début de repeat
+        $regexRepeatEND = $this->EPD; //Marqueur de fin de repeat
+        $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
+
+        $SFD = $this->SFD;
+        $EFD = $this->EFD;
+        $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
+                    $outputString = "";
+
+                    for ($i = 1; $i <= $nombrePhase; $i++)
+                        $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
+                    return $outputString;
+                };
+
+        $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
+
+        return $templateXML;
+    }
+    
+        //Repétition des phases
+    private function repeterPhase(&$templateXML, $nombrePhase) {
+        
+        $this->repeatTR($templateXML, $nombrePhase);
+        $this->repeatP($templateXML, $nombrePhase);
         return $templateXML;
     }
 
@@ -68,6 +98,9 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
+    /* nl2wbr
+     * Converti les retours à la ligne en retour à la ligne pour word
+     */
     private function nl2wbr($input) {
         return preg_replace('#\\r\\n|\\n|\\r#', '<w:br />', $input);
     }
@@ -113,27 +146,21 @@ class TraitementController extends Controller {
         //commenceParUneVoyelle
     }
 
-    //Traitement du template
-    private function traiterTemplate($templateFullPath, $nombrePhase, $champs) {
-        $templateXML = file_get_contents($templateFullPath); //récup contenu XML
-
-        $this->repeterPhase($templateXML, $nombrePhase); //Répétion phase
-        $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
-        $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
-        $this->liasons($templateXML); //liaisons de d'
-
-        return $templateXML;
-    }
 
     //Vérification du fichier
     //if match % _ % then pasbien
-    private function verifierTemplate($templateXML) {
+    private function verifierTemplates($templatesXML) {
         $SFD = $this->SFD;
         $EFD = $this->EFD;
-
+        $allmatches = array();
+        
+        foreach ($templatesXML as $templateXML)
+        {
         preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
+        $allmatches += $matches[1];
+        }
 
-        return $matches[1];
+        return $allmatches;
     }
 
     public function commenceParUneVoyelle($mot) {
@@ -438,8 +465,6 @@ class TraitementController extends Controller {
         }
 
 
-
-        //var_dump($champs);
         return $champs;
     }
 
@@ -464,54 +489,96 @@ class TraitementController extends Controller {
         $request = $this->get('request');
 
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
-            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.xml'; //asset
+            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.docx'; //asset
         } else {
             $chemin = $documenttype->getWebPath(); // on prend le document type qui est uploadé
         }
         return $chemin;
     }
+    
+    //Prendre tous les fichiers dans word
+    private function getDocxContent($docxFullPath) {
+        $zip = new \ZipArchive;
+        $templateXML = array();
+        if ($zip->open($docxFullPath) === TRUE) {
+            
 
+            for ($i=0; $i < $zip->numFiles; $i++)
+            {
+                $name = $zip->getNameIndex($i);
+                if((strstr($name,"document")||strstr($name,"header")||strstr($name,"footer")) && !strstr($name, "rels"))
+                {
+                    $this->array_push_assoc($templateXML, str_replace("word/", "", $name), $zip->getFromIndex($i));
+                }
+            }
+            $zip->close();
+        }
+        return $templateXML;
+    }
+    
+    private function traiterTemplates($templateFullPath, $nombrePhase, $champs) {
+        $templatesXML = $this->getDocxContent($templateFullPath); //rÃ©cup contenu XML
+        $templatesXMLTraite = array();
+        
+        foreach ($templatesXML as $templateName => $templateXML) {
+            $this->repeterPhase($templateXML, $nombrePhase); //RÃ©pÃ©tion phase
+            $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
+            $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
+            $this->liasons($templateXML); //liaisons de d'
+            $this->array_push_assoc($templatesXMLTraite,$templateName, $templateXML);
+        }
+
+        return $templatesXMLTraite;
+
+    }
+    
     private function publipostage($id_etude, $doc, $key) {
         $key = intval($key);
-        
+
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombrePhase = count($etude->getPhases());
         $champs = $this->getAllChamp($etude, $doc, $key);
 
-        //DEBUG
+        //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path . $doc . '.xml';
+            $chemin = $path . $doc . '.template';
         }
+        
+          $templatesXMLtraite = $this->traiterTemplates($chemin, $nombrePhase, $champs);
+          $champsBrut = $this->verifierTemplates($templatesXMLtraite);
 
-     $templateXMLtraite = $this->traiterTemplate($chemin, $nombrePhase, $champs);
-     $champsBrut = $this->verifierTemplate($templateXMLtraite);
+          $repertoire = 'tmp';
 
-     $repertoire = 'tmp';
-
-        if ($etude->getDoc($doc, $key))
-            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
-        else
-            $refDocx = 'ERROR';
-        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
-
-
-        if (!file_exists($repertoire))
-            mkdir($repertoire/* ,0700 */);
-        $handle = fopen($repertoire . '/' . $idDocx, "w+");
-        fwrite($handle, $templateXMLtraite);
-        fclose($handle);
+          if ($etude->getDoc($doc, $key))
+          $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
+          else
+          $refDocx = 'ERROR';
+          $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
 
+          
+          copy($chemin, $repertoire . '/' . $idDocx);
+          
+          $zip = new \ZipArchive();
+          $zip->open($repertoire . '/' . $idDocx);
+          
+          foreach($templatesXMLtraite as $templateXMLName => $templateXMLContent)
+          {
+              $zip->deleteName('word/'.$templateXMLName);
+              $zip->addFromString('word/'.$templateXMLName, $templateXMLContent);
+          }
+          
+          $zip->close();
 
-        $_SESSION['idDocx'] = $idDocx;
-        $_SESSION['refDocx'] = $refDocx;
+          $_SESSION['idDocx'] = $idDocx;
+          $_SESSION['refDocx'] = $refDocx;
 
 
-        return $champsBrut;
+          return $champsBrut; 
     }
-
+       
     public function publiposterMultiple($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
@@ -542,7 +609,8 @@ class TraitementController extends Controller {
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
         } else {
-            return $this->telechargerAction($doc);
+           
+          return $this->telechargerAction($doc);
         }
     }
 
