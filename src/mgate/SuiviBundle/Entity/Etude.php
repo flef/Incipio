@@ -815,8 +815,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     
     public function getTypePrestationToString()
     {
-        $tab = $this->getTypePrestationChoice();
-        return $tab[$this->typePrestation];
+        if($this->typePrestation)
+        {
+            $tab = $this->getTypePrestationChoice();
+            return $tab[$this->typePrestation];
+        }
+        else 
+            return null;
     }
     
     /**
