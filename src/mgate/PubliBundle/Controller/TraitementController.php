@@ -9,10 +9,10 @@ class TraitementController extends Controller {
 
     private $SFD = '~';
     private $EFD = '~~';
-    private $STRD = '<repeatTR>';
-    private $ETRD = '</repeatTR>';
-    private $SPD = '<repeatP>';
-    private $EPD = '</repeatP>';
+    private $STRD = '<!--repeatTR-->';
+    private $ETRD = '<!--/repeatTR-->';
+    private $SPD = '<!--repeatP-->';
+    private $EPD = '<!--/repeatP-->';
 
     private function repeatTR(&$templateXML, $nombrePhase) {
         $regexRepeatSTART = $this->STRD; //Marqueur de début de repeat
@@ -525,7 +525,7 @@ class TraitementController extends Controller {
         //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path . $doc . '.template';
+            $chemin = $path . $doc . '.docx';
         }
 
         $templatesXMLtraite = $this->traiterTemplates($chemin, $nombrePhase, $champs);
@@ -611,7 +611,7 @@ class TraitementController extends Controller {
                 $idZip = $_SESSION['idZip'];
                 $zip = new \ZipArchive;
                 $zip->open('tmp/' . $idZip, \ZipArchive::CREATE);
-                $zip->addFile('tmp/' . $idDocx, $refDocx . '.xml');
+                $zip->addFile('tmp/' . $idDocx, $refDocx . '.docx');
                 $zip->close();
             } elseif ($dlZip) {
                 $idZip = $_SESSION['idZip'];
