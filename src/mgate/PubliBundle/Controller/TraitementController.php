@@ -2,28 +2,19 @@
 
 namespace mgate\PubliBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-
-
-
 
 class TraitementController extends Controller {
 
     private $SFD = '~';
     private $EFD = '~~';
-    
-    private $STRD = '<repeatTR>';
-    private $ETRD = '</repeatTR>';
-    
-    private $SPD = '<repeatP>';
-    private $EPD = '</repeatP>';
+    private $STRD = '<!--repeatTR-->';
+    private $ETRD = '<!--/repeatTR-->';
+    private $SPD = '<!--repeatP-->';
+    private $EPD = '<!--/repeatP-->';
 
- 
-    
-    private function repeatTR(&$templateXML, $nombrePhase)
-    {
+    private function repeatTR(&$templateXML, $nombrePhase) {
         $regexRepeatSTART = $this->STRD; //Marqueur de début de repeat
         $regexRepeatEND = $this->ETRD; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
@@ -32,7 +23,7 @@ class TraitementController extends Controller {
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
-                    
+
 
                     if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Vérification de rowspan
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
@@ -50,9 +41,8 @@ class TraitementController extends Controller {
 
         return $templateXML;
     }
-    
-    private function repeatP(&$templateXML, $nombrePhase)
-    {
+
+    private function repeatP(&$templateXML, $nombrePhase) {
         $regexRepeatSTART = $this->SPD; //Marqueur de début de repeat
         $regexRepeatEND = $this->EPD; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
@@ -71,10 +61,10 @@ class TraitementController extends Controller {
 
         return $templateXML;
     }
-    
-        //Repétition des phases
+
+    //Repétition des phases
     private function repeterPhase(&$templateXML, $nombrePhase) {
-        
+
         $this->repeatTR($templateXML, $nombrePhase);
         $this->repeatP($templateXML, $nombrePhase);
         return $templateXML;
@@ -101,6 +91,7 @@ class TraitementController extends Controller {
     /* nl2wbr
      * Converti les retours à la ligne en retour à la ligne pour word
      */
+
     private function nl2wbr($input) {
         return preg_replace('#\\r\\n|\\n|\\r#', '<w:br />', $input);
     }
@@ -135,7 +126,7 @@ class TraitementController extends Controller {
     //effectu les "liaisons" le/l' la/l' ... pattern : µde|d'|variableµ
     private function liasons(&$templateXML) {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
-        
+
         $that = $this;
         $callback = function ($matches) use ($that) {//Fonction de callback
                     return (($that->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
@@ -146,18 +137,16 @@ class TraitementController extends Controller {
         //commenceParUneVoyelle
     }
 
-
     //Vérification du fichier
     //if match % _ % then pasbien
     private function verifierTemplates($templatesXML) {
         $SFD = $this->SFD;
         $EFD = $this->EFD;
         $allmatches = array();
-        
-        foreach ($templatesXML as $templateXML)
-        {
-        preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
-        $allmatches += $matches[1];
+
+        foreach ($templatesXML as $templateXML) {
+            preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
+            $allmatches += $matches[1];
         }
 
         return $allmatches;
@@ -242,30 +231,26 @@ class TraitementController extends Controller {
             $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
         else
             $Mois_Lancement = NULL;
-            
+
         if ($etudeManager->getDateFin($etude)) {
             $Mois_Fin = $this->nombreVersMois(intval($etudeManager->getDateFin($etude)->format('m')));
             $Date_Fin_Etude = $etudeManager->getDateFin($etude)->format('d/m/Y');
-        }
-        else
-        {
+        } else {
             $Mois_Fin = NULL;
             $Date_Fin_Etude = NULL;
         }
-        if ($etudeManager->getDelaiEtude($etude))
-
-        {
-            $Delais_Semaines= $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d ));
+        if ($etudeManager->getDelaiEtude($etude)) {
+            $Delais_Semaines = $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d));
         }
         else
             $Delais_Semaines = NULL;
 
-         
+
         //Etude
 
         $Acompte_Pourcentage = (float) $etude->getPourcentageAcompte();
-        $Acompte_HT = (float) $Montant_Total_Etude_HT * $Acompte_Pourcentage ;
-        $Acompte_TTC = (float) $Montant_Total_Etude_TTC * $Acompte_Pourcentage ;
+        $Acompte_HT = (float) $Montant_Total_Etude_HT * $Acompte_Pourcentage;
+        $Acompte_TTC = (float) $Montant_Total_Etude_TTC * $Acompte_Pourcentage;
         $Acompte_TVA = (float) $Montant_Total_Etude_HT * ($Acompte_Pourcentage) * $Taux_TVA / 100;
         $Solde_PVR_HT = (float) $Montant_Total_Etude_HT - $Acompte_HT;
         $Solde_PVR_TTC = (float) $Montant_Total_Etude_TTC - $Acompte_TTC;
@@ -294,7 +279,7 @@ class TraitementController extends Controller {
         $champs = Array(
             'Presentation_Projet' => $etude->getPresentationProjet(),
             'Description_Prestation' => $etude->getDescriptionPrestation(),
-            'Type_Prestation' => $etude->getTypePrestation(),
+            'Type_Prestation' => $etude->getTypePrestationToString(),
             'Capacites_Dev' => $etude->getCompetences(),
             'Nbr_JEH_Total' => $Nbr_JEH,
             'Nbr_JEH_Total_Lettres' => $Nbr_JEH_Lettres,
@@ -339,8 +324,8 @@ class TraitementController extends Controller {
                 $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
                 if ($signataire1 != NULL) {
                     $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire1->getNomFormel());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', mb_strtolower($signataire1->getPoste(),'UTF-8'));
-                    $this->array_push_assoc($champs, 'Sexe_Signataire_Mgate', ($signataire1->getSexe() == 'M.' ? 1 : 2 ));
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', mb_strtolower($signataire1->getPoste(), 'UTF-8'));
+                    $this->array_push_assoc($champs, 'Sexe_Signataire_Mgate', ($signataire1->getSexe() == 'M.' ? 1 : 2));
                 }
             }
             //Signataire 2 : Signataire Client
@@ -349,7 +334,7 @@ class TraitementController extends Controller {
                 if ($signataire2 != NULL) {
                     $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getNomFormel());
                     $this->array_push_assoc($champs, 'Nom_Formel_Client', $signataire2->getNomFormel());
-                    $this->array_push_assoc($champs, 'Fonction_Signataire_Client', mb_strtolower($signataire2->getPoste(),'UTF-8'));
+                    $this->array_push_assoc($champs, 'Fonction_Signataire_Client', mb_strtolower($signataire2->getPoste(), 'UTF-8'));
                 }
             }
         }
@@ -357,17 +342,18 @@ class TraitementController extends Controller {
 
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        if ($etude->getAp())
-            $this->array_push_assoc($champs, 'Reference_AP', $etudeManager->getRefDoc($etude, 'AP', $etude->getDoc('AP')->getVersion()));
-        if ($etude->getCc())
-            $this->array_push_assoc($champs, 'Reference_CC', $etudeManager->getRefDoc($etude, 'CC', $etude->getDoc('CC')->getVersion()));
+        foreach (array('AP','CC','FA','PVR') as $abrv){
+            if ($etude->getDoc($abrv))
+                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
+        }
         if ($etude->getDoc('RM', $key))
-            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+       
 
         //Prospect
         if ($etude->getProspect() != NULL) {
             $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
-            if($etude->getProspect()->getEntite())
+            if ($etude->getProspect()->getEntite())
                 $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntite());
             else
                 $this->array_push_assoc($champs, 'Entite_Sociale', ' ');
@@ -392,48 +378,47 @@ class TraitementController extends Controller {
             $Nbre_Dev_Lettres = $converter->ConvNumberLetter($Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbre_Developpeurs', $Nbr_Dev);
             $this->array_push_assoc($champs, 'Nbre_Developpeurs_Lettres', $Nbre_Dev_Lettres);
-            
-            if($etude->getAp()->getContactMgate())
-            {
+
+            if ($etude->getAp()->getContactMgate()) {
                 $this->array_push_assoc($champs, 'Nom_Contact_Mgate', $etude->getAp()->getContactMgate()->getNom());
                 $this->array_push_assoc($champs, 'Prenom_Contact_Mgate', $etude->getAp()->getContactMgate()->getPrenom());
                 $this->array_push_assoc($champs, 'Mail_Contact_Mgate', $etude->getAp()->getContactMgate()->getEmail());
                 $this->array_push_assoc($champs, 'Tel_Contact_Mgate', $etude->getAp()->getContactMgate()->getMobile());
-                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', mb_strtolower($etude->getAp()->getContactMgate()->getPoste(),'UTF-8'));
+                $this->array_push_assoc($champs, 'Fonction_Contact_Mgate', mb_strtolower($etude->getAp()->getContactMgate()->getPoste(), 'UTF-8'));
             }
-            
         }
 
 
         //Convention Client
+      
+      
         //Facture Acompte
-        /* if ($etude->getFactureAcompte() != NULL) {
-          $Date_Limite = clone $etude->getFactureAcompte()->getDateSignature();
-          $Date_Limite->modify('+ 30 day');
-          $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
-          } */
-
+        if ($etude->getFa()) {
+            $Date_Limite = clone $etude->getFa()->getDateSignature();
+            $Date_Limite->modify('+ 30 day');
+            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+        }
 
         //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
 
             $validation = $phase->getValidationChoice();
-            
+
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Titre', $phase->getTitre());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Nbre_JEH', (int) $phase->getNbrJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_JEH', (float) $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase_HT', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
-            if($phase->getDateDebut())
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
+            if ($phase->getDateDebut())
+                $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
             $Delai = $this->jourVersSemaine($phase->getDelai());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
-            $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);         
+            $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
         }
-        
+
         //Intervenant
         $mission = $etude->getMissions()->get($key);
         if ($mission) {
@@ -495,19 +480,17 @@ class TraitementController extends Controller {
         }
         return $chemin;
     }
-    
+
     //Prendre tous les fichiers dans word
     private function getDocxContent($docxFullPath) {
         $zip = new \ZipArchive;
         $templateXML = array();
         if ($zip->open($docxFullPath) === TRUE) {
-            
 
-            for ($i=0; $i < $zip->numFiles; $i++)
-            {
+
+            for ($i = 0; $i < $zip->numFiles; $i++) {
                 $name = $zip->getNameIndex($i);
-                if((strstr($name,"document")||strstr($name,"header")||strstr($name,"footer")) && !strstr($name, "rels"))
-                {
+                if ((strstr($name, "document") || strstr($name, "header") || strstr($name, "footer")) && !strstr($name, "rels")) {
                     $this->array_push_assoc($templateXML, str_replace("word/", "", $name), $zip->getFromIndex($i));
                 }
             }
@@ -515,23 +498,22 @@ class TraitementController extends Controller {
         }
         return $templateXML;
     }
-    
+
     private function traiterTemplates($templateFullPath, $nombrePhase, $champs) {
         $templatesXML = $this->getDocxContent($templateFullPath); //rÃ©cup contenu XML
         $templatesXMLTraite = array();
-        
+
         foreach ($templatesXML as $templateName => $templateXML) {
             $this->repeterPhase($templateXML, $nombrePhase); //RÃ©pÃ©tion phase
             $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
             $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
             $this->liasons($templateXML); //liaisons de d'
-            $this->array_push_assoc($templatesXMLTraite,$templateName, $templateXML);
+            $this->array_push_assoc($templatesXMLTraite, $templateName, $templateXML);
         }
 
         return $templatesXMLTraite;
-
     }
-    
+
     private function publipostage($id_etude, $doc, $key) {
         $key = intval($key);
 
@@ -543,42 +525,41 @@ class TraitementController extends Controller {
         //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path . $doc . '.template';
+            $chemin = $path . $doc . '.docx';
         }
-        
-          $templatesXMLtraite = $this->traiterTemplates($chemin, $nombrePhase, $champs);
-          $champsBrut = $this->verifierTemplates($templatesXMLtraite);
 
-          $repertoire = 'tmp';
+        $templatesXMLtraite = $this->traiterTemplates($chemin, $nombrePhase, $champs);
+        $champsBrut = $this->verifierTemplates($templatesXMLtraite);
 
-          if ($etude->getDoc($doc, $key))
-          $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
-          else
-          $refDocx = 'ERROR';
-          $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+        $repertoire = 'tmp';
 
-
-          
-          copy($chemin, $repertoire . '/' . $idDocx);
-          
-          $zip = new \ZipArchive();
-          $zip->open($repertoire . '/' . $idDocx);
-          
-          foreach($templatesXMLtraite as $templateXMLName => $templateXMLContent)
-          {
-              $zip->deleteName('word/'.$templateXMLName);
-              $zip->addFromString('word/'.$templateXMLName, $templateXMLContent);
-          }
-          
-          $zip->close();
-
-          $_SESSION['idDocx'] = $idDocx;
-          $_SESSION['refDocx'] = $refDocx;
+        if ($etude->getDoc($doc, $key))
+            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
+        else
+            $refDocx = 'ERROR';
+        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
 
-          return $champsBrut; 
+
+        copy($chemin, $repertoire . '/' . $idDocx);
+
+        $zip = new \ZipArchive();
+        $zip->open($repertoire . '/' . $idDocx);
+
+        foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
+            $zip->deleteName('word/' . $templateXMLName);
+            $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+        }
+
+        $zip->close();
+
+        $_SESSION['idDocx'] = $idDocx;
+        $_SESSION['refDocx'] = $refDocx;
+
+
+        return $champsBrut;
     }
-       
+
     public function publiposterMultiple($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
@@ -597,7 +578,7 @@ class TraitementController extends Controller {
 
     /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
-     */  
+     */
     public function publiposterAction($id_etude, $doc, $key) {
 
         if ($doc == 'RM' && $key == -1)
@@ -609,28 +590,28 @@ class TraitementController extends Controller {
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
         } else {
-           
-          return $this->telechargerAction($doc);
+
+            return $this->telechargerAction($doc);
         }
     }
 
     /** A nettoyer !!
      * @Secure(roles="ROLE_SUIVEUR")
-     */  
+     */
     public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
         $this->purge();
         //TODO idDocx.$doc
         if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = $_SESSION['refDocx'];
-            
-           
-            
+
+
+
             if ($addZip) {
                 $idZip = $_SESSION['idZip'];
                 $zip = new \ZipArchive;
                 $zip->open('tmp/' . $idZip, \ZipArchive::CREATE);
-                $zip->addFile('tmp/' . $idDocx, $refDocx . '.xml');
+                $zip->addFile('tmp/' . $idDocx, $refDocx . '.docx');
                 $zip->close();
             } elseif ($dlZip) {
                 $idZip = $_SESSION['idZip'];
@@ -657,6 +638,7 @@ class TraitementController extends Controller {
                 exit();
             }
         } else {
+            
         }
 
         return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)));
@@ -682,24 +664,22 @@ class TraitementController extends Controller {
         else
             return number_format($number, 2, ',', ' ');
     }
-    
-    private function jourVersSemaine($j)
-    {
+
+    private function jourVersSemaine($j) {
         $converter = $this->get('mgate.conversionlettre');
-        
-        $jour= $j % 7;
-        $semaine = (int)floor( $j / 7 );
-        
+
+        $jour = $j % 7;
+        $semaine = (int) floor($j / 7);
+
         $jour_str = $converter->ConvNumberLetter($jour);
         $semaine_str = $converter->ConvNumberLetter($semaine);
 
         $jourVersSemaine = "";
-        if($semaine)
-            $jourVersSemaine = $semaine_str.($semaine > 1 ? " semaines" : "e semaine");
-        if($jour)
-            $jourVersSemaine .= ($semaine > 0 ? " et " : "" ).$jour_str . " jour".($jour > 1 ? "s" :"");
-          return $jourVersSemaine;
-
+        if ($semaine)
+            $jourVersSemaine = $semaine_str . ($semaine > 1 ? " semaines" : "e semaine");
+        if ($jour)
+            $jourVersSemaine .= ($semaine > 0 ? " et " : "" ) . $jour_str . " jour" . ($jour > 1 ? "s" : "");
+        return $jourVersSemaine;
     }
 
 }

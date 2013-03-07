@@ -26,7 +26,7 @@
 
     <h2>Liste des Membres</h2>
 
-    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
         <thead>
           <tr>
             <!--<th>Id</th>-->
@@ -44,7 +44,7 @@
           <tr>
             <!--<td>{{ membre.id }}</td>-->
             <td>{{ membre.personne.prenomNom }}</td>
-            <td>{% if membre.poste %} {{membre.poste.intitule}}{% else %}-{% endif %}</td>
+            <td>{{ membre.poste ? membre.poste.intitule : '-' }}</td>
             <td>{{ membre.identifiant }}</td>
             <td>{{ membre.personne.email }}</td>
             <td>{{ membre.personne.mobile }}</td>
