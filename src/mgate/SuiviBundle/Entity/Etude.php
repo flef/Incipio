@@ -130,13 +130,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $competences;
 
     /**
-     * @var boolean $deonto
-     *
-     * @ORM\Column(name="deonto", type="boolean", nullable=true)
-     */
-    private $deonto;
-
-    /**
      * @var boolean $mailEntretienEnvoye
      *
      * @ORM\Column(name="mailEntretienEnvoye", type="boolean", nullable=true)
@@ -165,19 +158,18 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $dateFin;
 
     /**
-     * @var \DateTime $anneAudit
+     * @var \DateTime $auditDate
      *
-     * @ORM\Column(name="anneAudit", type="date", nullable=true)
+     * @ORM\Column(name="auditDate", type="date", nullable=true)
      */
-    private $anneAudit;
+    private $auditDate;
 
     /**
-     * @var string $audit
+     * @var string $auditType
      *
-     * @ORM\Column(name="audit", type="text", nullable=true)
-     * @Assert\Choice(callback = "getAuditType")
+     * @ORM\Column(name="auditType", type="integer", nullable=true)
      */
-    private $audit;
+    private $auditType;
 
     /**
      * @ORM\OneToMany(targetEntity="ClientContact", mappedBy="etude")
@@ -529,27 +521,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Set deonto
-     *
-     * @param boolean $deonto
-     * @return Etude
-     */
-    public function setDeonto($deonto) {
-        $this->deonto = $deonto;
-
-        return $this;
-    }
-
-    /**
-     * Get deonto
-     *
-     * @return boolean 
-     */
-    public function getDeonto() {
-        return $this->deonto;
-    }
-
-    /**
      * Set mailEntretienEnvoye
      *
      * @param boolean $mailEntretienEnvoye
@@ -634,34 +605,34 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Set anneAudit
+     * Set auditDate
      *
-     * @param \DateTime $anneAudit
+     * @param \DateTime $auditDate
      * @return Etude
      */
-    public function setAnneAudit($anneAudit) {
-        $this->anneAudit = $anneAudit;
+    public function setAuditDate($auditDate) {
+        $this->auditDate = $auditDate;
 
         return $this;
     }
 
     /**
-     * Get anneAudit
+     * Get auditDate
      *
      * @return \DateTime 
      */
-    public function getAnneAudit() {
-        return $this->anneAudit;
+    public function getAuditDate() {
+        return $this->auditDate;
     }
 
     /**
-     * Set audit
+     * Set auditType
      *
-     * @param string $audit
+     * @param string $auditType
      * @return Etude
      */
-    public function setAudit($audit) {
-        $this->audit = $audit;
+    public function setAuditType($auditType) {
+        $this->auditType = $auditType;
 
         return $this;
     }
@@ -671,10 +642,26 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return string 
      */
-    public function getAudit() {
-        return $this->audit;
+    public function getAuditType() {
+        return $this->auditType;
     }
 
+    public static function getAuditTypeChoice()
+    {
+        return array(   '1' => 'Déontologique',
+                        '2' => 'Exhaustif');
+    }
+    public static function getAuditTypeChoiceAssert()
+    {
+        return array_keys(Etude::getAuditTypeChoice());
+    }
+    
+    public function getAuditTypeToString()
+    {
+        $tab = $this->getAuditTypeChoice();
+        return $tab[$this->auditType];
+    }
+    
     /**
      * Set acompte
      *
@@ -1280,12 +1267,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     {
         return $this->thread;
     }
-    
-    
-    
-    
-    
-    
 
     /**
      * Set stateID
@@ -1310,6 +1291,24 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->stateID;
     }
 
+    public static function getStateIDChoice()
+    {
+        return array(   '1' => 'En cours',
+                        '2' => 'Pause',
+                        '3' => 'Avorté',
+                        '4'=> 'Cloturé');
+    }
+    public static function getStateIDChoiceAssert()
+    {
+        return array_keys(Etude::getStateIDChoice());
+    }
+    
+    public function getStateIDToString()
+    {
+        $tab = $this->getStateIDChoice();
+        return $tab[$this->stateID];
+    }
+    
     /**
      * Set stateDescription
      *
