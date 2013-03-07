@@ -5,7 +5,7 @@ mgateSuivi_etude_homepage:
       page : \d*
 
 mgateSuivi_etude_suivi:
-    pattern: /etude/ajouter
+    pattern: /etudes/suivi
     defaults: {_controller: mgateSuiviBundle:Etude:suivi}
         
 mgateSuivi_etude_ajouter:

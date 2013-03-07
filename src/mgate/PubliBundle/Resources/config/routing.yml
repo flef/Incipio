@@ -9,7 +9,8 @@ mgate_publi_publiposter:
     requirements:
         id_etude:  \d+
         key: \d+
-        doc: AP|CC|FA|RM
+        doc: AP|CC|FA|RM|PVR|PVI|FS
+        #change tolower
     
 mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
