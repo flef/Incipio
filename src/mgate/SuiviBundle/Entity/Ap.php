@@ -42,6 +42,13 @@ class Ap extends DocType
     protected $contactMgate;
     
     /**
+     * @var boolean $deonto
+     *
+     * @ORM\Column(name="deonto", type="boolean", nullable=true)
+     */
+    private $deonto;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -116,5 +123,26 @@ class Ap extends DocType
      */
     public function getContactMgate() {
         return $this->contactMgate;
+    }
+    
+    /**
+     * Set deonto
+     *
+     * @param boolean $deonto
+     * @return Ap
+     */
+    public function setDeonto($deonto) {
+        $this->deonto = $deonto;
+
+        return $this;
+    }
+
+    /**
+     * Get deonto
+     *
+     * @return boolean 
+     */
+    public function getDeonto() {
+        return $this->deonto;
     }
 }

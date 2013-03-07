@@ -10,6 +10,10 @@ class SuiviType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         
+        
+        $builder->add('stateID', 'choice', array('choices'=>Etude::getStateIDChoice(), 'label' => 'Etat de l\'Étude', 'required' => true));
+        $builder->add('auditDate', 'genemu_jquerydate', array('label'=>'Audité le', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'));
+        $builder->add('auditType', 'choice', array('choices'=>Etude::getAuditTypeChoice(), 'label' => 'Type d\'audit', 'required' => false));
         $builder->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class'=>'mgate\SuiviBundle\Entity\Ap'));
         $builder->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class'=>'mgate\SuiviBundle\Entity\Cc'));
         
