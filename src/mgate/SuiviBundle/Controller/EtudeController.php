@@ -21,20 +21,28 @@ class EtudeController extends Controller
      */
     public function indexAction($page)
     {
+        $MANDAT_MAX = 10;
+        
         $em = $this->getDoctrine()->getManager();
 
         //TODO Inserer mes etudes à suivre
         
         //A remplacer par en cours
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array(), array('mandat'=> 'DESC', 'id'=> 'DESC'));
+              
+        $etudesAvorteesParMandat = array();
+        for($i = 1; $i < $MANDAT_MAX; $i++)
+            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3,'mandat' => $i),array('id' => 'DESC')));
         
-        $etudesParMandat = array();
-        for($i = 1; $i < 10; $i++) //Ne sais trop que mettre...
-            array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i))); // A remplacer par : par mandat && terminées
+        $etudesTermineesParMandat = array();
+        for($i = 1; $i < $MANDAT_MAX; $i++)
+            array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 4, 'mandat' => $i), array('id' => 'DESC')));
+            
         
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
             'etudes' => $etudesEnCours,
-            'etudesParMandat' => $etudesParMandat,
+            'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
+            'etudesTermineesParMandat' => $etudesTermineesParMandat,
         ));
          
     }
