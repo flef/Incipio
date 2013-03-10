@@ -96,7 +96,7 @@ class ProspectController extends Controller
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new ProspectType, $prospect);
-
+        $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -113,6 +113,7 @@ class ProspectController extends Controller
 
         return $this->render('mgatePersonneBundle:Prospect:modifier.html.twig', array(
             'form' => $form->createView(),
+            'delete_form' => $deleteForm->createView(),
             'prospect'      => $prospect,
         ));
     }
@@ -143,5 +144,44 @@ class ProspectController extends Controller
         
         
         return $response;
-    }  
+    }
+    
+        
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */    
+    public function deleteAction($id)
+    {
+        $form = $this->createDeleteForm($id);
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+
+        if ($form->isValid())
+        {
+            $em = $this->getDoctrine()->getEntityManager();
+   
+            if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
+                throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
+            
+            /*if($entity->getPersonne())
+            {
+                $entity->getPersonne()->setMembre(null);
+            }
+            $entity->setPersonne(null);*/
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('mgatePersonne_prospect_homepage'));
+    }
+
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
+    }
 }

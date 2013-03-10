@@ -24,6 +24,12 @@ mgatePersonne_prospect_modifier:
     requirements:
         id: \d+
         
+mgatePersonne_prospect_supprimer:
+    pattern: /prospect/supprimer/{id}
+    defaults: {_controller: mgatePersonneBundle:Prospect:delete}
+    requirements:
+        id: \d+
+        
 mgatePersonne_employe_homepage:
     pattern:  /employe
     defaults: { _controller: mgatePersonneBundle:Employe:index , page: 1 }
