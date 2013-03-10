@@ -8,6 +8,12 @@
 
 	{% include "mgatePersonneBundle:Prospect:formulaire.html.twig" %}
 
+        
+    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_prospect_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+        <button>Supprimer le prospect</button>
+    </form>    
+        
 	<p>
 		Modification d'un prospect
 	</p>
