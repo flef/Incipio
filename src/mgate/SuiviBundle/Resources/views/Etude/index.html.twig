@@ -23,12 +23,12 @@ Accueil - {{ parent() }}
                 </div>
                 <div class="tab-pane" id="tab3" style="min-height: 400px;">
                         <div class="accordion" id="accordion">
-                            {% for mandat in etudesParMandat |reverse %}
+                            {% for mandat in etudesTermineesParMandat |reverse %}
                                 {% if mandat | length %}
                                 <div class="accordion-group">
                                     <div class="accordion-heading">
                                         <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{loop.index}}">
-                                            Mandat {{ etudesParMandat | length - loop.index0 }}
+                                            Mandat {{ etudesTermineesParMandat | length - loop.index0 }}
                                         </a>
                                     </div>
                                     {%if loop.index == 5 %}
