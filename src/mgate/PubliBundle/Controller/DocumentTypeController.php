@@ -18,7 +18,7 @@ class DocumentTypeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('mgatePubliBundle:DocumentType')->findAll();
-
+      
         return $this->render('mgatePubliBundle:DocumentType:index.html.twig', array(
             'docs' => $entities,
         ));

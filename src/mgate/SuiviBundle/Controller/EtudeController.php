@@ -25,24 +25,46 @@ class EtudeController extends Controller
         
         $em = $this->getDoctrine()->getManager();
 
-        //TODO Inserer mes etudes à suivre
+        $user = $this->container->get('security.context')->getToken()->getUser()->getPersonne();
         
-        //A remplacer par en cours
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array(), array('mandat'=> 'DESC', 'id'=> 'DESC'));
-              
+        //Etudes Suiveur
+        $etudesSuiveur = array();
+        foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'id'=> 'DESC')) as $etude)
+        {
+            $stateID = $etude->getStateID();
+            if( $stateID <= 1 )
+             array_push($etudesSuiveur, $etude);
+        }
+        
+        
+        //Etudes En Cours : stateID = 0||1
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => null), array('mandat'=> 'DESC', 'id'=> 'DESC'));
+        foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'id'=> 'DESC')) as $etude)
+        {
+            array_push($etudesEnCours, $etude);
+        }
+
+        //Etudes en pause : stateID = 2
+        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2),array('id' => 'DESC'));
+
+        
+        //Etudes Avortees : stateID = 3
         $etudesAvorteesParMandat = array();
         for($i = 1; $i < $MANDAT_MAX; $i++)
             array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3,'mandat' => $i),array('id' => 'DESC')));
         
+        //Etudes Terminees : stateID = 4
         $etudesTermineesParMandat = array();
         for($i = 1; $i < $MANDAT_MAX; $i++)
             array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 4, 'mandat' => $i), array('id' => 'DESC')));
             
         
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
-            'etudes' => $etudesEnCours,
-            'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
+            'etudesEnCours' => $etudesEnCours,
+            'etudesSuiveur' => $etudesSuiveur,
+            'etudesEnPause' => $etudesEnPause,
             'etudesTermineesParMandat' => $etudesTermineesParMandat,
+            'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
         ));
          
     }
