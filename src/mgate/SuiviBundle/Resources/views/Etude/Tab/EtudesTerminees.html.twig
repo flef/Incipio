@@ -1,0 +1,67 @@
+<table class="table table-striped" id="myTable">
+      <thead>
+          <tr>
+              <th>
+                  Status
+              </th>
+              <th>
+                  <div>Nom de l'étude</div>
+                  <div>Référence</div>
+              </th>
+              <th>
+                  <div>Client</div>
+                  <div>Suiveur</div>
+              </th>
+              <th>
+                  <div>Date de Lancement</div>
+                  <div>Date de Fin</div>
+              </th>
+              <th>
+                   Archivée
+              </th>
+              <th>
+                   Auditée
+              </th>
+              <th>
+                  Developpeurs
+              </th>              
+              <th>
+                   <div>Prix H.T</div>
+                   <div>Nbre J.E.H.</div>
+              </th>
+            </tr>
+ 	 </thead>
+ 	 <tbody>
+
+        {% for etude in etudes %}
+<tr>
+    <td><i id="commentaire" class="icon-search" data-title="{{ etude.id }}" data-content="0"></i></td>
+    <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
+    <td>{{ etude.prospect.nom }}
+        <br /><br />
+     {{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</td>
+    <td>
+            {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
+        </td>
+        <td>#
+            </td>
+            <td>
+            #
+            </td>
+            <td>
+                <ul>
+             {% for mission in etude.missions %}
+             <li>  {{ mission.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ mission.intervenant.nom | default("") }}</li>
+
+    {% endfor %}
+                        </ul>
+            </td>
+            <td>
+                <div>{{ getTotalHT(etude)|default('') }} €</div>
+                <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
+            </td>
+        </tr>
+        {% endfor %}
+ 	 </tbody>
+  </table>

@@ -7,16 +7,20 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
 
-    private $SFD = '~';
-    private $EFD = '~~';
-    private $STRD = '<!--repeatTR-->';
-    private $ETRD = '<!--/repeatTR-->';
-    private $SPD = '<!--repeatP-->';
-    private $EPD = '<!--/repeatP-->';
-
+    private $SFD = '~';                                                         //Start Field       Delimiter
+    private $EFD = '~~';                                                        //End   Field       Delimiter
+    private $STRD = '<!--repeatTR-->';                                          //Start TableRow    Delimiter   
+    private $ETRD = '<!--/repeatTR-->';                                         //End   TableRow    Delimiter
+    private $SPD = '<!--repeatP-->';                                            //Start Paragraph   Delimiter
+    private $EPD = '<!--/repeatP-->';                                           //End   Paragraph   Delimiter
+    private $SGD = '¤';                                                         //Start Grammar     Delimiter
+    private $EGD = '¤¤';                                                        //End   Grammar     Delimiter
+    private $SLD = 'µ';                                                         //Start Liaison     Delimiter
+    private $ELD = 'µµ';                                                        //End   Liaison     Delimiter
+ 
     private function repeatTR(&$templateXML, $nombrePhase) {
-        $regexRepeatSTART = $this->STRD; //Marqueur de début de repeat
-        $regexRepeatEND = $this->ETRD; //Marqueur de fin de repeat
+        $regexRepeatSTART = $this->STRD;
+        $regexRepeatEND = $this->ETRD;
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
 
         $SFD = $this->SFD;
@@ -73,6 +77,7 @@ class TraitementController extends Controller {
     //Remplissage des %champs%
     private function remplirChamps(&$templateXML, $fieldValues) {
         $SFD = $this->SFD;
+        
         $EFD = $this->EFD;
 
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
@@ -88,10 +93,7 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
-    /* nl2wbr
-     * Converti les retours à la ligne en retour à la ligne pour word
-     */
-
+    //Converti les retours à la ligne en retour à la ligne pour word
     private function nl2wbr($input) {
         return preg_replace('#\\r\\n|\\n|\\r#', '<w:br />', $input);
     }
@@ -126,7 +128,7 @@ class TraitementController extends Controller {
     //effectu les "liaisons" le/l' la/l' ... pattern : µde|d'|variableµ
     private function liasons(&$templateXML) {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
-
+    
         $that = $this;
         $callback = function ($matches) use ($that) {//Fonction de callback
                     return (($that->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];

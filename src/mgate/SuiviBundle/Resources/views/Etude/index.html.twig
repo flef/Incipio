@@ -11,65 +11,29 @@ Accueil - {{ parent() }}
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
-        <li><a href="#tab2" data-toggle="tab">Etudes en cours</a></li>
-        <li><a href="#tab3" data-toggle="tab">Etudes terminées</a></li>
+        <li><a href="#tab2" data-toggle="tab">Etudes en Cours</a></li>
+        <li><a href="#tab3" data-toggle="tab">Etudes en Pause</a></li>
+        <li><a href="#tab4" data-toggle="tab">Etudes Terminées</a></li>
+        <li><a href="#tab5" data-toggle="tab">Etudes Avortées</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab1" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Blocks/mesSuivis.html.twig" with  {'etudes':  etudes, 'user' : app.user.personne.prenomnom|default(0)} %}
-            </div>
-            <div class="tab-pane" id="tab2" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Blocks/etudesEnCours.html.twig" with  {'etudes':  etudes} %}
-                </div>
-                <div class="tab-pane" id="tab3" style="min-height: 400px;">
-                        <div class="accordion" id="accordion">
-                            {% for mandat in etudesTermineesParMandat |reverse %}
-                                {% if mandat | length %}
-                                <div class="accordion-group">
-                                    <div class="accordion-heading">
-                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{loop.index}}">
-                                            Mandat {{ etudesTermineesParMandat | length - loop.index0 }}
-                                        </a>
-                                    </div>
-                                    {%if loop.index == 5 %}
-                                    <div id="collapse{{loop.index}}" class="accordion-body in collapse" style="height: auto;">
-                                    {% else %}
-                                    <div id="collapse{{loop.index}}" class="accordion-body collapse" style="height: 0px;">
-                                    {% endif %}
-                                        <div class="accordion-inner">
-                                       {% include "mgateSuiviBundle:Etude:Blocks/etudesTerminees.html.twig" with  {'etudes':  mandat } %}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                {% endfor%}
-                                    
-                                    </div>
-                                </div>
-                            </div>
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesASuivre.html.twig" with  {'etudesSuiveur':  etudesSuiveur } %}
+        </div>
+        <div class="tab-pane" id="tab2" style="min-height: 400px;">
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesEnCours.html.twig" with  {'etudesEnCours':  etudesEnCours} %}
+        </div>
+        <div class="tab-pane" id="tab3" style="min-height: 400px;">
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesEnPause.html.twig" with  {'etudesEnPause':  etudesEnPause} %}
+        </div>
+        <div class="tab-pane" id="tab4" style="min-height: 400px;">
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig"} %}
+        </div>
+        <div class="tab-pane" id="tab5" style="min-height: 400px;">
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesAvortees.html.twig"} %}
+        </div>
+    </div>
 
-                            <!--<script>
-                            $(document).ready(function() { 
-                            $("table").tablesorter({ 
-                                // pass the headers argument and assing a object 
-                                headers: { 
-                                    // assign the secound column (we start counting zero) 
-                                    1: { 
-                                        // disable it by setting the property sorter to false 
-                                        sorter: false 
-                                    }, 
-                                    // assign the third column (we start counting zero) 
-                                    2: { 
-                                        // disable it by setting the property sorter to false 
-                                        sorter: false 
-                                    } 
-                                } 
-                            }); 
-                            });
-                            </script>-->
-
-                            
-                            <!-- block JS -->
     <script src="{{ asset('js/bootboxjs.js')}}"></script>
         <script>
             {% include "mgateSuiviBundle:Etude:Tools/Avancement.js.twig" %}
