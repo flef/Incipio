@@ -1,10 +1,10 @@
-<div class="btn-group btn-large">
-    <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Phases <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-        <li>
-            <a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les Phases</a>
-        </li>
-    </ul>
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand">Phases</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Modifier les Phases</a></li>
+        </ul>
+    </div>
 </div>
 <div class="row">
                     {% for phase in etude.phases %}
