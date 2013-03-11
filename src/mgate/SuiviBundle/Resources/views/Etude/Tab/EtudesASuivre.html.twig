@@ -29,9 +29,7 @@
 </tr>
 </thead>
 <tbody>
-        {% for etude in etudes %}
-        {% if etude.suiveur %}
-        {% if etude.suiveur.prenomNom == user%}
+        {% for etude in etudesSuiveur %}
         <tr>
             <td></td>
             <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
@@ -89,8 +87,6 @@
                     <div id="demo{{loop.index}}" class="collapse in contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div>
                 </td>
             </tr>
-        {% endif %}
-        {% endif %}
         {% endfor %}
         </tbody>
     </table>
@@ -98,7 +94,7 @@
     <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
 
     <script>
-        {%for etude in etudes %}
+        {%for etude in etudesSuiveur %}
          {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : loop.index } %}
     
                              

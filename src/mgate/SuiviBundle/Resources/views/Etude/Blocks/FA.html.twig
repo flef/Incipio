@@ -1,13 +1,21 @@
 <table class="table table-striped table-bordered">
     <tr>
         <th colspan="2">
-    <div class="btn-group btn-large">
-        <button class="btn dropdown-toggle btn-large" data-toggle="dropdown">Facture d'Acompte <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}">Rédiger la Facture d'Acompte</a></li>
-        </ul>
-    </div></th>
-</tr>
+            <div class="navbar">
+                <div class="navbar-inner">
+                  <span class="brand">Facture d'Acompte</span>
+                  <ul class="nav">
+                    <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+                    {% if etude.fa|default('0') %}
+                    <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer</a></li>
+                    {% endif %}
+                  </ul>
+                </div>
+              </div>
+        </th>
+    </tr>
+    
+    {#TODO#}
 <tr>
     <th>Date de signature</th>
     <td>
