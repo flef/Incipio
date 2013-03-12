@@ -7,6 +7,8 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use Ob\HighchartsBundle\Highcharts\Highchart;
 
+use mgate\SuiviBundle\Entity\EtudeRepository;
+
 class DefaultController extends Controller
 {
     /**
@@ -38,16 +40,23 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $etude = new \mgate\SuiviBundle\Entity\Etude;
-        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
-
+        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->getEtudesCa();
+        
         $ca = array();
         $cumul=0;
         foreach ($etudes as $etude) {
-            $cumul+= $this->get('mgate.etude_manager')->getTotalHT($etude);
-            $value = array();
-            $value[]=$etude->getDateCreation()->getTimestamp()*1000;
-            $value[]=$cumul;
-            $ca[] = $value;
+            echo "bite";
+            if($etude->getCc())
+            {
+                if($etude->getCc()->getDateSignature() )
+                {
+                    $cumul+= $this->get('mgate.etude_manager')->getTotalHT($etude);
+                    $value = array();
+                    $value[]=$etude->getCc()->getDateSignature()->getTimestamp()*1000;
+                    $value[]=$cumul;
+                    $ca[] = $value;
+                }
+            }
        }
         
         

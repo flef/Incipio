@@ -12,4 +12,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class EtudeRepository extends EntityRepository
 {
+    
+    public function getEtudesCa()
+    {
+        
+        $qb = $this->_em->createQueryBuilder();
+        
+
+            $query = $qb->select('e')
+                        ->from('mgateSuiviBundle:Etude', 'e')
+                        ->leftJoin('e.cc', 'cc')
+                        //->addSelect('e')
+                        ->where('e.cc IS NOT NULL')
+                        ->addOrderBy('cc.dateSignature');
+  
+           
+                  
+                    
+        return $query->getQuery()->getResult();;
+    }
+    
 }
