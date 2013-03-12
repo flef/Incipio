@@ -256,6 +256,7 @@ class TraitementController extends Controller {
         $Acompte_TVA = (float) $Montant_Total_Etude_HT * ($Acompte_Pourcentage) * $Taux_TVA / 100;
         $Solde_PVR_HT = (float) $Montant_Total_Etude_HT - $Acompte_HT;
         $Solde_PVR_TTC = (float) $Montant_Total_Etude_TTC - $Acompte_TTC;
+        $Acompte_Pourcentage *= 100;
 
         //Round
         $Part_TVA_Montant_Total_Etude = round($Part_TVA_Montant_Total_Etude, 2);
@@ -314,7 +315,7 @@ class TraitementController extends Controller {
             'Date_Fin_Etude' => $Date_Fin_Etude,
         );
 
-        //Doc
+        //Doc //TODO function signataire can be null !!
         if ($etude->getDoc($doc, $key) != NULL) {
             //Date Signature tout type de doc
             $dateSignature = $etude->getDoc($doc, $key)->getDateSignature();
