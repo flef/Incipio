@@ -1,0 +1,7 @@
+parameters:
+#    navbar.example.class: mgate\NavbarBundle\Example
+
+services:
+#    navbar.example:
+#        class: %navbar.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -73,8 +73,7 @@
                                     
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
     {# L'utilisateur est connecté ! #}
-    {% include "::Menus/staff.html.twig" with  {'nothing':  'test'} %}
-    {% include "::Menus/compte.html.twig" %}
+    {% render url('navbar_homepage', {'name' : 'salut'}) %}
 {% else %}
     {# L'utilisateur n'est pas connecté ! #}
 
