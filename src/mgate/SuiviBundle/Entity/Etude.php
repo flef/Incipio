@@ -296,6 +296,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
         $this->fraisDossier = 90;
         $this->pourcentageAcompte = 0.40;
+        $this->stateID = 1;
     }
 
 /// rajout à la main
