@@ -13,8 +13,9 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 					desc: "{{getRefEtude(etude)}}",
                                         values: [{ title : "{{ etude.nom | nbsp }}",
                                         content : "{{ etude.suiveur.prenomnom | nbsp }}",
-						from: "/Date({{getDateLancement(etude)|date('U')}}000)/",
-						to: "/Date({{getDateFin(etude)|date('U') }}000)/",
+						from: "/Date({{etude.datecreation|date('U')}}000)/",
+                                                {% set dateFin = getDateFin(etude) %}
+						to: "/Date({{ (dateFin ? getDateFin(etude) : etude.datecreation )|date('U') }}000)/",
 						label: "{{getRefEtude(etude)}}", 
 						customClass: "{{ (etude.stateID == 4 ? "ganttGreen" : (etude.stateID == 3 ? "ganttRed" : (etude.stateID == 2 ? "ganttOrange" : "ganttBlue"))) }}",
                                                 dataObj: ""
