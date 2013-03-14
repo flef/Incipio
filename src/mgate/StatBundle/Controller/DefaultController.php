@@ -46,22 +46,25 @@ class DefaultController extends Controller
         
         //$data = array();
         $mandats = array(); 
-        $cumul=0;
         $maxMandat = $etudeManager->getMaxMandat();
+        $cumuls=array();
+        for($i=0 ; $i<=$maxMandat ; $i++) 
+            $cumuls[$i] = 0;
+
         foreach ($etudes as $etude) {
 
             if($etude->getCc())
             {
                 if($etude->getCc()->getDateSignature() )
                 {
-                    $cumul+= $etudeManager->getTotalHT($etude);
+                    $cumuls[$etude->getMandat()] += $etudeManager->getTotalHT($etude);
                     
                     $interval = new \DateInterval('P'.($maxMandat-$etude->getMandat()).'Y');
                     $dateDecale = $etude->getCc()->getDateSignature()->add($interval);
                     
                     $mandats[$etude->getMandat()][]
                            = array( "x"=>$dateDecale->getTimestamp()*1000,
-                                    "y"=>$cumul, "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
+                                    "y"=>$cumuls[$etude->getMandat()], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
                                     'date'=>$dateDecale->format('d/m/Y'),
                                     'prix'=>$etudeManager->getTotalHT($etude));
                     
