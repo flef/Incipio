@@ -1302,7 +1302,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return array(   '1' => 'En cours',
                         '2' => 'Pause',
                         '3' => 'Avorté',
-                        '4'=> 'Cloturé');
+                        '4' => 'Cloturé');
     }
     public static function getStateIDChoiceAssert()
     {
