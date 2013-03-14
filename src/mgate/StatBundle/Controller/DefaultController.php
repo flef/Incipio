@@ -18,7 +18,8 @@ class DefaultController extends Controller
     {
         // Chart
         $series = array(
-            array("name" => "Data Serie Name",    "data" => array(1,2,4,5,6,3,8))
+            array("name" => "Data Serie Name",    "data" => array(1,2,4,5,6,3,8)) ,
+            array("name" => "CCCCCe",    "data" => array(1,7,12,14,15,3,8))
         );
 
         $ob = new Highchart();
@@ -43,8 +44,10 @@ class DefaultController extends Controller
         $etude = new \mgate\SuiviBundle\Entity\Etude;
         $etudes = $em->getRepository('mgateSuiviBundle:Etude')->getEtudesCa();
         
-        $data = array();
+        //$data = array();
+        $mandats = array(); 
         $cumul=0;
+        $maxMandat = $etudeManager->getMaxMandat();
         foreach ($etudes as $etude) {
 
             if($etude->getCc())
@@ -53,9 +56,13 @@ class DefaultController extends Controller
                 {
                     $cumul+= $etudeManager->getTotalHT($etude);
                     
-                    $data[]= array( "x"=>$etude->getCc()->getDateSignature()->getTimestamp()*1000,
+                    $interval = new \DateInterval('P'.($maxMandat-$etude->getMandat()).'Y');
+                    $dateDecale = $etude->getCc()->getDateSignature()->add($interval);
+                    
+                    $mandats[$etude->getMandat()][]
+                           = array( "x"=>$dateDecale->getTimestamp()*1000,
                                     "y"=>$cumul, "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
-                                    'date'=>$etude->getCc()->getDateSignature()->format('d/m/Y'),
+                                    'date'=>$dateDecale->format('d/m/Y'),
                                     'prix'=>$etudeManager->getTotalHT($etude));
                     
                 }
@@ -65,17 +72,21 @@ class DefaultController extends Controller
         
         
         // Chart
-        $series = array(
-            array("name" => "Chiffre d'Affaire total",    "data" => $data)
-        );
+        $series = array();
+        foreach ($mandats as $idMandat => $data)
+        {
+            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat),    "data" => $data);
+        }
+
+        
 
         $ob = new Highchart();
         $ob->global->useUTC(false);
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
-        $ob->title->text('Chiffre d\'Affaire titre du graph');
+        $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
         $ob->xAxis->title(array('text'  => "Date"));
         $ob->xAxis->type('datetime');
-        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire cumulé"));
+        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé"));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
         $ob->series($series);

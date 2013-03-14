@@ -244,4 +244,30 @@ class EtudeManager extends \Twig_Extension {
         return $ok;
     }
 
+    
+    /**
+     * Converti le numero de mandat en année
+     */
+    public function mandatToString($idMandat) {
+        // Mandat 0 => 2007/2008
+        
+        return strval(2007 + $idMandat)."/".strval(2008 + $idMandat);
+    }
+    
+    /**
+     * Get le maximum des mandats
+     */
+    public function getMaxMandat() {
+        $qb = $this->em->createQueryBuilder();
+
+        $query = $qb->select('e.mandat')
+                ->from('mgateSuiviBundle:Etude', 'e')
+                ->orderBy('e.mandat', 'DESC');
+
+        $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if ($value)
+            return $value['mandat'];
+        else
+            return 0;
+    }
 }
