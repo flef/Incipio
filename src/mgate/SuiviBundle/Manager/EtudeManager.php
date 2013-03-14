@@ -169,7 +169,7 @@ class EtudeManager extends \Twig_Extension {
         $phases = $etude->getPhases();
 
         foreach ($phases as $p) {
-            if ($p->getDateDebut() != NULL) {
+            if ($p->getDateDebut()!=NULL && $p->getDelai()!=NULL ) {
                 $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
                 array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
                 unset($dateDebut);
