@@ -38,14 +38,14 @@ class EtudeController extends Controller
         
         
         //Etudes En Cours : stateID = 0||1
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => null), array('mandat'=> 'DESC', 'id'=> 'DESC'));
-        foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'id'=> 'DESC')) as $etude)
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'id'=> 'DESC'));
+        /*foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'id'=> 'DESC')) as $etude)
         {
             array_push($etudesEnCours, $etude);
-        }
+        }*/
 
         //Etudes en pause : stateID = 2
-        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2),array('id' => 'DESC'));
+        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2),array('mandat'=> 'DESC', 'id' => 'DESC'));
 
         
         //Etudes Avortees : stateID = 3
