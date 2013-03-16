@@ -4,13 +4,13 @@
         <div class="accordion-group">
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse{{loop.index}}">
-                    Mandat {{ etudesTermineesParMandat | length - loop.index0 }}
+                    Mandat {{ etudesParMandat | length - loop.index0 }}
                 </a>
             </div>
-                {%if loop.index == 5 %}<!--Ouvre l'accordion sur le mandat en cours-->
+                {%if etudesParMandat | length - loop.index0 == 5 %}<!--Ouvre l'accordion sur le mandat en cours-->
             <div id="collapse{{loop.index}}" class="accordion-body in collapse" style="height: auto;">
                 {% else %}
-            <div id="collapse{{loop.index}}" class="accordion-body collapse" style="height: 0px;">
+            <div id="collapse{{loop.index}}" class="accordion-body collapse">
                 {% endif %}
                 <div class="accordion-inner">
                     {% include twig with  {'etudes':  mandat } %}
