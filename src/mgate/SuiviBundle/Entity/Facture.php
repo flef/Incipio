@@ -23,7 +23,7 @@ class Facture extends DocType
     
     /**
      * @ORM\ManyToOne(targetEntity="Etude", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     protected $etude;
     
