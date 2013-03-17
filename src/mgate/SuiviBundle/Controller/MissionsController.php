@@ -82,7 +82,9 @@ class MissionsController extends Controller
                 
                 // remove the relationship between the mission and the etude
                 foreach ($originalMissions as $mission) {
-                    $em->remove($mission->getPhaseMission()); // suppression répartition JEH
+                    foreach ($mission->getPhaseMission() as $PhaseMission) {
+                        $em->remove($PhaseMission); // suppression répartition JEH
+                    }
                     $em->remove($mission); // on peut faire un persist sinon, cf doc collection form
                 }
 
