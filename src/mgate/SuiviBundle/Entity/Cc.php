@@ -22,8 +22,8 @@ class Cc extends DocType
     private $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="Etude", inversedBy="cc", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Etude", inversedBy="cc")
+     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $etude;
            
@@ -45,7 +45,7 @@ class Cc extends DocType
      * @param mgate\SuiviBundle\Entity\Etude $etude
      * @return Cc
      */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude = null)
     {
         $this->etude = $etude;
     

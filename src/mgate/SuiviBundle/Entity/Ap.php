@@ -23,8 +23,8 @@ class Ap extends DocType
     private $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="Etude", inversedBy="ap", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Etude", inversedBy="ap")
+     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $etude;
     
@@ -64,7 +64,7 @@ class Ap extends DocType
      * @param mgate\SuiviBundle\Entity\Etude $etude
      * @return Ap
      */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude = null)
     {
         $this->etude = $etude;
     
