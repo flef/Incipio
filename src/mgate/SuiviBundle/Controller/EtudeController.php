@@ -50,12 +50,12 @@ class EtudeController extends Controller
         
         //Etudes Avortees : stateID = 3
         $etudesAvorteesParMandat = array();
-        for($i = 1; $i < $MANDAT_MAX; $i++)
+        for($i = 1; $i <= $MANDAT_MAX; $i++)
             array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3,'mandat' => $i),array('num' => 'DESC')));
         
         //Etudes Terminees : stateID = 4
         $etudesTermineesParMandat = array();
-        for($i = 1; $i < $MANDAT_MAX; $i++)
+        for($i = 1; $i <= $MANDAT_MAX; $i++)
             array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 4, 'mandat' => $i), array('num' => 'DESC')));
             
         
