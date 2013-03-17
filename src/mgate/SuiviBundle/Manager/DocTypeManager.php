@@ -39,12 +39,10 @@ class DocTypeManager /*extends \Twig_Extension*/
     {
         if(!$doc->isKnownSignataire2())
         {
-            $doc->setSignataire2($doc->getNewSignataire2());
+            $doc->setSignataire2($doc->getNewSignataire2()->getPersonne());
 
-            $employe = new Employe();
-            $employe->setPersonne($doc->getSignataire2());
-            $employe->setProspect($doc->getEtude()->getProspect());
-            $this->em->persist($employe);
+            $doc->getNewSignataire2()->setProspect($doc->getEtude()->getProspect());
+            $this->em->persist($doc->getNewSignataire2());
         }
 
         

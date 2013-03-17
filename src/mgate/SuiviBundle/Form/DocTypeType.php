@@ -6,10 +6,11 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
-use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
-use mgate\PersonneBundle\Form\PersonneType as PersonneType;
-use mgate\PersonneBundle\Entity\Prospect as Prospect;
-use mgate\PersonneBundle\Entity\Personne as Personne;
+use mgate\PersonneBundle\Entity\PersonneRepository;
+use mgate\PersonneBundle\Form\PersonneType;
+use mgate\PersonneBundle\Form\EmployeType;
+use mgate\PersonneBundle\Entity\Prospect;
+use mgate\PersonneBundle\Entity\Personne;
 
 class DocTypeType extends AbstractType
 {
@@ -32,7 +33,9 @@ class DocTypeType extends AbstractType
 
         //var_dump(function(PersonneRepository $pr) { return reset($pr->getMembreOnly()); });
 
-        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' && $options['data_class']!='mgate\SuiviBundle\Entity\Facture')
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' // le signataire2 c'est l'intervenant
+           && $options['data_class']!='mgate\SuiviBundle\Entity\Facture' // pas de signataire2
+           )
         {
             $pro=$options['prospect'];
             $builder->add('knownSignataire2', 'checkbox', array(
@@ -46,7 +49,7 @@ class DocTypeType extends AbstractType
                 'query_builder' => function(PersonneRepository $pr) use ($pro) { return $pr->getEmployeOnly($pro); },
                 'required' => false
                 ))
-            ->add('newSignataire2', new PersonneType(), array('label' => 'Nouveau signataire '.$pro->getNom(), 'required' => false, 'mini' => true) );                               
+            ->add('newSignataire2', new EmployeType(), array('label' => 'Nouveau signataire '.$pro->getNom(), 'required' => false, 'signataire' => true, 'mini' => true) );                               
         }
                                
             $builder->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false, 'widget'=>'single_text'));
@@ -55,7 +58,7 @@ class DocTypeType extends AbstractType
     
     public function getName()
     {
-        return 'alex_suivibundle_doctypetype';
+        return 'mgate_suivibundle_doctypetype';
     }
 
     public function getDefaultOptions(array $options)
