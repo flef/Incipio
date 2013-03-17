@@ -1,0 +1,68 @@
+<!-- ERRORS -->
+{% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+<!--        -->
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand">Etude {{ getRefEtude(etude) }} - {{ etude.nom }} |</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i> Modifier</a></a></li>
+            <li><a href="{{ path('mgateSuivi_clientcontact_ajouter', {'id': etude.id}) }}"><i class="icon-list-alt"></i> Ajouter Contact Client</a></li>
+        </ul>
+        <ul class="nav pull-right">
+            <li><a href="{{ path('mgateSuivi_etude_homepage') }}"><i class="icon-th-list"></i> Retour à la liste</a></li>
+        </ul>
+    </div>
+</div>
+<h2></h2>
+
+{% if etude.stateDescription %}
+<div class="alert alert-block alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4>Information Suiveur</h4>
+                {{ etude.stateDescription }}
+</div>
+{% endif %}
+
+<table class="table" style="table-layout: fixed;">
+    <tr>
+        <td style="width: 25%; padding-top: 28px;">
+            <table class="table table-bordered table-striped">
+                <tr class="{{ (etude.stateID == 4 ? "success" : (etude.stateID == 3 ? "error" : (etude.stateID == 2 ? "warning" : "info"))) }}">
+                    <td colspan="2" >
+                        <h4>Etat : {{ (etude.stateID == 4 ? "Terminée" : (etude.stateID == 3 ? "Avortée" : (etude.stateID == 2 ? "En Pause" : "En Cours"))) }}</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Client</th>
+                    <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
+                </tr>
+                <tr>
+                    <th>Suiveur</th>
+                    <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{etude.description }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>Crée le {{ etude.dateCreation|date("d/m/Y") }}</td>
+                </tr>
+            </table>
+        </td>
+        <td style="padding-left: 20px; width: 75%;"><div class="gantt" id="ganttId0"></div>
+        </td>
+    </tr>
+</table>
+
+<br>
+            {% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}
+
+
+            {% for contact in etude.clientContacts %}
+<li><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': contact.id}) }}">Contact n°{{contact.id}}</a> effectué le {{ contact.date|date("d/m/Y") }}</li>
+            {% endfor %}
+
+
+            {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
