@@ -228,10 +228,8 @@ class EtudeController extends Controller
             }
             foreach ($entity->getPhases() as $phase) {
                 $em->remove($phase); //suppression des phases
-            }
-            $em->remove($entity->getCc());
-            $em->remove($entity->getAp());
-            $em->remove($entity->getFa());
+            }            
+
             $em->remove($entity);
             $em->flush();
         }

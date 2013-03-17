@@ -182,18 +182,18 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $candidatures;
 
     /**
-     * @ORM\OneToOne(targetEntity="Ap", inversedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Ap", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $ap;
 
     /**
-     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"remove"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $phases;
 
     /**
-     * @ORM\OneToOne(targetEntity="Cc", inversedBy="etude", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Cc", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $cc;
 
