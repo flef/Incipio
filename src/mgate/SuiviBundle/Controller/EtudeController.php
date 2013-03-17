@@ -256,7 +256,7 @@ class EtudeController extends Controller
         
         $etudesParMandat = array();
         for($i = 1; $i < $MANDAT_MAX; $i++)
-            array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i), array('id' => 'DESC')));
+            array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i), array('num' => 'DESC')));
        
         return $this->render('mgateSuiviBundle:Etude:suiviEtudes.html.twig', array(
             'etudesParMandat' => $etudesParMandat,
