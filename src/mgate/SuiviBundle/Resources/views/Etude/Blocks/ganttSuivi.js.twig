@@ -12,7 +12,7 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
 					name: "{{ loop.index0 == 0 ? mandatNum : "" }}",
 					desc: "{{getRefEtude(etude)}}",
                                         values: [{ title : "{{ etude.nom | nbsp }}",
-                                        content : "{{ etude.suiveur.prenomnom | nbsp }}",
+                                        content : "{{ (etude.suiveur ? etude.suiveur.prenomnom|nbsp : "Pas de suiveur") }}",
 						from: "/Date({{etude.datecreation|date('U')}}000)/",
                                                 {% set dateFin = getDateFin(etude) %}
 						to: "/Date({{ (dateFin ? getDateFin(etude) : etude.datecreation )|date('U') }}000)/",
