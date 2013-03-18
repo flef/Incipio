@@ -298,8 +298,6 @@ class EtudeManager extends \Twig_Extension {
         $date2 = clone $date;
         $date2->sub($interval);
         
-        echo $date->format('d/m/Y')."->".$date2->format('d/m/Y')."<br />";
-        
         return intval( $date2->format('Y') )-2007;
     }
 }
