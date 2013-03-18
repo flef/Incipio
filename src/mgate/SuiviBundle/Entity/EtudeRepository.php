@@ -20,11 +20,11 @@ class EtudeRepository extends EntityRepository
         
 
             $query = $qb->select('e')
-                        ->from('mgateSuiviBundle:Etude', 'e')
-                        ->leftJoin('e.cc', 'cc')
+                        ->from('mgateSuiviBundle:Cc', 'cc')
+                        ->leftJoin('cc.etude', 'e');
                         //->addSelect('e')
-                        ->where('e.cc IS NOT NULL')
-                        ->addOrderBy('cc.dateSignature');
+                        //->where('e.cc IS NOT NULL')
+                        //->addOrderBy('cc.dateSignature');
   
            
                   
