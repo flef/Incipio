@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
 {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
+<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
 {% endblock %}
 
 {% block title %}
@@ -11,7 +11,7 @@ Affichage d'une étude - {{ parent() }}
 
 {% block content_bundle %}
 
-<div class="tabbable"> <!-- Only required for left/right tabs -->
+<div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif</a></li>
         <li><a href="#tab2" data-toggle="tab">Phases</a></li>
@@ -19,144 +19,24 @@ Affichage d'une étude - {{ parent() }}
         <li><a href="#tab4" data-toggle="tab">Suivi et Avancement</a></li>
     </ul>
     <div class="tab-content">
-        <!-- RECAPITULATIF -->
+    <!-- RECAPITULATIF -->
         <div class="tab-pane active" id="tab1">
             {% include "mgateSuiviBundle:Etude:TabVoir/Recapitulatif.html.twig" with  {'etude':  etude} %}
         </div>
-            <!-- PHASES -->
-            <div class="tab-pane" id="tab2" style="min-height:200px;">
-                       {% include "mgateSuiviBundle:Etude:Blocks/Phase.html.twig" with  {'etude':  etude} %}
-            </div>
-            <!-- SUIVI -->
-            <div class="tab-pane" id="tab3">
-                <div class="row">
-                    <!-- AVANT PROJET -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/AP.html.twig" with  {'etude':  etude} %}
-                    </div>
-                    <!-- CONVENTION CLIENT -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/CC.html.twig" with  {'etude':  etude} %}
-                    </div>
-                    <!-- RECAPITULATIF MISSION -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/RM.html.twig" with  {'etude':  etude} %}       
-                    </div>
-                    <!-- FACTURE ACCOMPTE -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/FA.html.twig" with  {'etude':  etude} %}  
-                    </div>
-                </div>
-
-
-
-
-                            <p>
-                            <h3>Procès-Verbal Intermédiaire:</h3>
-    {% for pvi in etude.pvis %}
-                            <li><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
-    {% endfor %}
-                            <a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a>
-                            </p>
-                            <p>
-                            <h3>Procès-Verbal de Recette:</h3>
-                            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
-                            </p>
-                            <p>
-                            <h3>Facture de Solde:</h3>
-                            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}">Rediger la Facture de Solde</a></li>
-                            </p>
-                            <p>
-                            <h3>Factures Intermédiaires:</h3>
-    {% for facture in etude.fis %}
-                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
-    {% endfor %}
-                            <a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture intermédiaire</a>
-                            </p>
-                            <p>
-                            <h3>Avenants:</h3>
-    {% for av in etude.avs %}
-                            <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
-    {% endfor %}
-                            <a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a>
-                            </p>
-                            <p>
-                            <h3>Avenants au Récapitulatif de Mission:</h3>
-    {% for av in etude.avMissions %}
-                            <li><a href="{{ path('mgateSuivi_avmission_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
-    {% endfor %}
-                            <a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a>
-                            </p>
-                        </div>
-              <!-- DOCUMENTS TYPES -->
-            <div class="tab-pane" id="tab4">   
-              
-                <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
-                {{ form_row(formSuivi.stateID) }}
-                {{ form_row(formSuivi.auditDate) }}
-                
-                    <table class="table table-striped table-bordered"  onclick="docStateChange();">
-                        <tr>
-                            <th>Document</th>
-                            <th>Statut</th>
-                            <th>Rédigé</th>
-                            <th>Relu</th>
-                            <th>SPT M-GaTE</th>
-                            <th>SPT Client</th>
-                            <th>Envoyé</th>
-                            <th>Réceptionné</th>
-                        </tr>
-                        <!-- AVANT PROJET -->
-                        <tr class="docTabRow">
-                            <th>Avant-Projet</td>
-                            <td class="state">Incomplet</td>
-                            <td>{{ form_widget(formSuivi.ap.redige) }}</td>
-                            <td>{{ form_widget(formSuivi.ap.relu) }}</td>
-                            <td>{{ form_widget(formSuivi.ap.spt1) }}</td>
-                            <td>{{ form_widget(formSuivi.ap.spt2) }}</td>
-                            <td>{{ form_widget(formSuivi.ap.envoye) }}</td>
-                            <td>{{ form_widget(formSuivi.ap.receptionne) }}</td>
-                            
-                        </tr>
-                        <!-- CONVENTION CLIENT-->
-                        {#PS : ça fait chier de ne pas pouvoir boucler sur les doctypeForms ... #}
-                        <tr class="docTabRow">
-                            <th>Convention Client</td>
-                            <td class="state">Incomplet</td>
-                            <td>{{ form_widget(formSuivi.cc.redige) }}</td>
-                            <td>{{ form_widget(formSuivi.cc.relu) }}</td>
-                            <td>{{ form_widget(formSuivi.cc.spt1) }}</td>
-                            <td>{{ form_widget(formSuivi.cc.spt2) }}</td>
-                            <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
-                            <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
-                        </tr>
-                        <!--RECAPITULATIFS DE MISSION-->
-                        {% for mission in formSuivi.missions %}
-                        <tr class="docTabRow">
-                            <th>RM n° {{ loop.index }} {# not sure ! #}</td>
-                            <td class="state">Incomplet</td>
-                            <td>{{ form_widget(mission.redige) }}</td>
-                            <td>{{ form_widget(mission.relu) }}</td>
-                            <td>{{ form_widget(mission.spt1) }}</td>
-                            <td>{{ form_widget(mission.spt2) }}</td>
-                            <td>{{ form_widget(mission.envoye) }}</td>
-                            <td>{{ form_widget(mission.receptionne) }}</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                        {{ form_rest(formSuivi) }}
-                </form>   
-            </div>
-                    </div>
-                </div>
-
-
-
-
-                <p>
-                    <br />
-                    <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a> - 
-                    <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
+    <!-- PHASES -->
+        <div class="tab-pane" id="tab2" style="min-height:200px;">
+            {% include "mgateSuiviBundle:Etude:TabVoir/Phases.html.twig" with  {'etude':  etude} %}
+        </div>
+    <!-- SUIVI -->
+        <div class="tab-pane" id="tab3">
+            {% include "mgateSuiviBundle:Etude:TabVoir/Suivi.html.twig" with  {'etude':  etude} %}
+        </div>
+    <!-- SUIVI DOCUMENTS TYPES AUDIT -->
+        <div class="tab-pane" id="tab4">   
+        {% include "mgateSuiviBundle:Etude:TabVoir/Redaction.html.twig" with  {'etude':  etude} %}
+        </div>
+    </div>
+</div>
 
  {# 
         <li>
@@ -176,93 +56,93 @@ Affichage d'une étude - {{ parent() }}
 
 
 
- 
+
 
 {% endblock %}
 
 {% block javascript_quick %}
 {{ parent() }}
-<script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-<script>
-//Egalisation de la hauteur des lignes des phases
-function equalHeight(group) {
-   var tallest = 0;
-   group.each(function() {
-      thisHeight = $(this).height();     
-      if(thisHeight > tallest) {
-         tallest = thisHeight;
-      }
-   });
-   group.css("height" , tallest);
-}
+                <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
+                <script>
+                //Egalisation de la hauteur des lignes des phases
+                function equalHeight(group) {
+                   var tallest = 0;
+                   group.each(function() {
+                      thisHeight = $(this).height();     
+                      if(thisHeight > tallest) {
+                         tallest = thisHeight;
+                      }
+                   });
+                   group.css("height" , tallest);
+                }
 
-$(window).load(function(){
-    $("#tab2").addClass("active");
-    var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
-    for( var i = 1; i <= nombreDeLigneParPhase; i++){
-        equalHeight($(".egalize tr:nth-child("+i+") th"));
-    };
-    $("#tab2").removeClass("active");
-});
-</script>
+                $(window).load(function(){
+                    $("#tab2").addClass("active");
+                    var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
+                    for( var i = 1; i <= nombreDeLigneParPhase; i++){
+                        equalHeight($(".egalize tr:nth-child("+i+") th"));
+                    };
+                    $("#tab2").removeClass("active");
+                });
+                    </script>
 {% endblock %}
 
  {% block javascript %}
 {{ parent() }}
 {{ form_javascript(formSuivi) }}
 
-<!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
-<script>
-function docStateChange()
-{
-$('.docTabRow').each(
-    function(i, e)
-    {
-        var ok = true;
-        console.log(e.children);
-        $(e).children().children('input[type=checkbox]').each(
-            function(index, elem)
-            {
-                ok = ok && elem.checked;
-            }
-        );
-        if(!ok)
-        {
-            $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
-        }
-        else
-            $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
-        ok = true;
-    }
-);
-};
+                    <!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
+                    <script>
+                    function docStateChange()
+                    {
+                    $('.docTabRow').each(
+                        function(i, e)
+                        {
+                            var ok = true;
+                            console.log(e.children);
+                            $(e).children().children('input[type=checkbox]').each(
+                                function(index, elem)
+                                {
+                                    ok = ok && elem.checked;
+                                }
+                            );
+                            if(!ok)
+                            {
+                                $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
+                            }
+                            else
+                                $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
+                            ok = true;
+                        }
+                    );
+                    };
     
     
-$(document).ready(function() {
-    docStateChange();
-    //listen for the form beeing submitted
-    $("#myForm :input").change(function(){
-        $(".loading").show();
-        var $form = $(this).closest("form");
-        $.post($form.attr("action"), $form.serialize(), 
-        function(data){
-            $(".loading").hide();
+                    $(document).ready(function() {
+                        docStateChange();
+                        //listen for the form beeing submitted
+                        $("#myForm :input").change(function(){
+                            $(".loading").show();
+                            var $form = $(this).closest("form");
+                            $.post($form.attr("action"), $form.serialize(), 
+                            function(data){
+                                $(".loading").hide();
             
-            if(data.responseCode!=100 ){
-               alert("An unexpeded error occured.");
-               bootbox.alert(data, function() { });
-               $('#output').html(data.msg);
-            }
-        });
+                                if(data.responseCode!=100 ){
+                                   alert("An unexpeded error occured.");
+                                   bootbox.alert(data, function() { });
+                                   $('#output').html(data.msg);
+                                }
+                            });
 
-        //we dont what the browser to submit the form
-        return false;
-    });
-
-
-});
+                            //we dont what the browser to submit the form
+                            return false;
+                        });
 
 
-{% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
-</script>
+                    });
+
+
+                    {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
+                        </script>
 {% endblock %}
