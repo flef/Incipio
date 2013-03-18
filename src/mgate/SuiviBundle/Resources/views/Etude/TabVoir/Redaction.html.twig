@@ -1,1 +1,54 @@
-{# empty Twig template #}
+ <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
+                {{ form_row(formSuivi.stateID) }}
+                {{ form_row(formSuivi.auditDate) }}
+
+                                <table class="table table-striped table-bordered"  onclick="docStateChange();">
+                                    <tr>
+                                        <th>Document</th>
+                                        <th>Statut</th>
+                                        <th>Rédigé</th>
+                                        <th>Relu</th>
+                                        <th>SPT M-GaTE</th>
+                                        <th>SPT Client</th>
+                                        <th>Envoyé</th>
+                                        <th>Réceptionné</th>
+                                    </tr>
+                                    <!-- AVANT PROJET -->
+                                    <tr class="docTabRow">
+                                        <th>Avant-Projet</td>
+                                        <td class="state">Incomplet</td>
+                                        <td>{{ form_widget(formSuivi.ap.redige) }}</td>
+                                        <td>{{ form_widget(formSuivi.ap.relu) }}</td>
+                                        <td>{{ form_widget(formSuivi.ap.spt1) }}</td>
+                                        <td>{{ form_widget(formSuivi.ap.spt2) }}</td>
+                                        <td>{{ form_widget(formSuivi.ap.envoye) }}</td>
+                                        <td>{{ form_widget(formSuivi.ap.receptionne) }}</td>
+
+                                    </tr>
+                                    <!-- CONVENTION CLIENT-->
+                                    <tr class="docTabRow">
+                                        <th>Convention Client</td>
+                                        <td class="state">Incomplet</td>
+                                        <td>{{ form_widget(formSuivi.cc.redige) }}</td>
+                                        <td>{{ form_widget(formSuivi.cc.relu) }}</td>
+                                        <td>{{ form_widget(formSuivi.cc.spt1) }}</td>
+                                        <td>{{ form_widget(formSuivi.cc.spt2) }}</td>
+                                        <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
+                                        <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
+                                    </tr>
+                                    <!--RECAPITULATIFS DE MISSION-->
+                        {% for mission in formSuivi.missions %}
+                                    <tr class="docTabRow">
+                                        <th>RM n° {{ loop.index }}</td>
+                                        <td class="state">Incomplet</td>
+                                        <td>{{ form_widget(mission.redige) }}</td>
+                                        <td>{{ form_widget(mission.relu) }}</td>
+                                        <td>{{ form_widget(mission.spt1) }}</td>
+                                        <td>{{ form_widget(mission.spt2) }}</td>
+                                        <td>{{ form_widget(mission.envoye) }}</td>
+                                        <td>{{ form_widget(mission.receptionne) }}</td>
+                                    </tr>
+                        {% endfor %}
+                                </table>
+                        {{ form_rest(formSuivi) }}
+                            </form>   
