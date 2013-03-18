@@ -53,23 +53,24 @@ class DefaultController extends Controller
 
         foreach ($Ccs as $cc) {
             $etude = $cc->getEtude();
+            $dateSignature = $cc->getDateSignature();
 
-            if($etude->getCc())
+            if($dateSignature)
             {
-                if($etude->getCc()->getDateSignature() )
-                {
-                    $cumuls[$etude->getMandat()] += $etudeManager->getTotalHT($etude);
-                    
-                    $interval = new \DateInterval('P'.($maxMandat-$etude->getMandat()).'Y');
-                    $dateDecale = $etude->getCc()->getDateSignature()->add($interval);
-                    
-                    $mandats[$etude->getMandat()][]
-                           = array( "x"=>$dateDecale->getTimestamp()*1000,
-                                    "y"=>$cumuls[$etude->getMandat()], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
-                                    'date'=>$dateDecale->format('d/m/Y'),
-                                    'prix'=>$etudeManager->getTotalHT($etude));
-                    
-                }
+                $idMandat=$etudeManager->dateToMandat($dateSignature);
+                
+                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
+
+                $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                $dateDecale = clone $dateSignature;
+                $dateDecale->add($interval);
+
+                $mandats[$idMandat][]
+                       = array( "x"=>$dateDecale->getTimestamp()*1000,
+                                "y"=>$cumuls[$idMandat], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
+                                'date'=>$dateDecale->format('d/m/Y'),
+                                'prix'=>$etudeManager->getTotalHT($etude));
+
             }
        }
         

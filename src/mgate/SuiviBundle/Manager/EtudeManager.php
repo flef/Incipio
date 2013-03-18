@@ -270,4 +270,16 @@ class EtudeManager extends \Twig_Extension {
         else
             return 0;
     }
+    
+    /**
+     * Converti le numero de mandat en année
+     */
+    public function dateToMandat(\DateTime $date) {
+        // Mandat 0 => 2007/2008
+        
+        $date2 = clone $date;
+        $interval = new \DateInterval('P3M20D');        
+        
+        return intval( $date2->sub($interval)->format('Y') )-2007;
+    }
 }
