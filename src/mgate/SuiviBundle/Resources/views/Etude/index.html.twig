@@ -12,10 +12,8 @@ Accueil - {{ parent() }}
     <ul class="nav nav-tabs">
         {% if etudesSuiveur | length %}
         <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
-        {% else %}
-        {% set active="class=\"active\""%}
         {% endif %}
-        <li><a href="#tab2" {{ active }} data-toggle="tab">Etudes en Cours</a></li>
+        <li class="{{ etudesSuiveur | length ? "" : "active" }}"><a href="#tab2" data-toggle="tab">Etudes en Cours</a></li>
         {% if etudesEnPause | length %}
         <li><a href="#tab3" data-toggle="tab">Etudes en Pause</a></li>
         {% endif %}
@@ -28,7 +26,7 @@ Accueil - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:Tab/EtudesASuivre.html.twig" with  {'etudesSuiveur':  etudesSuiveur } %}
         </div>
         {% endif %}
-        <div class="tab-pane" id="tab2" style="min-height: 400px;">
+        <div class="tab-pane {{ etudesSuiveur | length ? "" : "active" }}" id="tab2" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Tab/EtudesEnCours.html.twig" with  {'etudesEnCours':  etudesEnCours} %}
         </div>
         {% if etudesEnPause | length %}
