@@ -42,7 +42,7 @@ class DefaultController extends Controller
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         $etude = new \mgate\SuiviBundle\Entity\Etude;
-        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->getEtudesCa();
+        $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
         
         //$data = array();
         $mandats = array(); 
@@ -51,7 +51,8 @@ class DefaultController extends Controller
         for($i=0 ; $i<=$maxMandat ; $i++) 
             $cumuls[$i] = 0;
 
-        foreach ($etudes as $etude) {
+        foreach ($Ccs as $cc) {
+            $etude = $cc->getEtude();
 
             if($etude->getCc())
             {
