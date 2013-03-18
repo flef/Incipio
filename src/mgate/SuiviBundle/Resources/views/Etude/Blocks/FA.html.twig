@@ -1,20 +1,20 @@
 <table class="table table-striped table-bordered">
     <tr>
         <th colspan="2">
-            <div class="navbar">
-                <div class="navbar-inner">
-                  <span class="brand">Facture d'Acompte</span>
-                  <ul class="nav">
-                    <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+    <div class="navbar">
+        <div class="navbar-inner">
+            <span class="brand">Facture d'Acompte</span>
+            <ul class="nav">
+                <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
                     {% if etude.fa|default('0') %}
-                    <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer</a></li>
+                <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer</a></li>
                     {% endif %}
-                  </ul>
-                </div>
-              </div>
-        </th>
-    </tr>
-    
+            </ul>
+        </div>
+    </div>
+</th>
+</tr>
+
     {#TODO#}
 <tr>
     <th>Date de signature</th>

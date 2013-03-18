@@ -1,1 +1,246 @@
-{# empty Twig template #}
+<style>
+.titre{
+    min-width: 250px;
+    }
+</style>
+
+{# SET ACTIVE PANELS #}
+{% set activeAP = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "" : "in") %}
+{% set activeCC = (( etude.cc and etude.cc.dateSignature and etude.cc.redige and etude.cc.relu and etude.cc.spt1 and etude.cc.spt2 and etude.cc.envoye and etude.cc.receptionne ) ? "" : "in") %}
+{% set activeRM = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "active" : "") %}
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#ap">Avant-Projet - v{{etude.ap.version | default('')}}</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
+                    {% if etude.ap|default('0') %}
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'AP'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+                    {% endif %}
+                    {% if etude.ap.generer|default('0') %}
+            <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi</a></li>
+                    {% endif %} 
+        </ul>
+    </div>
+</div>
+<div id="ap" class="collapse {{activeAP}}">
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>Date de signature</th>
+        <th>Nombre de dev. estimé</th>
+        <th>Présentation du projet</th>
+        <th>Description</th>
+        <th>Type de prestation</th>
+        <th style="min-width: 200px;">Capacité des intervenants</th>
+    </tr>
+    <tr>
+        <td>{{ ( etude.ap and etude.ap.dateSignature ) ? etude.ap.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+        <td>{{ etude.ap.nbrDev| default('Non estimé') }}</td>
+        <td>{{etude.presentationprojet|default('')|nl2br}}</td>
+        <td>{{etude.description|default('')|nl2br}}</td>
+        <td>{{etude.typeprestationtostring|default('')}}</td>
+        <td>{{etude.competences|default('')|nl2br}}</td>
+    </tr>
+</table>
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#cc">Convention Client - v{{etude.cc.version | default('')}}</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
+                    {% if etude.cc|default('0') %}
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'CC'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+                    {% endif %}
+                    {% if etude.cc.generer|default('0') %}
+            <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi</a></li>
+                    {% endif %} 
+        </ul>
+    </div>
+</div>
+<div id="cc" class="collapse {{activeCC}}">
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Date de signature</th>
+            <th>Signataire Client</th>
+            <th>Acompte</th>
+            <th>Pourcentage Acompte</th>
+        </tr>
+        <tr>
+            <td>{{ ( etude.cc and etude.cc.dateSignature ) ? etude.cc.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+            <td>{{etude.cc.signataire2.prenomnom | default('')}}</td>
+            <td>{{ etude.acompte | default(0) ? "Oui" : "Non"}}</td>
+            <td>{{etude.pourcentageAcompte * 100 ~ "%" | default('')}}</td>
+        </tr>
+    </table>
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner" >
+        <span class="brand titre"  data-toggle="collapse" data-target="#rm">Récapitulatif de Mission</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Intervenants</a></li>
+            <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Répartition JEH</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+        </ul>
+    </div>
+</div>
+<div id="rm" class="collapse">
+    <div class="row">
+        {% for mission in etude.missions %}
+        <div class="span3">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td colspan="2">
+                        {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0} %} 
+                    </td>
+                </tr>
+                <tr>
+                    <th>Date de signature</th>
+
+                    <td>{{ mission.dateSignature ? mission.dateSignature | date("d/m/Y") : "non renseigné" }}</td>
+                </tr>
+                <tr>
+                    <th>Progression</th>
+                    <td>
+                        <div class="progress">
+                            <div class="bar" style="width: {{ mission.avancement|default(10) }}%;"></div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#fa">Facture d'Acompte</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+                    {% if etude.fa|default('0') %}
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer</a></li>
+                    {% endif %}
+        </ul>
+    </div>
+</div>
+
+<div id="fa" class="collapse">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Date de signature</th>
+            <th>Montant Total H.T</th>
+            <th>Acompte versé H.T</th>
+        </tr>
+        <tr>
+            <td>{{ ( etude.fa and etude.fa.dateSignature ) ? etude.fa.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+            <td>{{ getTotalHT(etude) | default('') }}</td>
+            <td>{{ etude.fa.montantHT | default('') }}</td>
+        </tr>   
+    </table>
+</div>
+            
+
+      {#
+
+<div class="row">
+    
+                    <!-- AVANT PROJET -->
+                    <div class="span4">
+                         {% include "mgateSuiviBundle:Etude:Blocks/AP.html.twig" with  {'etude':  etude} %}
+                    </div>
+                    <!-- CONVENTION CLIENT -->
+                    <div class="span4">
+                         {% include "mgateSuiviBundle:Etude:Blocks/CC.html.twig" with  {'etude':  etude} %}
+                    </div>
+                    <!-- RECAPITULATIF MISSION -->
+                    <div class="span4">
+                         {% include "mgateSuiviBundle:Etude:Blocks/RM.html.twig" with  {'etude':  etude} %}       
+                    </div>
+                    <!-- FACTURE ACCOMPTE -->
+                    <div class="span4">
+                         {% include "mgateSuiviBundle:Etude:Blocks/FA.html.twig" with  {'etude':  etude} %}  
+                    </div>
+                </div>
+
+
+ 
+#}
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#pvis">Procès-Verbal Intermédiaire</span>
+        <ul class="nav">
+            <li> <a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a></li>
+        </ul>
+    </div>
+</div>
+<div id="pvis" class="collapse">
+    {% for pvi in etude.pvis %}
+                            <li><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
+    {% endfor %}
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#pvr">Procès-Verbal de Recette</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
+        </ul>
+    </div>
+</div>
+<div id="pvr" class="collapse">
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#fs">Facture Solde</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}">Rediger la Facture de Solde</a></li>
+        </ul>
+    </div>
+</div>
+<div id="fs" class="collapse">
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#fis">Factures Intermédiares</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture intermédiaire</a></li>
+        </ul>
+    </div>
+</div>
+<div id="fis" class="collapse">
+    {% for facture in etude.fis %}
+                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
+    {% endfor %}
+</div>
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <span class="brand titre" data-toggle="collapse" data-target="#avs">Avenants</span>
+        <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a></li>
+            <li><a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a></li>
+        </ul>
+    </div>
+</div>
+<div id="avs" class="collapse">
+    {% for av in etude.avs %}
+                            <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+    {% endfor %}
+
+    {% for av in etude.avMissions %}
+                            <li><a href="{{ path('mgateSuivi_avmission_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+    {% endfor %}
+                      
+</div>
+
+    
+                           
+
+    
+
+      
