@@ -46,7 +46,8 @@ class DefaultController extends Controller
         
         //$data = array();
         $mandats = array(); 
-        $maxMandat = $etudeManager->getMaxMandat();
+        $maxMandat = $etudeManager->getMaxMandatCc();
+
         $cumuls=array();
         for($i=0 ; $i<=$maxMandat ; $i++) 
             $cumuls[$i] = 0;

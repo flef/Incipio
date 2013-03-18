@@ -272,14 +272,34 @@ class EtudeManager extends \Twig_Extension {
     }
     
     /**
+     * Get le maximum des mandats par rapport à la date de Signature de signature des CC
+     */
+    public function getMaxMandatCc() {
+        $qb = $this->em->createQueryBuilder();
+
+        $query = $qb->select('c.dateSignature')
+                ->from('mgateSuiviBundle:Cc', 'c')
+                ->orderBy('c.dateSignature', 'DESC');
+
+        $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        
+        if ($value)
+            return $this->dateToMandat($value['dateSignature']);
+        else
+            return 0;
+    }
+    
+    /**
      * Converti le numero de mandat en année
      */
     public function dateToMandat(\DateTime $date) {
         // Mandat 0 => 2007/2008
-        
+        $interval = new \DateInterval('P2M20D');
         $date2 = clone $date;
-        $interval = new \DateInterval('P3M20D');        
+        $date2->sub($interval);
         
-        return intval( $date2->sub($interval)->format('Y') )-2007;
+        echo $date->format('d/m/Y')."->".$date2->format('d/m/Y')."<br />";
+        
+        return intval( $date2->format('Y') )-2007;
     }
 }
