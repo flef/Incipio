@@ -2,14 +2,24 @@
  # Input : intervenant, keyMission, idEtude
  # use : {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0 } %}
  #}
+{% if intervenant %}
 <div class="btn-group" style="min-width: 220px;">
-    <a class="btn btn-primary" href="{{ path('mgatePersonne_membre_voir', {'id': intervenant.id|default('0')}) }}"style="width : 60%"><i class="icon-user icon-white"></i> {{ intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ intervenant.nom | default("") }}</a>
+    <a class="btn btn-primary" href="{{ path('mgatePersonne_membre_voir', {'id': intervenant.id|default('0')}) }}" style="width : 60%">
+        <i class="icon-user icon-white"></i> {{ intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ intervenant.nom | default("") }}
+    </a>
     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
+        <li><a href="mailto:{{ intervenant.personne.email | default("#")}}"><i class="icon-envelope"></i> Contacter</a></li>
         <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : idEtude, 'doc': 'RM', 'key' : keyMission }) }}"><i class="icon-envelope"></i> Générer</a></li>
         <li><a href="#" id="avancement" data-title="{{ idEtude }}" data-content="{{ keyMission }}"><i class="icon-envelope"></i> Modifier l'avancement</a></li>
         <li class="divider"></li>
         <li><a href="#"><i class="i"></i> autre</a></li>
     </ul>
 </div>
+{% else %}
+<div class="btn-group" style="min-width: 220px;">
+<a class="btn btn-info" href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}">
+    <i class="icon-user icon-white"></i> {{ intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ intervenant.nom | default("") }}
+</a>
+</div>
+{% endif %}
