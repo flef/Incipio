@@ -187,7 +187,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $ap;
 
     /**
-     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist", "remove"})
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $phases;
