@@ -92,6 +92,7 @@ class DefaultController extends Controller
         $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
         $ob->xAxis->title(array('text'  => "Date"));
         $ob->xAxis->type('datetime');
+        $ob->yAxis->min(0);
         $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé"));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
