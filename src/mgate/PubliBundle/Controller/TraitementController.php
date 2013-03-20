@@ -242,7 +242,7 @@ class TraitementController extends Controller {
             $Date_Fin_Etude = NULL;
         }
         if ($etudeManager->getDelaiEtude($etude)) {
-            $Delais_Semaines = $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->d));
+            $Delais_Semaines = $this->jourVersSemaine(((int) $etudeManager->getDelaiEtude($etude)->days));
         }
         else
             $Delais_Semaines = NULL;
