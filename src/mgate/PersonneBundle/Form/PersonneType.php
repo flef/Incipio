@@ -33,8 +33,8 @@ class PersonneType extends AbstractType
                 ->add('prenom')
                 ->add('nom')
                 ->add('sexe', new SexeType())
-                ->add('mobile', 'text', array('required'=>false, 'attr'=>$helpEmail))
-                ->add('email', 'email', array('required'=>false, 'attr'=>$helpMobile));
+                ->add('mobile', 'text', array('required'=>false, 'attr'=>$helpMobile))
+                ->add('email', 'email', array('required'=>false, 'attr'=>$helpEmail));
             
 
         if(!$options['mini'] && !$options['user'])

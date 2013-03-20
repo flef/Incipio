@@ -81,24 +81,40 @@ class DefaultController extends Controller
         $series = array();
         foreach ($mandats as $idMandat => $data)
         {
-            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat),    "data" => $data);
+            if($idMandat>=4)
+            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data);
         }
 
-        
+        $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
 
         $ob = new Highchart();
         $ob->global->useUTC(false);
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
+        $ob->xAxis->labels(array('style'=>$style));
+        $ob->yAxis->labels(array('style'=>$style));
         $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
-        $ob->xAxis->title(array('text'  => "Date"));
+        $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
+        $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
         $ob->xAxis->type('datetime');
         $ob->yAxis->min(0);
-        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé"));
+        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
+        $ob->credits->enable(false);
+        $ob->legend->floating(true);
+        $ob->legend->layout('vertical');
+        $ob->legend->y(40);
+        $ob->legend->x(-40);
+        $ob->legend->verticalAlign('top');
+        $ob->legend->reversed(true);
+        $ob->legend->align('right');
+        $ob->legend->backgroundColor('#FFFFFF');
+        $ob->legend->itemStyle($style);
+        $ob->plotOptions->series(array('lineWidth'=>5, 'marker'=>array('radius'=>8)));
         $ob->series($series);
 
-        return $this->render('mgateStatBundle:Default:ca.html.twig', array(
+        //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
+        return $this->render('mgateStatBundle:Default:caFull.html.twig', array(    
             'chart' => $ob
         ));
     }
