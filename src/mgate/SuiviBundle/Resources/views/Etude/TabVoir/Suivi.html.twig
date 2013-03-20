@@ -1,13 +1,14 @@
 <style>
 .titre{
     min-width: 250px;
+    cursor:  pointer;
     }
 </style>
 
 {# SET ACTIVE PANELS #}
 {% set activeAP = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "" : "in") %}
 {% set activeCC = (( etude.cc and etude.cc.dateSignature and etude.cc.redige and etude.cc.relu and etude.cc.spt1 and etude.cc.spt2 and etude.cc.envoye and etude.cc.receptionne ) ? "" : "in") %}
-{% set activeRM = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "active" : "") %}
+{% set activeRM = (( activeAP or activeCC ) ? "in" : "") %}
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -80,12 +81,14 @@
         <span class="brand titre"  data-toggle="collapse" data-target="#rm">Récapitulatif de Mission</span>
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Intervenants</a></li>
+        {% if etude.missions | length %}
             <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Répartition JEH</a></li>
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+        {% endif %}
         </ul>
     </div>
 </div>
-<div id="rm" class="collapse">
+<div id="rm" class="collapse {{activeRM}}">
     <div class="row">
         {% for mission in etude.missions %}
         <div class="span3">
@@ -136,8 +139,8 @@
         </tr>
         <tr>
             <td>{{ ( etude.fa and etude.fa.dateSignature ) ? etude.fa.dateSignature | date("d/m/Y") : "Non signé" }}</td>
-            <td>{{ getTotalHT(etude) | default('') }}</td>
-            <td>{{ etude.fa.montantHT | default('') }}</td>
+            <td>{{ getTotalHT(etude) | default('') }} €</td>
+            <td>{{ getTotalHT(etude) | default(0) * etude.pourcentageAcompte | default(0) }} €</td>
         </tr>   
     </table>
 </div>
