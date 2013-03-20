@@ -81,7 +81,7 @@ class DefaultController extends Controller
         $series = array();
         foreach ($mandats as $idMandat => $data)
         {
-            if($idMandat>=4)
+            //if($idMandat>=4)
             $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data);
         }
 
