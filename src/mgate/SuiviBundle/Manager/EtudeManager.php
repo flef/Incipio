@@ -195,10 +195,77 @@ class EtudeManager extends \Twig_Extension {
     
     public  function getErrors(Etude $etude)
     {
-        $errors = array();
+      $errors = array();
         
-        //$error = array('titre' => 'Mon Titre', 'message' => 'Mon message');        
-        //array_push($errors, $error);
+      if($etude->getAp()!=NULL && $etude->getCc()!=NULL)
+      {
+        if($etude->getAp()->getDateSignature()>=$etude->getCc()->getDateSignature())
+        {
+              $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure
+                  ou égale à la date de signature de la Convention Client.');  
+              array_push($errors, $error);
+        }
+      }
+      
+      foreach($etude->getMissions() as $mission)
+      {
+        if($etude->getCc()->getDateSignature()>=$mission->getDateSignature())
+        {
+            $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                  ou égale à la date de signature des récapitulatifs de mission.'); 
+            array_push($errors, $error);
+        }
+      }
+      
+      foreach($etude->getPvis() as $pvi)
+      {
+        if($etude->getCc()->getDateSignature()>=$pvi->getDateSignature())
+        {
+            $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                 à la date de signature des PVIS.'); 
+            array_push($errors, $error);
+        }
+      }
+      
+      //ordre PVI
+      foreach($etude->getPvis() as $pvi)
+      {
+          if(isset($pviAnterieur))
+          {
+            if($pvi->getDateSignature()<=$pviAnterieur->getDateSignature())
+            {
+                $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
+               '); 
+                array_push($errors, $error);
+            }
+          }
+          $pviAnterieur = $pvi;
+      }
+      
+      foreach($etude->getMissions() as $mission)
+      {
+          foreach($etude->getPvis() as $pvi)
+          {
+              if($mission->getDateSignature()>=$pvi->getDateSignature())
+              {
+                  $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
+                 à la date de signature des PVIS.'); 
+                    array_push($errors, $error);
+              }
+          }
+      }
+      
+      if($etude->getPvr())
+      {
+        if($etude->getPvr()->getDateSignature()>=$etude->getDateFin())
+        {
+               $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure
+                   à la date de fin de l\'étude. Consulter Convention Client ou Avenant à la Convention Client pour la fin l\'étude.'); 
+                      array_push($errors, $error);
+        }
+      }
+      
+      //TODO ordre date signature des PVIS
         
         return $errors;
         
@@ -208,7 +275,18 @@ class EtudeManager extends \Twig_Extension {
     {
         $warnings = array();
         
-        //$warning = array('titre' => 'Mon Titre', 'message' => 'Mon message');        
+        if($etude->getProspect()->getEntite()==NULL)
+        {
+            $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire');  
+            array_push($warnings, $warning);
+        }
+        
+        /*if($etude->getProspect()->getEmployes()->getPoste()==NULL)//foreach ?
+        {
+            $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire'); 
+            array_push($warnings, $warning);
+        }*/
+       
         //array_push($warnings, $warning);
         
         return $warnings;
