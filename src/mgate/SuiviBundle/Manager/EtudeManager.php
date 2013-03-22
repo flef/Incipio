@@ -265,7 +265,20 @@ class EtudeManager extends \Twig_Extension {
         }
       }
       
-      //TODO ordre date signature des PVIS
+        $now = new \DateTime("now");
+        $DateAvert0 = new \DateInterval('P10D');
+        //var_dump($i);
+        //var_dump($this->getDateFin($etude));
+        //var_dump($this->getDateLancement($etude));
+        if($this->getDateFin($etude))
+        {
+            //var_dump($this->getDateFin($etude)->sub($DateAvert0));
+            if($this->getDateFin($etude)->sub($DateAvert0)<$now)
+            {
+                $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps..');  
+                array_push($errors, $error);
+            }
+        }
         
         return $errors;
         
@@ -281,6 +294,21 @@ class EtudeManager extends \Twig_Extension {
             array_push($warnings, $warning);
         }
         
+      
+        $now = new \DateTime("now");
+        $DateAvert0 = new \DateInterval('P20D');
+        //var_dump($i);
+        //var_dump($this->getDateFin($etude));
+        //var_dump($this->getDateLancement($etude));
+        if($this->getDateFin($etude))
+        {
+            //var_dump($this->getDateFin($etude)->sub($DateAvert0));
+            if($this->getDateFin($etude)->sub($DateAvert0)<$now)
+            {
+                $warning = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de vingt jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
+                array_push($warnings, $warning);
+            }
+        }
         /*if($etude->getProspect()->getEmployes()->getPoste()==NULL)//foreach ?
         {
             $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire'); 
