@@ -452,7 +452,6 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
         }
 
-
         return $champs;
     }
 
