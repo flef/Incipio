@@ -127,6 +127,9 @@ class EtudeManager extends \Twig_Extension {
             $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
             return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
         }
+        if ($doc == "FA") {
+            return $this->getRefEtude($etude) . "-" . $doc;
+        }
 
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
     }
@@ -199,7 +202,7 @@ class EtudeManager extends \Twig_Extension {
         
       if($etude->getAp()!=NULL && $etude->getCc()!=NULL)
       {
-        if($etude->getAp()->getDateSignature()>=$etude->getCc()->getDateSignature())
+        if($etude->getAp()->getDateSignature() > $etude->getCc()->getDateSignature())
         {
               $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure
                   ou égale à la date de signature de la Convention Client.');  
