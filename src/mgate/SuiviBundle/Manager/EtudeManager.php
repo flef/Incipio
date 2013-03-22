@@ -128,7 +128,7 @@ class EtudeManager extends \Twig_Extension {
             return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
         }
         if ($doc == "FA") {
-            return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant;
+            return $this->getRefEtude($etude) . "-" . $doc;
         }
 
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
