@@ -327,15 +327,114 @@ class EtudeManager extends \Twig_Extension {
     public  function getInfos(Etude $etude)
     {
         $infos = array();
+        //AP
+        if($etude->getAp()==NULL)
+        {
+            $info = array('titre' => 'Avant-Projet : ', 'message' => 'à rédiger');    
+            array_push($infos, $info);
+        }
+        elseif(!$etude->getAp()->getRedige())
+        {
+            $info = array('titre' => 'Avant-Projet : ', 'message' => 'à rédiger');    
+            array_push($infos, $info);
+        }
         
-        //$info = array('titre' => 'Mise à jours', 'message' => 'Message de test :D');    
-        //array_push($infos, $info);
+        if($etude->getAp()!=NULL)
+        {
+            if($etude->getAp()->getRedige())
+            {
+                if(!$etude->getAp()->getRelu())
+                {
+                      $info = array('titre' => 'Avant-Projet : ', 'message' => 'à faire relire par le Responsable Qualité');    
+                      array_push($infos, $info);
+                }
+                elseif(!$etude->getAp()->getSpt1())
+                {
+                      $info = array('titre' => 'Avant-Projet : ', 'message' => 'à faire signer par le signer par le président');    
+                      array_push($infos, $info);
+                }
+                elseif(!$etude->getAp()->getEnvoye())
+                {
+                      $info = array('titre' => 'Avant-Projet : ', 'message' => 'à envoyer au client');    
+                      array_push($infos, $info);
+                }
+
+            }
+        }
+        
+        //CC
+        
+        if($etude->getCc()!=NULL)
+        {
+            if($etude->getCc()->getRedige())
+            {
+                if(!$etude->getCc()->getRelu())
+                {
+                      $info = array('titre' => 'Convention Client : ', 'message' => 'à faire relire par le Responsable Qualité');    
+                      array_push($infos, $info);
+                }
+                elseif(!$etude->getAp()->getSpt1())
+                {
+                      $info = array('titre' => 'Convention Client : ', 'message' => 'à faire signer par le signer par le président');    
+                      array_push($infos, $info);
+                }
+                elseif(!$etude->getAp()->getEnvoye())
+                {
+                      $info = array('titre' => 'Convention Client : ', 'message' => 'à envoyer au client');    
+                      array_push($infos, $info);
+                }
+
+            }
+        }
+        
+        //Recrutement et RM
+        if($etude->getCc()!=NULL & $etude->getAp()!=NULL)
+        {
+            if($etude->getCc()->getSpt2() & $etude->getAp()->getSpt2() & !$etude->getMailEntretienEnvoye())
+            {
+                $info = array('titre' => 'Recrutement : ', 'message' => 'lancez le recrutement des intervenants');    
+                array_push($infos, $info);
+            }
+            
+        }
+        
+        foreach($etude->getMissions() as $mission)
+        {
+            if(!$mission->getRedige())
+            {
+                 $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à rédiger');    
+                 array_push($infos, $info);
+            }
+            else
+            {
+                
+                if(!$mission->getRelu())
+                {   
+                    $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à faire relire par le responsable qualité');    
+                    array_push($infos, $info);
+                }
+                else
+                {
+                    if(!$mission->getSpt1())
+                    {
+                        $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à faire signer, parapher et tamponner par le président');    
+                        array_push($infos, $info);
+                    }
+
+                    if(!$mission->getSpt2())
+                    {    
+                        $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à faire signer par l\'intervenant');    
+                        array_push($infos, $info);
+                    }    
+                }
+            }    
+        }
         
         return $infos;
         
     }
       
-    public  function getEtatDoc($doc)
+    public function getEtatDoc($doc)
     {
         if($doc != null)
         {
