@@ -59,6 +59,9 @@ class ClientContact
      */
     private $moyenContact;
 
+    public function __construct() {
+        $this->date = new \DateTime('now');
+    }
 
     /**
      * Get id
