@@ -185,6 +185,25 @@ class EtudeManager extends \Twig_Extension {
             return NULL;
  
     }
+    
+    public function getDernierContact(Etude $etude)
+    {
+        $dernierContact = array();
+        if($etude->getClientContacts()!=NULL)
+        {
+            foreach ($etude->getClientContacts() as $contact)
+            {
+                if ($contact->getDate()!=NULL) 
+                {
+                    array_push($dernierContact, $contact->getDate());
+                }
+            }
+        }
+        if (count($dernierContact) > 0)
+            return max($dernierContact);
+        else
+            return NULL;
+    }
 
     public function getDelaiEtude(Etude $etude) {
         if($this->getDateFin($etude))
@@ -283,6 +302,12 @@ class EtudeManager extends \Twig_Extension {
             }
         }
         
+        if(strlen($etude->getPresentationProjet())<200)
+        {
+            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 200 caractères');  
+            array_push($errors, $error);
+        }
+        
         return $errors;
         
     }
@@ -312,6 +337,24 @@ class EtudeManager extends \Twig_Extension {
                 array_push($warnings, $warning);
             }
         }
+        
+        $DateAvertSignatureRm=new \DateInterval('P5D');
+        foreach($etude->getMissions() as $mission)
+        {
+            if($mission->getDateSignature()->sub($DateAvertSignatureRm)>$etude->getCc()->getDateSignature())
+            {
+                $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'faire signer le RM 5 jours après la Convention Client au maximim');  
+                array_push($warnings, $warning);
+            }
+        }
+        
+        $DateAvertContactClient=new \DateInterval('P7D');
+        if($now->sub($DateAvertContactClient)>$this->getDernierContact($etude))
+        {
+            $warning = array('titre' => 'Contact client :', 'message' => 'recontacter le client');  
+            array_push($warnings, $warning);
+        }
+        
         /*if($etude->getProspect()->getEmployes()->getPoste()==NULL)//foreach ?
         {
             $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire'); 
