@@ -319,7 +319,7 @@ class EtudeManager extends \Twig_Extension {
         
         if($etude->getProspect()->getEntite()==NULL)
         {
-            $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire');  
+            $warning = array('titre' => 'Entité sociale : ', 'message' => 'L\'entité sociale est absente. Vérifiez bien que le signataire dispose des autorisations de sa société pour signer les documents');  
             array_push($warnings, $warning);
         }
         
@@ -342,10 +342,12 @@ class EtudeManager extends \Twig_Extension {
         $DateAvertSignatureRm=new \DateInterval('P5D');
         foreach($etude->getMissions() as $mission)
         {
-            if($mission->getDateSignature()->sub($DateAvertSignatureRm)>$etude->getCc()->getDateSignature())
-            {
-                $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'faire signer le RM 5 jours après la Convention Client au maximim');  
-                array_push($warnings, $warning);
+            if($mission->getDateSignature()){
+                if($mission->getDateSignature()->sub($DateAvertSignatureRm)>$etude->getCc()->getDateSignature())
+                {
+                    $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'faire signer le RM 5 jours après la Convention Client au maximim');  
+                    array_push($warnings, $warning);
+                }
             }
         }
         
