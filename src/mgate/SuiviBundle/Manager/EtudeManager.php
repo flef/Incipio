@@ -306,6 +306,7 @@ class EtudeManager extends \Twig_Extension {
         {
             $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 200 caractères');  
             array_push($errors, $error);
+            //var_dump($this->getTauxConversion());
         }
         
         return $errors;
@@ -550,5 +551,72 @@ class EtudeManager extends \Twig_Extension {
         $date2->sub($interval);
         
         return intval( $date2->format('Y') )-2007;
+    }
+    
+    /**
+     * Taux de conversion
+     */
+    public function getTauxConversion()
+    {
+        $tauxConversion=array();
+        $tauxConversionCalc=array();
+
+        //recup toute les etudes
+        
+        foreach($this->getRepository()->findAll() as $etude)
+        {
+             
+                        $mandat=$etude->getMandat();
+                        //var_dump($mandat);
+                        if($etude->getAp()!=NULL)
+                        {
+                            if($etude->getAp()->getSpt2())
+                            {
+                                //var_dump(isset($tauxConversion[$etude->getMandat()]));
+                                if(isset($tauxConversion[$mandat]))
+                                {
+                                $ApRedige=$tauxConversion[$mandat]['ap_redige'];
+                                $ApRedige++;
+                                //var_dump($ApRedige);
+                                $ApSigne=$tauxConversion[$mandat]['ap_signe'];
+                                $ApSigne++;
+                                }
+                                else
+                                {
+                                    $ApRedige=1;
+                                    $ApSigne=1;
+                                }
+                                $tauxConversionCalc = array ('mandat'=>$mandat,'ap_redige'=>$ApRedige,'ap_signe'=>$ApSigne);
+                                $tauxConversion[$mandat]=$tauxConversionCalc;
+                            }
+                            elseif($etude->getAp()->getRedige())
+                            {
+                                if(isset($tauxConversion[$mandat]))
+                                {
+                                $ApRedige=$tauxConversion[$mandat]['ap_redige'];
+                                $ApRedige++;
+                                $ApSigne=$tauxConversion[$mandat]['ap_signe'];
+                                }
+                                else
+                                {
+                                    $ApRedige=1;
+                                    $ApSigne=0;
+                                }
+                                $tauxConversionCalc = array ('mandat'=>$mandat,'ap_redige'=>$ApRedige,'ap_signe'=>$ApSigne);
+                                $tauxConversion[$mandat]=$tauxConversionCalc;
+                            }
+                            //var_dump($tauxConversionCalc);
+                            
+
+                        }
+        }
+                
+                
+            
+        
+        
+        
+        
+        return $tauxConversion;
     }
 }
