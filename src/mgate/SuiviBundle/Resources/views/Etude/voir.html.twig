@@ -18,6 +18,9 @@ Affichage d'une étude - {{ parent() }}
         <li><a href="#tab3" data-toggle="tab">Rédaction et Génération</a></li>
         <li><a href="#tab4" data-toggle="tab">Suivi et Avancement</a></li>
     </ul>
+    <!-- ERRORS -->
+    {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+    <!--        -->
     <div class="tab-content">
     <!-- RECAPITULATIF -->
         <div class="tab-pane active" id="tab1">
