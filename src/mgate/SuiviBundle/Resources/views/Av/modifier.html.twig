@@ -4,10 +4,7 @@
 	Modifier un Avant-Projet - {{ parent() }}
 {% endblock %}
 
-{% block javascript %}
-    {{ form_javascript(form) }}
-{% endblock %}
-        
+       
 {% block content_bundle %}
 
 
@@ -22,3 +19,8 @@
 
 {% endblock %}
 
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 }%} 
+{% endblock %}
