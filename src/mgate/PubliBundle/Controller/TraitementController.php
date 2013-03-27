@@ -440,7 +440,7 @@ class TraitementController extends Controller {
                 $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
                 $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
             }
-            $Mission_Montant_JEH_Verse *= $mission->getPourcentageJunior() / 100;
+            $Mission_Montant_JEH_Verse *= (1-$mission->getPourcentageJunior()) / 100;
 
             $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
             $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
