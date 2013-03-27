@@ -42,6 +42,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\Column(name="stateDescription", type="text", nullable=true)
      */
     private $stateDescription;
+    
+    /**
+     * @var boolean $confidentiel
+     *
+     * @ORM\Column(name="confidentiel", type="boolean", nullable=true)
+     */
+    private $confidentiel;
 
 
     /**
@@ -1336,5 +1343,28 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getStateDescription()
     {
         return $this->stateDescription;
+    }
+
+    /**
+     * Set confidentiel
+     *
+     * @param boolean $confidentiel
+     * @return Etude
+     */
+    public function setConfidentiel($confidentiel)
+    {
+        $this->confidentiel = $confidentiel;
+    
+        return $this;
+    }
+
+    /**
+     * Get confidentiel
+     *
+     * @return boolean 
+     */
+    public function getConfidentiel()
+    {
+        return $this->confidentiel;
     }
 }
