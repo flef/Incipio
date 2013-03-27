@@ -569,12 +569,12 @@ class TraitementController extends Controller {
         $_SESSION['idZip'] = $idZip;
 
 
-        $i = 0;
-        foreach ($etude->getMissions() as $mission) {
-            $this->publipostage($id_etude, $doc, $i);
+       
+        foreach ($etude->getMissions() as $key => $mission) {
+            
+            $this->publipostage($id_etude, $doc, $key);
             $this->telechargerAction('', true);
-            $i++;
-        }
+         }
         $this->telechargerAction('', false, true);
     }
 
