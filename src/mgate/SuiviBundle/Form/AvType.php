@@ -34,6 +34,7 @@ class AvType extends DocTypeType
     {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Av',
+            'prospect' => '',
         );
     }
 }

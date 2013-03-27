@@ -35,15 +35,15 @@ class AvController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
+         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-        
         $av = new Av;
+        
         $av->setEtude($etude);
-        $form        = $this->createForm(new AvType, $av);
+        $form        = $this->createForm(new AvType, $av, array('prospect' => $etude->getProspect()));
         $formHandler = new AvHandler($form, $this->get('request'), $em);
         
         if($formHandler->process())
@@ -87,12 +87,14 @@ class AvController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
+
+        
         if( ! $av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id) )
         {
             throw $this->createNotFoundException('Av[id='.$id.'] inexistant');
         }
 
-        $form        = $this->createForm(new AvType, $av);
+        $form        = $this->createForm(new AvType, $av, array('prospect' => $av->getEtude()->getProspect()));
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
