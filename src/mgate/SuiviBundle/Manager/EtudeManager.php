@@ -231,11 +231,12 @@ class EtudeManager extends \Twig_Extension {
       
       foreach($etude->getMissions() as $mission)
       {
-        if( $mission->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $mission->getDateSignature())
+        if( $mission->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $mission->getDateSignature())
         {
             $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
                   ou égale à la date de signature des récapitulatifs de mission.'); 
             array_push($errors, $error);
+            break;
         }
       }
       
@@ -246,6 +247,7 @@ class EtudeManager extends \Twig_Extension {
             $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
                  à la date de signature des PVIS.'); 
             array_push($errors, $error);
+            break;
         }
       }
       
@@ -259,6 +261,7 @@ class EtudeManager extends \Twig_Extension {
                 $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
                '); 
                 array_push($errors, $error);
+                break;
             }
           }
           $pviAnterieur = $pvi;
@@ -273,6 +276,7 @@ class EtudeManager extends \Twig_Extension {
                   $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
                  à la date de signature des PVIS.'); 
                     array_push($errors, $error);
+                    break;
               }
           }
       }
