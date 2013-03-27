@@ -21,12 +21,12 @@ class EtudeController extends Controller
      */
     public function indexAction($page)
     {
-        $MANDAT_MAX = $this->get('mgate.etude_manager')->getMaxMandat();
+        $MANDAT_MAX = $this->get('mgate.etude_manager')->getMaxMandat();         
         
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->container->get('security.context')->getToken()->getUser()->getPersonne();
-        
+        //$membreDuCA = $this->container->get('security.context')->isGranted('ROLE_CA');
         //Etudes Suiveur
         $etudesSuiveur = array();
         foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'num'=> 'DESC')) as $etude)
@@ -35,14 +35,9 @@ class EtudeController extends Controller
             if( $stateID <= 1 )
              array_push($etudesSuiveur, $etude);
         }
-        
-        
+ 
         //Etudes En Cours : stateID = 0||1
         $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC'));
-        /*foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC')) as $etude)
-        {
-            array_push($etudesEnCours, $etude);
-        }*/
 
         //Etudes en pause : stateID = 2
         $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2),array('mandat'=> 'DESC', 'num' => 'DESC'));

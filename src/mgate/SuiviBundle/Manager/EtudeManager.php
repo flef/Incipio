@@ -329,10 +329,11 @@ class EtudeManager extends \Twig_Extension {
       
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P20D');
+        $DateAvert1 = new \DateInterval('P10D');
 
         if($this->getDateFin($etude))
         {
-            if($this->getDateFin($etude)->sub($DateAvert0)<$now)
+            if($this->getDateFin($etude)->sub($DateAvert1) > $now &&  $this->getDateFin($etude)->sub($DateAvert0)<$now)
             {
                 $warning = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de vingt jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
                 array_push($warnings, $warning);
@@ -358,14 +359,6 @@ class EtudeManager extends \Twig_Extension {
             $warning = array('titre' => 'Contact client :', 'message' => 'recontacter le client');  
             array_push($warnings, $warning);
         }
-        
-        /*if($etude->getProspect()->getEmployes()->getPoste()==NULL)//foreach ?
-        {
-            $warning = array('titre' => 'Entité sociale : ', 'message' => 'absente mais ce n\'est pas obligatoire'); 
-            array_push($warnings, $warning);
-        }*/
-       
-        //array_push($warnings, $warning);
         
         return $warnings;
         
@@ -451,6 +444,7 @@ class EtudeManager extends \Twig_Extension {
             {
                  $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à rédiger');    
                  array_push($infos, $info);
+                 break;
             }
             else
             {
@@ -459,8 +453,9 @@ class EtudeManager extends \Twig_Extension {
                 {   
                     $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à faire relire par le responsable qualité');    
                     array_push($infos, $info);
+                    break;
                 }
-                else
+                else if(!$mission->getSpt1() || !$mission->getSpt2())
                 {
                     if(!$mission->getSpt1())
                     {
@@ -472,7 +467,8 @@ class EtudeManager extends \Twig_Extension {
                     {    
                         $info = array('titre' => 'Récapitulatif de mission : ', 'message' => 'à faire signer par l\'intervenant');    
                         array_push($infos, $info);
-                    }    
+                    } 
+                    break;
                 }
             }    
         }

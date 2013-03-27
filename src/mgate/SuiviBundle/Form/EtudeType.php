@@ -32,6 +32,7 @@ class EtudeType extends AbstractType
             ->add('description','textarea',array('label'=>'Présentation interne de l\'étude', 'required' => false))
             ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude', 'required' => false))
+            ->add('confidentiel', 'checkbox', array('label' => 'Confidentialité :', 'required' => false, 'attr'=>array("title"=>"Si l'étude est confidentielle, elle ne sera visible que par vous et les membres du CA.")))
             ->add('suiveur', 'entity', 
                 array ('label' => 'Suiveur de projet',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
