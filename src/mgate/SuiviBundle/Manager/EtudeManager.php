@@ -116,7 +116,7 @@ class EtudeManager extends \Twig_Extension {
     /**
      * Get référence document
      */
-    public function getRefDoc(Etude $etude, $doc, $version, $key = 0) {
+    public function getRefDoc(Etude $etude, $doc, $version, $key = -1) {
         if ($doc == "RM") {
             if($etude->getMissions()->get($key)->getIntervenant()!=NULL)
             $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
