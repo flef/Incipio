@@ -30,7 +30,7 @@ class PhaseMission
     private $mission;
     
     /**
-     * @ORM\Column()
+     * @ORM\Column(name="nbrJEH", type="integer", nullable=true)
      */
     private $nbrJEH;
 
