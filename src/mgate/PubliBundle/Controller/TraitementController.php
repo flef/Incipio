@@ -345,7 +345,7 @@ class TraitementController extends Controller {
 
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR') as $abrv){
+        foreach (array('AP','CC','FA','PVR','FS') as $abrv){
             if ($etude->getDoc($abrv))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
         }
