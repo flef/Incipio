@@ -401,6 +401,39 @@ class TraitementController extends Controller {
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
         }
+        
+        //Facture de solde
+        if($etude->getFs())
+        {
+            $Date_Limite = clone $etude->getFs()->getDateSignature();
+            $Date_Limite->modify('+ 30 day');
+            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+            
+            if($etude->getFis())
+            {
+                foreach($etude->getFis() as $fi)
+                {
+                    $Reste_HT = $Montant_Total_Etude_HT - $fi->getMontantHT();
+                }
+                $Reste_HT = $Reste_HT - $Acompte_HT;
+            }
+            else
+            {
+                $Reste_HT = $Montant_Total_Etude_HT - $Acompte_HT;  
+            }
+            
+            $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);  
+            
+            $Reste_TTC = round($Reste_HT*(1+$Taux_TVA/100),2);
+            $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
+            
+            $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);;
+            $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC_Lettres);
+            
+            $Reste_TVA = round($Reste_HT*$Taux_TVA/100,2);
+            $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
+            
+        }
 
         //Phases
         foreach ($phases as $phase) {
@@ -451,7 +484,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
             $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
         }
-
+        
+  
         return $champs;
     }
 
