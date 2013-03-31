@@ -5,3 +5,7 @@ mgate_stat_homepage:
 mgate_stat_ca:
     pattern:  /stat/ca
     defaults: { _controller: mgateStatBundle:Default:ca }
+
+mgate_stat_tauxconversion:
+    pattern:  /stat/tauxconversion
+    defaults: { _controller: mgateStatBundle:Default:tauxConversion }
