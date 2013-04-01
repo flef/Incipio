@@ -345,7 +345,7 @@ class TraitementController extends Controller {
 
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR') as $abrv){
+        foreach (array('AP','CC','FA','PVR','FS') as $abrv){
             if ($etude->getDoc($abrv))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
         }
@@ -394,12 +394,42 @@ class TraitementController extends Controller {
 
         //Convention Client
       
-      
         //Facture Acompte
         if ($etude->getFa()) {
             $Date_Limite = clone $etude->getFa()->getDateSignature();
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+        }
+        
+        //Facture de solde
+        if($etude->getFs())
+        {
+            $Date_Limite = clone $etude->getFs()->getDateSignature();
+            $Date_Limite->modify('+ 30 day');
+            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+                        
+            $Reste_HT = $Montant_Total_Etude_HT;
+            $Reste_HT -=  $Acompte_HT;
+            
+            if($etude->getFis())
+            {
+                foreach($etude->getFis() as $fi)
+                {
+                    $Reste_HT -= $fi->getMontantHT();
+                }
+            }
+            
+            $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);  
+            
+            $Reste_TTC = (float) round($Reste_HT*(1+$Taux_TVA/100),2);
+            $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
+            
+            $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);;
+            $this->array_push_assoc($champs, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
+            
+            $Reste_TVA = (float) round($Reste_HT*$Taux_TVA/100,2);
+            $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
+            
         }
 
         //Phases
@@ -451,7 +481,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
             $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
         }
-
+        
+  
         return $champs;
     }
 
@@ -569,12 +600,12 @@ class TraitementController extends Controller {
         $_SESSION['idZip'] = $idZip;
 
 
-        $i = 0;
-        foreach ($etude->getMissions() as $mission) {
-            $this->publipostage($id_etude, $doc, $i);
+       
+        foreach ($etude->getMissions() as $key => $mission) {
+            
+            $this->publipostage($id_etude, $doc, $key);
             $this->telechargerAction('', true);
-            $i++;
-        }
+         }
         $this->telechargerAction('', false, true);
     }
 

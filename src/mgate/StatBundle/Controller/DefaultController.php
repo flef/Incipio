@@ -118,4 +118,61 @@ class DefaultController extends Controller
             'chart' => $ob
         ));
     }
+    
+    public function tauxConversionAction()
+    {
+        $etudeManager = $this->get('mgate.etude_manager');
+        $tauxConversion = $etudeManager->getTauxConversion();
+        $data_final = array();
+
+        $series = array();
+        foreach ($tauxConversion as $idMandat => $data)
+        {
+            $data_final = $data['ap_signe']/$data['ap_redige']*100;
+            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data_final);
+        }
+        //var_dump($data_final);
+        var_dump($series);
+        
+        $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
+
+        $ob = new Highchart();
+        //$ob->global->useUTC(false);
+        $ob->chart->type('column');
+        $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
+        $ob->xAxis->labels(array('style'=>$style));
+        $ob->yAxis->labels(array('style'=>$style));
+        $ob->title->text('Évolution par mandat du taux de conversion');
+        $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
+        $ob->xAxis->title(array('text'  => null, 'style'=>$style));
+        $ob->xAxis->type('datetime');
+        $ob->xAxis->categories(array("1","2"));
+        $ob->yAxis->min(0);
+        $ob->yAxis->title(array('text'  => "Taux de conversion", 'style'=>$style));
+        $ob->tooltip->headerFormat('<span style="font-size:10px">{point.key}</span><table>');
+        $ob->tooltip->pointFormat('<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>');
+        $ob->tooltip->footerFormat('</table>');
+        $ob->tooltip->shared(true);
+        $ob->tooltip->useHTML(true);
+        //$ob->credits->enabled(false);
+        //$ob->legend->floating(true);
+        //$ob->legend->layout('vertical');
+        //$ob->legend->y(100);
+        //$ob->legend->x(-100);
+        //$ob->legend->verticalAlign('top');
+        //$ob->legend->reversed(true);
+        //$ob->legend->align('right');
+        //$ob->legend->backgroundColor('#FFFFFF');
+        //$ob->legend->shadow(true);
+        //$ob->legend->borderWidth(1);
+        //$ob->legend->itemStyle($style);
+        $ob->plotOptions->column(array('pointPadding'=>0.2,'borderWidth'=>0));
+        $ob->series($series);
+
+        //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
+        return $this->render('mgateStatBundle:Default:caFull.html.twig', array(    
+            'chart' => $ob
+        ));
+    }
 }

@@ -130,6 +130,9 @@ class EtudeManager extends \Twig_Extension {
         if ($doc == "FA") {
             return $this->getRefEtude($etude) . "-" . $doc;
         }
+        if ($doc == "FS") {
+           return $this->getRefEtude($etude) . "-" . $doc;
+        }
 
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
     }
