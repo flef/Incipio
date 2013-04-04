@@ -34,7 +34,6 @@ class MissionsRepartitionController extends Controller
             foreach ($etude->getMissions() as $mission) {
                 if( !$em->getRepository('mgate\SuiviBundle\Entity\PhaseMission')->findBy(array('phase' => $phase, 'mission' => $mission)) )
                 {
-                    echo "test";
                     $relation = new PhaseMission;
                     $relation->setMission($mission);
                     $relation->setPhase($phase);
