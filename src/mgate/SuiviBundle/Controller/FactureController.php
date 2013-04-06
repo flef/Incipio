@@ -44,6 +44,7 @@ class FactureController extends Controller
 
         return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
             'facture'      => $entity,
+            'etude'      => $entity->getEtude(),
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
     }

@@ -16,6 +16,14 @@ class SuiviType extends AbstractType {
         $builder->add('auditType', 'choice', array('choices'=>Etude::getAuditTypeChoice(), 'label' => 'Type d\'audit', 'required' => false));
         $builder->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class'=>'mgate\SuiviBundle\Entity\Ap'));
         $builder->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class'=>'mgate\SuiviBundle\Entity\Cc'));
+       
+        $builder->add('factures', 'collection', array(
+                'type' => new DocTypeSuiviType,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false, //indispensable cf doc
+                ));
         
         $builder->add('missions', 'collection', array(
                 'type' => new DocTypeSuiviType,
