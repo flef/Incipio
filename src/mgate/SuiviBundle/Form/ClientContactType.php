@@ -17,7 +17,7 @@ class ClientContactType extends AbstractType
 	    $builder
             //->add('dateCreation',  'date')
             
-            ->add('faitPar','entity',array ('label' => 'Fait par',
+            ->add('faitPar','genemu_jqueryselect2_entity',array ('label' => 'Fait par',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
