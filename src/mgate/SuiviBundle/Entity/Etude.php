@@ -208,21 +208,11 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist"})
      */
     private $missions;
-
-    /** facture acompte
-     * @ORM\OneToOne(targetEntity="Facture", inversedBy="etude", cascade={"persist"})
-     */
-    private $fa;
     
-    /** facture intermedaire
-     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude")
+    /**
+     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude", cascade={"persist"})
      */
-    private $fis;
-
-    /** facture de solde
-     * @ORM\OneToOne(targetEntity="Facture", inversedBy="etude", cascade={"persist"})
-     */
-    private $fs;
+    private $factures;
 
     /** proces verbal intermedaire
      * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude")
@@ -296,8 +286,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
 
@@ -1028,6 +1018,36 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getMissions() {
         return $this->missions;
     }
+    
+    /**
+     * Add facture
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $facture
+     * @return Etude
+     */
+    public function addFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+        $this->factures[] = $facture;
+
+        return $this;
+    }
+
+    /**
+     * Remove facture
+     *
+     * @param \mgate\SuiviBundle\Entity\Facture $facture
+     */
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+        $this->factures->removeElement($facture);
+    }
+
+    /**
+     * Get factures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFactures() {
+        return $this->factures;
+    }
 
     /**
      * Add pvis
@@ -1173,7 +1193,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @param \mgate\SuiviBundle\Entity\Facture $fi
      */
-    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $fi) {
+    public function removeFi(\mgate\SuiviBundle\Entity\Facture $fi) {
         $this->fis->removeElement($fi);
     }
 
@@ -1187,7 +1207,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         
         // En fait fis ca prend toutes les facture qui sont lié a l'etude $this
         // C'est le principe de OneToMany, d'ou la selection ci-dessous
-        foreach ($this->fis as $value)
+        foreach ($this->factures as $value)
         {
             if($value->getType()=="fi")
                 $fis[]=$value;
@@ -1197,43 +1217,37 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
     
     /**
-     * Set fa
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $fa
-     * @return Etude
-     */
-    public function setFa(\mgate\SuiviBundle\Entity\Facture $fa = null) {
-        if ($fa != null)
-            $fa->setEtude($this);
-
-        $this->fa = $fa;
-
-        return $this;
-    }
-
-    /**
      * Get fa
      *
      * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFa() {
-        return $this->fa;
+        foreach ($this->factures as $facture)
+        {
+            if($facture->getType()=="fa")
+                return $facture;
+        }
     }
-
+    
     /**
-     * Set fs
+     * Set fa
      *
-     * @param \mgate\SuiviBundle\Entity\Facture $fs
-     * @return Etude
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
-    public function setFs(\mgate\SuiviBundle\Entity\Facture $fs = null) {
-        if ($fs != null)
-            $fs->setEtude($this);
-
-        $this->fs = $fs;
-
-        return $this;
+    public function setFa(\mgate\SuiviBundle\Entity\Facture $fa) {
+        $fs->setEtude($this);
+        
+        foreach ($this->factures as $facture)
+        {
+            if($facture->getType()=="fa")
+            {
+                $facture=$fa;
+                return;
+            }
+        }
+        $this->factures[]=$fa;
     }
+
 
     /**
      * Get fs
@@ -1241,22 +1255,31 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFs() {
-        return $this->fs;
-    }
-
-
-
-
-    /**
-     * Remove fis
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $fis
-     */
-    public function removeFi(\mgate\SuiviBundle\Entity\Facture $fis)
-    {
-        $this->fis->removeElement($fis);
+        foreach ($this->factures as $facture)
+        {
+            if($facture->getType()=="fs")
+                return $facture;
+        }
     }
     
+    /**
+     * Set fs
+     *
+     * @return \mgate\SuiviBundle\Entity\Facture
+     */
+    public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
+        $fs->setEtude($this);
+        
+        foreach ($this->factures as $facture)
+        {
+            if($facture->getType()=="fs")
+            {
+                $facture=$fs;
+                return;
+            }
+        }
+        $this->factures[]=$fs;
+    } 
     
     /**
      * Set thread
