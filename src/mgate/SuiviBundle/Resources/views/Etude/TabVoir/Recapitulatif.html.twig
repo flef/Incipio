@@ -47,6 +47,10 @@
                     <th>Création</th>
                     <td>Crée le {{ etude.dateCreation|date("d/m/Y") }}</td>
                 </tr>
+                <tr>
+                    <th>JEH - Prix</th>
+                    <td>{{getNbrJEH(etude) | default('0') }} JEH - {{ getTotalHT(etude) | default('0') }} € HT</td>
+                </tr>
             </table>
         </td>
         <td style="padding-left: 20px; width: 75%;"><div class="gantt" id="ganttId0"></div>
