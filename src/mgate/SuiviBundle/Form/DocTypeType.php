@@ -22,7 +22,7 @@ class DocTypeType extends AbstractType
             ->add('version', 'integer', array('label'=>'Version du document'));
         if($options['data_class']!='mgate\SuiviBundle\Entity\Facture')
         {
-             $builder->add('signataire1', 'entity', 
+             $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
