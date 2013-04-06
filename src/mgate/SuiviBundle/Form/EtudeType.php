@@ -33,7 +33,7 @@ class EtudeType extends AbstractType
             ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude', 'required' => false))
             ->add('confidentiel', 'checkbox', array('label' => 'Confidentialité :', 'required' => false, 'attr'=>array("title"=>"Si l'étude est confidentielle, elle ne sera visible que par vous et les membres du CA.")))
-            ->add('suiveur', 'entity', 
+            ->add('suiveur', 'genemu_jqueryselect2_entity', 
                 array ('label' => 'Suiveur de projet',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
