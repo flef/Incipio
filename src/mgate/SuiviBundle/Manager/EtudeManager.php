@@ -33,6 +33,7 @@ class EtudeManager extends \Twig_Extension {
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
             'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
+            'typeFactureToString' => new \Twig_Function_Method($this, 'typeFactureToString'),
         );
     }
     
@@ -617,12 +618,20 @@ class EtudeManager extends \Twig_Extension {
                         }
         }
                 
-                
-            
-        
-        
-        
-        
         return $tauxConversion;
+    }
+    
+        /**
+     * Taux de conversion
+     */
+    public function typeFactureToString($type)
+    {
+        if($type=="fa")
+            return "Facture d'Acompte";
+        if($type=="fi")
+            return "Facture Intermédiaire";
+        if($type=="fs")
+            return "Facture de Solde";
+        
     }
 }
