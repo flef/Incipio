@@ -42,12 +42,6 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
     {% endfor %}
     {% endfor %}
 </table>
-
-{{ dump(form.stateDescription) }}
-{{ form_widget(form.stateDescription) }}
-{% for description in form.stateDescription %}
-    
-{% endfor %}
 {% endblock %}
 
 {% block javascript %}
