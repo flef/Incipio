@@ -301,7 +301,7 @@ class EtudeManager extends \Twig_Extension {
         {
             if($this->getDateFin($etude)->sub($DateAvert0)<$now)
             {
-                $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps..');  
+                $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
                 array_push($errors, $error);
             }
         }
@@ -351,12 +351,15 @@ class EtudeManager extends \Twig_Extension {
         $DateAvertSignatureRm=new \DateInterval('P5D');
         foreach($etude->getMissions() as $mission)
         {
-            if($mission->getDateSignature()){
-                if($etude->getCc()->getDateSignature() != NULL && $mission->getDateSignature()->sub($DateAvertSignatureRm) > $etude->getCc()->getDateSignature())
-                {
-                    $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'La date de signature du RM ne devrait pas être autant éloignée de la date de la signature de la CC.');  
-                    array_push($warnings, $warning);
-                    break;
+            if($mission->getRedige())
+            {    
+                if($mission->getDateSignature()){
+                    if($etude->getCc()->getDateSignature() != NULL && $mission->getDateSignature()->sub($DateAvertSignatureRm) > $etude->getCc()->getDateSignature())
+                    {
+                        $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'La date de signature du RM ne devrait pas être autant éloignée de la date de la signature de la CC.');  
+                        array_push($warnings, $warning);
+                        break;
+                    }
                 }
             }
         }
