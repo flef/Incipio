@@ -253,8 +253,27 @@ class EtudeController extends Controller
         for($i = 1; $i < $MANDAT_MAX; $i++)
             array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i), array('num' => 'DESC')));
        
+        
+        $form = $this->createForm(new \mgate\SuiviBundle\Form\CommentaireSuiviType(), $etudesParMandat[4][2]);
+        if($this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bindRequest($this->get('request'));
+
+            if( $form->isValid() )
+            {
+                $em->persist($etude);
+                $em->flush();
+            }
+        }
+        
+        
+        
+        
+        
+        
         return $this->render('mgateSuiviBundle:Etude:suiviEtudes.html.twig', array(
             'etudesParMandat' => $etudesParMandat,
+            'form' => $form->createView(),
         ));
          
     }
