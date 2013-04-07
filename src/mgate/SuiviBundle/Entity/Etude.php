@@ -1235,7 +1235,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function setFa(\mgate\SuiviBundle\Entity\Facture $fa) {
-        $fs->setEtude($this);
+        $fa->setEtude($this);
+        $fa->setType('fa');
         
         foreach ($this->factures as $facture)
         {
@@ -1269,6 +1270,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
         $fs->setEtude($this);
+        $fa->setType('fs');
         
         foreach ($this->factures as $facture)
         {
