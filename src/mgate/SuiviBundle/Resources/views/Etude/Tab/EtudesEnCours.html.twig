@@ -123,6 +123,16 @@
         {% endfor %}
             </td>
             <td>
+        {% for pvi in etude.pvis %}
+            {% if  getEtatDoc(pvi) %}
+                            <img src="{{ valider }}" />
+            {% else %}
+                            <img src="{{ Nvalider }}" />
+            {% endif %}
+                            <br><br>
+        {% endfor %}
+            </td>
+            <td>
         {% if getEtatDoc(etude.pvr) %}
                         <img src="{{ valider }}" />
         {% else %}
@@ -137,10 +147,7 @@
         {% endif %}
             </td>
             <td>
-                
-            </td>
-            <td>
-                
+
             </td>
             <td>
                 
