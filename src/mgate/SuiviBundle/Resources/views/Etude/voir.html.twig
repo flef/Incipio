@@ -19,7 +19,9 @@ Affichage d'une étude - {{ parent() }}
         <li><a href="#tab4" data-toggle="tab">Suivi et Avancement</a></li>
     </ul>
     <!-- ERRORS -->
-    {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+    {% if etude.stateID | default(1) < 3 %}
+        {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+    {% endif %}
     <!--        -->
     <div class="tab-content">
     <!-- RECAPITULATIF -->
