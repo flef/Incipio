@@ -48,6 +48,10 @@
                     <td>Crée le {{ etude.dateCreation|date("d/m/Y") }}</td>
                 </tr>
                 <tr>
+                    <th>Fin</th>
+                    <td>Fin le {{ getDateFin(etude)|date("d/m/Y") }}</td>
+                </tr>
+                <tr>
                     <th>JEH - Prix</th>
                     <td>{{getNbrJEH(etude) | default('0') }} JEH - {{ getTotalHT(etude) | default('0') }} € HT</td>
                 </tr>
@@ -59,12 +63,17 @@
 </table>
 
 <br>
-            {% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}
+    {% if etude.stateID | default(1) < 3 %}
+        {% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}
+    {% endif %}
+            
 
 
             {% for contact in etude.clientContacts %}
 <li><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': contact.id}) }}">Contact n°{{contact.id}}</a> effectué le {{ contact.date|date("d/m/Y") }}</li>
             {% endfor %}
 
-
-            {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
+    {% if etude.stateID | default(1) == 1 %}
+        {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
+    {% endif %}
+            
