@@ -22,7 +22,9 @@ Affichage d'une étude - {{ parent() }}
     </ul>
     <div class="tab-content">
     <!-- ERRORS -->
-    {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+    {% if etude.stateID | default(1) < 3 %}
+        {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
+    {% endif %}
     <!--        -->
     <!-- RECAPITULATIF -->
         <div class="tab-pane active" id="tab1">
