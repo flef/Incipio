@@ -5,7 +5,7 @@
 {% block content %}
        
     {% block breadcrumb %}
-        <ul class="breadcrumb">
+    <ul class="breadcrumb no-margin">
             <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a> <span class="divider">/</span></li>
             {% if etude is defined %}
                 <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }}</a> <span class="divider">/</span></li>
