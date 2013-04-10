@@ -11,17 +11,19 @@ Affichage d'une étude - {{ parent() }}
 
 {% block content_bundle %}
 
-<div class="tabbable">
-    <ul class="nav nav-tabs">
+
+
+<div class="tabbable "><!-- verticaltabs-container-->
+    <ul class="nav nav-tabs" style="font-weight: bold;">
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif</a></li>
         <li><a href="#tab2" data-toggle="tab">Phases</a></li>
         <li><a href="#tab3" data-toggle="tab">Rédaction et Génération</a></li>
-        <li><a href="#tab4" data-toggle="tab">Suivi et Avancement</a></li>
+        <li><a href="#tab4" data-toggle="tab">Suivi</a></li>
     </ul>
+    <div class="tab-content">
     <!-- ERRORS -->
     {% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}
     <!--        -->
-    <div class="tab-content">
     <!-- RECAPITULATIF -->
         <div class="tab-pane active" id="tab1">
             {% include "mgateSuiviBundle:Etude:TabVoir/Recapitulatif.html.twig" with  {'etude':  etude} %}
