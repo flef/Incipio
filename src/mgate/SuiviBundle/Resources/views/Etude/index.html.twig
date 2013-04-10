@@ -35,10 +35,10 @@ Accueil - {{ parent() }}
         </div>
         {% endif %}
         <div class="tab-pane" id="tab4" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig"} %}
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig", 'key' : '1'} %}
         </div>
         <div class="tab-pane" id="tab5" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesAvortees.html.twig"} %}
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesAvortees.html.twig", 'key' : '2'} %}
         </div>
     </div>
 
