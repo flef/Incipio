@@ -247,6 +247,7 @@ class TraitementController extends Controller {
         else
             $Delais_Semaines = NULL;
 
+        
 
         //Etude
 
@@ -480,6 +481,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
             $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+            
+            $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
         
   
