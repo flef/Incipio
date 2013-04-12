@@ -26,11 +26,5 @@
 }
 
 .verticaltabs-container > .tab-content {
-  position: absolute;
-  top: 0;
-  right: 58px;
-  bottom: 0;
-  left: 0;
-  width: auto;
-  height: auto;
+    right: 58px;
 }
