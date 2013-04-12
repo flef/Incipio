@@ -118,7 +118,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * @var string $nom
      *
-     * @ORM\Column(name="nom", type="text", nullable=false)
+     * @ORM\Column(name="nom", type="text", nullable=false, length=50)
      */
     private $nom;
 

@@ -1313,6 +1313,8 @@
             },
 
             // Move chart via mousewheel
+            // Commente pour le focus de la souris
+            /*
             wheelScroll: function (element, e) {
                 var delta = e.detail ? e.detail * (-50) : e.wheelDelta / 120 * 50;
 
@@ -1327,6 +1329,7 @@
                     return false;
                 }
             },
+            */
 
             // Move chart via slider control
             sliderScroll: function (element, e) {
@@ -1365,6 +1368,7 @@
             },
 
             // Update scroll panel margins
+            /*
             scrollPanel: function (element, delta) {
                 if (!element.scrollNavigation.canScroll) {
                     return false;
@@ -1382,6 +1386,7 @@
                 }
                 core.synchronizeScroller(element);
             },
+            */
 
             // Synchronize scroller
             synchronizeScroller: function (element) {
