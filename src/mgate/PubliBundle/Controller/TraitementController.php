@@ -352,6 +352,7 @@ class TraitementController extends Controller {
         }
         if ($etude->getDoc('RM', $key))
            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+        $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", 0, $key));
        
 
         //Prospect
@@ -480,7 +481,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
-            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", $key));
+            
             
             $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
