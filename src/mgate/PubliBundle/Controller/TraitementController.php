@@ -343,17 +343,17 @@ class TraitementController extends Controller {
             }
         }
 
-
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
         foreach (array('AP','CC','FA','PVR','FS') as $abrv){
             if ($etude->getDoc($abrv))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
         }
-        if ($etude->getDoc('RM', $key))
+        if ($etude->getDoc('RM', $key)){
            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
-        $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", 0, $key));
-       
+           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", 0, $key));
+        }
+
 
         //Prospect
         if ($etude->getProspect() != NULL) {
@@ -570,12 +570,12 @@ class TraitementController extends Controller {
 
         $repertoire = 'tmp';
 
+
         if ($etude->getDoc($doc, $key))
             $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         else
             $refDocx = 'ERROR';
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
-
 
 
         copy($chemin, $repertoire . '/' . $idDocx);
@@ -617,7 +617,6 @@ class TraitementController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function publiposterAction($id_etude, $doc, $key) {
-
         if ($doc == 'RM' && $key == -1)
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
         else
