@@ -125,15 +125,7 @@ class EtudeManager extends \Twig_Extension {
             return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant . "-" . $version;
         }
         else if ($doc == "CE") {
-            var_dump($doc);
-            try{
             $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
-            }
-            catch (Exception $e)
-            {
-             $identifiant = NULL;   
-            
-            }
             return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
         }
         else{
