@@ -17,9 +17,10 @@ class DocTypeType extends AbstractType
     
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-
-        $builder
-            ->add('version', 'integer', array('label'=>'Version du document'));
+        // Version du document
+        $builder->add('version', 'integer', array('label'=>'Version du document'));
+        
+        // Si le document n'est pas une facture
         if($options['data_class']!='mgate\SuiviBundle\Entity\Facture')
         {
              $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
@@ -30,9 +31,19 @@ class DocTypeType extends AbstractType
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getPresidentFirst(); },
                        'required' => true));
         }
-
-        //var_dump(function(PersonneRepository $pr) { return reset($pr->getMembreOnly()); });
-
+        else
+        {
+             $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
+                array ('label' => 'Signataire M-GaTE',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'prenomNom',
+                       'property_path' => true,
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getTresorierFirst(); },
+                       'required' => true));
+        }
+        
+        
+        // Si le document n'est ni une facture ni un RM
         if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' // le signataire2 c'est l'intervenant
            && $options['data_class']!='mgate\SuiviBundle\Entity\Facture' // pas de signataire2
            )
@@ -51,6 +62,7 @@ class DocTypeType extends AbstractType
                 ))
             ->add('newSignataire2', new EmployeType(), array('label' => 'Nouveau signataire '.$pro->getNom(), 'required' => false, 'signataire' => true, 'mini' => true) );                               
         }
+
                                
             $builder->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false, 'widget'=>'single_text'));
             
