@@ -36,6 +36,20 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
+    public function getTresorierFirst()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb
+                ->select('n')
+                ->from('mgatePersonneBundle:Personne', 'n')
+                ->join('n.membre', 'm')
+                ->join('m.poste', 'p')
+                ->where('n.membre IS NOT NULL')
+                ->andWhere("p.intitule LIKE '%tresorier%'");
+                            
+        return $query;
+    }
+    
     public function getEmployeOnly($prospect = null)
     {
         
