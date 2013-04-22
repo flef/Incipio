@@ -1270,7 +1270,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
         $fs->setEtude($this);
-        $fa->setType('fs');
+        $fs->setType('fs');
         
         foreach ($this->factures as $facture)
         {
