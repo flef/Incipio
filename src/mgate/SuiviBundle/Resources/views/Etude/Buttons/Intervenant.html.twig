@@ -4,7 +4,7 @@
  #}
 {% if intervenant %}
 <div class="btn-group" style="min-width: 220px;">
-    <a class="btn btn-primary" href="{{ path('mgatePersonne_membre_voir', {'id': intervenant.id|default('0')}) }}" style="width : 60%">
+    <a class="btn btn-primary" href="{{ path('mgatePersonne_membre_voir', {'id': intervenant.id|default('0')}) }}" style="width : 60%; text-align: left;">
         <i class="icon-user icon-white"></i> {{ intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ intervenant.nom | default("") }}
     </a>
     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
