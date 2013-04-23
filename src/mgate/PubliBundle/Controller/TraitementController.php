@@ -83,7 +83,7 @@ class TraitementController extends Controller {
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
             if ($values != NULL) {
                 if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
-                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->formaterNombre($values), $templateXML);
+                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', preg_replace("# #", " ", $this->formaterNombre($values)), $templateXML);
                 else
                     $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->nl2wbr($values), $templateXML);
             }
