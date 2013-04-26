@@ -30,6 +30,12 @@ class Mission extends DocType
     protected $etude;
     
     /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $referentTechnique;
+    
+    /**
      * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -368,4 +374,29 @@ class Mission extends DocType
         return $this->pourcentageJunior;
     }
     
+
+   
+
+    /**
+     * Set referentTechnique
+     *
+     * @param \mgate\PersonneBundle\Entity\Membre $referentTechnique
+     * @return Mission
+     */
+    public function setReferentTechnique(\mgate\PersonneBundle\Entity\Membre $referentTechnique = null)
+    {
+        $this->referentTechnique = $referentTechnique;
+    
+        return $this;
+    }
+
+    /**
+     * Get referentTechnique
+     *
+     * @return \mgate\PersonneBundle\Entity\Membre 
+     */
+    public function getReferentTechnique()
+    {
+        return $this->referentTechnique;
+    }
 }
