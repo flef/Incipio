@@ -99,7 +99,7 @@ class Personne
     
     public function getNomFormel()
     {
-        return $this->sexe.' '.strtoupper($this->nom).' '.$this->prenom;
+        return $this->sexe.' '.mb_strtoupper($this->nom).' '.$this->prenom;
     }
     
     public function getPoste()
