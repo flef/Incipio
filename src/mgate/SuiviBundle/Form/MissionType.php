@@ -30,7 +30,13 @@ class MissionType extends DocTypeType
         
             ->add('debutOm','genemu_jquerydate', array('label'=>'Début du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
             ->add('finOm','genemu_jquerydate', array('label'=>'Fin du Récapitulatif de Mission','required'=>false, 'widget'=>'single_text'))
-            ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false));
+            ->add('pourcentageJunior', 'integer', array('label'=>'Pourcentage junior', 'required' => false))
+            ->add('referentTechnique', 'genemu_jqueryselect2_entity', array(
+               'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
+               'property' => 'personne.prenomNom',
+               'label' => 'Référent Technique',
+               'required' => false
+               ));
 
             //->add('avancement','integer',array('label'=>'Avancement en %'))
             //->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
