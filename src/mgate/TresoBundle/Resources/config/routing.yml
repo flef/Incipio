@@ -1,0 +1,8 @@
+mgate_treso_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: mgateTresoBundle:Default:index }
+
+
+mgate_treso_urssaf:
+    pattern:  /treso/urssaf
+    defaults: { _controller: mgateTresoBundle:Urssaf:index }

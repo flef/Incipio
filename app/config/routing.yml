@@ -1,3 +1,7 @@
+mgate_treso:
+    resource: "@mgateTresoBundle/Resources/config/routing.yml"
+    prefix:   /
+
 navbar:
     resource: "@NavbarBundle/Resources/config/routing.yml"
     prefix:   /

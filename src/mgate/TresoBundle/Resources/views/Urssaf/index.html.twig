@@ -1,0 +1,87 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Accueil - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+
+        <h2>URSSAF</h2>
+
+<form method="post" {{ form_enctype(form) }}>
+    {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+    {{ form_widget(form) }}
+
+    <input type="submit" value="Chercher"/>
+</form>
+        
+        
+        
+<table class="table table-striped" id="myTable">
+      <thead>
+          <tr>
+              <th>
+                  Status
+              </th>
+              <th>
+                  <div>Nom de l'étude</div>
+                  <div>Référence</div>
+              </th>
+              <th>
+                  <div>Client</div>
+                  <div>Suiveur</div>
+              </th>
+              <th>
+                  <div>Date de Lancement de l'étude</div>
+                  <div>Date de Fin de l'étude</div>
+              </th>
+              <th>
+                   Nom Prénom
+              </th>          
+              <th>
+                   <div>Nombre de JEH de l'étude</div>
+              </th>
+              <th>
+                   <div>Nombre de JEH pour l'étudiant</div>
+              </th>
+            </tr>
+ 	 </thead>
+ 	 <tbody>
+
+        {% for rm in RMs %}
+<tr>
+    <td><i id="commentaire" class="icon-search" data-title="{{ rm.id }}" data-content="0"></i></td>
+    <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': rm.etude.id}) }}"> {{ getRefEtude(rm.etude) }}</a></div></td>
+    <td>{{ rm.etude.prospect.nom }}
+        <br /><br />
+     {{rm.etude.suiveur.prenomNom| default("Pas de suiveur!")}}</td>
+    <td>
+            {% if getDateLancement(rm.etude) != NULL %}<div>{{ getDateLancement(rm.etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if getDateFin(rm.etude) != NULL %}<div>{{ getDateFin(rm.etude)|date("d/m/Y") }}</div>{% endif %}
+        </td>
+            <td>
+                {{ rm.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ rm.intervenant.nom | default("") }}
+            </td>
+            <td>
+                <div>{{ getTotalHT(rm.etude)|default('') }} €</div>
+                <div>{{ getNbrJEH(rm.etude)|default('') }} JEH</div>
+            </td>
+           <td>
+               {% for phasemission in rm.phaseMission %}
+                <div>Phase n°{{ phasemission.phase.position+ 1 }} : {{ phasemission.nbrJEH }} * {{ phasemission.phase.prixJEH * (1-rm.pourcentageJunior/100)}} = {{ phasemission.phase.prixJEH*phasemission.nbrJEH*(1-rm.pourcentageJunior/100) }} €</div>
+                {% endfor %}
+            </td>
+        </tr>
+        {% endfor %}
+ 	 </tbody>
+</table>
+        
+
+{% endblock %}
+        
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+    
