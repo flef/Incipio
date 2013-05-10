@@ -1200,7 +1200,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get fis
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return array
      */
     public function getFis() {
         $fis = array();

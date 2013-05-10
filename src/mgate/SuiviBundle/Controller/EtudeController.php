@@ -15,6 +15,19 @@ use mgate\SuiviBundle\Form\SuiviType;
 
 class EtudeController extends Controller
 {
+    
+    /*
+     * 
+     * 
+     *         //Confidentialité : Visibilité CA, Suiveur
+        $userToken = $this->container->get('security.context');
+        $user = $userToken->getToken()->getUser()->getPersonne();
+        
+        if($etude->getConfidentiel() && !$userToken->isGranted('ROLE_CA') && $user->getId() != $etude->getSuiveur()->getId())
+                throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+        ///
+     * 
+     */
  
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -26,7 +39,7 @@ class EtudeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->container->get('security.context')->getToken()->getUser()->getPersonne();
-        //$membreDuCA = $this->container->get('security.context')->isGranted('ROLE_CA');
+
         //Etudes Suiveur
         $etudesSuiveur = array();
         foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'num'=> 'DESC')) as $etude)
@@ -155,6 +168,7 @@ class EtudeController extends Controller
         if (!$entity)
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
+       
         //$deleteForm = $this->createDeleteForm($id);
         $formSuivi = $this->createForm(new SuiviType, $entity);
         return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
@@ -172,10 +186,8 @@ class EtudeController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
-        }
-
+        
         $form = $this->createForm(new EtudeType, $etude);
         $deleteForm = $this->createDeleteForm($id);
         if($this->get('request')->getMethod() == 'POST' )
