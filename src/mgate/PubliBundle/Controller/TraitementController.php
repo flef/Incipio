@@ -18,46 +18,69 @@ class TraitementController extends Controller {
     private $SLD = 'µ';                                                         //Start Liaison     Delimiter
     private $ELD = 'µµ';                                                        //End   Liaison     Delimiter
  
-    private function repeatTR(&$templateXML, $nombrePhase) {
+    private function repeatTR(&$templateXML, $nombreRepeat) {
+
         $regexRepeatSTART = $this->STRD;
         $regexRepeatEND = $this->ETRD;
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
 
         $SFD = $this->SFD;
         $EFD = $this->EFD;
-        $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
+        $callback = function ($matches) use ($nombreRepeat, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
 
-
+                    /* Selection du nombre de répétition :
+                     * $nombreRepeat[0] = nombrePhase
+                     * $nombreRepeat[1] = nombreDev
+                     */
+                    if(preg_match("#{{DEV}}#", $matches[1]))
+                        $repetition = $nombreRepeat[1];
+                    else
+                        $repetition = $nombreRepeat[0];
+                    $matches[1] = preg_replace('#{{\w+}}#', '', $matches[1]);
+                    //
+                    
                     if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Vérification de rowspan
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
                     else
                         $premiereLigne = $matches[1];
 
-                    $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "1", $premiereLigne);
+                    $outputString .= preg_replace('#' . $SFD . 'Index' . $EFD . '#U', "1", $premiereLigne);
 
-                    for ($i = 2; $i <= $nombrePhase; $i++)
-                        $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
+                    for ($i = 2; $i <= $repetition; $i++)
+                        $outputString .= preg_replace('#' . $SFD . 'Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
-
+              
         $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
 
         return $templateXML;
     }
 
-    private function repeatP(&$templateXML, $nombrePhase) {
+    private function repeatP(&$templateXML, $nombreRepeat) {
         $regexRepeatSTART = $this->SPD; //Marqueur de début de repeat
         $regexRepeatEND = $this->EPD; //Marqueur de fin de repeat
         $regexpRepeat = '#' . $regexRepeatSTART . '(.*?)' . $regexRepeatEND . '#s'; // *? see ungreedy behavior //Expression régulière filtrage répétition /!\ imbrication interdite !
 
         $SFD = $this->SFD;
         $EFD = $this->EFD;
-        $callback = function ($matches) use ($nombrePhase, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
+        $callback = function ($matches) use ($nombreRepeat, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
-
-                    for ($i = 1; $i <= $nombrePhase; $i++)
-                        $outputString .= preg_replace('#' . $SFD . 'Phase_Index' . $EFD . '#U', "$i", $matches[1]);
+                    
+                    /* Selection du nombre de répétition :
+                     * $nombreRepeat[0] = nombrePhase
+                     * $nombreRepeat[1] = nombreDev
+                     */
+                    if(preg_match("#{{PHASE}}#", $matches[1]))
+                        $repetition = $nombreRepeat[0];
+                    else
+                        $repetition = $nombreRepeat[1];
+                    $matches[1] = preg_replace('#{{\w+}}#', '', $matches[1]);
+                    //
+                    
+                    
+                    for ($i = 1; $i <= $repetition; $i++)
+                        $outputString .= preg_replace('#' . $SFD . 'Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
 
@@ -67,10 +90,9 @@ class TraitementController extends Controller {
     }
 
     //Repétition des phases
-    private function repeterPhase(&$templateXML, $nombrePhase) {
-
-        $this->repeatTR($templateXML, $nombrePhase);
-        $this->repeatP($templateXML, $nombrePhase);
+    private function repeterBlock(&$templateXML, $nombreRepeat) {
+        $this->repeatTR($templateXML, $nombreRepeat);
+        $this->repeatP($templateXML, $nombreRepeat);
         return $templateXML;
     }
 
@@ -337,7 +359,6 @@ class TraitementController extends Controller {
                 $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
                 if ($signataire2 != NULL) {
                     $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getNomFormel());
-                    $this->array_push_assoc($champs, 'Nom_Formel_Client', $signataire2->getNomFormel());
                     $this->array_push_assoc($champs, 'Fonction_Signataire_Client', mb_strtolower($signataire2->getPoste(), 'UTF-8'));
                 }
             }
@@ -351,8 +372,10 @@ class TraitementController extends Controller {
         }
         if ($etude->getDoc('RM', $key)){
            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
+           $this->array_push_assoc($champs, 'Reference_DM',  preg_replace('#RM#', 'DM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key)));
            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", 0, $key));
         }
+
 
 
         //Prospect
@@ -409,17 +432,8 @@ class TraitementController extends Controller {
             $Date_Limite = clone $etude->getFs()->getDateSignature();
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
-                        
-            $Reste_HT = $Montant_Total_Etude_HT;
-            $Reste_HT -=  $Acompte_HT;
-            
-            if($etude->getFis())
-            {
-                foreach($etude->getFis() as $fi)
-                {
-                    $Reste_HT -= $fi->getMontantHT();
-                }
-            }
+    
+            $Reste_HT = $etude->getFs()->getMontantHT();
             
             $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);  
             
@@ -447,12 +461,54 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             if ($phase->getDateDebut())
                 $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
+            if ($phase->getDateDebut()){
+                $dateFin = clone $phase->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+                $dateFin->modify('+' . $phase->getDelai() . ' day');
+                $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Fin', $phase->getDateDebut()->format('d/m/Y'));
+            }
             $Delai = $this->jourVersSemaine($phase->getDelai());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
         }
+        
+        
+        //DM : Autres dev
+        $i = 0;
+        foreach($etude->getMissions() as $mission){
+            $i++;
+            if($i == $key){ // Phase concernant l'intervenant
+                $phaseDev = '';
+                foreach($mission->getPhaseMission()->getValues() as $phaseMission)
+                {
+                    if($phaseMission->getNbrJEH())
+                        $phaseDev .= $phaseMission->getPhase()->getPosition() . ' - ' . $phase->getTitre() . '<w:br />';
+                }
+                $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
+                
+                //Referent Technique
+                if($mission){
+                    if($refTechnique = $mission->getReferentTechnique()){
+                        $this->array_push_assoc($champs, 'Prenom_Referent_Technique',$refTechnique->getPersonne()->getPrenom());
+                        $this->array_push_assoc($champs, 'Nom_Referent_Technique', $refTechnique->getPersonne()->getNom());
+                        $this->array_push_assoc($champs, 'Mail_Referent_Technique', $refTechnique->getPersonne()->getEmail());
+                        $this->array_push_assoc($champs, 'Tel_Referent_Technique', $refTechnique->getPersonne()->getMobile());
+                    }
+                }
+            }
+            if ($mission) { // Autre intervenants
+                if($intervenant = $mission->getIntervenant())
+                if ($intervenant =  $intervenant->getPersonne()) {
+                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Nom',$intervenant->getNomFormel());
+                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Mail',$intervenant->getEmail());
+                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Tel',$intervenant->getMobile());
+                }
+            }
+        }
+        
+        
+
 
         //Intervenant
         $mission = $etude->getMissions()->get($key);
@@ -536,12 +592,12 @@ class TraitementController extends Controller {
         return $templateXML;
     }
 
-    private function traiterTemplates($templateFullPath, $nombrePhase, $champs) {
+    private function traiterTemplates($templateFullPath, $nombreRepeat, $champs) {
         $templatesXML = $this->getDocxContent($templateFullPath); //rÃ©cup contenu XML
         $templatesXMLTraite = array();
 
         foreach ($templatesXML as $templateName => $templateXML) {
-            $this->repeterPhase($templateXML, $nombrePhase); //RÃ©pÃ©tion phase
+            $this->repeterBlock($templateXML, $nombreRepeat); //RÃ©pÃ©tion phase
             $this->remplirChamps($templateXML, $champs); //remplissage des champs + phases
             $this->accorder($templateXML); //Accord en nombre /!\ accord en genre ?
             $this->liasons($templateXML); //liaisons de d'
@@ -556,7 +612,7 @@ class TraitementController extends Controller {
 
         $etude = $this->getEtudeFromID($id_etude);
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
-        $nombrePhase = count($etude->getPhases());
+        $nombreRepeat = Array(count($etude->getPhases()), count($etude->getMissions()));
         $champs = $this->getAllChamp($etude, $doc, $key);
 
         //DEBUG   
@@ -565,16 +621,25 @@ class TraitementController extends Controller {
             $chemin = $path . $doc . '.docx';
         }
 
-        $templatesXMLtraite = $this->traiterTemplates($chemin, $nombrePhase, $champs);
+        $templatesXMLtraite = $this->traiterTemplates($chemin, $nombreRepeat, $champs);
         $champsBrut = $this->verifierTemplates($templatesXMLtraite);
 
         $repertoire = 'tmp';
 
+        //SI DM on prend la ref de RM et ont remplace RM par DM
+        if($doc == 'DM')
+            $doc = 'RM';
 
         if ($etude->getDoc($doc, $key))
             $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
         else
             $refDocx = 'ERROR';
+        
+        //On remplace DM par RM si DM
+        $refDocx = preg_replace("#RM#", 'DM', $refDocx);
+        
+        
+        
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
 
 
@@ -599,17 +664,16 @@ class TraitementController extends Controller {
 
     public function publiposterMultiple($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc)->getVersion());
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, 0, -1);
         $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
         $_SESSION['idZip'] = $idZip;
-
-
-       
-        foreach ($etude->getMissions() as $key => $mission) {
-            
+   
+        foreach ($etude->getMissions() as $key => $mission) {            
             $this->publipostage($id_etude, $doc, $key);
             $this->telechargerAction('', true);
          }
+        $_SESSION['refDocx'] = preg_replace( '#(RM|DM)-\w?\w?-\d+#','$1', $_SESSION['refDocx']);
+        
         $this->telechargerAction('', false, true);
     }
 
@@ -617,7 +681,7 @@ class TraitementController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function publiposterAction($id_etude, $doc, $key) {
-        if ($doc == 'RM' && $key == -1)
+        if (($doc == 'RM' || $doc = 'DM') && $key == -1)
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
         else
             $champsBrut = $this->publipostage($id_etude, $doc, $key);
