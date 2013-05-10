@@ -118,19 +118,22 @@ class EtudeManager extends \Twig_Extension {
      * Get référence document
      */
     public function getRefDoc(Etude $etude, $doc, $version = 0, $key = 0) {
-        if ($doc == "RM") {
+        if ($doc == "RM" ||$doc == "DM") {
+            if($key == -1 )
+                return $this->getRefEtude($etude) . "-" . $doc;
             if($etude->getMissions()->get($key)->getIntervenant()!=NULL)
             $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
             
             return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant . "-" . $version;
         }
-        else if ($doc == "CE") {
+        elseif ($doc == "CE") {
             $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
             return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
         }
-        else{
-            return $this->getRefEtude($etude) . "-" . $doc;
+        elseif ($doc == "FA" || $doc == "FS" || $doc == "FS"){
+            return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; 
         }
+        
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
     }
 
