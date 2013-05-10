@@ -65,18 +65,41 @@ class FactureController extends Controller
         $facture = new Facture;
         $etude->addFi($facture);
         
-        $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));      
+        $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));   
+        
+
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
-
+       
             if( $form->isValid() )
             {
+                //Vérification du montant de la facture
+                    $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                    
+                    if($etude->getFa())
+                        $montantHT -= $etude->getFa()->getMontantHT();
+                    foreach($etude->getFis() as $fi){
+                        $montantHT -= $fi->getMontantHT();
+                    }
+                    if($etude->getFs())
+                        $montantHT -= $etude->getFs()->getMontantHT();
+                    
+                    $montantHT -= $form->get('montantHT')->getData();
+                    
+                    if($montantHT < 0)
+                    {
+                        throw new \Exception('Montant impossible, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
+                    }
+                    ///
+                    
+                    
                 $em->persist($facture);
                 $em->flush();
                 
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
             }
+            
         }
 
         return $this->render('mgateSuiviBundle:Facture:ajouter.html.twig', array(
@@ -102,7 +125,28 @@ class FactureController extends Controller
             
             if( $form->isValid() )
             {
-                
+                //vérification montant facture
+                    $etude = $facture->getEtude();
+                    $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                    
+                    if($etude->getFa())
+                        $montantHT -= $etude->getFa()->getMontantHT();
+                    foreach($etude->getFis() as $fi){
+                        $montantHT -= $fi->getMontantHT();
+                    }
+                    if($etude->getFs())
+                        $montantHT -= $etude->getFs()->getMontantHT();
+                                        
+                    $montantHT += $facture->getMontantHT();
+                    $montantHT -= $form->get('montantHT')->getData();
+                    
+                    if($montantHT < 0)
+                    {
+                        $montantHT += $form->get('montantHT')->getData();
+                        throw new \Exception('Montant impossible, le client doit encore : ' . $montantHT. ' €');
+                    }
+                    ///
+                    
                 $em->persist($facture);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
@@ -124,6 +168,7 @@ class FactureController extends Controller
      */
     public function redigerAction($id_etude, $type)
     {
+        $erreur = null;
         $em = $this->getDoctrine()->getEntityManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
@@ -139,9 +184,22 @@ class FactureController extends Controller
                 $etude->setFa($facture);
                 $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
             }
-            elseif(strtoupper($type)=="FS")
+            elseif(strtoupper($type)=="FS"){
                 $etude->setFs($facture);
+                
+                $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                if($etude->getFa())
+                    $montantHT -= $etude->getFa()->getMontantHT();
+                foreach($etude->getFis() as $fi){
+                    $montantHT -= $fi->getMontantHT();
+                }
+                
+                if($montantHT < 0)
+                    throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
 
+                
+                $etude->getFs()->setMontantHT($montantHT);
+            }  
             $facture->setType($type);
         }
 
@@ -154,6 +212,20 @@ class FactureController extends Controller
             {
                 if(strtoupper($type)=="FA")
                     $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
+                elseif(strtoupper($type)=="FS"){
+                    $etude->setFs($facture);
+
+                    $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                    if($etude->getFa())
+                        $montantHT -= $etude->getFa()->getMontantHT();
+                    foreach($etude->getFis() as $fi)
+                        $montantHT -= $fi->getMontantHT();
+
+                    if($montantHT < 0)
+                        throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
+
+                    $etude->getFs()->setMontantHT($montantHT);
+                } 
                 
                 $em->persist($etude);
                 $em->flush();
@@ -166,6 +238,7 @@ class FactureController extends Controller
             'form' => $form->createView(),
             'etude' => $etude,
             'type' => $type,
+            'error' => $erreur,
         ));
     }
     
