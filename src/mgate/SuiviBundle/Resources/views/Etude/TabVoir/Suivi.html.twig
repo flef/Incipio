@@ -84,7 +84,8 @@
             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Intervenants</a></li>
         {% if etude.missions | length %}
             <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Répartition JEH</a></li>
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les RM</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les DM</a></li>
         {% endif %}
         </ul>
     </div>
@@ -96,8 +97,12 @@
             <table class="table table-bordered table-striped">
                 <tr>
                     <td colspan="2">
-                        {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0} %} 
+                        {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0} %}
                     </td>
+                </tr>
+                <tr>
+                    <td><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM', 'key' : loop.index0 }) }}"><i class="icon-circle-arrow-down"></i> RM</a></td> 
+                    <td><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM', 'key' : loop.index0 }) }}"><i class="icon-circle-arrow-down"></i> DM</a></td>
                 </tr>
                 <tr>
                     <th>Date de signature</th>
@@ -121,57 +126,75 @@
 
 <div class="navbar">
     <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#fa">Facture d'Acompte</span>
+        <span class="brand titre" data-toggle="collapse" data-target="#fa">Factures</span>
         <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger</a></li>
+            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger la FA</a></li>
                     {% if etude.fa|default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FA</a></li>
+                    {% endif %}
+            <li><a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}"><i class="icon-plus"></i> Ajouter une facture intermédiaire</a></li>
+            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><i class="icon-pencil"></i> Rédiger la FS</a></li>
+                    {% if etude.fs|default('0') %}
+            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FS</a></li>
                     {% endif %}
         </ul>
     </div>
 </div>
 
 <div id="fa" class="collapse">
+    {% set montantRestant = getTotalHT(etude) %}
     <table class="table table-bordered table-striped">
         <tr>
+            <th style="width: 200px;">Facture</th>
             <th>Date de signature</th>
-            <th>Montant Total H.T</th>
-            <th>Acompte versé H.T</th>
+            <th>Montant H.T.</th>            
         </tr>
         <tr>
+            <th colspan="3">Facture d'Acompte</th>
+        </tr>
+        <tr>
+            <td>Facture d'Acompte</td>
             <td>{{ ( etude.fa and etude.fa.dateSignature ) ? etude.fa.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+            <td>{{ etude.fa.montantHT | default(0) }} €</td>
+        </tr>
+        {% set montantRestant =  montantRestant - etude.fa.montantHT | default(0) %}
+        {% if etude.fis %}
+        <tr>
+            <th colspan="3">Factures Intermédiaires</th>
+        </tr>
+        {% endif %}
+        {% for fi in etude.fis %}
+        <tr>
+            <td><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': fi.id}) }}">Facture intermédiaire n° {{ loop.index }}</a></td>
+            <td>{{ ( fi and fi.dateSignature ) ? fi.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+            <td>{{ fi.montantHT | default(0) }} €</td>
+        </tr>
+        {% set montantRestant =  montantRestant - fi.montantHT | default(0) %}
+        {% endfor %}
+        <tr>
+            <th colspan="3">Facture de solde</th>
+        </tr>
+        <tr>
+            <td>Facture solde</td>
+            <td>{{ ( etude.fs and etude.fs.dateSignature ) ? etude.fs.dateSignature | date("d/m/Y") : "Non signé" }}</td>
+            <td>{{ etude.fs.montantHT | default(0) }} €</td>
+        </tr>
+        {% set montantRestant =  montantRestant - etude.fs.montantHT | default(0)  %}
+        
+    </table>
+    <table class="table table-bordered">
+        <tr>
+            <th>Montant Total H.T.</th>
             <td>{{ getTotalHT(etude) | default('') }} €</td>
-            <td>{{ getTotalHT(etude) | default(0) * etude.pourcentageAcompte | default(0) }} €</td>
-        </tr>   
+            <th>Reste à payer</th>
+            <td>{{ montantRestant }} €</td>
+        </tr>
     </table>
 </div>
+
+
             
 
-      {#
-
-<div class="row">
-    
-                    <!-- AVANT PROJET -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/AP.html.twig" with  {'etude':  etude} %}
-                    </div>
-                    <!-- CONVENTION CLIENT -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/CC.html.twig" with  {'etude':  etude} %}
-                    </div>
-                    <!-- RECAPITULATIF MISSION -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/RM.html.twig" with  {'etude':  etude} %}       
-                    </div>
-                    <!-- FACTURE ACCOMPTE -->
-                    <div class="span4">
-                         {% include "mgateSuiviBundle:Etude:Blocks/FA.html.twig" with  {'etude':  etude} %}  
-                    </div>
-                </div>
-
-
- 
-#}
 <div class="navbar">
     <div class="navbar-inner">
         <span class="brand titre" data-toggle="collapse" data-target="#pvis">Procès-Verbal Intermédiaire</span>
@@ -197,30 +220,6 @@
 <div id="pvr" class="collapse">
 </div>
 
-<div class="navbar">
-    <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#fs">Facture Solde</span>
-        <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}">Rediger la Facture de Solde</a></li>
-        </ul>
-    </div>
-</div>
-<div id="fs" class="collapse">
-</div>
-
-<div class="navbar">
-    <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#fis">Factures Intermédiares</span>
-        <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}">Ajouter une facture intermédiaire</a></li>
-        </ul>
-    </div>
-</div>
-<div id="fis" class="collapse">
-    {% for facture in etude.fis %}
-                            <li><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': facture.id}) }}">Facture Intermédiaire n°{{facture.id}}</a></li>
-    {% endfor %}
-</div>
 
 <div class="navbar">
     <div class="navbar-inner">

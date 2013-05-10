@@ -7,14 +7,14 @@
         
 {% block content_bundle %}
         
-    <h2>Rédiger la Facture {% if type=="fs" %}de Solde{%elseif type=="fa"%}d'Acompte{%endif%}</h2>
+    <h2>Rédiger la Facture {% if type=="fs" %}de Solde{%elseif type=="fa"%}d'Acompte{%else%}Intermédiaire{%endif%}</h2>
 
-<form method="post" {{ form_enctype(form) }}>
+    <form method="post" {{ form_enctype(form) }}>
 
-	{{ form_widget(form) }}
-	
-	<input type="submit" value="Enregistrer"/>  
-</form>
+            {{ form_widget(form) }}
+
+            <input type="submit" value="Enregistrer"/>  
+    </form>
 
 
 
