@@ -16,12 +16,9 @@
         <span class="brand titre" data-toggle="collapse" data-target="#ap">Avant-Projet - v{{etude.ap.version | default('')}}</span>
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
-                    {% if etude.ap|default('0') %}
+                    {% if etude.ap.dateSignature |default('0') %}
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'AP'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
                     {% endif %}
-                    {% if etude.ap.generer|default('0') %}
-            <li><a href="{{ path('mgateSuivi_ap_suivi', {'id': etude.id}) }}">Suivi</a></li>
-                    {% endif %} 
         </ul>
     </div>
 </div>
@@ -51,12 +48,9 @@
         <span class="brand titre" data-toggle="collapse" data-target="#cc">Convention Client - v{{etude.cc.version | default('')}}</span>
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><i class="icon-pencil"></i> Rediger</a></li>
-                    {% if etude.cc|default('0') %}
+                    {% if etude.cc.dateSignature |default('0') %}
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'CC'}) }}"><i class="icon-circle-arrow-down"></i> Generer</a></li>
                     {% endif %}
-                    {% if etude.cc.generer|default('0') %}
-            <li><a href="{{ path('mgateSuivi_cc_suivi', {'id': etude.id}) }}">Suivi</a></li>
-                    {% endif %} 
         </ul>
     </div>
 </div>
@@ -131,11 +125,11 @@
             <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger la FA</a></li>
                     {% if etude.fa|default('0') %}
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FA</a></li>
-                    {% endif %}
             <li><a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}"><i class="icon-plus"></i> Ajouter une facture intermédiaire</a></li>
             <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><i class="icon-pencil"></i> Rédiger la FS</a></li>
                     {% if etude.fs|default('0') %}
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FS</a></li>
+                    {% endif %}
                     {% endif %}
         </ul>
     </div>
