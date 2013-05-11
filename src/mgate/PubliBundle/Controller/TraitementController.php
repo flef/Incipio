@@ -378,11 +378,19 @@ class TraitementController extends Controller {
            $Nbr_Avenant = 0;
         $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
         
+        //PVI
+        if($doc == 'PVI'){
+            try {
+                $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis()[$key]->getPhaseID());
+            } catch (Exception $e) {}
+
+        }
+        
         
         
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS') as $abrv){
+        foreach (array('AP','CC','FA','PVR','FS','PVI') as $abrv){
             if ($etude->getDoc($abrv))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
         }
