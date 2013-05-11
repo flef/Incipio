@@ -136,6 +136,9 @@ class EtudeManager extends \Twig_Extension {
         elseif($doc == 'AV'){
             return $this->getRefEtude($etude) . "-CC-" . $version . '-AV' . $av . '-'. $avVersion;
         }
+        elseif ($doc == 'PVI') {
+            return $this->getRefEtude($etude) . "-" . $doc . ($key+1). "-" . $version;
+        }
         
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
     }
