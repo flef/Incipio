@@ -202,12 +202,20 @@
     <table class="table table-bordered table-striped">
         <tr>
             <th>Procès verbal</th>
+            <th>Phases concernées</th>
             <th>Date de signature</th>
             <th>Signataire Client</th>
         </tr>
     {% for pvi in etude.pvis %}
         <tr>
             <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{loop.index}}</a></td>
+            <td>
+                {% if pvi.phaseID is null %}
+                    Aucune !
+                {% else %}
+                {{ pvi.phaseID }}
+                {% endif %}
+            </td>
             <td>{{ pvi.dateSignature ? pvi.dateSignature | date("d/m/Y") : "Non signé"}}</td>
             <td>{{ pvi.signataire2 ? pvi.signataire2.nomFormel }}</td>
         </tr>
@@ -215,6 +223,7 @@
     {% if etude.pvr %}
         <tr>
             <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': etude.pvr.id}) }}">PVR</a></td>
+            <td>Toutes</td>
             <td>{{ etude.pvr.dateSignature ? etude.pvr.dateSignature | date("d/m/Y") : "Non signé"}}</td>
             <td>{{ etude.pvr.signataire2 ? etude.pvr.signataire2.nomFormel }}</td>
         </tr>
