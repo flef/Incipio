@@ -17,7 +17,8 @@ class FactureSubType extends DocTypeType
         else
             $readOnly=false;
         
-        $builder->add('montantHT', 'money', array( 'label'=>'Montant HT', 'required'=>false, 'read_only'=>$readOnly, 'attr' => array('class' => 'montantHT')));
+        $builder->add('montantHT', 'money', array( 'label'=>'Montant HT', 'required'=>true, 'read_only'=>$readOnly, 'attr' => array('class' => 'montantHT')));
+        $builder->add('num', 'integer', array( 'label'=>'Numéro Facture Comptable', 'required'=>true, 'read_only'=>false,));
         
         DocTypeType::buildForm($builder, $options);
     }

@@ -65,6 +65,8 @@ class FactureController extends Controller
         $facture = new Facture;
         $etude->addFi($facture);
         
+        $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
+        
         $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));   
         
 
@@ -201,6 +203,7 @@ class FactureController extends Controller
                 $etude->getFs()->setMontantHT($montantHT);
             }  
             $facture->setType($type);
+            $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
         }
 
         $form = $this->createForm(new FactureType, $etude, array('type' => $type));
