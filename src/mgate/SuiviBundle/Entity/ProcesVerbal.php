@@ -27,6 +27,15 @@ class ProcesVerbal extends DocType
      */
     protected $etude;
     
+
+    //Justification du choix: choix des phases dans un select multiple destiner qu'à un affichage, aucun traitement sur les phases
+    /**
+     * @var string $type
+     *
+     * @ORM\Column(name="phaseIDs", type="integer", nullable=true)
+     */
+    protected $phaseID;
+    
     /**
      * @var string $type
      *
@@ -91,4 +100,50 @@ class ProcesVerbal extends DocType
         return $this->type;
     }
 
+
+    /**
+     * Set phaseIDs
+     *
+     * @param array $phaseIDs
+     * @return ProcesVerbal
+     */
+    public function setPhaseIDs($phaseIDs)
+    {
+        $this->phaseIDs = $phaseIDs;
+    
+        return $this;
+    }
+
+    /**
+     * Get phaseIDs
+     *
+     * @return array 
+     */
+    public function getPhaseIDs()
+    {
+        return $this->phaseIDs;
+    }
+
+    /**
+     * Set phaseID
+     *
+     * @param integer $phaseID
+     * @return ProcesVerbal
+     */
+    public function setPhaseID($phaseID)
+    {
+        $this->phaseID = $phaseID;
+    
+        return $this;
+    }
+
+    /**
+     * Get phaseID
+     *
+     * @return integer 
+     */
+    public function getPhaseID()
+    {
+        return $this->phaseID;
+    }
 }
