@@ -117,7 +117,7 @@ class EtudeManager extends \Twig_Extension {
     /**
      * Get référence document
      */
-    public function getRefDoc(Etude $etude, $doc, $version = 0, $key = 0) {
+    public function getRefDoc(Etude $etude, $doc, $version = 0, $key = 0, $av = 0, $avVersion = 0) {
         if ($doc == "RM" ||$doc == "DM") {
             if($key == -1 )
                 return $this->getRefEtude($etude) . "-" . $doc;
@@ -132,6 +132,9 @@ class EtudeManager extends \Twig_Extension {
         }
         elseif ($doc == "FA" || $doc == "FS" || $doc == "FS"){
             return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; 
+        }
+        elseif($doc == 'AV'){
+            return $this->getRefEtude($etude) . "-CC-" . $version . '-AV' . $av . '-'. $avVersion;
         }
         
         return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
