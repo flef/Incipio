@@ -146,13 +146,38 @@ class EtudeManager extends \Twig_Extension {
     /**
      * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
      */
-    public function getNouveauNumero($mandat = 5) {
+    public function getNouveauNumero() {
+        $mandat = $this->getMaxMandat();
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('e.num')
                 ->from('mgateSuiviBundle:Etude', 'e')
                 ->andWhere('e.mandat = :mandat')
                 ->setParameter('mandat', $mandat)
+                ->orderBy('e.num', 'DESC');
+
+        $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if ($value)
+            return $value['num'] + 1;
+        else
+            return 1;
+    }
+    
+    
+    /**
+     * Get nouveau numéro pour facture (auto incrémentation)
+     */
+    public function getNouveauNumeroFacture() {
+        $qb = $this->em->createQueryBuilder();
+        
+        $mandat = 2007 + $this->getMaxMandat();
+        
+        $mandatComptable = DateTime::createFromFormat("d/m/Y",'31/03/'.$mandat, $mandatComptable);
+
+        $query = $qb->select('e.num')
+                ->from('mgateSuiviBundle:Facture', 'e')
+                ->andWhere('e.dateSignature > :mandatComptable')
+                ->setParameter('mandatComptable', $mandatComptable)
                 ->orderBy('e.num', 'DESC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
