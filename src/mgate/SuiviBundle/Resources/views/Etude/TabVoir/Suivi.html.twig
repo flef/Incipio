@@ -197,28 +197,38 @@
 
 <div class="navbar">
     <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#pvis">Procès-Verbal Intermédiaire</span>
+        <span class="brand titre" data-toggle="collapse" data-target="#pvs">Procès-Verbaux</span>
         <ul class="nav">
+            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
             <li> <a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a></li>
         </ul>
     </div>
 </div>
-<div id="pvis" class="collapse">
+<div id="pvs" class="collapse">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Procès verbal</th>
+            <th>Date de signature</th>
+            <th>Signataire Client</th>
+        </tr>
     {% for pvi in etude.pvis %}
-                            <li><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{pvi.id}}</a></li>
+        <tr>
+            <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{loop.index}}</a></td>
+            <td>{{ pvi.dateSignature ? pvi.dateSignature | date("d/m/Y") : "Non signé"}}</td>
+            <td>{{ pvi.signataire2 ? pvi.signataire2.nomFormel }}</td>
+        </tr>
     {% endfor %}
+    {% if etude.pvr %}
+        <tr>
+            <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': etude.pvr.id}) }}">PVR</a></td>
+            <td>{{ etude.pvr.dateSignature ? etude.pvr.dateSignature | date("d/m/Y") : "Non signé"}}</td>
+            <td>{{ etude.pvr.signataire2 ? etude.pvr.signataire2.nomFormel }}</td>
+        </tr>
+    {% endif %}
+    </table>
 </div>
 
-<div class="navbar">
-    <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#pvr">Procès-Verbal de Recette</span>
-        <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
-        </ul>
-    </div>
-</div>
-<div id="pvr" class="collapse">
-</div>
+
 
 
 <div class="navbar">
