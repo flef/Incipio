@@ -328,7 +328,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             case 'PVR':
                 return $this->getPvr();
             case 'PVI':
-                return $this->getPvis()->get($key);
+                return $this->getPvis()[$key];
             case 'AV':
                 return $this->getAvs()->get($key);
             case 'RM':
@@ -1076,7 +1076,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get pvis
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return array
      */
     public function getPvis() {
         $pvis = array();
