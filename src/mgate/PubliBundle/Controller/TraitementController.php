@@ -103,7 +103,9 @@ class TraitementController extends Controller {
         $EFD = $this->EFD;
 
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
-            if ($values != NULL) {
+            //WARNING : ($values != NULL) remplacer par ($values !== NULL), les valeurs NULL de type non NULL sont permises !!!!!!!
+            //TODO : Verification type NULL sur champs vide 
+            if ($values !== NULL) {
                 if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
                     $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', preg_replace("# #", " ", $this->formaterNombre($values)), $templateXML);
                 else
@@ -251,10 +253,14 @@ class TraitementController extends Controller {
         $Nbr_JEH = (int) $etudeManager->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $converter->ConvNumberLetter($Nbr_JEH);
 
-        if ($etudeManager->getDateLancement($etude))
+        if ($etudeManager->getDateLancement($etude)){
             $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
-        else
+            $Date_Debut_Etude = $etudeManager->getDateLancement($etude)->format("d/m/Y");
+        }
+        else{
             $Mois_Lancement = NULL;
+            $Date_Debut_Etude = NULL;
+        }
 
         if ($etudeManager->getDateFin($etude)) {
             $Mois_Fin = $this->nombreVersMois(intval($etudeManager->getDateFin($etude)->format('m')));
@@ -335,7 +341,8 @@ class TraitementController extends Controller {
             'Solde_PVR_HT_Lettres' => $Solde_PVR_HT_Lettres,
             'Solde_PVR_TTC_Lettres' => $Solde_PVR_TTC_Lettres,
             'Acompte_Pourcentage' => $Acompte_Pourcentage,
-            'Date_Fin_Etude' => $Date_Fin_Etude,
+            'Date_Debut_Etude' => $Date_Fin_Etude,
+            'Date_Fin_Etude' => $Date_Debut_Etude,
         );
 
         //Doc //TODO function signataire can be null !!
@@ -364,12 +371,26 @@ class TraitementController extends Controller {
             }
         }
 
+        //PVR
+        if($etude->getAvs())
+           $Nbr_Avenant = count($etude->getAvs()->getValues());
+        else
+           $Nbr_Avenant = 0;
+        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
+        
+        
+        
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
         foreach (array('AP','CC','FA','PVR','FS') as $abrv){
             if ($etude->getDoc($abrv))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
         }
+        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
+            if ($etude->getDoc('CC'))
+                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AV', $etude->getDoc('CC')->getVersion(),0, $Nbr_Avenant, $etude->getDoc('AV',$Nbr_Avenant-1)->getVersion()));
+        }
+            
         if ($etude->getDoc('RM', $key)){
            $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
            $this->array_push_assoc($champs, 'Reference_DM',  preg_replace('#RM#', 'DM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key)));
@@ -421,17 +442,20 @@ class TraitementController extends Controller {
       
         //Facture Acompte
         if ($etude->getFa()) {
+            if($etude->getFa()->getDateSignature()){
             $Date_Limite = clone $etude->getFa()->getDateSignature();
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+            }
         }
-        
         //Facture de solde
         if($etude->getFs())
         {
+            if($etude->getFs()->getDateSignature()){
             $Date_Limite = clone $etude->getFs()->getDateSignature();
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+            }
     
             $Reste_HT = $etude->getFs()->getMontantHT();
             
@@ -472,6 +496,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
         }
+        
+        
         
         
         //DM : Autres dev
@@ -627,8 +653,10 @@ class TraitementController extends Controller {
         $repertoire = 'tmp';
 
         //SI DM on prend la ref de RM et ont remplace RM par DM
-        if($doc == 'DM')
+        if($doc == 'DM'){
             $doc = 'RM';
+            $isDM = true;
+        }
 
         if ($etude->getDoc($doc, $key))
             $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
@@ -636,7 +664,8 @@ class TraitementController extends Controller {
             $refDocx = 'ERROR';
         
         //On remplace DM par RM si DM
-        $refDocx = preg_replace("#RM#", 'DM', $refDocx);
+        if(isset($isDM) && $isDM)
+            $refDocx = preg_replace("#RM#", 'DM', $refDocx);
         
         
         
@@ -672,7 +701,8 @@ class TraitementController extends Controller {
             $this->publipostage($id_etude, $doc, $key);
             $this->telechargerAction('', true);
          }
-        $_SESSION['refDocx'] = preg_replace( '#(RM|DM)-\w?\w?-\d+#','$1', $_SESSION['refDocx']);
+
+        $_SESSION['refDocx'] = $refDocx;
         
         $this->telechargerAction('', false, true);
     }
@@ -681,11 +711,10 @@ class TraitementController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function publiposterAction($id_etude, $doc, $key) {
-        if (($doc == 'RM' || $doc = 'DM') && $key == -1)
+        if (($doc == 'RM' || $doc == 'DM') && $key == -1)
             $champsBrut = $this->publiposterMultiple($id_etude, $doc);
         else
             $champsBrut = $this->publipostage($id_etude, $doc, $key);
-
 
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));

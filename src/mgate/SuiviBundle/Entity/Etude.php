@@ -329,6 +329,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
                 return $this->getPvr();
             case 'PVI':
                 return $this->getPvis()->get($key);
+            case 'AV':
+                return $this->getAvs()->get($key);
             case 'RM':
                 if ($key == -1)
                     return NULL;
