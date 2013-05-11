@@ -172,7 +172,7 @@ class EtudeManager extends \Twig_Extension {
         
         $mandat = 2007 + $this->getMaxMandat();
         
-        $mandatComptable = DateTime::createFromFormat("d/m/Y",'31/03/'.$mandat, $mandatComptable);
+        $mandatComptable = \DateTime::createFromFormat("d/m/Y",'31/03/'.$mandat);
 
         $query = $qb->select('e.num')
                 ->from('mgateSuiviBundle:Facture', 'e')
