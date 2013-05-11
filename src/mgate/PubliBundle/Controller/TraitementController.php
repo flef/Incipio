@@ -478,6 +478,14 @@ class TraitementController extends Controller {
             
         }
 
+        //PREPARE PVI
+        $nbrPVI = count($etude->getPvis());
+        if( $doc == 'PVI' && $key < $nbrPVI)
+            $phasePVI = $etude->getPvis()[$key]->getPhaseID();
+        else 
+            $phasePVI = -1;
+        
+
         //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
@@ -501,6 +509,13 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
+            
+            
+            
+            //PVI
+            if($doc == 'PVI' && $i == $phasePVI){
+                $this->array_push_assoc($champs, 'Phase_PVI_Objectif', $phase->getObjectif());                   
+            }
         }
         
         
