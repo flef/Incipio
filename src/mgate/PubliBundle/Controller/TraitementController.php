@@ -380,10 +380,8 @@ class TraitementController extends Controller {
         
         //PVI
         if($doc == 'PVI'){
-            try {
+            if($key < count($etude->getPvis()))
                 $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis()[$key]->getPhaseID());
-            } catch (Exception $e) {}
-
         }
         
         
