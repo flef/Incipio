@@ -120,7 +120,6 @@ class FactureController extends Controller
             throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
 
         $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
-        $deleteForm = $this->createDeleteForm($id_facture);
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
@@ -161,7 +160,6 @@ class FactureController extends Controller
             'etude' => $facture->getEtude(),
             'type' => $facture->getType(),
             'facture' => $facture,
-            'delete_form' => $deleteForm->createView(),
         ));
     }   
         
@@ -188,6 +186,13 @@ class FactureController extends Controller
             }
             elseif(strtoupper($type)=="FS"){
                 $etude->setFs($facture);
+            }  
+            $facture->setType($type);
+            $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
+        }
+        
+        if(strtoupper($type)=="FS"){
+                $etude->setFs($facture);
                 
                 $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                 if($etude->getFa())
@@ -202,9 +207,6 @@ class FactureController extends Controller
                 
                 $etude->getFs()->setMontantHT($montantHT);
             }  
-            $facture->setType($type);
-            $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
-        }
 
         $form = $this->createForm(new FactureType, $etude, array('type' => $type));
         if( $this->get('request')->getMethod() == 'POST' )
@@ -250,13 +252,6 @@ class FactureController extends Controller
      */    
     public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($id);
-        $request = $this->getRequest();
-
-        $form->bindRequest($request);
-
-        if ($form->isValid())
-        {
             $em = $this->getDoctrine()->getEntityManager();
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
@@ -264,16 +259,8 @@ class FactureController extends Controller
 
             $em->remove($entity);
             $em->flush();
-        }
-
+            
         return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $entity->getEtude()->getId())));
     }
-
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
+   
 }
