@@ -210,7 +210,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $missions;
     
     /**
-     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $factures;
 
