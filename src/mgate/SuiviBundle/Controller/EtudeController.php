@@ -115,8 +115,8 @@ class EtudeController extends Controller
     {
         $etude = new Etude;
         
-        $etude->setMandat(5);
-        $etude->setNum($this->get('mgate.etude_manager')->getNouveauNumero($etude->getMandat()));
+        $etude->setMandat($this->get('mgate.etude_manager')->getMaxMandat());
+        $etude->setNum($this->get('mgate.etude_manager')->getNouveauNumero());
         
         $user = $this->container->get('security.context')->getToken()->getUser();
         if (is_object($user) && $user instanceof \mgate\UserBundle\Entity\User)
