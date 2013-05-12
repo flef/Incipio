@@ -44,9 +44,16 @@ class EtudeManager extends \Twig_Extension {
      public function getFilters() {
         return array(
             'nbsp' => new \Twig_Filter_Method($this, 'nonBreakingSpace'),
+            'string' => new \Twig_Filter_Method($this, 'toString'),
         );
     }
- 
+    
+    public function toString($int){
+        var_dump((string) $int);
+        return (string) $int;
+    }
+
+
     public function nonBreakingSpace($string) {
         return preg_replace('#\s#', '&nbsp;', $string);    
     }
@@ -324,33 +331,35 @@ class EtudeManager extends \Twig_Extension {
         }
       }
       
-      foreach($etude->getPvis() as $pvi)
-      {
-        if($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature())
+      if($etude->getPvis()){
+        foreach($etude->getPvis() as $pvi)
         {
-            $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                 à la date de signature des PVIS.'); 
-            array_push($errors, $error);
-            break;
+          if($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature())
+          {
+              $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                   à la date de signature des PVIS.'); 
+              array_push($errors, $error);
+              break;
+          }
         }
       }
-      
       //ordre PVI
-      foreach($etude->getPvis() as $pvi)
-      {
-          if(isset($pviAnterieur))
-          {
-            if($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature())
+      if($etude->getPvis()){
+        foreach($etude->getPvis() as $pvi)
+        {
+            if(isset($pviAnterieur))
             {
-                $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
-               '); 
-                array_push($errors, $error);
-                break;
+              if($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature())
+              {
+                  $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
+                 '); 
+                  array_push($errors, $error);
+                  break;
+              }
             }
-          }
-          $pviAnterieur = $pvi;
+            $pviAnterieur = $pvi;
+        }
       }
-      
       foreach($etude->getMissions() as $mission)
       {
           foreach($etude->getPvis() as $pvi)

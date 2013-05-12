@@ -124,13 +124,8 @@
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i> Rédiger la FA</a></li>
                     {% if etude.fa|default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FA</a></li>
             <li><a href="{{ path('mgateSuivi_facture_ajouter', {'id': etude.id}) }}"><i class="icon-plus"></i> Ajouter une facture intermédiaire</a></li>
             <li><a href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><i class="icon-pencil"></i> Rédiger la FS</a></li>
-                    {% if etude.fs|default('0') %}
-            <li><a href="{{ path('mgateSuivi_facture_supprimer', { 'id': etude.fs.id }) }}"><i class="icon-pencil"></i> Supprimer la FS</a></li>
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><i class="icon-circle-arrow-down"></i> Générer la FS</a></li>
-                    {% endif %}
                     {% endif %}
         </ul>
     </div>
@@ -187,7 +182,9 @@
                 &nbsp;&nbsp;&nbsp;
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><i class="icon-circle-arrow-down"></i></a>
                 &nbsp;&nbsp;&nbsp;
+                {% if etude.fs.id | default(0) %}
                 <a title="Supprimer" href="{{ path('mgateSuivi_facture_supprimer', { 'id': etude.fs.id }) }}"><i class="icon-remove"></i></a>
+                {% endif %}
             </td>
             <td>Facture solde</td>
             <td>{{ ( etude.fs and etude.fs.dateSignature ) ? etude.fs.dateSignature | date("d/m/Y") : "Non signé" }}</td>
