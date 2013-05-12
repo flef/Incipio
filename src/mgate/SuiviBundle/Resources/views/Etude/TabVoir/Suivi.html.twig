@@ -140,26 +140,38 @@
     {% set montantRestant = getTotalHT(etude) %}
     <table class="table table-bordered table-striped">
         <tr>
-            <th style="width: 200px;">Facture</th>
+            <th colspan="2">Facture</th>
             <th>Date de signature</th>
             <th>Montant H.T.</th>            
         </tr>
         <tr>
-            <th colspan="3">Facture d'Acompte</th>
+            <th colspan="4">Facture d'Acompte</th>
         </tr>
         <tr>
-            <td>Facture d'Acompte</td>
+            <td style="width: 100px;">
+                <a title="Modifier" href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><i class="icon-pencil"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><i class="icon-circle-arrow-down"></i></a>
+            </td>
+            <td style="width: 200px;">Facture d'Acompte</td>
             <td>{{ ( etude.fa and etude.fa.dateSignature ) ? etude.fa.dateSignature | date("d/m/Y") : "Non signé" }}</td>
             <td>{{ etude.fa.montantHT | default(0) }} €</td>
         </tr>
         {% set montantRestant =  montantRestant - etude.fa.montantHT | default(0) %}
         {% if etude.fis %}
         <tr>
-            <th colspan="3">Factures Intermédiaires</th>
+            <th colspan="4">Factures Intermédiaires</th>
         </tr>
         {% endif %}
         {% for fi in etude.fis %}
         <tr>
+            <td>
+                <a title="Modifier" href="{{ path('mgateSuivi_facture_modifier', {'id_facture': fi.id}) }}"><i class="icon-pencil"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{#{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }#}#"><i class="icon-circle-arrow-down"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Supprimer" href="{{ path('mgateSuivi_facture_supprimer', { 'id': fi.id }) }}"><i class="icon-remove"></i></a>
+            </td>
             <td><a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': fi.id}) }}">Facture intermédiaire n° {{ loop.index }}</a></td>
             <td>{{ ( fi and fi.dateSignature ) ? fi.dateSignature | date("d/m/Y") : "Non signé" }}</td>
             <td>{{ fi.montantHT | default(0) }} €</td>
@@ -167,9 +179,16 @@
         {% set montantRestant =  montantRestant - fi.montantHT | default(0) %}
         {% endfor %}
         <tr>
-            <th colspan="3">Facture de solde</th>
+            <th colspan="4">Facture de solde</th>
         </tr>
         <tr>
+            <td>
+                <a title="Modifier" href="{{ path('mgateSuivi_facture_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><i class="icon-pencil"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><i class="icon-circle-arrow-down"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Supprimer" href="{{ path('mgateSuivi_facture_supprimer', { 'id': etude.fs.id }) }}"><i class="icon-remove"></i></a>
+            </td>
             <td>Facture solde</td>
             <td>{{ ( etude.fs and etude.fs.dateSignature ) ? etude.fs.dateSignature | date("d/m/Y") : "Non signé" }}</td>
             <td>{{ etude.fs.montantHT | default(0) }} €</td>
@@ -194,22 +213,29 @@
     <div class="navbar-inner">
         <span class="brand titre" data-toggle="collapse" data-target="#pvs">Procès-Verbaux</span>
         <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}">Rediger le PVR</a></li>
-            <li> <a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}">Ajouter un PVI</a></li>
+            <li><a href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}"><i class="icon-pencil"></i> Rediger le PVR</a></li>
+            <li><a href="{{ path('mgateSuivi_procesverbal_ajouter', {'id': etude.id}) }}"><i class="icon-plus"></i> Ajouter un PVI</a></li>
         </ul>
     </div>
 </div>
 <div id="pvs" class="collapse">
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Procès verbal</th>
+            <th colspan="2">Procès verbal</th>
             <th>Phases concernées</th>
             <th>Date de signature</th>
             <th>Signataire Client</th>
         </tr>
     {% for pvi in etude.pvis %}
         <tr>
-            <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{loop.index}}</a></td>
+            <td style="width: 100px;">
+                <a title="Modifier" href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}"><i class="icon-pencil"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'PVI', 'key' : loop.index0 }) }}"><i class="icon-circle-arrow-down"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Supprimer" href="#"><i class="icon-remove"></i></a>
+            </td>
+            <td style="width: 200px;"><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}">PVI n°{{loop.index}}</a></td>
             <td>
                 {% if pvi.phaseID is null %}
                     Aucune !
@@ -223,6 +249,10 @@
     {% endfor %}
     {% if etude.pvr %}
         <tr>
+            <td><a title="Modifier" href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}"><i class="icon-pencil"></i></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'PVR' }) }}"><i class="icon-circle-arrow-down"></i></a>
+            </td>
             <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': etude.pvr.id}) }}">PVR</a></td>
             <td>Toutes</td>
             <td>{{ etude.pvr.dateSignature ? etude.pvr.dateSignature | date("d/m/Y") : "Non signé"}}</td>
