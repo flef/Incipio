@@ -313,7 +313,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->newProspect = $var;
     }
 
-    public function getDoc($doc, $key = 0) {
+    public function getDoc($doc, $key = -1) {
         switch (strtoupper($doc)) {
             case 'AP':
                 return $this->getAp();
@@ -322,16 +322,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             case 'FA':
                 return $this->getFa();
             case 'FI':
-                return $this->getFis()->get($key);
+                return $this->getFis($key);
             case 'FS':
                 return $this->getFs();
             case 'PVR':
                 return $this->getPvr();
             case 'PVI':
-                if($key < count($this->getPvis()))
-                    return $this->getPvis()[$key];
-                else
-                    return NULL;
+                    return $this->getPvis($key);
             case 'AV':
                 return $this->getAvs()->get($key);
             case 'RM':
@@ -1081,17 +1078,25 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return array
      */
-    public function getPvis() {
+    public function getPvis($key = -1) {
         $pvis = array();
         
+        $i = 0;
         // En fait pvis ca prend toutes les PV qui sont lié a l'etude $this
         // C'est le principe de OneToMany, d'ou la selection ci-dessous
         foreach ($this->pvis as $value)
         {
-            if($value->getType()=="pvi")
+            if($value->getType()=="pvi"){
                 $pvis[]=$value;
+                $i++;
+            }
         }
-        return $pvis;
+         if($key >= 0){
+            if($key < $i) return $pvis[$key];
+            else return NULL;
+        }
+        if(count($pvis)) return $pvis;        
+        else return NULL;
     }
 
 
@@ -1205,20 +1210,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get fis
      *
-     * @return array
+     * @return mixed(array, Facture)
      */
-    public function getFis() {
+    public function getFis($key = -1) {
         $fis = array();
         
         // En fait fis ca prend toutes les facture qui sont lié a l'etude $this
         // C'est le principe de OneToMany, d'ou la selection ci-dessous
+        $i = -1;
         foreach ($this->factures as $value)
         {
-            if($value->getType()=="fi")
+            if($value->getType()=="fi"){
                 $fis[]=$value;
+                $i++;
+            }
         }
-        
-        return $fis;
+        if($key >= 0){
+            if($key < $i) return $fis[$key];
+            else return NULL;
+        }
+        if(count($fis)) return $fis;
+        else return NULL;
     }
     
     /**

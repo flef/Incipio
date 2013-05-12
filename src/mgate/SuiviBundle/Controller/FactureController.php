@@ -81,8 +81,9 @@ class FactureController extends Controller
                     
                     if($etude->getFa())
                         $montantHT -= $etude->getFa()->getMontantHT();
-                    foreach($etude->getFis() as $fi){
-                        $montantHT -= $fi->getMontantHT();
+                    if($etude->getFis()){
+                        foreach($etude->getFis() as $fi)
+                            $montantHT -= $fi->getMontantHT();
                     }
                     if($etude->getFs())
                         $montantHT -= $etude->getFs()->getMontantHT();

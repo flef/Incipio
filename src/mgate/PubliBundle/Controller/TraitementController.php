@@ -71,10 +71,10 @@ class TraitementController extends Controller {
                      * $nombreRepeat[0] = nombrePhase
                      * $nombreRepeat[1] = nombreDev
                      */
-                    if(preg_match("#{{PHASE}}#", $matches[1]))
-                        $repetition = $nombreRepeat[0];
-                    else
+                    if(preg_match("#{{DEV}}#", $matches[1]))
                         $repetition = $nombreRepeat[1];
+                    else
+                        $repetition = $nombreRepeat[0];
                     $matches[1] = preg_replace('#{{\w+}}#', '', $matches[1]);
                     //
                     
@@ -345,7 +345,7 @@ class TraitementController extends Controller {
             'Date_Fin_Etude' => $Date_Debut_Etude,
         );
 
-        //Doc //TODO function signataire can be null !!
+        //Doc
         if ($etude->getDoc($doc, $key) != NULL) {
             //Date Signature tout type de doc
             $dateSignature = $etude->getDoc($doc, $key)->getDateSignature();
@@ -353,7 +353,7 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Date_Signature', $dateSignature->format("d/m/Y"));
 
             //Signataire 1 : Signataire M-GaTE
-            if ($etude->getDoc($doc)->getSignataire1() != NULL) {
+            if ($etude->getDoc($doc, $key)->getSignataire1() != NULL) {
                 $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
                 if ($signataire1 != NULL) {
                     $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire1->getNomFormel());
@@ -362,7 +362,7 @@ class TraitementController extends Controller {
                 }
             }
             //Signataire 2 : Signataire Client
-            if ($etude->getDoc($doc)->getSignataire2() != NULL) {
+            if ($etude->getDoc($doc, $key)->getSignataire2() != NULL) {
                 $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
                 if ($signataire2 != NULL) {
                     $this->array_push_assoc($champs, 'Nom_Signataire_Client', $signataire2->getNomFormel());
@@ -381,26 +381,26 @@ class TraitementController extends Controller {
         //PVI
         if($doc == 'PVI'){
             if($key < count($etude->getPvis()))
-                $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis()[$key]->getPhaseID());
+                $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis($key)->getPhaseID());
         }
         
         
         
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS','PVI') as $abrv){
+        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
             if ($etude->getDoc($abrv))
-                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $etude->getDoc($abrv)->getVersion()));
-        }
+                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
+            }
         if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
             if ($etude->getDoc('CC'))
-                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AV', $etude->getDoc('CC')->getVersion(),0, $Nbr_Avenant, $etude->getDoc('AV',$Nbr_Avenant-1)->getVersion()));
+                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
         }
             
         if ($etude->getDoc('RM', $key)){
-           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key));
-           $this->array_push_assoc($champs, 'Reference_DM',  preg_replace('#RM#', 'DM', $etudeManager->getRefDoc($etude, 'RM', $etude->getDoc('RM', $key)->getVersion(), $key)));
-           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, "CE", 0, $key));
+           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
+           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
+           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
         }
 
 
@@ -680,7 +680,7 @@ class TraitementController extends Controller {
         }
 
         if ($etude->getDoc($doc, $key))
-            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $etude->getDoc($doc, $key)->getVersion(), $key);
+            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $key);
         else
             $refDocx = 'ERROR';
         
@@ -714,7 +714,7 @@ class TraitementController extends Controller {
 
     public function publiposterMultiple($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, 0, -1);
+        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc);
         $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
         $_SESSION['idZip'] = $idZip;
    

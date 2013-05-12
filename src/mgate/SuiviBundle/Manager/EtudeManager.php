@@ -114,34 +114,84 @@ class EtudeManager extends \Twig_Extension {
         return "[M-GaTE]" . (string) ($etude->getMandat() * 100 + $etude->getNum());
     }
 
-    /**
-     * Get référence document
+    /*
+     * Get référence du document
+     * Params : Etude $etude, mixed $doc, string $type (the type of doc)
      */
-    public function getRefDoc(Etude $etude, $doc, $version = 0, $key = 0, $av = 0, $avVersion = 0) {
-        if ($doc == "RM" ||$doc == "DM") {
-            if($key == -1 )
-                return $this->getRefEtude($etude) . "-" . $doc;
-            if($etude->getMissions()->get($key)->getIntervenant()!=NULL)
-            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+    //TODO if object == NULL
+    public function getRefDoc(Etude $etude, $type, $key = -1){
+        $type = strtoupper($type);
+        if($type == 'AP'){
+            if($etude->getAp())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getAp()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'CC'){
+            if($etude->getCc())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getCc()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'RM' || $type == 'DM'){
+            if($key < 0) return $this->getRefEtude($etude) . '-' . $type;
+            if(!$etude->getMissions()->get($key) 
+            || !$etude->getMissions()->get($key)->getIntervenant())
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING DEV ID - ERROR GETTING VERSION';
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
+        }
+        elseif($type == 'FA'){
+            if($etude->getFa())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getFa()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'FI'){
+            if($etude->getFis($key))
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '-' . $etude->getFis($key)->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '- ERROR GETTING VERSION';
+                
+        }
+        elseif($type == 'FS'){
+            if($etude->getFs())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getFs()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'PVI'){
+            if($key>=0 && $etude->getPvis($key))
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '-' . $etude->getPvis($key)->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '- ERROR GETTING PVI';
+        }
+        elseif($type == 'PVR'){
+            if($etude->getPvr())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getPvr()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'CE'){
+            if(!$etude->getMissions()->get($key) 
+            || !$etude->getMissions()->get($key)->getIntervenant())
+                return "[M-GaTE]" . $etude->getMandat() . "-CE- ERROR GETTING DEV ID";
+            else
+                $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;            
+        }
+        elseif($type == 'AVCC'){
+            if($etude->getCc() && $etude->getAvs()->get($key))
+                return $this->getRefEtude($etude) . '-CC-' . $etude->getCc()->getVersion() . '-AV'.($key+1) . '-'.$etude->getAvs()->get($key)->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
             
-            return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant . "-" . $version;
         }
-        elseif ($doc == "CE") {
-            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
-            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
-        }
-        elseif ($doc == "FA" || $doc == "FS" || $doc == "FS"){
-            return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; 
-        }
-        elseif($doc == 'AV'){
-            return $this->getRefEtude($etude) . "-CC-" . $version . '-AV' . $av . '-'. $avVersion;
-        }
-        elseif ($doc == 'PVI') {
-            return $this->getRefEtude($etude) . "-" . $doc . ($key+1). "-" . $version;
-        }
-        
-        return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
+        else
+            return 'ERROR';
+
     }
+    
 
     /**
      * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
