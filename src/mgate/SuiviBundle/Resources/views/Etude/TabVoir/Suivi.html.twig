@@ -35,10 +35,10 @@
     <tr>
         <td>{{ ( etude.ap and etude.ap.dateSignature ) ? etude.ap.dateSignature | date("d/m/Y") : "Non signé" }}</td>
         <td>{{ etude.ap.nbrDev| default('Non estimé') }}</td>
-        <td>{% if etude.presentationprojet|default(0) %}Dans le cadre de son activité professionnelle, {{etude.prospect.nom |default('')}}{% endif %} {{etude.presentationprojet|default('')|nl2br}}</td>
+        <td>{% if etude.presentationprojet|default(0) %}<i>Dans le cadre de son activité professionnelle, </i>{{etude.prospect.nom |default('')}}{% endif %} {{etude.presentationprojet|default('')|nl2br}}</td>
         <td>{{etude.description|default('')|nl2br}}</td>
         <td>{{etude.typeprestationtostring|default('')}}</td>
-        <td>{% if etude.competences|default(0) %}Les réalisateurs de cette étude devront donc être capables de : <br />{% endif %}{{etude.competences|default('')|nl2br}}</td>
+        <td>{% if etude.competences|default(0) %}<i>Les réalisateurs de cette étude devront donc être capables de : </i><br />{% endif %}{{etude.competences|default('')|nl2br}}</td>
     </tr>
 </table>
 </div>
