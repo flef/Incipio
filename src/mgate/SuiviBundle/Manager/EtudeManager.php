@@ -388,10 +388,26 @@ class EtudeManager extends \Twig_Extension {
         $DateAvert0 = new \DateInterval('P10D');
         if($this->getDateFin($etude))
         {
-            if($this->getDateFin($etude)->sub($DateAvert0)<$now)
+            if(!$etude->getPvr())
+            {    
+                if($now<$this->getDateFin($etude) && $this->getDateFin($etude)->sub($DateAvert0)<$now)
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
+                    array_push($errors, $error);
+                }
+                else if($this->getDateFin($etude)<$now)
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'la fin de l\'étude est passée. Pensez à faire un PVR ou des avenants à la CC et au(x) RM.');  
+                    array_push($errors, $error);
+                }
+            }
+            else
             {
-                $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
-                array_push($errors, $error);
+                if($etude->getPvr()->getDateSignature()>$this->getDateFin($etude))
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La date du PVR est située après la fin de l\'étude.');  
+                    array_push($errors, $error);
+                }
             }
         }
         
