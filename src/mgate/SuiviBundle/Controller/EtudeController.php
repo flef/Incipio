@@ -262,21 +262,65 @@ class EtudeController extends Controller
         $MANDAT_MAX = 10;
         
         $etudesParMandat = array();
+        
         for($i = 1; $i < $MANDAT_MAX; $i++)
             array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('mandat' => $i), array('num' => 'DESC')));
        
+        //WARN
+        /* Création d'un form personalisé sans classes (Symfony Forms without Classes)
+         * 
+         * Le problème qui se pose est de savoir si les données reçues sont bien destinées aux bonnes études
+         * Si quelqu'un ajoute une étude ou supprime une étude pendant la soumission de se formulaire, c'est la cata
+         * tout se décale de 1 étude !!
+         * J'ai corrigé ce bug en cas d'ajout d'une étude. Les changements sont bien sauvegardés !!
+         * Mais cette page doit être rechargée et elle l'est automatiquement. (Si js est activé !)
+         * bref rien de bien fracassant. Solution qui se doit d'être temporaire bien que fonctionnelle !
+         * Cependant en cas de suppression d'une étude, chose qui n'arrive pas tous les jours, les données seront perdues !!
+         * Perdues Perdues !!!
+         */
+                
         
-        $form = $this->createForm(new \mgate\SuiviBundle\Form\CommentaireSuiviType(), $etudesParMandat[4][2]);
+        $NbrEtudes = 0;
+        foreach ($etudesParMandat as $etudesInMandat)
+            $NbrEtudes += count ($etudesInMandat);
+        
+        $form = $this->createFormBuilder();
+        
+        $id = 0;
+        foreach(array_reverse($etudesParMandat) as $etudesInMandat){
+            foreach ($etudesInMandat as $etude)                
+            {
+                $form = $form->add((string) (2*$id), 'hidden', array('label' => 'refEtude', 'data' => $this->get('mgate.etude_manager')->getRefEtude($etude)))
+                             ->add((string) (2*$id+1), 'textarea', array('label' => $this->get('mgate.etude_manager')->getRefEtude($etude), 'required' => false, 'data' => $etude->getStateDescription() ));
+                $id++;                
+            }
+        }  
+        $form = $form->getForm();
+        
         if($this->get('request')->getMethod() == 'POST' )
         {
             $form->bindRequest($this->get('request'));
 
-            if( $form->isValid() )
-            {
-                $em->persist($etude);
-                $em->flush();
-            }
-        }
+            $data = $form->getData();
+            
+            $id = 0;
+            foreach(array_reverse($etudesParMandat) as $etudesInMandat){
+                foreach ($etudesInMandat as $etude)                
+                {
+                    if($data[2*$id] == $this->get('mgate.etude_manager')->getRefEtude($etude)){
+                        if($data[2*$id] != $etude->getStateDescription()){
+                            $etude->setStateDescription($data[2*$id+1]);
+                            $em->persist($etude);
+                            $id++;
+                        }     
+                    }
+                    else{
+                        echo '<script>alert("Alexis, n\'aie crainte. Flouff s\'occupe de tout, tes données sont safes, mais je dois recharger la page, quelqu\'un a modifié la BDD en même temps que toi"); location.reload();</script>';
+                    }
+                }
+            }  
+            $em->flush();
+         }
         
         
         
