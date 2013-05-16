@@ -349,7 +349,7 @@ class TraitementController extends Controller {
         if ($etude->getDoc($doc, $key) != NULL) {
             //Date Signature tout type de doc
             $dateSignature = $etude->getDoc($doc, $key)->getDateSignature();
-            if ($dateSignature != NULL)
+            if ($dateSignature)
                 $this->array_push_assoc($champs, 'Date_Signature', $dateSignature->format("d/m/Y"));
 
             //Signataire 1 : Signataire M-GaTE
@@ -585,7 +585,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
             
-            
+            if($mission->getFinOm())
             $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
         
