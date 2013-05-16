@@ -24,7 +24,7 @@ class Facture extends DocType
     /**
      * @var integer $num
      *
-     * @ORM\Column(name="num", type="integer", nullable=true)
+     * @ORM\Column(name="num", type="integer", nullable=true, unique=true)
      */
     private $num;
     
