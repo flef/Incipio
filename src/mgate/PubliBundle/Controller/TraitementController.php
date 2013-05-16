@@ -481,7 +481,7 @@ class TraitementController extends Controller {
         //PREPARE PVI
         $nbrPVI = count($etude->getPvis());
         if( $doc == 'PVI' && $key < $nbrPVI)
-            $phasePVI = $etude->getPvis()[$key]->getPhaseID();
+            $phasePVI = $etude->getPvis($key)->getPhaseID();
         else 
             $phasePVI = -1;
         
