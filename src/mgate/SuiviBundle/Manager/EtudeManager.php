@@ -362,15 +362,17 @@ class EtudeManager extends \Twig_Extension {
       }
       foreach($etude->getMissions() as $mission)
       {
-          foreach($etude->getPvis() as $pvi)
-          {
-              if($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature())
-              {
-                  $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
-                 à la date de signature des PVIS.'); 
-                    array_push($errors, $error);
-                    break;
-              }
+          if($etude->getPvis()){
+            foreach($etude->getPvis() as $pvi)
+            {
+                if($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature())
+                {
+                    $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
+                   à la date de signature des PVIS.'); 
+                      array_push($errors, $error);
+                      break;
+                }
+            }
           }
       }
       
