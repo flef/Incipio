@@ -149,23 +149,23 @@ class EtudeManager extends \Twig_Extension {
                 return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
         }
         elseif($type == 'FA'){
-            if($etude->getFa())
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getFa()->getVersion();
+            if($etude->getFa() && $num = $etude->getFa()->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ '  . $type;
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
         }
         elseif($type == 'FI'){
-            if($etude->getFis($key))
-                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '-' . $etude->getFis($key)->getVersion();
+            if($etude->getFis($key) && $num = $etude->getFis($key)->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type . ($key+1);
             else
-                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '- ERROR GETTING VERSION';
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type . ($key+1);
                 
         }
         elseif($type == 'FS'){
-            if($etude->getFs())
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getFs()->getVersion();
+            if($etude->getFs() && $num = $etude->getFs()->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type;
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
         }
         elseif($type == 'PVI'){
             if($key>=0 && $etude->getPvis($key))
