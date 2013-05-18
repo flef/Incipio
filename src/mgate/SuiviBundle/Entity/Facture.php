@@ -3,12 +3,14 @@
 namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity; 
 
 /**
  * mgate\SuiviBundle\Entity\Facture
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\FactureRepository")
+ * @UniqueEntity(fields={"num", "exercice"}) 
  */
 class Facture extends DocType
 {
@@ -24,9 +26,16 @@ class Facture extends DocType
     /**
      * @var integer $num
      *
-     * @ORM\Column(name="num", type="integer", nullable=true, unique=true)
+     * @ORM\Column(name="num", type="integer", nullable=true)
      */
     private $num;
+    
+    /**
+     * @var integer $exercice
+     *
+     * @ORM\Column(name="exercice", type="integer", nullable=true)
+     */
+    private $exercice;
     
     
     /**

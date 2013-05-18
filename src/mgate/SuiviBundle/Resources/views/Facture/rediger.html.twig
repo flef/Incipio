@@ -16,11 +16,18 @@
             <input type="submit" value="Enregistrer"/>  
     </form>
 
-
-
+{% if type == 'fa' %}   
+<div id="dialog" title="Aide au calcul de l'acompte">
+    <p>Pourcentage de l'acompte dans l'AP: <b>{{form.vars.value.pourcentageAcompte *100 }} %</b></p>
+    <p>Prix total de l'etude : {{ getTotalHT(etude)|default('') }} € HT</p>
     <p>
-        <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'Etude</a>
-    </p>   
+        <label for="pourcentage"></label>
+        <input type="text" name="pourcentage" id="pourcentage" value="{{form.vars.value.pourcentageAcompte * 100 }}" style="width: 45px"  /> % => <span class="prix">//</span> € HT
+        <button id="myButtonUpdate">Utiliser ce montant</button>
+    </p>
+    <p>Le montant actuel correpond à <span class="pourcentageEqu">//</span> % de l'étude</p>
+</div>    
+{% endif %}
     
 {% endblock %}
 
@@ -29,26 +36,88 @@
     {{ form_javascript(form) }}
 <script type="text/javascript">
     
+    // Fenetre resumant
+    $.ui.dialog.prototype._oldinit = $.ui.dialog.prototype._init;
+    $.ui.dialog.prototype._init = function() {
+        $(this.element).parent().css('position', 'fixed');
+        $(this.element).dialog("option",{
+            resizeStop: function(event,ui) {
+                var position = [(Math.floor(ui.position.left) - $(window).scrollLeft()),
+                                (Math.floor(ui.position.top) - $(window).scrollTop())];
+                $(event.target).parent().css('position', 'fixed');
+                $(event.target).parent().dialog('option','position',position);
+                return true;
+            }
+        });
+        this._oldinit();
+    };
+    $(function() {
+        $( "#dialog" ).dialog({
+            position: { 
+                  my: 'right center',
+                  at: 'right center'
+            },
+            height:  $(window).height() * 0.25,
+            width:  $(window).width() * 0.25
+        });
+    });
     
     {% if type == 'fa' %}
     
-    
-    function updatePrix() {
+    function updatePrix(apercu) {
         var prix = 0;
         
-        prix=$('input.pourcentageAcompte').val()*0.01*{{ getTotalHT(etude)|default(0) }};
-        $('input.montantHT').val( prix );
-
+        prix=$('#pourcentage').val()*0.01*{{ getTotalHT(etude)|default(0) }};
         
+        if(prix.toFixed(2) != prix)
+            arrondi = "...";
+        else
+            arrondi = "";
+        
+        if(apercu)
+            $('.prix').text( prix.toFixed(2) + arrondi);
+        else
+        {
+            $('input.montantHT').val( prix.toFixed(2) );
+            updatePourcentage();
+        }
+
+    }
+    
+    function updatePourcentage() {
+        var pourcentage = 0;
+        
+        pourcentage=$('input.montantHT').val().replace(/,/g,"\.") *100 /{{ getTotalHT(etude)|default(0) }};
+        
+        if(pourcentage.toFixed(2) != pourcentage)
+            arrondi = "...";
+        else
+            arrondi = "";
+        
+        $('.pourcentageEqu').text( pourcentage.toFixed(2) + arrondi );
+
     }
 
     jQuery(document).ready(function() {
         
-        updatePrix();    
+        updatePrix(true);  
+        updatePourcentage();
          
-        $('input.pourcentageAcompte').each(function() {
+        $('#pourcentage').each(function() {
             $(this).change(function() { 
-                updatePrix();
+                updatePrix(true);
+            });
+        });
+        
+        $('#myButtonUpdate').on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+            updatePrix(false);
+        });
+        
+        $('input.montantHT').each(function() {
+            $(this).change(function() { 
+                updatePourcentage();
             });
         });
                 
