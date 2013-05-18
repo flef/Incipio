@@ -32,6 +32,16 @@ class SuiviType extends AbstractType {
                 'prototype' => true,
                 'by_reference' => false, //indispensable cf doc
                 ));
+        
+        $builder->add('pvis', 'collection', array(
+                'type' => new DocTypeSuiviType,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false, //indispensable cf doc
+                ));
+        
+        $builder->add('pvr', new DocTypeSuiviType(), array('label' => 'PVR', 'data_class'=>'mgate\SuiviBundle\Entity\ProcesVerbal'));
     }
 
     public function getName() {

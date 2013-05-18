@@ -1,6 +1,20 @@
  <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
-                {{ form_row(formSuivi.stateID) }}
-                {{ form_row(formSuivi.auditDate) }}
+                
+                
+                
+                            <table class="table">
+                                    <tr>
+                                        <th>Etat de l'Étude</th>
+                                        <th>Audité le</th>
+                                        <th>Type d'audit</th>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ form_widget(formSuivi.stateID) }}</td>
+                                        <td>{{ form_widget(formSuivi.auditDate) }}</td>
+                                        <td>{{ form_widget(formSuivi.auditType) }}</td>
+                                    </tr>
+                                </table>
+         
 
                                 <table class="table table-striped table-bordered"  onclick="docStateChange();">
                                     <tr>
@@ -15,7 +29,7 @@
                                     </tr>
                                     <!-- AVANT PROJET -->
                                     <tr class="docTabRow">
-                                        <th>Avant-Projet</td>
+                                        <th>Avant-Projet</th>
                                         <td class="state">Incomplet</td>
                                         <td>{{ form_widget(formSuivi.ap.redige) }}</td>
                                         <td>{{ form_widget(formSuivi.ap.relu) }}</td>
@@ -27,7 +41,7 @@
                                     </tr>
                                     <!-- CONVENTION CLIENT-->
                                     <tr class="docTabRow">
-                                        <th>Convention Client</td>
+                                        <th>Convention Client</th>
                                         <td class="state">Incomplet</td>
                                         <td>{{ form_widget(formSuivi.cc.redige) }}</td>
                                         <td>{{ form_widget(formSuivi.cc.relu) }}</td>
@@ -36,10 +50,13 @@
                                         <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
                                         <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
                                     </tr>
-                        <!--FACTURES-->
-                        {% for facture in formSuivi.factures %}
+                                    <!--FACTURES-->
+                                    <tr>
+                                        <th colspan="8">Factures</th>
+                                    </tr>
+                                    {% for facture in formSuivi.factures %}
                                     <tr class="docTabRow">
-                                        <th>Facture n° {{ loop.index }} {{typeFactureToString(facture.vars.value.type) }}</td>
+                                        <th>Facture n° {{ loop.index }} {{typeFactureToString(facture.vars.value.type) }}</th>
                                         <td class="state">Incomplet</td>
                                         <td>{{ form_widget(facture.redige) }}</td>
                                         <td>{{ form_widget(facture.relu) }}</td>
@@ -49,10 +66,13 @@
                                         <td>{{ form_widget(facture.receptionne) }}</td>
                                     </tr>
                         {% endfor %}
-                                    <!--RECAPITULATIFS DE MISSION-->
+                        <!--RECAPITULATIFS DE MISSION-->
+                                    <tr>
+                                        <th colspan="8">Récapitulatif de mission</th>
+                                    </tr>
                         {% for mission in formSuivi.missions %}
                                     <tr class="docTabRow">
-                                        <th>RM n° {{ loop.index }}</td>
+                                        <th>RM n° {{ loop.index }}</th>
                                         <td class="state">Incomplet</td>
                                         <td>{{ form_widget(mission.redige) }}</td>
                                         <td>{{ form_widget(mission.relu) }}</td>
@@ -62,6 +82,32 @@
                                         <td>{{ form_widget(mission.receptionne) }}</td>
                                     </tr>
                         {% endfor %}
+                        <!--PROCES VERBAUX-->
+                                    <tr>
+                                        <th colspan="8">Procès-verbaux</th>
+                                    </tr>
+                        {% for pvi in formSuivi.pvis %}
+                                    <tr class="docTabRow">
+                                        <th>PVI n° {{ loop.index }}</th>
+                                        <td class="state">Incomplet</td>
+                                        <td>{{ form_widget(pvi.redige) }}</td>
+                                        <td>{{ form_widget(pvi.relu) }}</td>
+                                        <td>{{ form_widget(pvi.spt1) }}</td>
+                                        <td>{{ form_widget(pvi.spt2) }}</td>
+                                        <td>{{ form_widget(pvi.envoye) }}</td>
+                                        <td>{{ form_widget(pvi.receptionne) }}</td>
+                                    </tr>
+                        {% endfor %}
+                                    <tr class="docTabRow">
+                                        <th>PVR</th>
+                                        <td class="state">Incomplet</td>
+                                        <td>{{ form_widget(formSuivi.pvr.redige) }}</td>
+                                        <td>{{ form_widget(formSuivi.pvr.relu) }}</td>
+                                        <td>{{ form_widget(formSuivi.pvr.spt1) }}</td>
+                                        <td>{{ form_widget(formSuivi.pvr.spt2) }}</td>
+                                        <td>{{ form_widget(formSuivi.pvr.envoye) }}</td>
+                                        <td>{{ form_widget(formSuivi.pvr.receptionne) }}</td>
+                                    </tr>
                                 </table>
                         {{ form_rest(formSuivi) }}
                             </form>   

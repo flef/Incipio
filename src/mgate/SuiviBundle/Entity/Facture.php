@@ -22,6 +22,14 @@ class Facture extends DocType
     private $id;
     
     /**
+     * @var integer $num
+     *
+     * @ORM\Column(name="num", type="integer", nullable=true, unique=true)
+     */
+    private $num;
+    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="factures", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
@@ -118,5 +126,28 @@ class Facture extends DocType
         $this->montantHT = $montantHT;
     
         return $this;
+    }
+
+    /**
+     * Set num
+     *
+     * @param integer $num
+     * @return Facture
+     */
+    public function setNum($num)
+    {
+        $this->num = $num;
+    
+        return $this;
+    }
+
+    /**
+     * Get num
+     *
+     * @return integer 
+     */
+    public function getNum()
+    {
+        return $this->num;
     }
 }

@@ -123,27 +123,4 @@ class ProcesVerbal extends DocType
     {
         return $this->phaseIDs;
     }
-
-    /**
-     * Set phaseID
-     *
-     * @param integer $phaseID
-     * @return ProcesVerbal
-     */
-    public function setPhaseID($phaseID)
-    {
-        $this->phaseID = $phaseID;
-    
-        return $this;
-    }
-
-    /**
-     * Get phaseID
-     *
-     * @return integer 
-     */
-    public function getPhaseID()
-    {
-        return $this->phaseID;
-    }
 }
