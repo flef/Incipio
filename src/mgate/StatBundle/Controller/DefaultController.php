@@ -96,6 +96,7 @@ class DefaultController extends Controller
         $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
         $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
         $ob->xAxis->type('datetime');
+        $ob->xAxis->dateTimeLabelFormats(array('month'  => "%b"));
         $ob->yAxis->min(0);
         $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
@@ -104,10 +105,10 @@ class DefaultController extends Controller
         $ob->legend->floating(true);
         $ob->legend->layout('vertical');
         $ob->legend->y(40);
-        $ob->legend->x(-40);
+        $ob->legend->x(90);
         $ob->legend->verticalAlign('top');
         $ob->legend->reversed(true);
-        $ob->legend->align('right');
+        $ob->legend->align('left');
         $ob->legend->backgroundColor('#FFFFFF');
         $ob->legend->itemStyle($style);
         $ob->plotOptions->series(array('lineWidth'=>5, 'marker'=>array('radius'=>8)));
