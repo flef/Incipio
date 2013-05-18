@@ -48,7 +48,7 @@ Partie "variable système", modifier l'entrée "Path" et rajouter ;c:\wamp\bin\p
 - Faire autre chose et attendre
 
 7. Installer la base de données
-php app/console doctrine:database:create
+php app/console doctrine:database:creat
 php app/console doctrine:schema:update --force
 
 8. Tester la configuration sur http://127.0.0.1:81/My-M-GaTE/web/config.php
