@@ -143,10 +143,12 @@ class DefaultController extends Controller
         //$ob->global->useUTC(false);
         $ob->chart->type('column');
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
-
+        //$ob->xAxis->labels(array('style'=>$style));
+        //$ob->yAxis->labels(array('style'=>$style));
         $ob->title->text('Évolution par mandat du taux de conversion');
         $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
-
+        //$ob->xAxis->title(array('text'  => null, 'style'=>$style));
+        //$ob->xAxis->type('datetime');
         $ob->xAxis->categories($categories);
         $ob->yAxis->min(0);
         $ob->yAxis->title(array('text'  => "Taux de conversion"));
@@ -156,11 +158,22 @@ class DefaultController extends Controller
         $ob->tooltip->footerFormat('</table>');
         $ob->tooltip->shared(true);
         $ob->tooltip->useHTML(true);
+        //$ob->credits->enabled(false);
+        //$ob->legend->floating(true);
+        //$ob->legend->layout('vertical');
+        //$ob->legend->y(100);
+        //$ob->legend->x(-100);
+        //$ob->legend->verticalAlign('top');
+        //$ob->legend->reversed(true);
+        //$ob->legend->align('right');
         $ob->legend->backgroundColor('#FFFFFF');
-
+        //$ob->legend->shadow(true);
+        //$ob->legend->borderWidth(1);
+        //$ob->legend->itemStyle($style);
         $ob->plotOptions->column(array('pointPadding'=>0.2,'borderWidth'=>0));
         $ob->series($series);
 
+        //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
         return $this->render('mgateStatBundle:Default:caFull.html.twig', array(    
             'chart' => $ob
         ));
