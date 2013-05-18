@@ -12,11 +12,8 @@ use mgate\SuiviBundle\Form\ProcesVerbalSubType;
 class ProcesVerbalType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        $builder->add(strtolower($options['type']), new ProcesVerbalSubType(), array('label' => ' ', 'type'=>$options['type'], 'prospect'=>$options['prospect']));
-        
-        /*if(strtolower($options['type'])=="pvr")
-                $builder->add('pourcentageAcompte', 'percent', array('label' => 'Pourcentage de l\'Acompte', 'required' => false, 'attr' => array('class' => 'pourcentageAcompte')));
-        */
+        $builder->add(strtolower($options['type']), new ProcesVerbalSubType(), array('label' => ' ', 'type'=>$options['type'], 'prospect'=>$options['prospect'], 'phases'=>$options['phases']));
+                 
     }
 
     public function getName() {
@@ -28,6 +25,7 @@ class ProcesVerbalType extends AbstractType {
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'type' => '',
             'prospect' => '',
+            'phases' => '',
         );
     }
 

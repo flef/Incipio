@@ -10,38 +10,43 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
 
 
 
+<form method="post" {{ form_enctype(form) }}>
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>Référence</th>
+            <th>Sujet</th>
+            <th>Client</th>
+            <th>Suiveur de projet</th>
+            <th>Signé</th>
+            <th>Commentaires</th>
+        </tr>
+        {% set textAreaID = -1 %}
+        {% for mandat in etudesParMandat | reverse %}
+        {% if mandat |length %}
+        <tr>
+            <th colspan="6">Mandat {{(etudesParMandat | length - loop.index0)}}</th>
+        </tr>
+        {% endif %}
+            {% for etude in mandat %}
+        {% set textAreaID = textAreaID + 1 %}
+        {% set signe = ( etude.cc ? etude.cc.spt1 and etude.cc.spt2 : false )%}
+        <tr class="{{ (etude.stateID == 4 ? "success" : (etude.stateID == 3 ? "error" : (etude.stateID == 2 ? "warning" : "info"))) }}">
+            <td><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></td>
+            <td>{{ etude.nom }}</td>
+            <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
+            <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
+            <td>{% if signe %}<span class="badge badge-success">Oui</span>{% else %}<span class="badge badge-important">Non</span>{% endif %}</td>
+            <td>
+                {# Token pour confimer que le text éditer correspond à l'étude + textarea  #}
+                {{ form_widget(form[2*textAreaID]) }}{{ form_widget(form[2*textAreaID+1]) }}
+            </td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </table>
+	<input type="submit" value="Enregistrer l'étude"/>
+</form>
 
-<table class="table table-striped table-bordered">
-    <tr>
-        <th>Référence</th>
-        <th>Sujet</th>
-        <th>Client</th>
-        <th>Suiveur de projet</th>
-        <th>Signé</th>
-        <th>Commentaires</th>
-    </tr>
-    {% for mandat in etudesParMandat | reverse %}
-    {% if mandat |length %}
-    <tr>
-        <th colspan="6">Mandat {{(etudesParMandat | length - loop.index0)}}</th>
-    </tr>
-    {% endif %}
-        {% for etude in mandat %}
-    {% set signe = ( etude.cc ? etude.cc.spt1 and etude.cc.spt2 : false )%}
-    <tr class="{{ (etude.stateID == 4 ? "success" : (etude.stateID == 3 ? "error" : (etude.stateID == 2 ? "warning" : "info"))) }}">
-        <td><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></td>
-        <td>{{ etude.nom }}</td>
-        <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
-        <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
-        <td>{% if signe %}<span class="badge badge-success">Oui</span>{% else %}<span class="badge badge-important">Non</span>{% endif %}</td>
-        <td>
-            <a id="commentaire" class="btn" href="#" data-title="{{ etude.id }}" data-content="0">
-                <i class="icon-comment"></i> 
-            </a> {{ etude.stateDescription }}</td>
-    </tr>
-    {% endfor %}
-    {% endfor %}
-</table>
 {% endblock %}
 
 {% block javascript %}

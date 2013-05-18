@@ -11,9 +11,10 @@ class ProcesVerbalSubType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-        
-        /*if($options['type']=="pvr")
-            $readOnly=true;*/
+        $phaseNum = $options['phases'];
+        if($options['type']=="pvi"){
+            $builder->add('phaseID', 'integer', array('label' => 'Phases concernées', 'required' => false, 'attr' => array('min' => '1', 'max' => $phaseNum)));
+        }
         
         DocTypeType::buildForm($builder, $options);
     }
@@ -27,6 +28,7 @@ class ProcesVerbalSubType extends DocTypeType
             'data_class' => 'mgate\SuiviBundle\Entity\ProcesVerbal',
             'type' => null,
             'prospect' => null,
+            'phases' => null,
         );
     }
 }
