@@ -5,12 +5,12 @@ namespace mgate\SuiviBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * mgate\SuiviBundle\Entity\ProcesVerbal
+ * mgate\SuiviBundle\Entity\Facture
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\ProcesVerbalRepository")
+ * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\FactureRepository")
  */
-class ProcesVerbal extends DocType
+class Facture extends DocType
 {
     /**
      * @var integer $id
@@ -22,27 +22,31 @@ class ProcesVerbal extends DocType
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", cascade={"persist"})
+     * @var integer $num
+     *
+     * @ORM\Column(name="num", type="integer", nullable=true)
+     */
+    private $num;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="factures", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
     
-
-    //Justification du choix: choix des phases dans un select multiple destiner qu'à un affichage, aucun traitement sur les phases
     /**
      * @var string $type
      *
-     * @ORM\Column(name="phaseIDs", type="integer", nullable=true)
-     */
-    protected $phaseID;
-    
-    /**
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="text", nullable=true)
+     * @ORM\Column(name="type", type="text", nullable=false)
      */
     private $type;
 
+    /**
+     * @var integer $montantHT
+     *
+     * @ORM\Column(name="montantHT", type="decimal", scale=2, nullable=true)
+     */
+    private $montantHT;
 
     /**
      * Get id
@@ -58,7 +62,7 @@ class ProcesVerbal extends DocType
      * Set etude
      *
      * @param mgate\SuiviBundle\Entity\Etude $etude
-     * @return ProcesVerbal
+     * @return Fi
      */
     public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
     {
@@ -81,7 +85,7 @@ class ProcesVerbal extends DocType
      * Set type
      *
      * @param string $type
-     * @return ProcesVerbal
+     * @return Etude
      */
     public function setType($type)
     {
@@ -99,51 +103,27 @@ class ProcesVerbal extends DocType
     {
         return $this->type;
     }
-
-
-    /**
-     * Set phaseIDs
-     *
-     * @param array $phaseIDs
-     * @return ProcesVerbal
-     */
-    public function setPhaseIDs($phaseIDs)
-    {
-        $this->phaseIDs = $phaseIDs;
     
-        return $this;
-    }
-
     /**
-     * Get phaseIDs
-     *
-     * @return array 
-     */
-    public function getPhaseIDs()
-    {
-        return $this->phaseIDs;
-    }
-
-    /**
-     * Set phaseID
-     *
-     * @param integer $phaseID
-     * @return ProcesVerbal
-     */
-    public function setPhaseID($phaseID)
-    {
-        $this->phaseID = $phaseID;
-    
-        return $this;
-    }
-
-    /**
-     * Get phaseID
+     * Get montantHT
      *
      * @return integer 
      */
-    public function getPhaseID()
+    public function getMontantHT()
     {
-        return $this->phaseID;
+        return $this->montantHT;
+    }
+
+    /**
+     * Set montantHT
+     *
+     * @param string $montantHT
+     * @return Facture
+     */
+    public function setMontantHT($montantHT)
+    {
+        $this->montantHT = $montantHT;
+    
+        return $this;
     }
 }

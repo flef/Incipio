@@ -44,9 +44,16 @@ class EtudeManager extends \Twig_Extension {
      public function getFilters() {
         return array(
             'nbsp' => new \Twig_Filter_Method($this, 'nonBreakingSpace'),
+            'string' => new \Twig_Filter_Method($this, 'toString'),
         );
     }
- 
+    
+    public function toString($int){
+        var_dump((string) $int);
+        return (string) $int;
+    }
+
+
     public function nonBreakingSpace($string) {
         return preg_replace('#\s#', '&nbsp;', $string);    
     }
@@ -114,36 +121,120 @@ class EtudeManager extends \Twig_Extension {
         return "[M-GaTE]" . (string) ($etude->getMandat() * 100 + $etude->getNum());
     }
 
-    /**
-     * Get référence document
+    /*
+     * Get référence du document
+     * Params : Etude $etude, mixed $doc, string $type (the type of doc)
      */
-    public function getRefDoc(Etude $etude, $doc, $version = 0, $key = 0) {
-        if ($doc == "RM") {
-            if($etude->getMissions()->get($key)->getIntervenant()!=NULL)
-            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+    //TODO if object == NULL
+    public function getRefDoc(Etude $etude, $type, $key = -1){
+        $type = strtoupper($type);
+        if($type == 'AP'){
+            if($etude->getAp())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getAp()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'CC'){
+            if($etude->getCc())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getCc()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'RM' || $type == 'DM'){
+            if($key < 0) return $this->getRefEtude($etude) . '-' . $type;
+            if(!$etude->getMissions()->get($key) 
+            || !$etude->getMissions()->get($key)->getIntervenant())
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING DEV ID - ERROR GETTING VERSION';
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
+        }
+        elseif($type == 'FA'){
+            if($etude->getFa() && $num = $etude->getFa()->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ '  . $type;
+            else
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
+        }
+        elseif($type == 'FI'){
+            if($etude->getFis($key) && $num = $etude->getFis($key)->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type . ($key+1);
+            else
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type . ($key+1);
+                
+        }
+        elseif($type == 'FS'){
+            if($etude->getFs() && $num = $etude->getFs()->getNum())
+                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type;
+            else
+                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
+        }
+        elseif($type == 'PVI'){
+            if($key>=0 && $etude->getPvis($key))
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '-' . $etude->getPvis($key)->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '- ERROR GETTING PVI';
+        }
+        elseif($type == 'PVR'){
+            if($etude->getPvr())
+                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getPvr()->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+        }
+        elseif($type == 'CE'){
+            if(!$etude->getMissions()->get($key) 
+            || !$etude->getMissions()->get($key)->getIntervenant())
+                return "[M-GaTE]" . $etude->getMandat() . "-CE- ERROR GETTING DEV ID";
+            else
+                $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
+            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;            
+        }
+        elseif($type == 'AVCC'){
+            if($etude->getCc() && $etude->getAvs()->get($key))
+                return $this->getRefEtude($etude) . '-CC-' . $etude->getCc()->getVersion() . '-AV'.($key+1) . '-'.$etude->getAvs()->get($key)->getVersion();
+            else
+                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
             
-            return $this->getRefEtude($etude) . "-" . $doc . "-" . $identifiant . "-" . $version;
         }
-        else if ($doc == "CE") {
-            $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
-            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;
-        }
-        else{
-            return $this->getRefEtude($etude) . "-" . $doc;
-        }
-        return $this->getRefEtude($etude) . "-" . $doc . "-" . $version; //TODO faire les autres type de docs, genre RM
+        else
+            return 'ERROR';
+
     }
+    
 
     /**
      * Get nouveau numéro d'etude, pour valeur par defaut dans formulaire
      */
-    public function getNouveauNumero($mandat = 5) {
+    public function getNouveauNumero() {
+        $mandat = $this->getMaxMandat();
         $qb = $this->em->createQueryBuilder();
 
         $query = $qb->select('e.num')
                 ->from('mgateSuiviBundle:Etude', 'e')
                 ->andWhere('e.mandat = :mandat')
                 ->setParameter('mandat', $mandat)
+                ->orderBy('e.num', 'DESC');
+
+        $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
+        if ($value)
+            return $value['num'] + 1;
+        else
+            return 1;
+    }
+    
+    
+    /**
+     * Get nouveau numéro pour facture (auto incrémentation)
+     */
+    public function getNouveauNumeroFacture() {
+        $qb = $this->em->createQueryBuilder();
+        
+        $mandat = 2007 + $this->getMaxMandat();
+        
+        $mandatComptable = \DateTime::createFromFormat("d/m/Y",'31/03/'.$mandat);
+
+        $query = $qb->select('e.num')
+                ->from('mgateSuiviBundle:Facture', 'e')
+                ->andWhere('e.dateSignature > :mandatComptable')
+                ->setParameter('mandatComptable', $mandatComptable)
                 ->orderBy('e.num', 'DESC');
 
         $value = $query->getQuery()->setMaxResults(1)->getOneOrNullResult();
@@ -240,44 +331,48 @@ class EtudeManager extends \Twig_Extension {
         }
       }
       
-      foreach($etude->getPvis() as $pvi)
-      {
-        if($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature())
+      if($etude->getPvis()){
+        foreach($etude->getPvis() as $pvi)
         {
-            $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                 à la date de signature des PVIS.'); 
-            array_push($errors, $error);
-            break;
+          if($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature())
+          {
+              $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                   à la date de signature des PVIS.'); 
+              array_push($errors, $error);
+              break;
+          }
         }
       }
-      
       //ordre PVI
-      foreach($etude->getPvis() as $pvi)
-      {
-          if(isset($pviAnterieur))
-          {
-            if($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature())
+      if($etude->getPvis()){
+        foreach($etude->getPvis() as $pvi)
+        {
+            if(isset($pviAnterieur))
             {
-                $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
-               '); 
-                array_push($errors, $error);
-                break;
+              if($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature())
+              {
+                  $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
+                 '); 
+                  array_push($errors, $error);
+                  break;
+              }
             }
-          }
-          $pviAnterieur = $pvi;
+            $pviAnterieur = $pvi;
+        }
       }
-      
       foreach($etude->getMissions() as $mission)
       {
-          foreach($etude->getPvis() as $pvi)
-          {
-              if($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature())
-              {
-                  $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
-                 à la date de signature des PVIS.'); 
-                    array_push($errors, $error);
-                    break;
-              }
+          if($etude->getPvis()){
+            foreach($etude->getPvis() as $pvi)
+            {
+                if($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature())
+                {
+                    $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
+                   à la date de signature des PVIS.'); 
+                      array_push($errors, $error);
+                      break;
+                }
+            }
           }
       }
       
@@ -295,10 +390,26 @@ class EtudeManager extends \Twig_Extension {
         $DateAvert0 = new \DateInterval('P10D');
         if($this->getDateFin($etude))
         {
-            if($this->getDateFin($etude)->sub($DateAvert0)<$now)
+            if(!$etude->getPvr())
+            {    
+                if($now<$this->getDateFin($etude) && $this->getDateFin($etude)->sub($DateAvert0)<$now)
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
+                    array_push($errors, $error);
+                }
+                else if($this->getDateFin($etude)<$now)
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'la fin de l\'étude est passée. Pensez à faire un PVR ou des avenants à la CC et au(x) RM.');  
+                    array_push($errors, $error);
+                }
+            }
+            else
             {
-                $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
-                array_push($errors, $error);
+                if($etude->getPvr()->getDateSignature()>$this->getDateFin($etude))
+                {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La date du PVR est située après la fin de l\'étude.');  
+                    array_push($errors, $error);
+                }
             }
         }
         

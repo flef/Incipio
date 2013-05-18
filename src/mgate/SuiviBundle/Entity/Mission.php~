@@ -30,7 +30,7 @@ class Mission extends DocType
     protected $etude;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $referentTechnique;

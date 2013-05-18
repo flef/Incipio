@@ -19,15 +19,10 @@
         <a href="{{ path('mgateSuivi_facture_voir', {'id': facture.id}) }}" >Retour</a>
     </p>
 
-        <form action="{{ path('mgateSuivi_facture_supprimer', { 'id': facture.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
- 
 
-   <button onclick="bootbox.confirm('Are you sure?', function(result) { alert('Confirm result: '+result);}); return false;">test</button>
-    
-    
+
+    <button type="submit" onclick="self.location.href='{{ path('mgateSuivi_facture_supprimer', { 'id': facture.id }) }}'">Delete</button>
+
     
 {% endblock %}
 

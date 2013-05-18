@@ -9,7 +9,7 @@ mgate_publi_publiposter:
     requirements:
         id_etude:  \d+
         key: \d+
-        doc: AP|CC|FA|RM|PVR|PVI|FS
+        doc: AP|CC|FA|RM|PVR|PVI|FS|DM
         #change tolower
     
 mgate_publi_telecharger:
