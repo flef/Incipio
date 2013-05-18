@@ -14,9 +14,9 @@ class FactureType extends AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add(strtolower($options['type']), new FactureSubType(), array('label' => ' ', 'type'=>$options['type']));
         
-        if(strtolower($options['type'])=="fa")
+        /*if(strtolower($options['type'])=="fa")
                 $builder->add('pourcentageAcompte', 'percent', array('label' => 'Pourcentage de l\'Acompte', 'required' => false, 'attr' => array('class' => 'pourcentageAcompte')));
-        
+        */
     }
 
     public function getName() {
