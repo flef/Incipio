@@ -49,6 +49,12 @@ class ClientContact
     
     /**
      * @var string $contenu
+     * @ORM\Column(name="objet", type="text",nullable=true)
+     */
+    private $objet;
+    
+    /**
+     * @var string $contenu
      * @ORM\Column(name="contenu", type="text",nullable=true)
      */
     private $contenu;
@@ -255,5 +261,28 @@ class ClientContact
     public function getMoyenContact()
     {
         return $this->moyenContact;
+    }
+
+    /**
+     * Set objet
+     *
+     * @param string $objet
+     * @return ClientContact
+     */
+    public function setObjet($objet)
+    {
+        $this->objet = $objet;
+    
+        return $this;
+    }
+
+    /**
+     * Get objet
+     *
+     * @return string 
+     */
+    public function getObjet()
+    {
+        return $this->objet;
     }
 }

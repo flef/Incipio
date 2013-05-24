@@ -26,6 +26,7 @@ class ClientContactType extends AbstractType
             //->add('thread', new ThreadType) // délicat 
            ->add('date','datetime',array('label'=>'Date du contact'))
            ->add('date', 'genemu_jquerydate', array('label'=>'Date du contact', 'required'=>true, 'widget'=>'single_text'))
+           ->add('objet','text',array('label'=>'Objet'))
            ->add('contenu','textarea',array('label'=>'Résumé du contact'))
            ->add('moyenContact', new MoyenContactType(), array('label'=>'Contact effectué par'))
            ;
