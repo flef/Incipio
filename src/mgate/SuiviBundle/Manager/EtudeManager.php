@@ -605,10 +605,12 @@ class EtudeManager extends \Twig_Extension {
                 && $doc->getSpt2()
                 && $doc->getEnvoye()
                 && $doc->getReceptionne();
+            
+            $ok = ($ok ? 2 : ($doc->getRedige() ? 1 : 0));
         }
         else
         {
-            $ok = false;
+            $ok =  0;
         }
         return $ok;
     }

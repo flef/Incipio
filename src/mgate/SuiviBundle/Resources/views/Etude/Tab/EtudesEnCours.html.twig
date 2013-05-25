@@ -1,8 +1,12 @@
+{% set valide    = asset('img/succes.png') %}
+{% set nonValide = asset('img/cross.png') %}
+{% set enCours   = asset('img/progress.png') %}
+
 <table class="table table-striped" id="myTable">
       <thead>
           <tr>
               <th>
-                  Statuts
+                  X
               </th>
               <th>
                   <div>Nom de l'étude</div>
@@ -33,7 +37,7 @@
                    RM
               </th>
               <th>
-                   PVI
+                   Avancement
               </th>
               <th>
                    PVR
@@ -45,13 +49,13 @@
                    RP
               </th>
               <th>
+                   Payé
+              </th>
+              <th>
                    BV
               </th>
               <th>
-                   Paiement
-              </th>
-              <th>
-                   Cloture
+                   Audit (int)
               </th>
               <th>
                    <div>Prix H.T</div>
@@ -60,13 +64,11 @@
             </tr>
  	 </thead>
  	 <tbody>
-        <!-- Juste un exemple Pour test.... -->
-        {% set valider = "http://passagestecroix.ek.la/images/menubar/icon_tick.png" %}
-        {% set Nvalider = "http://www.neuroscoop.net/images_communes/croix_rouge3D.png" %}
+        
 
         {% for etude in etudesEnCours %}
 <tr>
-    <td><i id="commentaire" class="icon-search" data-title="{{ etude.id }}" data-content="0"></i></td>
+    <td></td>
     <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
     <td>
         {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
@@ -91,59 +93,66 @@
     {% endfor %}
             </td>
         <td>
-        {% if getEtatDoc(etude.ap) %} {#pas les bonnes conditions#}
-                        <img src="{{ valider }}" />
+        {% if getEtatDoc(etude.ap) == 1 %}
+                <img src="{{ enCours }}" />
+        {% elseif getEtatDoc(etude.ap) == 2 %}
+                <img src="{{ valide }}" />
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                <img src="{{ nonValide }}" />
         {% endif %}
             </td>
        
             <td>
-        {% if getEtatDoc(etude.cc) %}
-                        <img src="{{ valider }}" />
+        {% if getEtatDoc(etude.cc) == 1 %}
+                <img src="{{ enCours }}" />
+        {% elseif getEtatDoc(etude.cc) == 2 %}
+                <img src="{{ valide }}" />
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                <img src="{{ nonValide }}" />
         {% endif %}
             </td>
             <td>
-        {% if getEtatDoc(etude.fa) %}
-                        <img src="{{ valider }}" />
+        {% if getEtatDoc(etude.fa) == 1 %}
+                <img src="{{ enCours }}" />
+        {% elseif getEtatDoc(etude.fa) == 2 %}
+                <img src="{{ valide }}" />
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                <img src="{{ nonValide }}" />
         {% endif %}
             </td>
             <td>
         {% for mission in etude.missions %}
-            {% if  getEtatDoc(mission) %}
-                            <img src="{{ valider }}" />
+            {% if getEtatDoc(mission) == 1 %}
+                <img src="{{ enCours }}" />
+            {% elseif getEtatDoc(mission) == 2 %}
+                <img src="{{ valide }}" />
             {% else %}
-                            <img src="{{ Nvalider }}" />
-            {% endif %}
+                <img src="{{ nonValide }}" />
+        {% endif %}
                             <br><br>
         {% endfor %}
             </td>
             <td>
-        {% for pvi in etude.pvis %}
-            {% if  getEtatDoc(pvi) %}
-                            <img src="{{ valider }}" />
-            {% else %}
-                            <img src="{{ Nvalider }}" />
-            {% endif %}
-                            <br><br>
-        {% endfor %}
+                <div class="progress">
+                 <div class="bar" style="width: {{ 0 ~ '%;'|default('0%;') }}"></div>
+                </div>
             </td>
             <td>
-        {% if getEtatDoc(etude.pvr) %}
-                        <img src="{{ valider }}" />
+        {% if getEtatDoc(etude.pvr) == 1 %}
+                <img src="{{ enCours }}" />
+        {% elseif getEtatDoc(etude.pvr) == 2 %}
+                <img src="{{ valide }}" />
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                <img src="{{ nonValide }}" />
         {% endif %}
             </td>
             <td>
-        {% if getEtatDoc(etude.fs) %}
-                        <img src="{{ valider }}" />
+        {% if getEtatDoc(etude.fs) == 1 %}
+                <img src="{{ enCours }}" />
+        {% elseif getEtatDoc(etude.fs) == 2 %}
+                <img src="{{ valide }}" />
         {% else %}
-                        <img src="{{ Nvalider }}" />
+                <img src="{{ nonValide }}" />
         {% endif %}
             </td>
             <td>
