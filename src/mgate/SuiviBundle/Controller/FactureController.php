@@ -219,7 +219,9 @@ class FactureController extends Controller
             
             if( $form->isValid() )
             {
-                if(strtoupper($type)=="FS"){
+                if(strtoupper($type)=="FA")
+                    $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
+                elseif(strtoupper($type)=="FS"){ 
                     $etude->setFs($facture);
 
                     $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);

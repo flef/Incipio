@@ -18,14 +18,14 @@
 
 {% if type == 'fa' %}   
 <div id="dialog" title="Aide au calcul de l'acompte">
-    <p>Pourcentage de l'acompte dans l'AP: <b>{{form.vars.value.pourcentageAcompte *100 }} %</b></p>
-    <p>Prix total de l'etude : {{ getTotalHT(etude)|default('') }} € HT</p>
+    <p>Pourcentage de l'acompte dans l'AP auparavant: <b>{{form.vars.value.pourcentageAcompte *100 }} %</b></p>
+    <p>La Facture d'Acompte était auparavant: <b>{{form.vars.value.fa.montantHT }} € HT</b></p>
+    <p>Prix total de l'étude : <b>{{ getTotalHT(etude)|default('') }} € HT</b></p>
     <p>
-        <label for="pourcentage"></label>
-        <input type="text" name="pourcentage" id="pourcentage" value="{{form.vars.value.pourcentageAcompte * 100 }}" style="width: 45px"  /> % => <span class="prix">//</span> € HT
-        <button id="myButtonUpdate">Utiliser ce montant</button>
+        <label for="montantHelp">Aide au cacul:<br /></label>
+        <input type="text" name="montantHelp" id="montantHelp" value="{{form.vars.value.fa.montantHT }}" style="width: 70px"  /> € HT => <span class="pourcentageHelp">//</span> %
+        <button id="myButtonUpdate">Utiliser ce pourcentage</button>
     </p>
-    <p>Le montant actuel correpond à <span class="pourcentageEqu">//</span> % de l'étude</p>
 </div>    
 {% endif %}
     
@@ -63,61 +63,61 @@
     });
     
     {% if type == 'fa' %}
-    
-    function updatePrix(apercu) {
+
+    function updatePrix() {
         var prix = 0;
         
-        prix=$('#pourcentage').val()*0.01*{{ getTotalHT(etude)|default(0) }};
-        
+        prix=$('input.pourcentageAcompte').val()*0.01*{{ getTotalHT(etude)|default(0) }};
+
         if(prix.toFixed(2) != prix)
             arrondi = "...";
         else
             arrondi = "";
         
-        if(apercu)
-            $('.prix').text( prix.toFixed(2) + arrondi);
-        else
-        {
-            $('input.montantHT').val( prix.toFixed(2) );
-            updatePourcentage();
-        }
+        $('input.montantHT').val( prix.toFixed(2) );
 
     }
     
-    function updatePourcentage() {
+    function updatePourcentage(apercu) {
         var pourcentage = 0;
         
-        pourcentage=$('input.montantHT').val().replace(/,/g,"\.") *100 /{{ getTotalHT(etude)|default(0) }};
+        pourcentage=$('#montantHelp').val().replace(/,/g,"\.") / {{ getTotalHT(etude)|default(0) }}*100;
         
         if(pourcentage.toFixed(2) != pourcentage)
-            arrondi = "...";
+            arrondi = "<b>...</b>";
         else
             arrondi = "";
         
-        $('.pourcentageEqu').text( pourcentage.toFixed(2) + arrondi );
-
+        if(apercu)
+            $('.pourcentageHelp').html( pourcentage.toFixed(2) + arrondi );
+        else
+        {
+            $('input.pourcentageAcompte').val(pourcentage.toFixed(2));
+            updatePrix();
+        }
+     
     }
 
     jQuery(document).ready(function() {
         
-        updatePrix(true);  
-        updatePourcentage();
+        updatePrix();  
+        updatePourcentage(true);
+        
          
-        $('#pourcentage').each(function() {
-            $(this).change(function() { 
-                updatePrix(true);
+        $('input.pourcentageAcompte').each(function() {
+            $(this).change(function() {
+                updatePrix();
             });
         });
-        
+         
         $('#myButtonUpdate').on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
             e.preventDefault();
-            updatePrix(false);
+            updatePourcentage(false);
         });
         
-        $('input.montantHT').each(function() {
+        $('#montantHelp').each(function() {
             $(this).change(function() { 
-                updatePourcentage();
+                updatePourcentage(true);
             });
         });
                 
