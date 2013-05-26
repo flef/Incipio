@@ -12,7 +12,7 @@ class FactureSubType extends DocTypeType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
         
-        if($options['type']=="fs") // || $options['type']=="fa"
+        if($options['type']=="fs" || $options['type']=="fa")
             $readOnly=true;
         else
             $readOnly=false;
