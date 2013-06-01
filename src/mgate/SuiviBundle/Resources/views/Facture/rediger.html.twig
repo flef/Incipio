@@ -81,18 +81,13 @@
     function updatePourcentage(apercu) {
         var pourcentage = 0;
         
-        pourcentage=$('#montantHelp').val().replace(/,/g,"\.") / {{ getTotalHT(etude)|default(0) }}*100;
-        
-        if(pourcentage.toFixed(2) != pourcentage)
-            arrondi = "<b>...</b>";
-        else
-            arrondi = "";
-        
+        pourcentage = $('#montantHelp').val().replace(/,/g,"\.") / {{ getTotalHT(etude)|default(0) }}*100;
+   
         if(apercu)
-            $('.pourcentageHelp').html( pourcentage.toFixed(2) + arrondi );
+            $('.pourcentageHelp').html( pourcentage.toFixed(0));
         else
         {
-            $('input.pourcentageAcompte').val(pourcentage.toFixed(2));
+            $('input.pourcentageAcompte').val(pourcentage.toFixed(0));
             updatePrix();
         }
      
@@ -105,7 +100,7 @@
         
          
         $('input.pourcentageAcompte').each(function() {
-            $(this).change(function() {
+            $(this).on('input', function() {
                 updatePrix();
             });
         });
@@ -116,7 +111,7 @@
         });
         
         $('#montantHelp').each(function() {
-            $(this).change(function() { 
+            $(this).on('input', function() { 
                 updatePourcentage(true);
             });
         });
