@@ -8,9 +8,10 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
 <div class="gantt" id="ganttId1"></div>
 
-
-
 <form method="post" {{ form_enctype(form) }}>
+    <br />
+    <input type="submit" value="Enregistrer les commentaires"/>
+    <br />
     <table class="table table-striped table-bordered">
         <tr>
             <th>Référence</th>
@@ -44,7 +45,7 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
         {% endfor %}
         {% endfor %}
     </table>
-	<input type="submit" value="Enregistrer l'étude"/>
+    <input type="submit" value="Enregistrer les commentaires"/>
 </form>
 
 {% endblock %}

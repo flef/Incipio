@@ -318,7 +318,7 @@ class EtudeController extends Controller
                         }     
                     }
                     else{
-                        echo '<script>alert("Alexis, n\'aie crainte. Flouff s\'occupe de tout, tes données sont safes, mais je dois recharger la page, quelqu\'un a modifié la BDD en même temps que toi"); location.reload();</script>';
+                        echo '<script>location.reload();</script>';
                     }
                 }
             }  

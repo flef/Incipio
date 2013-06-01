@@ -6,9 +6,6 @@
       <thead>
           <tr>
               <th>
-                  X
-              </th>
-              <th>
                   <div>Nom de l'étude</div>
                   <div>Référence</div>
               </th>
@@ -68,7 +65,6 @@
 
         {% for etude in etudesEnCours %}
 <tr>
-    <td></td>
     <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
     <td>
         {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
