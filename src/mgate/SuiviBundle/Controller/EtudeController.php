@@ -45,29 +45,32 @@ class EtudeController extends Controller
         foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'num'=> 'DESC')) as $etude)
         {
             $stateID = $etude->getStateID();
-            if( $stateID <= 1 )
+            if( $stateID <= 2 )
              array_push($etudesSuiveur, $etude);
         }
  
-        //Etudes En Cours : stateID = 0||1
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC'));
-
-        //Etudes en pause : stateID = 2
-        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2),array('mandat'=> 'DESC', 'num' => 'DESC'));
-
+        //Etudes En Négociation : stateID = 1
+        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC'));
         
-        //Etudes Avortees : stateID = 3
-        $etudesAvorteesParMandat = array();
-        for($i = 1; $i <= $MANDAT_MAX; $i++)
-            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3,'mandat' => $i),array('num' => 'DESC')));
-        
+        //Etudes En Cours : stateID = 2
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'DESC', 'num'=> 'DESC'));
+
+        //Etudes en pause : stateID = 3
+        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3),array('mandat'=> 'DESC', 'num' => 'DESC'));
+
         //Etudes Terminees : stateID = 4
         $etudesTermineesParMandat = array();
         for($i = 1; $i <= $MANDAT_MAX; $i++)
             array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 4, 'mandat' => $i), array('num' => 'DESC')));
-            
+           
         
+        //Etudes Avortees : stateID = 5
+        $etudesAvorteesParMandat = array();
+        for($i = 1; $i <= $MANDAT_MAX; $i++)
+            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 5,'mandat' => $i),array('num' => 'DESC')));
+
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
+            'etudesEnNegociation' => $etudesEnNegociation,
             'etudesEnCours' => $etudesEnCours,
             'etudesSuiveur' => $etudesSuiveur,
             'etudesEnPause' => $etudesEnPause,
