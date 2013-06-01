@@ -13,12 +13,13 @@ Accueil - {{ parent() }}
         {% if etudesSuiveur | length %}
         <li class="active"><a href="#tab1" data-toggle="tab">Etudes à suivre ({{app.user.personne.prenomnom|default('non connecté')}})</a></li>
         {% endif %}
-        <li class="{{ etudesSuiveur | length ? "" : "active" }}"><a href="#tab2" data-toggle="tab">Etudes en Cours</a></li>
+        <li><a href="#tab2" data-toggle="tab">Etudes en Négociation</a></li>
+        <li class="{{ etudesSuiveur | length ? "" : "active" }}"><a href="#tab3" data-toggle="tab">Etudes en Cours</a></li>
         {% if etudesEnPause | length %}
-        <li><a href="#tab3" data-toggle="tab">Etudes en Pause</a></li>
+        <li><a href="#tab4" data-toggle="tab">Etudes en Pause</a></li>
         {% endif %}
-        <li><a href="#tab4" data-toggle="tab">Etudes Terminées</a></li>
-        <li><a href="#tab5" data-toggle="tab">Etudes Avortées</a></li>
+        <li><a href="#tab5" data-toggle="tab">Etudes Terminées</a></li>
+        <li><a href="#tab6" data-toggle="tab">Etudes Avortées</a></li>
     </ul>
     <div class="tab-content">
         {% if etudesSuiveur | length %}
@@ -26,18 +27,21 @@ Accueil - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:Tab/EtudesASuivre.html.twig" with  {'etudesSuiveur':  etudesSuiveur } %}
         </div>
         {% endif %}
-        <div class="tab-pane {{ etudesSuiveur | length ? "" : "active" }}" id="tab2" style="min-height: 400px;">
+        <div class="tab-pane" id="tab2" style="min-height: 400px;">
+            {% include "mgateSuiviBundle:Etude:Tab/EtudesEnNegociation.html.twig" with  {'etudesEnNegociation':  etudesEnCours} %}
+        </div>
+        <div class="tab-pane {{ etudesSuiveur | length ? "" : "active" }}" id="tab3" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Tab/EtudesEnCours.html.twig" with  {'etudesEnCours':  etudesEnCours} %}
         </div>
         {% if etudesEnPause | length %}
-        <div class="tab-pane" id="tab3" style="min-height: 400px;">
+        <div class="tab-pane" id="tab4" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Tab/EtudesEnPause.html.twig" with  {'etudesEnPause':  etudesEnPause} %}
         </div>
         {% endif %}
-        <div class="tab-pane" id="tab4" style="min-height: 400px;">
+        <div class="tab-pane" id="tab5" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig", 'key' : '1'} %}
         </div>
-        <div class="tab-pane" id="tab5" style="min-height: 400px;">
+        <div class="tab-pane" id="tab6" style="min-height: 400px;">
             {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesAvortees.html.twig", 'key' : '2'} %}
         </div>
     </div>

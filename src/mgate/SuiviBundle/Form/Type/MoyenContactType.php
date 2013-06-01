@@ -12,6 +12,7 @@ class MoyenContactType extends AbstractType
             'choices' => array(
                 'mail' => 'Mail',
                 'telephone' => 'Téléphone',
+                'physique' => 'Physique',
                 
             )
         ));
