@@ -1348,10 +1348,11 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
     public static function getStateIDChoice()
     {
-        return array(   '1' => 'En cours',
-                        '2' => 'Pause',
-                        '3' => 'Avorté',
-                        '4' => 'Cloturé');
+        return array(   '1' => 'En négociation',
+                        '2' => 'En cours',
+                        '3' => 'En pause',
+                        '4' => 'Clorurée',
+                        '5' => 'Avortée');
     }
     public static function getStateIDChoiceAssert()
     {
