@@ -1,9 +1,10 @@
+{% set valide    = asset('img/succes.png') %}
+{% set nonValide = asset('img/cross.png') %}
+{% set enCours   = asset('img/progress.png') %}
+
 <table class="table table-striped" id="myTable">
       <thead>
           <tr>
-              <th>
-                  Statuts
-              </th>
               <th>
                   <div>Nom de l'étude</div>
                   <div>Référence</div>
@@ -18,41 +19,11 @@
               </th>
 
               <th>
-                   Developpeurs
+                   Etat
               </th>
               <th>
-                   AP
-              </th>
-              <th>
-                   CC
-              </th>
-              <th>
-                   FA
-              </th>
-              <th>
-                   RM
-              </th>
-              <th>
-                   PVI
-              </th>
-              <th>
-                   PVR
-              </th>
-              <th>
-                   FS
-              </th>
-              <th>
-                   RP
-              </th>
-              <th>
-                   BV
-              </th>
-              <th>
-                   Paiement
-              </th>
-              <th>
-                   Cloture
-              </th>
+                   A recontacter le
+              </th>              
               <th>
                    <div>Prix H.T</div>
                    <div>Nbre J.E.H.</div>
@@ -60,13 +31,8 @@
             </tr>
  	 </thead>
  	 <tbody>
-        <!-- Juste un exemple Pour test.... -->
-        {% set valider = "http://passagestecroix.ek.la/images/menubar/icon_tick.png" %}
-        {% set Nvalider = "http://www.neuroscoop.net/images_communes/croix_rouge3D.png" %}
-
         {% for etude in etudesEnPause %}
 <tr>
-    <td><i id="commentaire" class="icon-search" data-title="{{ etude.id }}" data-content="0"></i></td>
     <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
     <td>
         {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
@@ -80,76 +46,9 @@
     </td>
     
         <td>
-             {% for mission in etude.missions %}
-                {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0 } %}
-                    {% if loop.index != loop.last %}
-                <br /><br />
-                    {% endif %}
-
-
-
-    {% endfor %}
-            </td>
-        <td>
-        {% if getEtatDoc(etude.ap) %} {#pas les bonnes conditions#}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-       
-            <td>
-        {% if getEtatDoc(etude.cc) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
+          {{ etude.stateDescription }} 
             </td>
             <td>
-        {% if getEtatDoc(etude.fa) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% for mission in etude.missions %}
-            {% if  getEtatDoc(mission) %}
-                            <img src="{{ valider }}" />
-            {% else %}
-                            <img src="{{ Nvalider }}" />
-            {% endif %}
-                            <br><br>
-        {% endfor %}
-            </td>
-            <td>
-        {% if getEtatDoc(etude.pvr) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-        {% if getEtatDoc(etude.fs) %}
-                        <img src="{{ valider }}" />
-        {% else %}
-                        <img src="{{ Nvalider }}" />
-        {% endif %}
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
-            </td>
-            <td>
-                
             </td>
             <td>
                 <div>{{ getTotalHT(etude)|default('') }} €</div>

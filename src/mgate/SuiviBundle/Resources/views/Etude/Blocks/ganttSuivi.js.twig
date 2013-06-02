@@ -17,7 +17,7 @@ $(".contain").css({'margin' : '0 auto', 'width' : $(document).width() - 200 + 'p
                                                 {% set dateFin = getDateFin(etude) %}
 						to: "/Date({{ (dateFin ? getDateFin(etude) : etude.datecreation )|date('U') }}000)/",
 						label: "{{getRefEtude(etude)}}", 
-						customClass: "{{ (etude.stateID == 4 ? "ganttGreen" : (etude.stateID == 3 ? "ganttRed" : (etude.stateID == 2 ? "ganttOrange" : "ganttBlue"))) }}",
+						customClass: "{{ (etude.stateID == 1 ? "ganttBlue" : (etude.stateID == 2 ? "ganttGreen" : (etude.stateID == 3 ? "ganttOrange" : "ganttRed"))) }}",
                                                 dataObj: ""
 					}]
 				},
