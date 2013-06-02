@@ -149,23 +149,23 @@ class EtudeManager extends \Twig_Extension {
                 return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
         }
         elseif($type == 'FA'){
-            if($etude->getFa() && $num = $etude->getFa()->getNum())
-                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ '  . $type;
+            if($etude->getFa() && $num = $etude->getFa()->getNum() && $exerice = $etude->getFa()->getExercice())
+                return '[M-GaTE]'.$exerice . '-FV-'. sprintf("%02d", $num). ' ǀ '. preg_replace('#\[M-GaTE\]#','',$this->getRefEtude($etude)) . '-'  . $type;
             else
-                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
+                return $this->getRefEtude($etude) . '-' . $type;
         }
         elseif($type == 'FI'){
-            if($etude->getFis($key) && $num = $etude->getFis($key)->getNum())
-                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type . ($key+1);
+            if($etude->getFis($key) && $num = $etude->getFis($key)->getNum() && $exercice = $etude->getFis($key)->getExercice())
+                return '[M-GaTE]'.$exercice . '-FV-'. sprintf("%02d", $num). ' ǀ '. preg_replace('#\[M-GaTE\]#','',$this->getRefEtude($etude)). '-' . $type . ($key+1);
             else
-                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type . ($key+1);
+                return $this->getRefEtude($etude) . '-' . $type. ($key+1);
                 
         }
         elseif($type == 'FS'){
-            if($etude->getFs() && $num = $etude->getFs()->getNum())
-                return $this->getRefEtude($etude) . '-FV-'. sprintf("%02d", $num). ' ǀ ' . $type;
+            if($etude->getFs() && $num = $etude->getFs()->getNum()  && $exercice = $etude->getFs()->getExercice())
+                return '[M-GaTE]'.$exercice . '-FV-'. sprintf("%02d", $num). ' ǀ '.preg_replace('#\[M-GaTE\]#','',$this->getRefEtude($etude)) . '-' . $type;
             else
-                return $this->getRefEtude($etude) . '-FV-X ǀ ' . $type;
+                return $this->getRefEtude($etude) . '-' . $type;
         }
         elseif($type == 'PVI'){
             if($key>=0 && $etude->getPvis($key))
@@ -242,6 +242,15 @@ class EtudeManager extends \Twig_Extension {
             return $value['num'] + 1;
         else
             return 1;
+    }
+    
+    public function getExerciceComptable($facture){
+        if($facture){
+            $dateAn = (int)$facture->getDateSignature()->format("y");
+            $exercice = ((int)$facture->getDateSignature()->format("m") < 4 ? $dateAn - 8 : $dateAn - 7);
+            return $exercice;
+        }
+        else return 0;
     }
 
     public function getDateLancement(Etude $etude) {
