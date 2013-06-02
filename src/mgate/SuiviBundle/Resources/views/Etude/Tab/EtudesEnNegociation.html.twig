@@ -89,7 +89,7 @@
             <td>
                 {% set dCU = dernierContact | date("U") %}
                 <span class="badge badge-{{ (dernierContact | date("dmy")) == ("now" | date("dmy")) ? "info" : (dCU > "now"|date("U") ? "important" : ( dCU > "now" |date_modify("-5 day")|date("U") ? "success" : (dCU > "now" |date_modify("-10 day")|date("U") ? "warning" : "important"))) }}">
-                    {{ dernierContact | date("d/m/Y")}}
+                    {{ dernierContact | date("d/m/Y") == "01/01/1970" ? "Jamais" : dernierContact | date("d/m/Y") }}
                 </span>
             </td>
             <td>

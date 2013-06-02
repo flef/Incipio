@@ -31,7 +31,7 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
             {% for etude in mandat %}
         {% set textAreaID = textAreaID + 1 %}
         {% set signe = ( etude.cc ? etude.cc.spt1 and etude.cc.spt2 : false )%}
-        <tr class="{{ (etude.stateID == 4 ? "success" : (etude.stateID == 3 ? "error" : (etude.stateID == 2 ? "warning" : "info"))) }}">
+        <tr class="{{ (etude.stateID == 1 ? "info" : (etude.stateID == 2 ? "success" : (etude.stateID == 3 ? "warning" : (etude.stateID == 4 ? "" : "error")))) }}">
             <td><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></td>
             <td>{{ etude.nom }}</td>
             <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
