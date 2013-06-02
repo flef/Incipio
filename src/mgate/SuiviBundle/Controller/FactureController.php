@@ -63,9 +63,14 @@ class FactureController extends Controller
         
         
         $facture = new Facture;
+        
         $etude->addFi($facture);
         
         $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
+        
+        $time = time();
+        $now = new \DateTime("@$time");
+        $facture->setDateSignature($now);
         
         $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));   
         
@@ -94,8 +99,10 @@ class FactureController extends Controller
                     {
                         throw new \Exception('Montant impossible, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
                     }
-                    ///
                     
+                    //Exercice comptable
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
+                $facture->setExercice($exercice);
                     
                 $em->persist($facture);
                 $em->flush();
@@ -151,6 +158,10 @@ class FactureController extends Controller
                     }
                     ///
                     
+                    //Exercice comptable
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
+                $facture->setExercice($exercice);
+                    
                 $em->persist($facture);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
@@ -182,6 +193,12 @@ class FactureController extends Controller
         if(!$facture = $etude->getDoc($type))
         {
             $facture = new Facture;
+            
+            $time = time();
+            $now = new \DateTime("@$time");
+            $facture->setDateSignature($now);
+        
+        
             if(strtoupper($type)=="FA")
             {
                 $etude->setFa($facture);
@@ -237,7 +254,11 @@ class FactureController extends Controller
 
                     $etude->getFs()->setMontantHT($montantHT);
                 } 
-                
+                                
+                //Exercice comptable
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
+                $facture->setExercice($exercice);
+                                        
                 $em->persist($etude);
                 $em->flush();
                 return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
