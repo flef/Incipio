@@ -101,7 +101,7 @@ class DefaultController extends Controller
         $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
-        $ob->credits->enable(false);
+        $ob->credits->enabled(false);
         $ob->legend->floating(true);
         $ob->legend->layout('vertical');
         $ob->legend->y(40);

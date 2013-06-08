@@ -54,7 +54,9 @@
                 </tr>
             </table>
         </td>
-        <td style="padding-left: 20px; width: 75%; padding-top: 0px;"><div class="gantt" id="ganttId0"></div>
+        <td style="padding-left: 20px; width: 75%; padding-top: 0px;">
+            <div id="linechart" style="min-width: 150px; height: 450px; margin: 0 auto"></div>
+            <!--<div class="gantt" id="ganttId0"></div>-->
         </td>
     </tr>
 </table>
@@ -113,4 +115,3 @@
 {% if etude.stateID | default(1) <= 2 %}
     {% include "mgateSuiviBundle:Etude:Infos/info.html.twig" with  {'etude':  etude} %}
 {% endif %}
-            
