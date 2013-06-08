@@ -97,59 +97,65 @@ Affichage d'une étude - {{ parent() }}
  {% block javascript %}
 {{ parent() }}
 {{ form_javascript(formSuivi) }}
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
+    <script src="{{ asset('js/hightcharts.js') }}"></script>
+    <script type="text/javascript">
+        {{ chart(chart) }}
+    </script>
 
-                    <!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
-                    <script>
-                    function docStateChange()
-                    {
-                    $('.docTabRow').each(
-                        function(i, e)
-                        {
-                            var ok = true;
-                            console.log(e.children);
-                            $(e).children().children('input[type=checkbox]').each(
-                                function(index, elem)
-                                {
-                                    ok = ok && elem.checked;
-                                }
-                            );
-                            if(!ok)
-                            {
-                                $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
-                            }
-                            else
-                                $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
-                            ok = true;
-                        }
-                    );
-                    };
-    
-    
-                    $(document).ready(function() {
-                        docStateChange();
-                        //listen for the form beeing submitted
-                        $("#myForm :input").change(function(){
-                            $(".loading").show();
-                            var $form = $(this).closest("form");
-                            $.post($form.attr("action"), $form.serialize(), 
-                            function(data){
-                                $(".loading").hide();
-            
-                                if(data.responseCode!=100 ){
-                                   alert("An unexpeded error occured.");
-                                   bootbox.alert(data, function() { });
-                                   $('#output').html(data.msg);
-                                }
-                            });
-
-                            //we dont what the browser to submit the form
-                            return false;
-                        });
+    <!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
+    <script>
+    function docStateChange()
+    {
+    $('.docTabRow').each(
+        function(i, e)
+        {
+            var ok = true;
+            console.log(e.children);
+            $(e).children().children('input[type=checkbox]').each(
+                function(index, elem)
+                {
+                    ok = ok && elem.checked;
+                }
+            );
+            if(!ok)
+            {
+                $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
+            }
+            else
+                $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
+            ok = true;
+        }
+    );
+    };
 
 
-                    });
+    $(document).ready(function() {
+        docStateChange();
+        //listen for the form beeing submitted
+        $("#myForm :input").change(function(){
+            $(".loading").show();
+            var $form = $(this).closest("form");
+            $.post($form.attr("action"), $form.serialize(), 
+            function(data){
+                $(".loading").hide();
+
+                if(data.responseCode!=100 ){
+                   alert("An unexpeded error occured.");
+                   bootbox.alert(data, function() { });
+                   $('#output').html(data.msg);
+                }
+            });
+
+            //we dont what the browser to submit the form
+            return false;
+        });
 
 
-                    {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
-                        </script>
+    });
+
+
+    {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
+    </script>
 {% endblock %}
