@@ -2,8 +2,8 @@
  # Input : suiveur
  # use : {% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
  #}
-<div class="btn-group" style="min-width: 220px;">
-    <a class="btn btn-success" href="#" style="width : 60%;  text-align: left;"><i class="icon-user icon-white"></i> {{suiveur.prenomNom| default("Pas de suiveur!")}}</a>
+<div class="btn-group" style="width: 220px;">
+    <a class="btn btn-success" href="#" style="width : 60%;  text-align: left; overflow: hidden;"><i class="icon-user icon-white"></i> {{suiveur.prenomNom| default("Pas de suiveur!")}}</a>
     <a class="btn btn-success dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">
         <li><a href="#"><i class="icon-envelope"></i> Contacter</a></li>
