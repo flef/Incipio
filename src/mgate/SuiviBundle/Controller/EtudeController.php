@@ -6,8 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use Ob\HighchartsBundle\Highcharts\Highchart;
-
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
@@ -174,68 +172,10 @@ class EtudeController extends Controller
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
-        $etudeManager = $this->get('mgate.etude_manager');
+        $chartManager = $this->get('mgate.chart_manager');
         
-        // Chart
-        $series = array();
-        $data = array();
-        $categories = array();
-        $naissance =  new \DateTime();
-        
-        if(count($etude->getClientContacts())!=0)
-            $categories[] = "Contact client";
-        foreach($etude->getClientContacts() as $contact)
-        {
-            /*$debut = $phase->getDateDebut();
-            $fin = clone $debut;
-            $fin->add(new \DateInterval('P'.$phase->getDelai().'D'));
-            $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000);*/
-            $data[] = array("low" => $contact->getDate()->getTimestamp()*1000, "y" => $contact->getDate()->getTimestamp()*1000);
-        }
-        
-        foreach($etude->getPhases() as $phase)
-        {
-            $debut = $phase->getDateDebut();
-            $fin = clone $debut;
-            $fin->add(new \DateInterval('P'.$phase->getDelai().'D'));
-            $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000);
-            $categories[] = "Phase n°".($phase->getPosition()+1);
-            if($naissance >= $debut)
-                $naissance= clone $debut;
-        }
-        $series[] = array("data" => $data);
+        $ob=$chartManager->getGantt($etude, "suivi");
 
-        $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
-
-        $ob = new Highchart();
-        $ob->global->useUTC(false);
-        $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
-        $ob->chart->type('bar');
-        $ob->title->text('');
-        $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
-        $ob->xAxis->labels(array('style'=>$style));
-        $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
-        $ob->xAxis->categories($categories);
-        $ob->yAxis->labels(array('style'=>$style));
-        $ob->yAxis->title(array('text' => ''));
-        $ob->yAxis->type('datetime');
-        $ob->yAxis->min($naissance->getTimestamp()*1000);
-        //$ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        //$ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
-        $ob->credits->enabled(false);
-        /*$ob->legend->floating(true);
-        $ob->legend->layout('vertical');
-        $ob->legend->y(40);
-        $ob->legend->x(90);
-        $ob->legend->verticalAlign('top');
-        $ob->legend->reversed(true);
-        $ob->legend->align('left');
-        $ob->legend->backgroundColor('#FFFFFF');
-        $ob->legend->itemStyle($style);*/
-        //$ob->plotOptions->series(array('lineWidth'=>5, 'marker'=>array('radius'=>8)));
-        $ob->series($series);
-        
-        //echo $ob->render();
        
         //$deleteForm = $this->createDeleteForm($id);
         $formSuivi = $this->createForm(new SuiviType, $etude);
