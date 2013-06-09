@@ -99,17 +99,17 @@
                     <td><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM', 'key' : loop.index0 }) }}"><i class="icon-circle-arrow-down"></i> DM</a></td>
                 </tr>
                 <tr>
-                    <th>Date de signature</th>
+                    <th>Date du RM</th>
 
-                    <td>{{ mission.dateSignature ? mission.dateSignature | date("d/m/Y") : "non renseigné" }}</td>
+                    <td>
+                        Du : {{ mission.debutOm ? mission.debutOm | date("d/m/Y") : "??" }}<br />
+                        Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "??" }}
+                    </td>
                 </tr>
                 <tr>
-                    <th>Progression</th>
-                    <td>
-                        <div class="progress">
-                            <div class="bar" style="width: {{ mission.avancement|default(10) }}%;"></div>
-                        </div>
-                    </td>
+                    <th>Date de signature</th>
+
+                    <td>{{ mission.dateSignature ? mission.dateSignature | date("d/m/Y") : "??" }}</td>
                 </tr>
             </table>
         </div>
