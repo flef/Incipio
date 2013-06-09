@@ -502,7 +502,7 @@ class TraitementController extends Controller {
             if ($phase->getDateDebut()){
                 $dateFin = clone $phase->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
                 $dateFin->modify('+' . $phase->getDelai() . ' day');
-                $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Fin', $phase->getDateDebut()->format('d/m/Y'));
+                $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Fin', $dateFin->format('d/m/Y'));
             }
             $Delai = $this->jourVersSemaine($phase->getDelai());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
