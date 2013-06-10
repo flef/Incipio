@@ -65,7 +65,7 @@ class ChartManager /*extends \Twig_Extension*/ {
                 
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                         "titre"=>"Avant-Projet", "detail"=>"signé le ".$date->format('d/m/Y'));
-                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'circle'));
+                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'square', 'fillColor'=>'blue'));
                 $naissance= clone $etude->getAp()->getDateSignature();
             }
             $data = $dataSauv;
@@ -77,7 +77,7 @@ class ChartManager /*extends \Twig_Extension*/ {
                 
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                     "titre"=>"Convention Client", "detail"=>"signé le ".$date->format('d/m/Y'));
-                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'square'));
+                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'triangle', 'fillColor'=>'red'));
             }
             $data = $dataSauv;
             if($etude->getPvr() && $etude->getPvr()->getDateSignature() )
@@ -88,7 +88,7 @@ class ChartManager /*extends \Twig_Extension*/ {
                 
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                         "name"=>"Procès Verbal de Recette", "detail"=>"signé le ".$date->format('d/m/Y'));
-                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'triangle'));
+                $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'circle'));
             }
             $cats[] = "Documents";
         }
@@ -169,6 +169,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $ob->chart->zoomType('y');
         $ob->credits->enabled(false);
         $ob->legend->enabled(false);
+        $ob->exporting->enabled(false);
         $ob->plotOptions->series(array('pointPadding'=>0, 'groupPadding'=>0, 'pointWidth'=>10,'groupPadding'=>0,'marker'=>array('radius'=>5), 'tooltip'=>array('pointFormat'=>'<b>{point.titre}</b><br /> {point.detail}')));
         $ob->plotOptions->scatter(array('tooltip'=>array('headerFormat'=>'')));
         $ob->series($series);
