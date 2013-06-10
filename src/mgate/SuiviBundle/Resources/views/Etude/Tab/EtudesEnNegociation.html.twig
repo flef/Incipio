@@ -18,9 +18,6 @@
                   <div>Suiveur</div>
               </th>
               <th>
-                   Developpeurs
-              </th>
-              <th>
                   Etat
               </th>
               <th>
@@ -57,18 +54,6 @@
             <br /><br />
             {% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}
         </td>
-
-            <td>
-                 {% for mission in etude.missions %}
-                    {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0 } %}
-                        {% if loop.index != loop.last %}
-                    <br /><br />
-                        {% endif %}
-
-
-
-        {% endfor %}
-            </td>
             <td>
                 {{etude.stateDescription }}
             </td>
