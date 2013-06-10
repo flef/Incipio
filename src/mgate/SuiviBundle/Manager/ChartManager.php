@@ -31,6 +31,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $data = array();
         $cats = array();
         $naissance =  new \DateTime();
+        $mort =  new \DateTime();
         
         //Contacts Client
         if(count($etude->getClientContacts())!=0 && $type=="suivi")
@@ -38,8 +39,8 @@ class ChartManager /*extends \Twig_Extension*/ {
             foreach($etude->getClientContacts() as $contact)
             {
                 $date = $contact->getDate();
-                if($naissance >= $date)
-                    $naissance= clone $date;
+                if($naissance >= $date) $naissance= clone $date;
+                if($mort <= $date) $mort= clone $date;
                 
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                     "titre"=>$contact->getObjet(), "detail"=>"fait par ".$contact->getFaitPar()->getPrenomNom()." le ".$date->format('d/m/Y') );
@@ -59,8 +60,9 @@ class ChartManager /*extends \Twig_Extension*/ {
             if($etude->getAp()&& $etude->getAp()->getDateSignature())
             {
                 $date = $etude->getAp()->getDateSignature();
-                if($naissance >= $date)
-                    $naissance= clone $date;
+                if($naissance >= $date) $naissance= clone $date;
+                if($mort <= $date) $mort= clone $date;
+                
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                         "titre"=>"Avant-Projet", "detail"=>"signé le ".$date->format('d/m/Y'));
                 $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'circle'));
@@ -70,8 +72,9 @@ class ChartManager /*extends \Twig_Extension*/ {
             if($etude->getCc() && $etude->getCc()->getDateSignature() )
             {
                 $date = $etude->getCc()->getDateSignature();
-                if($naissance >= $date)
-                    $naissance= clone $date;
+                if($naissance >= $date) $naissance= clone $date;
+                if($mort <= $date) $mort= clone $date;
+                
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                     "titre"=>"Convention Client", "detail"=>"signé le ".$date->format('d/m/Y'));
                 $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'square'));
@@ -80,8 +83,9 @@ class ChartManager /*extends \Twig_Extension*/ {
             if($etude->getPvr() && $etude->getPvr()->getDateSignature() )
             {
                 $date = $etude->getPvr()->getDateSignature();
-                if($naissance >= $date)
-                    $naissance= clone $date;
+                if($naissance >= $date) $naissance= clone $date;
+                if($mort <= $date) $mort= clone $date;
+                
                 $data[] = array("x" => count($cats), "y" => $date->getTimestamp()*1000,
                         "titre"=>"Procès Verbal de Recette", "detail"=>"signé le ".$date->format('d/m/Y'));
                 $series[] = array("type"=> "scatter", "data" => $data, "marker"=>array('symbol'=>'triangle'));
@@ -118,12 +122,16 @@ class ChartManager /*extends \Twig_Extension*/ {
             if($phase->getDateDebut()&&$phase->getDelai())
             {
                 $debut = $phase->getDateDebut();
-                if($naissance >= $debut)
-                    $naissance= clone $debut;
+                if($naissance >= $debut) $naissance= clone $debut;
+
                 $fin = clone $debut;
                 $fin->add(new \DateInterval('P'.$phase->getDelai().'D'));
-                $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000,
-                    "titre"=>$phase->getTitre(), "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y') );
+                if($mort <= $fin) $mort= clone $fin;
+                
+                $func = new \Zend\Json\Expr("function() {return this.point.titre;}");
+                $data[] = array("low" => $fin->getTimestamp()*1000, "y" => $debut->getTimestamp()*1000,
+                    "titre"=>$phase->getTitre(), "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y'),
+                        'dataLabels'=>array('enabled'=>true, 'align'=>'left', 'verticalAlign'=>'bottom', 'formatter'=> $func, 'y'=>-10));
             }
             else
                 $data[] = array();
@@ -145,7 +153,7 @@ class ChartManager /*extends \Twig_Extension*/ {
             $data[] = array("x" => count($cats)-1, "y" => $date->getTimestamp()*1000,
                 "titre"=>"aujourd'hui", "detail"=>"le ".$date->format('d/m/Y') );
             
-            $series[] = array("type"=> "spline", "data" => $data, "marker"=>array('radius'=>1, 'color'=>'#545454'), 'color'=>'#545454', 'lineWidth'=>1);
+            $series[] = array("type"=> "spline", "data" => $data, "marker"=>array('radius'=>1, 'color'=>'#545454'), 'color'=>'#545454', 'lineWidth'=>1, 'pointWidth'=>10);
         }
 
         $style=array('color'=>'#000000', 'fontSize'=>'11px', 'fontFamily'=>'Calibri (Corps)');
@@ -160,9 +168,8 @@ class ChartManager /*extends \Twig_Extension*/ {
         $ob->yAxis->title(array('text' => ''));
         $ob->yAxis->type('datetime');
         $ob->yAxis->min($naissance->sub(new \DateInterval('P1D'))->getTimestamp()*1000);
+        $ob->yAxis->max($mort->add(new \DateInterval('P1D'))->getTimestamp()*1000);
         $ob->yAxis->labels(array('style'=>$style));
-        //$ob->tooltip->headerFormat('<b>{series.name} : {point.titre}</b><br />');
-        //$ob->tooltip->pointFormat('<b>{point.titre}sdfqsdf</b> <br /> fait par {point.faitPar} le {point.periode}');
         $ob->chart->zoomType('y');
         $ob->credits->enabled(false);
         $ob->legend->enabled(false);
