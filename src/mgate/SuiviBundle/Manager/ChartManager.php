@@ -105,18 +105,13 @@ class ChartManager /*extends \Twig_Extension*/ {
                 $debut = $this->etudeManager->getDateLancement($etude);
                 $fin = $this->etudeManager->getDateFin($etude);
 
-                $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000,
+                $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000, 'color'=>'#005CA4',
                         "titre"=>"Durée de déroulement des phases", "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y') );
-
-                $series[] = array("type"=> "bar", "data" => $data, 'color'=>'#005CA4');     
+    
                 $cats[] = "Etude";
             }
         }
         
-        //Phases
-        $data = array();
-        for($j=0;$j<count($cats);$j++)
-            $data[]=array();
         foreach($etude->getPhases() as $phase)
         {
             if($phase->getDateDebut()&&$phase->getDelai())
@@ -130,7 +125,7 @@ class ChartManager /*extends \Twig_Extension*/ {
                 
                 $func = new \Zend\Json\Expr("function() {return this.point.titre;}");
                 $data[] = array("low" => $fin->getTimestamp()*1000, "y" => $debut->getTimestamp()*1000,
-                    "titre"=>$phase->getTitre(), "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y'),
+                    "titre"=>$phase->getTitre(), "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y'), 'color'=>'#F26729',
                         'dataLabels'=>array('enabled'=>true, 'align'=>'left', 'verticalAlign'=>'bottom', 'formatter'=> $func, 'y'=>-10));
             }
             else
@@ -139,7 +134,7 @@ class ChartManager /*extends \Twig_Extension*/ {
             $cats[] = "Phase n°".($phase->getPosition()+1);            
             
         }
-        $series[] = array("type"=> "bar", "data" => $data, 'color'=>'#F26729');
+        $series[] = array("type"=> "bar", "data" => $data);
         
         //Today, à faire à la fin
         $data = array();
@@ -153,7 +148,7 @@ class ChartManager /*extends \Twig_Extension*/ {
             $data[] = array("x" => count($cats)-1, "y" => $date->getTimestamp()*1000,
                 "titre"=>"aujourd'hui", "detail"=>"le ".$date->format('d/m/Y') );
             
-            $series[] = array("type"=> "spline", "data" => $data, "marker"=>array('radius'=>1, 'color'=>'#545454'), 'color'=>'#545454', 'lineWidth'=>1, 'pointWidth'=>10);
+            $series[] = array("type"=> "spline", "data" => $data, "marker"=>array('radius'=>1, 'color'=>'#545454'), 'color'=>'#545454', 'lineWidth'=>1, 'pointWidth'=>5);
         }
 
         $style=array('color'=>'#000000', 'fontSize'=>'11px', 'fontFamily'=>'Calibri (Corps)');
@@ -161,6 +156,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $ob = new Highchart();
         $ob->global->useUTC(false);
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart 
+        $ob->chart->height(100+count($etude->getPhases())*25);
         $ob->title->text('');
         $ob->xAxis->title(array('text'  => ""));
         $ob->xAxis->categories($cats);
@@ -173,7 +169,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $ob->chart->zoomType('y');
         $ob->credits->enabled(false);
         $ob->legend->enabled(false);
-        $ob->plotOptions->series(array('marker'=>array('radius'=>5), 'tooltip'=>array('pointFormat'=>'<b>{point.titre}</b><br /> {point.detail}')));
+        $ob->plotOptions->series(array('pointPadding'=>0, 'groupPadding'=>0, 'pointWidth'=>10,'groupPadding'=>0,'marker'=>array('radius'=>5), 'tooltip'=>array('pointFormat'=>'<b>{point.titre}</b><br /> {point.detail}')));
         $ob->series($series);
         
         return $ob;
