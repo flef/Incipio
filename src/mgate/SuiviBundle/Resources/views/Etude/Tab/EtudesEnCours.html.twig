@@ -119,11 +119,11 @@
             <td>
         {% for mission in etude.missions %}
             {% if getEtatDoc(mission) == 1 %}
-                <img src="{{ enCours }}" />
+                <img title="{{mission.intervenant.personne.prenomNom | default("")}}" src="{{ enCours }}" />
             {% elseif getEtatDoc(mission) == 2 %}
-                <img src="{{ valide }}" />
+                <img title="{{mission.intervenant.personne.prenomNom | default("")}}" src="{{ valide }}" />
             {% else %}
-                <img src="{{ nonValide }}" />
+                <img title="{{mission.intervenant.personne.prenomNom | default("")}}" src="{{ nonValide }}" />
         {% endif %}
                             <br><br>
         {% endfor %}
