@@ -347,7 +347,7 @@ class EtudeController extends Controller
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function suiviUpdateAction($id)
-    {     
+    {    
         $em = $this->getDoctrine()->getEntityManager();
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
 
@@ -374,4 +374,69 @@ class EtudeController extends Controller
         $return=json_encode($return);//jscon encode the array
         return new Response($return,200,array('Content-Type'=>'application/json'));//make sure it has the correct content type
      }
+     
+     private function searchArrayID(array $etudes, Etude $etude){
+            $i = 0;
+            foreach($etudes as $e){
+                if($e->getId() == $etude->getId())
+                    return $i;
+                else
+                    $i++;
+            }
+            return -1;
+        }
+     
+     /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function vuCAAction($id){
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);
+        
+        if (!$etude)
+            throw $this->createNotFoundException('Unable to find Etude entity.');
+        
+        //Etudes En Négociation : stateID = 1
+        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        
+        //Etudes En Cours : stateID = 2
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        
+        $etudes = array_merge($etudesEnNegociation,$etudesEnCours);
+        
+        $id = $this->searchArrayID($etudes,$etude);
+        
+        if ($id == -1)
+            throw $this->createNotFoundException('Etude incorrecte');
+        
+        $nextID = $etudes[$id+1]->getId();
+        $prevID = $etudes[$id-1]->getId();
+        
+//ATTENTION SI DERNIERE ETUDE DU TABLEAU !!
+        
+        
+        
+        
+         $chartManager = $this->get('mgate.chart_manager');
+        
+        $ob=$chartManager->getGantt($etude, "suivi");
+
+       
+        return $this->render('mgateSuiviBundle:Etude:vuCA.html.twig', array(
+            'etude' => $etude,
+            'chart' => $ob,
+            'nextID' => $nextID,
+            'prevID' => $prevID,
+            //'listEtudesID' => $listEtudesID,
+            //'listEtudes' => $listEtudes,
+        ));
+        
+
+    }
+    
+            
+     
 }
