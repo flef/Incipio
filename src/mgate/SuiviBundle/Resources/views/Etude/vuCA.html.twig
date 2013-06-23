@@ -8,21 +8,23 @@
         <a class="brand" href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a>
         <ul class="nav pull-right">
             <li>
-                <li><a href="{{ path('mgateSuivi_vu_ca', {'id': prevID}) }}">Prev</a></li>
+            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': prevID}) }}"><i class="icon-chevron-left"></i> Précédent</a></li>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Accès Rapide <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
+                    <li class="nav-header">En négociation</li>
+                    {% for id, etudeRef in listEtudesNegociate %}
+                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}">{{etudeRef}}</a></li>
+                    {% endfor %}
                     <li class="divider"></li>
-                    <li class="nav-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
+                    <li class="nav-header">En cours</li>
+                    {% for id, etudeRef in listEtudesCurrent %}
+                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}">{{etudeRef}}</a></li>
+                    {% endfor %}
                 </ul>
             </li>
-            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': nextID}) }}">Next</a></li>
+            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': nextID}) }}">Suivant <i class="icon-chevron-right"></i></a></li>
         </ul>
 
 
