@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
 <table class="table table-striped" id="myTable">
     <thead>
         <tr>
@@ -78,26 +77,8 @@
                     <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="7">
-                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo{{loop.index}}">
-                        Avancement
-                    </button>
-
-                    <div id="demo{{loop.index}}" class="collapse in contain"><div class="gantt" id="ganttId{{loop.index}}"></div></div>
-                </td>
-            </tr>
         {% endfor %}
         </tbody>
     </table>
-    <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-    <script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script>
 
-    <script>
-        {%for etude in etudesSuiveur %}
-         {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : loop.index } %}
-    
-                             
-    {%endfor%}
-        </script>
 
