@@ -385,11 +385,21 @@ class EtudeController extends Controller
             }
             return -1;
         }
-     
-     /**
+        
+        private function constructArrayAssoc(array $etudes){
+            $etudesAssoc = array();
+            foreach($etudes as $e){
+                $etudesAssoc[$e->getId()] = $this->get('mgate.etude_manager')->getRefEtude($e) . " - " . $e->getNom();
+            }
+            return $etudesAssoc;
+        }
+
+
+        /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function vuCAAction($id){
+        
         $em = $this->getDoctrine()->getEntityManager();
         
         $etude = new \mgate\SuiviBundle\Entity\Etude;
@@ -406,19 +416,20 @@ class EtudeController extends Controller
         $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'ASC', 'num'=> 'ASC'));
         
         $etudes = array_merge($etudesEnNegociation,$etudesEnCours);
-        
+
         $id = $this->searchArrayID($etudes,$etude);
         
         if ($id == -1)
             throw $this->createNotFoundException('Etude incorrecte');
         
-        $nextID = $etudes[$id+1]->getId();
-        $prevID = $etudes[$id-1]->getId();
         
-//ATTENTION SI DERNIERE ETUDE DU TABLEAU !!
+        $nId = $id+1;
+        $pId = $id-1;
+        if($nId > count($etudes)) $nid--;
+        if($pId < 0 ) $pId = 0; 
         
-        
-        
+        $nextID = $etudes[$nId]->getId();
+        $prevID = $etudes[$pId]->getId();
         
          $chartManager = $this->get('mgate.chart_manager');
         
@@ -430,8 +441,9 @@ class EtudeController extends Controller
             'chart' => $ob,
             'nextID' => $nextID,
             'prevID' => $prevID,
-            //'listEtudesID' => $listEtudesID,
-            //'listEtudes' => $listEtudes,
+           
+            'listEtudesNegociate' => $this->constructArrayAssoc($etudesEnNegociation),
+            'listEtudesCurrent' => $this->constructArrayAssoc($etudesEnCours),
         ));
         
 
