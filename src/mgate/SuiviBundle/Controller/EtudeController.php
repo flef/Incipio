@@ -287,7 +287,6 @@ class EtudeController extends Controller
          * Cependant en cas de suppression d'une étude, chose qui n'arrive pas tous les jours, les données seront perdues !!
          * Perdues Perdues !!!
          */
-                
         
         $NbrEtudes = 0;
         foreach ($etudesParMandat as $etudesInMandat)

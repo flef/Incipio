@@ -46,11 +46,12 @@
                     <td colspan="3">{{ etude.stateDescription }}</td>
                 </tr>
                 <tr>
-                    <th>Client</th>
+                    <td>Client</td>
                     <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
-                    <th>Suiveur</th>
+                    <td>Suiveur</td>
                     <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
                 </tr>
+                {% if etude.missions is not empty%}
                 <tr>
                     <td colspan="4" style=" text-align: center !important; ">
                     {% for mission in etude.missions %}
@@ -64,21 +65,21 @@
     {% endfor %}
                         </td>
                     </tr>
+                    {% endif %}
                     <tr>
-                        <th>Création</th>
-                        <td>Crée le {{ etude.dateCreation|date("d/m/Y") }}</td>
-                        <th>Fin</th>
-                        <td>Fin le {{ getDateFin(etude)|date("d/m/Y") }}</td>
+                        <td>Crée le</td>
+                        <th>{{ etude.dateCreation|date("d/m/Y") }}</th>
+                        <td>Fin le</td>
+                        <th>{{ getDateFin(etude)|date("d/m/Y") }}</th>
                     </tr>
                     <tr>
-                        <th>JEH</th>
-                        <td>{{getNbrJEH(etude) | default('0') }} JEH</td>
-                        <th>Prix</th>
-                        <td>{{ getTotalHT(etude) | default('0') }} € HT</td>
+                        <td>JEH</td>
+                        <th>{{getNbrJEH(etude) | default('0') }} JEH</th>
+                        <td>Prix</td>
+                        <th>{{ getTotalHT(etude) | default('0') }} € HT</th>
                     </tr>
                     <tr>
-                        <th>Description</th>
-                        <td colspan="3">{{etude.description }}</td>
+                        <td colspan="4">{{etude.description }}</td>
                     </tr>
                 </table>
             </td>
@@ -193,10 +194,8 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <td style="padding-left: 20px; width: 75%;" valign="top">
-                                        <div id="linechart" style="width: 100%;"></div>
-                                        <!--<div class="gantt" id="ganttId0"></div>-->
-                                    </td>
+
+                                    <div id="linechart" style="width: 100%;"></div>
 
 {% endblock %}
 
