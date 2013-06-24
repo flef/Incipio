@@ -17,7 +17,7 @@ class DefaultController extends Controller
         foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'id'=> 'DESC')) as $etude)
         {
             $stateID = $etude->getStateID();
-            if( $stateID <= 1 )
+            if( $stateID <= 2 )
              array_push($etudesSuiveur, $etude);
         }
         
