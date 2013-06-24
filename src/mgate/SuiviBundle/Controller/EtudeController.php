@@ -424,7 +424,7 @@ class EtudeController extends Controller
         
         $nId = $id+1;
         $pId = $id-1;
-        if($nId > count($etudes)) $nid--;
+        if($nId >= count($etudes)) $nId--;
         if($pId < 0 ) $pId = 0; 
         
         $nextID = $etudes[$nId]->getId();
