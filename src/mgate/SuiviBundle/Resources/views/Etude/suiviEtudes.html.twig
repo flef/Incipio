@@ -5,9 +5,6 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
-<div class="gantt" id="ganttId1"></div>
-
 <form method="post" {{ form_enctype(form) }}>
     <br />
     <input type="submit" value="Enregistrer les commentaires"/>
@@ -48,14 +45,4 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
     <input type="submit" value="Enregistrer les commentaires"/>
 </form>
 
-{% endblock %}
-
-{% block javascript %}
-    {{ parent() }}
-<script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-<script>
-    
-    {% include "mgateSuiviBundle:Etude:Tools/CommentairesSuivi.js.twig" %}
-    {% include "mgateSuiviBundle:Etude:Blocks/ganttSuivi.js.twig" %}
-</script>
 {% endblock %}

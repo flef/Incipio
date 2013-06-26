@@ -287,7 +287,6 @@ class EtudeController extends Controller
          * Cependant en cas de suppression d'une étude, chose qui n'arrive pas tous les jours, les données seront perdues !!
          * Perdues Perdues !!!
          */
-                
         
         $NbrEtudes = 0;
         foreach ($etudesParMandat as $etudesInMandat)
@@ -347,7 +346,7 @@ class EtudeController extends Controller
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function suiviUpdateAction($id)
-    {     
+    {    
         $em = $this->getDoctrine()->getEntityManager();
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
 
@@ -374,4 +373,81 @@ class EtudeController extends Controller
         $return=json_encode($return);//jscon encode the array
         return new Response($return,200,array('Content-Type'=>'application/json'));//make sure it has the correct content type
      }
+     
+     private function searchArrayID(array $etudes, Etude $etude){
+            $i = 0;
+            foreach($etudes as $e){
+                if($e->getId() == $etude->getId())
+                    return $i;
+                else
+                    $i++;
+            }
+            return -1;
+        }
+        
+        private function constructArrayAssoc(array $etudes){
+            $etudesAssoc = array();
+            foreach($etudes as $e){
+                $etudesAssoc[$e->getId()] = $this->get('mgate.etude_manager')->getRefEtude($e) . " - " . $e->getNom();
+            }
+            return $etudesAssoc;
+        }
+
+
+        /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function vuCAAction($id){
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);
+        
+        if (!$etude)
+            throw $this->createNotFoundException('Unable to find Etude entity.');
+        
+        //Etudes En Négociation : stateID = 1
+        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        
+        //Etudes En Cours : stateID = 2
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        
+        $etudes = array_merge($etudesEnNegociation,$etudesEnCours);
+
+        $id = $this->searchArrayID($etudes,$etude);
+        
+        if ($id == -1)
+            throw $this->createNotFoundException('Etude incorrecte');
+        
+        
+        $nId = $id+1;
+        $pId = $id-1;
+        if($nId >= count($etudes)) $nId--;
+        if($pId < 0 ) $pId = 0; 
+        
+        $nextID = $etudes[$nId]->getId();
+        $prevID = $etudes[$pId]->getId();
+        
+         $chartManager = $this->get('mgate.chart_manager');
+        
+        $ob=$chartManager->getGantt($etude, "suivi");
+
+       
+        return $this->render('mgateSuiviBundle:Etude:vuCA.html.twig', array(
+            'etude' => $etude,
+            'chart' => $ob,
+            'nextID' => $nextID,
+            'prevID' => $prevID,
+           
+            'listEtudesNegociate' => $this->constructArrayAssoc($etudesEnNegociation),
+            'listEtudesCurrent' => $this->constructArrayAssoc($etudesEnCours),
+        ));
+        
+
+    }
+    
+            
+     
 }
