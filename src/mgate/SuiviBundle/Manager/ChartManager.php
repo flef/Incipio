@@ -19,7 +19,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $this->etudeManager = $etudeManager;
 
     }
-   
+    
     /**
     * Taux de conversion
     */
@@ -126,7 +126,7 @@ class ChartManager /*extends \Twig_Extension*/ {
                 $func = new \Zend\Json\Expr("function() {return this.point.titre;}");
                 $data[] = array("low" => $fin->getTimestamp()*1000, "y" => $debut->getTimestamp()*1000,
                     "titre"=>$phase->getTitre(), "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y'), 'color'=>'#F26729',
-                        'dataLabels'=>array('enabled'=>true, 'align'=>'left', 'verticalAlign'=>'bottom', 'formatter'=> $func, 'y'=>-10));
+                        'dataLabels'=>array('enabled'=>true, 'align'=>'left', 'inside'=>true, 'verticalAlign'=>'bottom', 'formatter'=> $func, 'y'=>-5));
             }
             else
                 $data[] = array();
@@ -154,7 +154,6 @@ class ChartManager /*extends \Twig_Extension*/ {
         $style=array('color'=>'#000000', 'fontSize'=>'11px', 'fontFamily'=>'Calibri (Corps)');
 
         $ob = new Highchart();
-        $ob->global->useUTC(false);
         $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart 
         $ob->chart->height(100+count($etude->getPhases())*25);
         $ob->title->text('');
@@ -171,9 +170,45 @@ class ChartManager /*extends \Twig_Extension*/ {
         $ob->legend->enabled(false);
         $ob->exporting->enabled(false);
         $ob->plotOptions->series(array('pointPadding'=>0, 'groupPadding'=>0, 'pointWidth'=>10,'groupPadding'=>0,'marker'=>array('radius'=>5), 'tooltip'=>array('pointFormat'=>'<b>{point.titre}</b><br /> {point.detail}')));
-        $ob->plotOptions->scatter(array('tooltip'=>array('headerFormat'=>'')));
+        $ob->plotOptions->scatter(array('tooltip'=>array('headerFormat'=>'')));	
         $ob->series($series);
         
         return $ob;
+    }
+    
+    public function exportGantt(Highchart $ob, $filename)
+    {
+        /*<script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
+        <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
+        <script src="{{ asset('js/highcharts.js') }}"></script>*/
+        
+        // Create the file
+        $chemin = 'tmp/'.$filename.'.json';
+        $destination = 'tmp/'.$filename.'.png';
+        
+        $fp = fopen($chemin, 'w');
+        if($fp)
+        {
+            fwrite($fp, substr($ob->render(), 51, -8));
+            fclose($fp);
+        }
+        else
+        {
+            echo "Fichier .json non enregistré (".$chemin.")";
+            return false;
+        }
+
+        
+        $output = shell_exec("phantomjs js/highcharts-convert.js -infile ".$chemin." -outfile ".$destination." -width 800 -constr Chart");
+        if(strncmp($output, $destination, strlen($destination))==0)
+        {
+            return true;
+        }
+        else
+        {
+            echo("erreur:0".$output);
+            return false;
+        }
+                
     }
 }
