@@ -1,3 +1,9 @@
+mgateSuivi_vu_ca:
+    pattern:  /ca/{id}
+    defaults: {_controller: mgateSuiviBundle:Etude:vuCA }
+    requirements:
+      id: \d+
+
 mgateSuivi_etude_homepage:
     pattern:  /{page}
     defaults: {_controller: mgateSuiviBundle:Etude:index , page: 1}
