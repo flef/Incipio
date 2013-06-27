@@ -674,7 +674,7 @@ class TraitementController extends Controller {
         $champsBrut = $this->verifierTemplates($templatesXMLtraite);
 
         $repertoire = 'tmp';
-
+        
         //SI DM on prend la ref de RM et ont remplace RM par DM
         if($doc == 'DM'){
             $doc = 'RM';
@@ -693,6 +693,19 @@ class TraitementController extends Controller {
         
         
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+        
+        //Gantt
+        if($doc == 'AP')
+        {
+            $chartManager = $this->get('mgate.chart_manager');
+            $ob=$chartManager->getGantt($etude, "ap");
+            if($chartManager->exportGantt($ob, $idDocx))
+            {
+                // le fichier tmp/$idDocx.png existe
+                //voila tu peux faire l'intégration ici
+            }
+        }
+
 
 
         copy($chemin, $repertoire . '/' . $idDocx);

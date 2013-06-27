@@ -97,9 +97,12 @@ Affichage d'une étude - {{ parent() }}
  {% block javascript %}
 {{ parent() }}
 {{ form_javascript(formSuivi) }}
-    <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
-    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
-    <script src="{{ asset('js/hightcharts.js') }}"></script>
+    <!--<script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
+    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>-->
+    <script src="{{ asset('js/highcharts.js') }}"></script>
+    <script src="{{ asset('js/highcharts-fr.js') }}"></script>
+    <script src="{{ asset('js/exporting.js') }}"></script>
+    
     <script type="text/javascript">
         {{ chart(chart) }}
     </script>
