@@ -371,18 +371,7 @@ class TraitementController extends Controller {
             }
         }
 
-        //PVR
-        if($etude->getAvs())
-           $Nbr_Avenant = count($etude->getAvs()->getValues());
-        else
-           $Nbr_Avenant = 0;
-        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
         
-        //PVI
-        if($doc == 'PVI'){
-            if($key < count($etude->getPvis()))
-                $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis($key)->getPhaseID());
-        }
         
         
         
@@ -484,6 +473,19 @@ class TraitementController extends Controller {
             $phasePVI = $etude->getPvis($key)->getPhaseID();
         else 
             $phasePVI = -1;
+        
+        //PVR
+        if($etude->getAvs())
+           $Nbr_Avenant = count($etude->getAvs()->getValues());
+        else
+           $Nbr_Avenant = 0;
+        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
+        
+        //PVI
+        if($doc == 'PVI'){
+            if($key < count($etude->getPvis()))
+                $this->array_push_assoc($champs, 'Phase_PVI', $phasePVI);
+        }
         
 
         //Phases
