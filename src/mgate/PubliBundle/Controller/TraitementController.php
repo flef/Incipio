@@ -798,7 +798,7 @@ class TraitementController extends Controller {
 
                 header('Content-Type: application/msword');
                 header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: attachment; filename=' . $refDocx);
+                header('Content-disposition: attachment; filename=' . $refDocx . '.docx');
                 header('Pragma: no-cache');
                 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
                 header('Expires: 0');
