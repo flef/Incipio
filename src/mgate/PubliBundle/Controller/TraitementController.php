@@ -375,22 +375,7 @@ class TraitementController extends Controller {
         
         
         
-        //Références
-        $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
-            if ($etude->getDoc($abrv))
-                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
-            }
-        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
-            if ($etude->getDoc('CC'))
-                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
-        }
-            
-        if ($etude->getDoc('RM', $key)){
-           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
-           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
-           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
-        }
+        
 
 
 
@@ -487,6 +472,23 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Phase_PVI', $phasePVI);
         }
         
+        //Références
+        $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
+        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
+            if ($etude->getDoc($abrv))
+                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
+            }
+        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
+            if ($etude->getDoc('CC'))
+                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
+        }
+            
+        if ($etude->getDoc('RM', $key)){
+           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
+           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
+           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
+        }
+        
 
         //Phases
         foreach ($phases as $phase) {
@@ -526,13 +528,13 @@ class TraitementController extends Controller {
         //DM : Autres dev
         $i = 0;
         foreach($etude->getMissions() as $mission){
-            $i++;
+            
             if($i == $key){ // Phase concernant l'intervenant
                 $phaseDev = '';
                 foreach($mission->getPhaseMission()->getValues() as $phaseMission)
                 {
                     if($phaseMission->getNbrJEH())
-                        $phaseDev .= $phaseMission->getPhase()->getPosition() . ' - ' . $phase->getTitre() . '<w:br />';
+                        $phaseDev .= $phaseMission->getPhase()->getPosition() . ' - ' .$phaseMission->getPhase()->getTitre() . '<w:br />';
                 }
                 $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
                 
@@ -554,6 +556,7 @@ class TraitementController extends Controller {
                     $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Tel',$intervenant->getMobile());
                 }
             }
+            $i++;
         }
         
         
