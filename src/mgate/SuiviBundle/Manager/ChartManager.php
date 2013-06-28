@@ -183,6 +183,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         <script src="{{ asset('js/highcharts.js') }}"></script>*/
         
         // Create the file
+        /*
         $chemin = 'tmp/'.$filename.'.json';
         $destination = 'tmp/'.$filename.'.png';
         
@@ -209,6 +210,8 @@ class ChartManager /*extends \Twig_Extension*/ {
             echo("erreur:0".$output);
             return false;
         }
+         * 
+         */
                 
     }
 }
