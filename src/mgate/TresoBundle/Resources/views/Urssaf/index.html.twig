@@ -68,9 +68,14 @@
                 <div>{{ getNbrJEH(rm.etude)|default('') }} JEH</div>
             </td>
            <td>
-               {% for phasemission in rm.phaseMission %}
+               {% set totalJEH = 0 %}
+               {% set totalRem = 0 %}
+               {% for phasemission in rm.phaseMission if phasemission.nbrJEH > 0 %}
+               {% set totalJEH = totalJEH + phasemission.nbrJEH %}
+               {% set totalRem = totalRem + phasemission.nbrJEH * phasemission.phase.prixJEH * (1-rm.pourcentageJunior/100) %}
                 <div>Phase n°{{ phasemission.phase.position+ 1 }} : {{ phasemission.nbrJEH }} * {{ phasemission.phase.prixJEH * (1-rm.pourcentageJunior/100)}} = {{ phasemission.phase.prixJEH*phasemission.nbrJEH*(1-rm.pourcentageJunior/100) }} €</div>
                 {% endfor %}
+                <div>Total : {{ totalJEH }} JEH - {{ totalRem }} €</div>
             </td>
         </tr>
         {% endfor %}
