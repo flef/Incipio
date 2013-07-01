@@ -526,15 +526,15 @@ class TraitementController extends Controller {
         
         
         //DM : Autres dev
-        $i = 0;
+        $i = 1;
         foreach($etude->getMissions() as $mission){
             
-            if($i == $key){ // Phase concernant l'intervenant
+            if($i == $key + 1 ){ // Phase concernant l'intervenant
                 $phaseDev = '';
                 foreach($mission->getPhaseMission()->getValues() as $phaseMission)
                 {
                     if($phaseMission->getNbrJEH())
-                        $phaseDev .= $phaseMission->getPhase()->getPosition() . ' - ' .$phaseMission->getPhase()->getTitre() . '<w:br />';
+                        $phaseDev .= ($phaseMission->getPhase()->getPosition() + 1) . ' - ' .$phaseMission->getPhase()->getTitre() . '<w:br />';
                 }
                 $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
                 
