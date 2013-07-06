@@ -198,7 +198,8 @@ class ChartManager /*extends \Twig_Extension*/ {
         $render = substr($render, 1);
         $render = strstr($render, "{", false);
         
-        $render = substr($render, 0, strrpos($render, ',')); // on tronque jusqu'a la dernire ,
+        $render = substr($render, 0, strrpos($render, '}')); // on tronque jusqu'a la dernire ,
+        $render = substr($render, 0, strrpos($render, '}')); // on tronque jusqu'a la dernire ,
         $render .= "}";
         
         $fp = fopen($chemin, 'w');
