@@ -25,7 +25,7 @@ class Poste
     /**
      * @var string $prenom
      *
-     * @ORM\Column(name="prenom", type="string", length=255)
+     * @ORM\Column(name="intitule", type="string", length=255)
      */
     private $intitule;
     
