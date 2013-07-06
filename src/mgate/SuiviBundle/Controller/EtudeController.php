@@ -39,15 +39,6 @@ class EtudeController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $user = $this->container->get('security.context')->getToken()->getUser()->getPersonne();
-
-        //Etudes Suiveur
-        $etudesSuiveur = array();
-        foreach($em->getRepository('mgateSuiviBundle:Etude')->findBy(array('suiveur' => $user), array('mandat'=> 'DESC', 'num'=> 'DESC')) as $etude)
-        {
-            $stateID = $etude->getStateID();
-            if( $stateID <= 2 )
-             array_push($etudesSuiveur, $etude);
-        }
  
         //Etudes En Négociation : stateID = 1
         $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC'));
@@ -72,7 +63,6 @@ class EtudeController extends Controller
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
             'etudesEnNegociation' => $etudesEnNegociation,
             'etudesEnCours' => $etudesEnCours,
-            'etudesSuiveur' => $etudesSuiveur,
             'etudesEnPause' => $etudesEnPause,
             'etudesTermineesParMandat' => $etudesTermineesParMandat,
             'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
