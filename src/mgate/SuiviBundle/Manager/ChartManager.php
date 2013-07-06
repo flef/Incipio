@@ -188,6 +188,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         $logger = $this->logger;
         
         // Create the file
+        /*
         $chemin = 'tmp/'.$filename.'.json';
         $destination = 'tmp/'.$filename.'.png';
         
@@ -224,6 +225,8 @@ class ChartManager /*extends \Twig_Extension*/ {
             $logger->err("exportGantt: erreur lors de la génération de l'image: ".$output);
             return false;
         }
+         * 
+         */
                 
     }
 }
