@@ -15,47 +15,6 @@ class MembreController extends Controller {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function ajouterAction() {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $membre = new Membre;
-
-        $mandatNew = new Mandat;
-        $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
-        $dt = new \DateTime("now");
-        $dtl = clone $dt;
-        $dtl->modify('+1 year');
-
-        if ($poste)
-            $mandatNew->setPoste($poste);
-        $mandatNew->setMembre($membre);
-        $mandatNew->setDebutMandat($dt);
-        $mandatNew->setFinMandat($dtl);
-        $membre->addMandat($mandatNew);
-
-        $form = $this->createForm(new MembreType, $membre);
-
-        if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
-
-            if ($form->isValid()) {
-                $em->persist($membre);
-                $em->flush();
-                $membre->getPersonne()->setMembre($membre);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre->getId())));
-            }
-        }
-
-        return $this->render('mgatePersonneBundle:Membre:ajouter.html.twig', array(
-                    'form' => $form->createView(),
-                ));
-    }
-
-    /**
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
     public function indexAction($page) {
         $em = $this->getDoctrine()->getManager();
 
@@ -85,6 +44,9 @@ class MembreController extends Controller {
                 /* 'delete_form' => $deleteForm->createView(),        */                ));
     }
 
+    /*
+     * Ajout ET modification des membres (create if membre not existe )
+     */
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
@@ -92,9 +54,23 @@ class MembreController extends Controller {
         $em = $this->getDoctrine()->getEntityManager();
 
         if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id))
-            throw $this->createNotFoundException('Membre [id=' . $id . '] inexistant');
+            $membre = new Membre;
+        if (!count($membre->getMandats()->toArray())) {
+            $mandatNew = new Mandat;
+            $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
+            $dt = new \DateTime("now");
+            $dtl = clone $dt;
+            $dtl->modify('+1 year');
 
-        // On passe l'$article récupéré au formulaire
+            if ($poste)
+                $mandatNew->setPoste($poste);
+            $mandatNew->setMembre($membre);
+            $mandatNew->setDebutMandat($dt);
+            $mandatNew->setFinMandat($dtl);
+            $membre->addMandat($mandatNew);
+        }
+
+        
         $form = $this->createForm(new MembreType, $membre);
         $deleteForm = $this->createDeleteForm($id);
 
