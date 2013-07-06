@@ -371,37 +371,11 @@ class TraitementController extends Controller {
             }
         }
 
-        //PVR
-        if($etude->getAvs())
-           $Nbr_Avenant = count($etude->getAvs()->getValues());
-        else
-           $Nbr_Avenant = 0;
-        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
-        
-        //PVI
-        if($doc == 'PVI'){
-            if($key < count($etude->getPvis()))
-                $this->array_push_assoc($champs, 'Phase_PVI', $etude->getPvis($key)->getPhaseID());
-        }
         
         
         
-        //Références
-        $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
-            if ($etude->getDoc($abrv))
-                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
-            }
-        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
-            if ($etude->getDoc('CC'))
-                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
-        }
-            
-        if ($etude->getDoc('RM', $key)){
-           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
-           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
-           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
-        }
+        
+        
 
 
 
@@ -485,6 +459,36 @@ class TraitementController extends Controller {
         else 
             $phasePVI = -1;
         
+        //PVR
+        if($etude->getAvs())
+           $Nbr_Avenant = count($etude->getAvs()->getValues());
+        else
+           $Nbr_Avenant = 0;
+        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
+        
+        //PVI
+        if($doc == 'PVI'){
+            if($key < count($etude->getPvis()))
+                $this->array_push_assoc($champs, 'Phase_PVI', $phasePVI);
+        }
+        
+        //Références
+        $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
+        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
+            if ($etude->getDoc($abrv))
+                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
+            }
+        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
+            if ($etude->getDoc('CC'))
+                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
+        }
+            
+        if ($etude->getDoc('RM', $key)){
+           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
+           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
+           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
+        }
+        
 
         //Phases
         foreach ($phases as $phase) {
@@ -522,15 +526,15 @@ class TraitementController extends Controller {
         
         
         //DM : Autres dev
-        $i = 0;
+        $i = 1;
         foreach($etude->getMissions() as $mission){
-            $i++;
-            if($i == $key){ // Phase concernant l'intervenant
+            
+            if($i == $key + 1 ){ // Phase concernant l'intervenant
                 $phaseDev = '';
                 foreach($mission->getPhaseMission()->getValues() as $phaseMission)
                 {
                     if($phaseMission->getNbrJEH())
-                        $phaseDev .= $phaseMission->getPhase()->getPosition() . ' - ' . $phase->getTitre() . '<w:br />';
+                        $phaseDev .= ($phaseMission->getPhase()->getPosition() + 1) . ' - ' .$phaseMission->getPhase()->getTitre() . '<w:br />';
                 }
                 $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
                 
@@ -552,6 +556,7 @@ class TraitementController extends Controller {
                     $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Tel',$intervenant->getMobile());
                 }
             }
+            $i++;
         }
         
         
@@ -793,7 +798,7 @@ class TraitementController extends Controller {
 
                 header('Content-Type: application/msword');
                 header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: attachment; filename=' . $refDocx);
+                header('Content-disposition: attachment; filename=' . $refDocx . '.docx');
                 header('Pragma: no-cache');
                 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
                 header('Expires: 0');

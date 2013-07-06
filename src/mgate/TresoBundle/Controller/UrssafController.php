@@ -28,6 +28,7 @@ class UrssafController extends Controller
             $qb->select('m')
                 ->from('mgateSuiviBundle:Mission', 'm')
                 ->where('m.debutOm <= :date')
+                ->orderBy('m.finOm', 'DESC')
                 //->andWhere('m.finOm >= :date')
                 ->setParameters(array('date' => $data["date"]));
 
