@@ -517,7 +517,7 @@ class EtudeManager extends \Twig_Extension {
                 }
                 elseif(!$etude->getAp()->getSpt1())
                 {
-                      $info = array('titre' => 'Avant-Projet : ', 'message' => 'à faire signer par le signer par le président');    
+                      $info = array('titre' => 'Avant-Projet : ', 'message' => 'à faire signer par le président');    
                       array_push($infos, $info);
                 }
                 elseif(!$etude->getAp()->getEnvoye())
