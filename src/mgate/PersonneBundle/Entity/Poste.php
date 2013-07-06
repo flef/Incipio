@@ -31,11 +31,10 @@ class Poste
     
     
     /**
-     * @ORM\OneToMany(targetEntity="Membre", mappedBy="poste")
-        * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="poste")
+     * @ORM\JoinColumn(nullable=true)
      */
-    private $membres;
-
+    private $mandats;
 
 
     /**
@@ -72,36 +71,44 @@ class Poste
     }
     
     /**
-     * Add membre
-     *
-     * @param mgate\PersonneBundle\Entity\Membre $membre
-     * @return Prospect
+     * Constructor
      */
-    public function addMembre(\mgate\PersonneBundle\Entity\Membre $membre)
+    public function __construct()
     {
-        $this->membres[] = $membre;
+        $this->mandat = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+
+    /**
+     * Add mandats
+     *
+     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
+     * @return Poste
+     */
+    public function addMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
+    {
+        $this->mandats[] = $mandats;
     
         return $this;
     }
 
     /**
-     * Remove membre
+     * Remove mandats
      *
-     * @param mgate\PersonneBundle\Entity\Membre $membre
+     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
      */
-    public function removeMembre(\mgate\PersonneBundle\Entity\Membre $membre)
+    public function removeMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
     {
-        $this->membres->removeElement($membre);
+        $this->mandats->removeElement($mandats);
     }
 
     /**
-     * Get membres
+     * Get mandats
      *
-     * @return Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getMembres()
+    public function getMandats()
     {
-        return $this->membres;
+        return $this->mandats;
     }
-
 }

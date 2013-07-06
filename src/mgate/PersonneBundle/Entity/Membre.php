@@ -31,15 +31,14 @@ class Membre
     /**
      * @var string $identifiant
      *
-     * @ORM\Column(name="identifiant", type="string", length=10, nullable=true)
+     * @ORM\Column(name="identifiant", type="string", length=10, nullable=true, unique=true)
      */
     private $identifiant;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Poste", inversedBy="membres", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="membre", cascade={"persist","remove"})
      */
-    private $poste;
+    private $mandats;
 
     /**
      * Get id
@@ -120,5 +119,46 @@ class Membre
     public function getPoste()
     {
         return $this->poste;
+    }
+ 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->mandats = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add mandats
+     *
+     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
+     * @return Membre
+     */
+    public function addMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
+    {
+        $this->mandats[] = $mandats;
+    
+        return $this;
+    }
+
+    /**
+     * Remove mandats
+     *
+     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
+     */
+    public function removeMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
+    {
+        $this->mandats->removeElement($mandats);
+    }
+
+    /**
+     * Get mandats
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMandats()
+    {
+        return $this->mandats;
     }
 }
