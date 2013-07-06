@@ -26,6 +26,6 @@ monolog:
         swift:
             type:       swift_mailer
             from_email: error@mgate.fr
-            to_email:   thunderbirdcloud@gmail.com
+            to_email:   stephane.collot@gmail.com
             subject:    An Error Occurred!
             level:      error
