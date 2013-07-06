@@ -6,17 +6,20 @@ use Doctrine\ORM\EntityManager;
 use mgate\SuiviBundle\Manager\BaseManager;
 use mgate\SuiviBundle\Entity\Etude as Etude;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Monolog\Logger;
 
 class ChartManager /*extends \Twig_Extension*/ {
 
     protected $em;
     protected $tva;
     protected $etudeManager;
+    protected $logger;
 
-    public function __construct(EntityManager $em, $tva, EtudeManager $etudeManager) {
+    public function __construct(EntityManager $em, $tva, EtudeManager $etudeManager, Logger $logger) {
         $this->em = $em;
         $this->tva = $tva;
         $this->etudeManager = $etudeManager;
+        $this->logger = $logger;
 
     }
     
@@ -25,7 +28,7 @@ class ChartManager /*extends \Twig_Extension*/ {
     */
     public function getGantt(Etude $etude, $type)
     {
-      
+        
         // Chart
         $series = array();
         $data = array();
@@ -182,6 +185,8 @@ class ChartManager /*extends \Twig_Extension*/ {
         <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
         <script src="{{ asset('js/highcharts.js') }}"></script>*/
         
+        $logger = $this->logger;
+        
         // Create the file
         $chemin = 'tmp/'.$filename.'.json';
         $destination = 'tmp/'.$filename.'.png';
@@ -189,24 +194,34 @@ class ChartManager /*extends \Twig_Extension*/ {
         $fp = fopen($chemin, 'w');
         if($fp)
         {
-            fwrite($fp, substr($ob->render(), 51, -8));
+            if (fwrite($fp, substr($ob->render(), 51, -8)) === FALSE) {
+                $logger->err("exportGantt: impossible d'écrire dans le fichier .json (".$chemin.")");
+                return false;
+            }
+            
             fclose($fp);
         }
         else
         {
-            echo "Fichier .json non enregistré (".$chemin.")";
+            $logger->err("exportGantt: impossible de créer le fichier .json (".$chemin.")");
             return false;
         }
 
         
-        $output = shell_exec("phantomjs js/highcharts-convert.js -infile ".$chemin." -outfile ".$destination." -width 800 -constr Chart");
+        $output = shell_exec('phantomjs js/highcharts-convert.js -infile "'.$chemin.'" -outfile "'.$destination.'" -width 800 -constr Chart');
         if(strncmp($output, $destination, strlen($destination))==0)
         {
-            return true;
+            if(file_exists($destination))
+                return true;
+            else
+            {
+                $logger->err("exportGantt: le fichier final n'existe pas (".$destination.")");
+                return false;
+            }
         }
         else
         {
-            echo("erreur:0".$output);
+            $logger->err("exportGantt: erreur lors de la génération de l'image: ".$output);
             return false;
         }
                 

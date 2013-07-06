@@ -21,6 +21,7 @@ class ClientContactType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => true))
             
             //->add('thread', new ThreadType) // délicat 
