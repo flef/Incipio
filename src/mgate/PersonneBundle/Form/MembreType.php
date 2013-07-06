@@ -14,12 +14,13 @@ class MembreType extends AbstractType
 	    $builder
                 ->add('personne', new PersonneType(), array('label'=>' ', 'user'=>true))
                 ->add('identifiant', 'text', array('required'=>false))
-                ->add('poste', 'entity', 
-                    array ('label' => 'Séléctionner un poste',
-                           'class' => 'mgate\\PersonneBundle\\Entity\\Poste',
-                           'property' => 'intitule',
-                           'property_path' => true,
-                           'required' => false,));
+                ->add('mandats', 'collection', array(
+                'type' => new MandatType,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false, //indispensable cf doc
+                ));
             
     }
 
