@@ -195,7 +195,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         
         // On garde que ce qui est intéressant
         $render = strstr($render, "{", false);
-        $render = substr($render, 1, strrpos($render, ','));
+        $render = substr($render, 1);
         $render = strstr($render, "{", false);
         
         $render = substr($render, 0, strrpos($render, ',')); // on tronque jusqu'a la dernire ,
