@@ -78,37 +78,4 @@ class Poste
         $this->mandat = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
-
-    /**
-     * Add mandats
-     *
-     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
-     * @return Poste
-     */
-    public function addMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
-    {
-        $this->mandats[] = $mandats;
-    
-        return $this;
-    }
-
-    /**
-     * Remove mandats
-     *
-     * @param \mgate\PersonneBundle\Entity\Mandat $mandats
-     */
-    public function removeMandat(\mgate\PersonneBundle\Entity\Mandat $mandats)
-    {
-        $this->mandats->removeElement($mandats);
-    }
-
-    /**
-     * Get mandats
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getMandats()
-    {
-        return $this->mandats;
-    }
 }

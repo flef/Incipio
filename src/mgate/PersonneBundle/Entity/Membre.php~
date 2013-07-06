@@ -31,12 +31,12 @@ class Membre
     /**
      * @var string $identifiant
      *
-     * @ORM\Column(name="identifiant", type="string", length=10, nullable=true, unique=true)
+     * @ORM\Column(name="identifiant", type="string", length=10, nullable=true)
      */
     private $identifiant;
 
     /**
-     * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="membre", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="membre", cascade={"persist", "remove"})
      */
     private $mandats;
 
@@ -120,7 +120,29 @@ class Membre
     {
         return $this->poste;
     }
- 
+
+    /**
+     * Set mandat
+     *
+     * @param \mgate\PersonneBundle\Entity\Mandat $mandat
+     * @return Membre
+     */
+    public function setMandat(\mgate\PersonneBundle\Entity\Mandat $mandat = null)
+    {
+        $this->mandat = $mandat;
+    
+        return $this;
+    }
+
+    /**
+     * Get mandat
+     *
+     * @return \mgate\PersonneBundle\Entity\Mandat 
+     */
+    public function getMandat()
+    {
+        return $this->mandat;
+    }
     /**
      * Constructor
      */
