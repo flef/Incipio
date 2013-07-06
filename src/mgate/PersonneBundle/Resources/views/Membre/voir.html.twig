@@ -7,7 +7,7 @@
 {% block content_bundle %}
 <p>
 	<h2>{{ membre.personne.sexe }} {{ membre.personne.nom }} {{ membre.personne.prenom }}</h2>
-	<i>{% if membre.poste %} {{membre.poste.intitule}}{% else %}Sans poste{% endif %}</i><br />
+	<i>{#% if membre.poste %} {{membre.poste.intitule}}{% else %}Sans poste{% endif %#}</i><br />
             Mobile: {{ membre.personne.mobile }}<br />
             Fix: {{ membre.personne.fix }}<br />
             Email: {{ membre.personne.email }}<br />

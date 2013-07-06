@@ -44,7 +44,11 @@
           <tr>
             <!--<td>{{ membre.id }}</td>-->
             <td>{{ membre.personne.prenomNom }}</td>
-            <td>{{ membre.poste ? membre.poste.intitule : '-' }}</td>
+            <td>
+                {% for mandat in membre.mandats %}
+                    {{ "De" ~ mandat.debutMandat ~ " à " ~mandat.finMandat ~ " - " ~ mandat.poste }}
+                {% endfor %}
+            </td>
             <td>{{ membre.identifiant }}</td>
             <td>{{ membre.personne.email }}</td>
             <td>{{ membre.personne.mobile }}</td>
