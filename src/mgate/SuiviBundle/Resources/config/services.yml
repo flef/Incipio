@@ -23,6 +23,7 @@ services:
           - "@doctrine.orm.entity_manager"
           - "%tva%"
           - "@mgate.etude_manager"
+          - "@logger"
           
     mgate.validation:
       class: "%mgate.validation.class%"
