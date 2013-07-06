@@ -109,7 +109,7 @@ class TraitementController extends Controller {
                 if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
                     $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', preg_replace("# #", " ", $this->formaterNombre($values)), $templateXML);
                 else
-                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->nl2wbr($values), $templateXML);
+                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->nl2wbr(htmlspecialchars($values)), $templateXML);
             }
         }
 
@@ -341,8 +341,8 @@ class TraitementController extends Controller {
             'Solde_PVR_HT_Lettres' => $Solde_PVR_HT_Lettres,
             'Solde_PVR_TTC_Lettres' => $Solde_PVR_TTC_Lettres,
             'Acompte_Pourcentage' => $Acompte_Pourcentage,
-            'Date_Debut_Etude' => $Date_Fin_Etude,
-            'Date_Fin_Etude' => $Date_Debut_Etude,
+            'Date_Debut_Etude' => $Date_Debut_Etude,
+            'Date_Fin_Etude' => $Date_Fin_Etude,
         );
 
         //Doc
@@ -436,6 +436,19 @@ class TraitementController extends Controller {
             $Date_Limite->modify('+ 30 day');
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
             }
+            
+            $Factures_Intermédiaires_HT = (float) 0;
+            if($etude->getFis()){
+                foreach($etude->getFis() as $fi)
+                {
+                    $Factures_Intermédiaires_HT += $fi->getMontantHT();
+                }
+            }
+            $Part_TVA_Deja_Paye = (float) ($Factures_Intermédiaires_HT + $Acompte_HT) * $Taux_TVA / 100;
+            $Deja_Paye_TTC =  (float) $Acompte_TTC + $Factures_Intermédiaires_HT * (1 + $Taux_TVA / 100);
+            $this->array_push_assoc($champs, 'Factures_Intermédiaires_HT', $Factures_Intermédiaires_HT);
+            $this->array_push_assoc($champs, 'Deja_Paye_TTC', $Deja_Paye_TTC );
+            $this->array_push_assoc($champs, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
     
             $Reste_HT = $etude->getFs()->getMontantHT();
             
