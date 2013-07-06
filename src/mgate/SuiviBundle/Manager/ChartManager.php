@@ -191,10 +191,20 @@ class ChartManager /*extends \Twig_Extension*/ {
         $chemin = 'tmp/'.$filename.'.json';
         $destination = 'tmp/'.$filename.'.png';
         
+        $render=$ob->render();
+        
+        // On garde que ce qui est intéressant
+        $render = strstr($render, "{", false);
+        $render = substr($render, 1, strrpos($render, ','));
+        $render = strstr($render, "{", false);
+        
+        $render = substr($render, 0, strrpos($render, ',')); // on tronque jusqu'a la dernire ,
+        $render .= "}";
+        
         $fp = fopen($chemin, 'w');
         if($fp)
         {
-            if (fwrite($fp, substr($ob->render(), 51, -8)) === FALSE) {
+            if (fwrite($fp, $render) === FALSE) {
                 $logger->err("exportGantt: impossible d'écrire dans le fichier .json (".$chemin.")");
                 return false;
             }
@@ -207,8 +217,8 @@ class ChartManager /*extends \Twig_Extension*/ {
             return false;
         }
 
-        
-        $output = shell_exec('phantomjs js/highcharts-convert.js -infile "'.$chemin.'" -outfile "'.$destination.'" -width 800 -constr Chart');
+        $cmd= 'phantomjs js/highcharts-convert.js -infile "'.$chemin.'" -outfile "'.$destination.'" -width 800 -constr Chart';
+        $output = shell_exec($cmd);
         if(strncmp($output, $destination, strlen($destination))==0)
         {
             if(file_exists($destination))
@@ -221,7 +231,7 @@ class ChartManager /*extends \Twig_Extension*/ {
         }
         else
         {
-            $logger->err("exportGantt: erreur lors de la génération de l'image: ".$output);
+            $logger->err("exportGantt: erreur lors de la génération de l'image: ".$output,array("cmd"=>$cmd));
             return false;
         }
                 
