@@ -62,7 +62,7 @@ mgatePersonne_membre_homepage:
     
 mgatePersonne_membre_ajouter:
     pattern: /membre/add
-    defaults: {_controller: mgatePersonneBundle:Membre:ajouter}
+    defaults: {_controller: mgatePersonneBundle:Membre:modifier, id:0}
 
 mgatePersonne_membre_voir:
     pattern:   /membre/{id}
