@@ -46,7 +46,7 @@
             <td>{{ membre.personne.prenomNom }}</td>
             <td>
                 {% for mandat in membre.mandats %}
-                    {{ "De" ~ mandat.debutMandat ~ " à " ~mandat.finMandat ~ " - " ~ mandat.poste }}
+                    {{ "Du " ~ mandat.debutMandat | date("d/m/Y") ~ " au " ~mandat.finMandat | date("d/m/Y") ~ " - " ~ mandat.poste.intitule }}<br />
                 {% endfor %}
             </td>
             <td>{{ membre.identifiant }}</td>
