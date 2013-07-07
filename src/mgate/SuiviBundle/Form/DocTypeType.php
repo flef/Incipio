@@ -28,7 +28,7 @@ class DocTypeType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getPresidentFirst(); },
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getPresidents(); },
                        'required' => true));
         }
         else
@@ -38,7 +38,7 @@ class DocTypeType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getTresorierFirst(); },
+                       'query_builder' => function(PersonneRepository $pr) { return $pr->getTresoriers(); },
                        'required' => true));
         }
         

@@ -22,30 +22,32 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
-    public function getPresidentFirst()
+
+    public function getPresidents()
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb
-                ->select('n')
-                ->from('mgatePersonneBundle:Personne', 'n')
-                ->join('n.membre', 'm')
-                ->join('m.poste', 'p')
-                ->where('n.membre IS NOT NULL')
-                ->andWhere("p.intitule LIKE '%president%'");
-                            
+                ->select('p')
+                ->from('mgatePersonneBundle:Personne', 'p')
+                ->innerJoin('p.membre', 'me')
+                ->innerJoin('me.mandats', 'ma')
+                ->innerJoin('ma.poste', 'po')
+                ->where("po.intitule LIKE 'president%'")
+                ->orderBy('ma.finMandat','DESC');
         return $query;
     }
     
-    public function getTresorierFirst()
+    public function getTresoriers()
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb
-                ->select('n')
-                ->from('mgatePersonneBundle:Personne', 'n')
-                ->join('n.membre', 'm')
-                ->join('m.poste', 'p')
-                ->where('n.membre IS NOT NULL')
-                ->andWhere("p.intitule LIKE '%tresorier%'");
+                ->select('p')
+                ->from('mgatePersonneBundle:Personne', 'p')
+                ->innerJoin('p.membre', 'me')
+                ->innerJoin('me.mandats', 'ma')
+                ->innerJoin('ma.poste', 'po')
+                ->where("po.intitule LIKE '%tresorier%'")
+                ->orderBy('ma.finMandat','DESC');
                             
         return $query;
     }
