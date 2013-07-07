@@ -109,6 +109,10 @@ class MembreController extends Controller {
                 if(!$membre->getIdentifiant()){
                     $initial = substr($membre->getPersonne()->getPrenom(), 0, 1) . substr($membre->getPersonne()->getNom(), 0, 1);
                     $ident = count($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findBy(array("identifiant" => $initial))) + 1;
+                    while($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findOneBy(array("identifiant" => $initial.$ident)))
+                        $ident++;
+                    
+                        
                     
                     $membre->setIdentifiant(strtoupper($initial.$ident));
                 }

@@ -13,7 +13,7 @@ class MembreType extends AbstractType
     {
 	    $builder
                 ->add('personne', new PersonneType(), array('label'=>' ', 'user'=>true))
-                ->add('identifiant', 'text', array('required'=>false))
+                ->add('identifiant', 'text', array('required'=>false,'read_only'=>true))
                 ->add('mandats', 'collection', array(
                 'type' => new MandatType,
                 'allow_add' => true,

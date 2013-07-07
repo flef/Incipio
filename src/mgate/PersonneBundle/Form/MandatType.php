@@ -13,7 +13,7 @@ class MandatType extends AbstractType
                 ->add('debutMandat', 'genemu_jquerydate', array('label'=>'Date de début', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
                 ->add('finMandat', 'genemu_jquerydate', array('label'=>'Date de Fin', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
                 ->add('poste', 'entity', 
-                    array ('label' => 'Séléctionner un poste',
+                    array ('label' => 'Intitulé',
                            'class' => 'mgate\\PersonneBundle\\Entity\\Poste',
                            'property' => 'intitule',
                            'property_path' => true,
