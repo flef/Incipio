@@ -1,39 +1,53 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
-
-{% block title %}Modifier un membre - {{ parent() }}{% endblock %}
+{% block title %}Ajouter/Modifier un membre - {{ parent() }}{% endblock %}
 
 {% block content_bundle %}
+<h2>Ajouter/Modifier un membre</h2>
 
-    <h2>Modifier un membre</h2>
-    
-    
-    
-   <form method="POST" {{ form_enctype(form) }}>
-    {# affiche l'unique champ de la tache : description #}
-    {#{ form_row(form.description) }#}
-        
-<p><br /><input type="submit" value="Ajouter mandat" name="add"/>
- - <input type="submit" value="Enregistrer" /></p>
+<form method="POST" {{ form_enctype(form) }}>
+<!--<input type="submit" value="Enregistrer" />
+<input type="submit" value="Ajouter mandat" name="add"/>-->
 
-
-    <div class="boutonAdd"></div>
-        {# itere sur chaque tag existant et affiche son unique champ : name #}
-            <div class="row mandats" id="mandats" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
-        {# itere sur chaque tag existant et affiche son unique champ : name #}
-        {% for mandat in form.mandats %}
-                    <span>
-                        {{ form_widget(mandat) }}
-                    </span>
-              
-        {% endfor %}
-            </div>
-
-    <br />
-      {{ form_rest(form) }}
-    <div class="boutonAdd"></div>
-<p><br /><input type="submit" value="Ajouter mandat" name="add"/>
- - <input type="submit" value="Enregistrer" /></p>
-
+<table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
+    <tr>
+        <th colspan="6">Informations</th>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.personne.sexe) }}</td>
+        <td>{{ form_widget(form.personne.sexe) }}</td>
+        <td>{{ form_label(form.personne.prenom) }}</td>
+        <td>{{ form_widget(form.personne.prenom) }}</td>
+        <td>{{ form_label(form.personne.nom) }}</td>
+        <td>{{ form_widget(form.personne.nom) }}</td>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.personne.mobile) }}</td>
+        <td>{{ form_widget(form.personne.mobile) }}</td>
+        <td>{{ form_label(form.personne.email) }}</td>
+        <td>{{ form_widget(form.personne.email) }}</td>
+        <td>{{ form_label(form.identifiant) }}</td>
+        <td>{{ form_widget(form.identifiant) }}</td>
+    </tr>
+    <tr>
+        <td>{{ form_label(form.personne.adresse) }}</td>
+        <td colspan="5">{{ form_widget(form.personne.adresse) }}</td>
+    </tr>
+    <tr>
+        <td colspan="6"><button class="btn" type="submit" value="Ajouter mandat" name="add"><i class="icon-plus"></i></button> <h4 style="display: inline;">Postes occupés</h4></td>
+    </tr>
+    {% for mandat in form.mandats %}
+    <tr class="mandats">
+        <td>{{ form_label(mandat.poste) }}</td>
+        <td>{{ form_widget(mandat.poste) }}</td>
+        <td>{{ form_label(mandat.debutMandat) }}</td>
+        <td>{{ form_widget(mandat.debutMandat) }}</td>
+        <td>{{ form_label(mandat.finMandat) }}</td>
+        <td>{{ form_widget(mandat.finMandat) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{{ form_rest(form) }}
+<input type="submit" value="Enregistrer" />
 </form>
 {#
 <form method="post" {{ form_enctype(form) }}>
@@ -43,123 +57,66 @@
 	<input type="submit" />
 </form>
 #}
-    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+            <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
-        <button>Supprimer le membre</button>
-    </form>    
-         
-<p>
-    <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
-</p>
+                    <button>Supprimer le membre</button>
+                </form>    
+
+                <p>
+                    <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
+                </p>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
 
-<script type="text/javascript">
-    
-    // Recupere le div qui contient la collection de tags
-    var collectionHolder = $('.mandats');
-    
-    function updateOrder() {
-    }
-    
-    function updatePrix() {
-    }
-    
-    function updateNbrJEH() {
-    }
-    
-    var isDirty = false;
+                <script type="text/javascript">
+                    var isDirty = false;
 
-    jQuery(document).ready(function() {
+                    jQuery(document).ready(function() {
         
-        updateOrder();
-        updatePrix();
-        updateNbrJEH();     
+                        //Verification avant de quitter
+                        $(':input').change(function(){
+                            if(!isDirty){
+                               isDirty = true;
+                            }
+                        });
+                        $(window).bind('beforeunload', function(){
+                            if(isDirty)
+                                return "Do you really want to leave now?";
+                        });
+                        $('form').submit(function() {
+                            isDirty = false;
+                            return true;
+                        });
         
-        //Verification avant de quitter
-        $(':input').change(function(){
-            if(!isDirty){
-               isDirty = true;
-            }
-        });
-        $(window).bind('beforeunload', function(){
-            if(isDirty)
-                return "Do you really want to leave now?";
-        });
-        $('form').submit(function() {
-            isDirty = false;
-            return true;
-        });
+                        //Rajout des boutons (X, up, down) pour les phases
+                        $('.mandats').each(function() {
+                            addPhaseBouton($(this));
+                        });
         
-        //Rajout des boutons (X, up, down) pour les phases
-        collectionHolder.find('span').each(function() {
-            addPhaseBouton($(this));
-        });
+                    });
+    
+                    function addPhaseBouton($tagFormLi) {
+                        var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+                        $tagFormLi.children().first().append($delete);
         
-        //Ajouter le drag and drop
-        {# $("#phases").dragsort({ dragSelector: "li", dragBetween: true, dragEnd: updateOrder, placeHolderTemplate: "<div class='span6'></div>" }); #}
-        collectionHolder.sortable({
-            helper: function(e, tr)
-            {
-              var $originals = tr.children();
-              var $helper = tr.clone();
-              $helper.children().each(function(index)
-              {
-                // Set helper cell sizes to match the original sizes
-                $(this).width($originals.eq(index).width())
-              });
-              return $helper;
-            },
-
-            // La fonction appele quand un element change de position
-            // C'est le code vraiment utile, en fait
-            update: function(){             
-                updateOrder();
-            }
+                        $delete.on('click', function(e) {
+                            // prevent the link from creating a "#" on the URL
+                            e.preventDefault();
             
-        });
+                            //CONFIRM confirmation suppression
+                            var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
+                            bootbox.confirm(message, function(result) {
+                                if (result) {
+                                    $tagFormLi.remove();
+                                }
+                            });
+                           });
+                    }
         
-        
-       $('#myButtonUpdate').on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
-            
-            updatePrix();
-            updateNbrJEH();
-        });
-        
-
-
-    });
-    
-    function addPhaseBouton($tagFormLi) {
-        var $delete = $('<button id="myButtonDelete" class="btn">X</button>');
-        $tagFormLi.append($delete);
-        
-        $delete.on('click', function(e) {
-            // prevent the link from creating a "#" on the URL
-            e.preventDefault();
-            
-            //CONFIRM confirmation suppression
-            var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
-            bootbox.confirm(message, function(result) {
-                if (result) {
-                                // remove the li for the tag form
-                    $tagFormLi.remove();
-                    updateOrder();
-                    updatePrix();
-                    updateNbrJEH();
-                }
-            });
-           });
-    }
-        
-</script>
-
-
+                 </script>
 {% endblock %}
 
-        
+
