@@ -53,8 +53,10 @@ class MembreController extends Controller {
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id))
+        if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)){
             $membre = new Membre;
+        }
+            
         if (!count($membre->getMandats()->toArray())) {
             $mandatNew = new Mandat;
             $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
@@ -104,6 +106,14 @@ class MembreController extends Controller {
                     $em->remove($mandat); // on peut faire un persist sinon, cf doc collection form
                 }
 
+                if(!$membre->getIdentifiant()){
+                    $initial = substr($membre->getPersonne()->getPrenom(), 0, 1) . substr($membre->getPersonne()->getNom(), 0, 1);
+                    $ident = count($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findBy(array("identifiant" => $initial))) + 1;
+                    
+                    $membre->setIdentifiant(strtoupper($initial.$ident));
+                }
+                
+                
                 $em->persist($membre); // persist $etude / $form->getData()
                 $em->flush();
 
@@ -116,7 +126,6 @@ class MembreController extends Controller {
 
         return $this->render('mgatePersonneBundle:Membre:modifier.html.twig', array(
                     'form' => $form->createView(),
-                    'membre' => $membre,
                     'delete_form' => $deleteForm->createView(),
                 ));
     }
