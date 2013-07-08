@@ -47,16 +47,17 @@ class MembreController extends Controller {
     /*
      * Ajout ET modification des membres (create if membre not existe )
      */
+
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getEntityManager();
 
-        if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)){
+        if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)) {
             $membre = new Membre;
         }
-            
+
         if (!count($membre->getMandats()->toArray())) {
             $mandatNew = new Mandat;
             $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
@@ -72,11 +73,11 @@ class MembreController extends Controller {
             $membre->addMandat($mandatNew);
         }
 
-        
+
         $form = $this->createForm(new MembreType, $membre);
         $deleteForm = $this->createDeleteForm($id);
 
-        $mandats = $membre->getMandats()->toArray();
+        $mandatsToRemove = $membre->getMandats()->toArray();
 
         $form = $this->createForm(new MembreType, $membre);
 
@@ -100,29 +101,31 @@ class MembreController extends Controller {
                     $membre->addMandat($mandatNew);
                 }
 
-
-                // remove the relationship between the phase and the etude
-                foreach ($mandats as $mandat) {
-                    $em->remove($mandat); // on peut faire un persist sinon, cf doc collection form
-                }
-
-                if(!$membre->getIdentifiant()){
+                if (!$membre->getIdentifiant()) {
                     $initial = substr($membre->getPersonne()->getPrenom(), 0, 1) . substr($membre->getPersonne()->getNom(), 0, 1);
                     $ident = count($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findBy(array("identifiant" => $initial))) + 1;
-                    while($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findOneBy(array("identifiant" => $initial.$ident)))
+                    while ($em->getRepository('mgate\PersonneBundle\Entity\Membre')->findOneBy(array("identifiant" => $initial . $ident)))
                         $ident++;
-                    
-                        
-                    
-                    $membre->setIdentifiant(strtoupper($initial.$ident));
+                    $membre->setIdentifiant(strtoupper($initial . $ident));
                 }
                 
                 
+                // Suppression des mandat à supprimer
+                    //Recherche des mandats supprimés
+                foreach ($membre->getMandats() as $mandat){
+                    $key = array_search($mandat, $mandatsToRemove);
+                    if($key !== FALSE)
+                        array_splice($mandatsToRemove, $key, 1);
+                }
+                    //Supression de la BDD
+                foreach ($mandatsToRemove as $mandat){
+                    $em->remove($mandat);
+                }
+                
+
                 $em->persist($membre); // persist $etude / $form->getData()
                 $em->flush();
-
-                //Necessaire pour refraichir l ordre
-                $em->refresh($membre);
+                
                 $form = $this->createForm(new MembreType(), $membre);
             }
         }
