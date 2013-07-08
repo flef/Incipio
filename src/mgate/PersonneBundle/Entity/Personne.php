@@ -11,8 +11,8 @@ use FOS\UserBundle\Entity\User as BaseUser;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="mgate\PersonneBundle\Entity\PersonneRepository")
  */
-class Personne
-{
+class Personne {
+
     /**
      * @var integer $id
      *
@@ -21,28 +21,28 @@ class Personne
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @var string $prenom
      *
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     private $prenom;
-    
+
     /**
      * @var string $nom
      *
      * @ORM\Column(name="nom", type="string", length=255)
      */
     private $nom;
-    
+
     /**
      * @var string $sexe
      *
      * @ORM\Column(name="sexe", type="string", length=255)
      */
     private $sexe;
-    
+
     /**
      * @var string $mobile
      *
@@ -63,27 +63,26 @@ class Personne
      * @ORM\Column(name="adresse", type="string", length=255, nullable=true)
      */
     private $adresse;
-    
+
     /**
      * @var string $email
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
-    
-    
+
     /**
      * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $employe;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="mgate\UserBundle\Entity\User", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $user;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
@@ -92,39 +91,42 @@ class Personne
 
     // pour afficher Prénom Nom
     // Merci de ne pas supprimer
-    public function getPrenomNom()
-    {
-        return $this->prenom.' '.$this->nom;
+    public function getPrenomNom() {
+        return $this->prenom . ' ' . $this->nom;
     }
-    
-    public function getNomFormel()
-    {
-        return $this->sexe.' '. mb_strtoupper($this->nom,'UTF-8') .' '.$this->prenom;
+
+    public function getNomFormel() {
+        return $this->sexe . ' ' . mb_strtoupper($this->nom, 'UTF-8') . ' ' . $this->prenom;
     }
-    
-    public function getPoste()
-    {
-        if($this->employe)
-            return $this->employe->getPoste();
-        elseif($this->membre)
-        {
-            if($this->membre->getPoste())
-                return $this->membre->getPoste()->getIntitule();
+
+    public function getPoste() {
+        if ($this->getEmploye())
+            return $this->getEmploye()->getPoste();
+        else if ($this->getMembre()) {  //Renvoi le plus haut poste (par id)
+            $mandatValid = null;
+            if (count($mandats = $this->getMembre()->getMandats())) {
+                $id = 100;
+                foreach ($mandats as $mandat) {
+                    if ($mandat->getPoste()->getId() < $id)
+                        $mandatValid = $mandat;
+                    $id = $mandat->getPoste()->getId();
+                }
+            }
+            if ($mandatValid)
+                return $mandatValid->getPoste()->getIntitule();
+            else
+                return "";
         }
         else
             return "";
     }
-    
-    
-    
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -134,10 +136,9 @@ class Personne
      * @param string $prenom
      * @return Personne
      */
-    public function setPrenom($prenom)
-    {
+    public function setPrenom($prenom) {
         $this->prenom = $prenom;
-    
+
         return $this;
     }
 
@@ -146,8 +147,7 @@ class Personne
      *
      * @return string 
      */
-    public function getPrenom()
-    {
+    public function getPrenom() {
         return $this->prenom;
     }
 
@@ -157,10 +157,9 @@ class Personne
      * @param string $nom
      * @return Personne
      */
-    public function setNom($nom)
-    {
+    public function setNom($nom) {
         $this->nom = $nom;
-    
+
         return $this;
     }
 
@@ -169,8 +168,7 @@ class Personne
      *
      * @return string 
      */
-    public function getNom()
-    {
+    public function getNom() {
         return $this->nom;
     }
 
@@ -180,10 +178,9 @@ class Personne
      * @param string $sexe
      * @return Personne
      */
-    public function setSexe($sexe)
-    {
+    public function setSexe($sexe) {
         $this->sexe = $sexe;
-    
+
         return $this;
     }
 
@@ -192,8 +189,7 @@ class Personne
      *
      * @return string 
      */
-    public function getSexe()
-    {
+    public function getSexe() {
         return $this->sexe;
     }
 
@@ -203,10 +199,9 @@ class Personne
      * @param string $mobile
      * @return Personne
      */
-    public function setMobile($mobile)
-    {
+    public function setMobile($mobile) {
         $this->mobile = $mobile;
-    
+
         return $this;
     }
 
@@ -215,8 +210,7 @@ class Personne
      *
      * @return string 
      */
-    public function getMobile()
-    {
+    public function getMobile() {
         return $this->mobile;
     }
 
@@ -226,10 +220,9 @@ class Personne
      * @param string $fix
      * @return Personne
      */
-    public function setFix($fix)
-    {
+    public function setFix($fix) {
         $this->fix = $fix;
-    
+
         return $this;
     }
 
@@ -238,8 +231,7 @@ class Personne
      *
      * @return string 
      */
-    public function getFix()
-    {
+    public function getFix() {
         return $this->fix;
     }
 
@@ -249,10 +241,9 @@ class Personne
      * @param string $adresse
      * @return Personne
      */
-    public function setAdresse($adresse)
-    {
+    public function setAdresse($adresse) {
         $this->adresse = $adresse;
-    
+
         return $this;
     }
 
@@ -261,21 +252,19 @@ class Personne
      *
      * @return string 
      */
-    public function getAdresse()
-    {
+    public function getAdresse() {
         return $this->adresse;
-    }    
-    
+    }
+
     /**
      * Set email
      *
      * @param string $email
      * @return Personne
      */
-    public function setEmail($email)
-    {
+    public function setEmail($email) {
         $this->email = $email;
-    
+
         return $this;
     }
 
@@ -284,8 +273,7 @@ class Personne
      *
      * @return string 
      */
-    public function getEmail()
-    {
+    public function getEmail() {
         return $this->email;
     }
 
@@ -295,10 +283,9 @@ class Personne
      * @param \mgate\PersonneBundle\Entity\Employe $employe
      * @return Personne
      */
-    public function setEmploye(\mgate\PersonneBundle\Entity\Employe $employe = null)
-    {
+    public function setEmploye(\mgate\PersonneBundle\Entity\Employe $employe = null) {
         $this->employe = $employe;
-    
+
         return $this;
     }
 
@@ -307,8 +294,7 @@ class Personne
      *
      * @return \mgate\PersonneBundle\Entity\Employe 
      */
-    public function getEmploye()
-    {
+    public function getEmploye() {
         return $this->employe;
     }
 
@@ -318,10 +304,9 @@ class Personne
      * @param \mgate\UserBundle\Entity\User $user
      * @return Personne
      */
-    public function setUser(\mgate\UserBundle\Entity\User $user = null)
-    {
+    public function setUser(\mgate\UserBundle\Entity\User $user = null) {
         $this->user = $user;
-    
+
         return $this;
     }
 
@@ -330,8 +315,7 @@ class Personne
      *
      * @return \mgate\UserBundle\Entity\User 
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
 
@@ -341,10 +325,9 @@ class Personne
      * @param \mgate\PersonneBundle\Entity\Membre $membre
      * @return Personne
      */
-    public function setMembre(\mgate\PersonneBundle\Entity\Membre $membre = null)
-    {
+    public function setMembre(\mgate\PersonneBundle\Entity\Membre $membre = null) {
         $this->membre = $membre;
-    
+
         return $this;
     }
 
@@ -353,8 +336,8 @@ class Personne
      *
      * @return \mgate\PersonneBundle\Entity\Membre 
      */
-    public function getMembre()
-    {
+    public function getMembre() {
         return $this->membre;
     }
+
 }
