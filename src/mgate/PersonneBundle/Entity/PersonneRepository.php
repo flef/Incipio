@@ -22,8 +22,14 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
-
-    public function getPresidents()
+    /**
+     * Renvoi tous les membres qui ont été au poste de $poste pendant un mandat.
+     * Il est possible d'utiliser les metacaractères spécifiques à mySQL tel que % pour vos recherches.
+     * 
+     * @access  public
+     * @return Array(mgate\PersonneBundle\Entity\Membre)
+     */
+    public function getMembresByPoste($poste)
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb
@@ -32,25 +38,11 @@ class PersonneRepository extends EntityRepository
                 ->innerJoin('p.membre', 'me')
                 ->innerJoin('me.mandats', 'ma')
                 ->innerJoin('ma.poste', 'po')
-                ->where("po.intitule LIKE 'president%'")
+                ->where("po.intitule LIKE '$poste'")
                 ->orderBy('ma.finMandat','DESC');
         return $query;
     }
     
-    public function getTresoriers()
-    {
-        $qb = $this->_em->createQueryBuilder();
-        $query = $qb
-                ->select('p')
-                ->from('mgatePersonneBundle:Personne', 'p')
-                ->innerJoin('p.membre', 'me')
-                ->innerJoin('me.mandats', 'ma')
-                ->innerJoin('ma.poste', 'po')
-                ->where("po.intitule LIKE '%tresorier%'")
-                ->orderBy('ma.finMandat','DESC');
-                            
-        return $query;
-    }
     
     public function getEmployeOnly($prospect = null)
     {

@@ -50,7 +50,7 @@ class SubApType extends DocTypeType {
             'property_path' => true,
             'attr' => array('title' => "Dans l'AP: 'En cas d’absence ou de problème, il est également possible de joindre le ...'"),
             'query_builder' => function(PersonneRepository $pr) {
-                return $pr->getPresidents();
+                return $pr->getMembresByPoste("%vice-president%");
             },
             'required' => true));
         DocTypeType::buildForm($builder, $options);
