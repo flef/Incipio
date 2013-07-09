@@ -10,6 +10,7 @@ use mgate\CommentBundle\Form\ThreadType;
 
 use mgate\SuiviBundle\Form\Type\MoyenContactType as MoyenContactType;
 
+
 class ClientContactType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
@@ -21,7 +22,6 @@ class ClientContactType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'property_path' => true,
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => true))
             
             //->add('thread', new ThreadType) // délicat 
