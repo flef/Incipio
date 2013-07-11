@@ -29,20 +29,24 @@
     <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
         <thead>
           <tr>
-            <!--<th>Id</th>-->
+            <th>Promotion</th>
             <th>Prénom Nom</th>
             <th>Poste</th>
             <th>Identifiant</th>
             <th>Email</th>
             <th>Mobile</th>
             <th>Adresse</th>
+            {% if is_granted('ROLE_CA') %}
+            <th>Date de naissance</th>
+            <th>Lieu de naissance</th>
+            {% endif %}
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
                 {% for membre in membres %}
           <tr>
-            <!--<td>{{ membre.id }}</td>-->
+            <td>{{ membre.promotion }}</td>
             <td>{{ membre.personne.prenomNom }}</td>
             <td>
                 {% for mandat in membre.mandats %}
@@ -53,6 +57,10 @@
             <td>{{ membre.personne.email }}</td>
             <td>{{ membre.personne.mobile }}</td>
             <td>{{ membre.personne.adresse }}</td>
+            {% if is_granted('ROLE_CA') %}
+            <th>{{ membre.dateDeNaissance }}</th>
+            <th>{{ membre.lieuDeNaissance }}</th>
+            {% endif %}
             <td><a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">modifier</a></td>
           </tr>
                 {% else %}
