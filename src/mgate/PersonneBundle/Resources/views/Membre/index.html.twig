@@ -58,7 +58,7 @@
             <td>{{ membre.personne.mobile }}</td>
             <td>{{ membre.personne.adresse }}</td>
             {% if is_granted('ROLE_CA') %}
-            <th>{{ membre.dateDeNaissance }}</th>
+            <th>{{ membre.dateDeNaissance ? membre.dateDeNaissance | date('d/m/Y') }}</th>
             <th>{{ membre.lieuDeNaissance }}</th>
             {% endif %}
             <td><a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">modifier</a></td>
