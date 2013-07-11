@@ -535,9 +535,6 @@ class TraitementController extends Controller {
             }
         }
         
-        
-        
-        
         //DM : Autres dev
         $i = 1;
         foreach($etude->getMissions() as $mission){
@@ -671,7 +668,34 @@ class TraitementController extends Controller {
 
         return $templatesXMLTraite;
     }
-
+    
+    private function traiterImages(&$templatesXML, $images){
+        $allmatches = array();
+        foreach ($templatesXML as $key => $templateXML) {
+            $i = preg_match_all('#<!--IMAGE\|(.*?)\|\/IMAGE-->#', $templateXML, $matches);
+            while($i--){
+                $splited = preg_split("#\|#", $matches[1][$i]);
+                if(isset($images[$splited[0]])){
+                    if(preg_match("#VAR#", $splited[0]))
+                    {
+                        $cx = $splited[3];
+                        $cy = $images[$splited[0]]['height'] * $cx / $images[$splited[0]]['width'];
+                        
+                        $replacement = array();
+                        preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $templateXML,$replacement);
+                        $replacement = $replacement[0];
+                        $replacement = preg_replace("#cy=\"$splited[4]\"#","cy=\"$cy\"",$replacement);
+                        $templatesXML[$key] = preg_replace("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#",$replacement, $templateXML);
+                    }
+                }                
+                array_push($allmatches, $splited);
+            }
+        }
+        return $allmatches;
+    }
+    
+    
+    
     private function publipostage($id_etude, $doc, $key) {
         $key = intval($key);
 
@@ -679,6 +703,7 @@ class TraitementController extends Controller {
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombreRepeat = Array(count($etude->getPhases()), count($etude->getMissions()));
         $champs = $this->getAllChamp($etude, $doc, $key);
+        
 
         //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
@@ -688,7 +713,8 @@ class TraitementController extends Controller {
 
         $templatesXMLtraite = $this->traiterTemplates($chemin, $nombreRepeat, $champs);
         $champsBrut = $this->verifierTemplates($templatesXMLtraite);
-
+        
+        
         $repertoire = 'tmp';
         
         //SI DM on prend la ref de RM et ont remplace RM par DM
@@ -706,10 +732,13 @@ class TraitementController extends Controller {
         if(isset($isDM) && $isDM)
             $refDocx = preg_replace("#RM#", 'DM', $refDocx);
         
-        
-        
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+        copy($chemin, $repertoire . '/' . $idDocx);
+        $zip = new \ZipArchive();
+        $zip->open($repertoire . '/' . $idDocx);
         
+        
+        $images = array();
         //Gantt
         if($doc == 'AP')
         {
@@ -717,22 +746,33 @@ class TraitementController extends Controller {
             $ob=$chartManager->getGantt($etude, "ap");
             if($chartManager->exportGantt($ob, $idDocx))
             {
-                // le fichier tmp/$idDocx.png existe
-                //voila tu peux faire l'intégration ici
+                $image = array();
+                $image['fileLocation'] = "$repertoire/$idDocx.png";
+                $info = getimagesize("$repertoire/$idDocx.png");
+                $image['width'] = $info[0];
+                $image['height'] = $info[1];
+                $images['imageVARganttAP'] = $image;
             }
+            
         }
 
-
-
-        copy($chemin, $repertoire . '/' . $idDocx);
-
-        $zip = new \ZipArchive();
-        $zip->open($repertoire . '/' . $idDocx);
+        //Intégration temporaire
+        $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
+        foreach ($imagesInDocx as $image)
+        {
+            $zip->deleteName('word/media/' . $image[2]);
+            $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
+        }
 
         foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
             $zip->deleteName('word/' . $templateXMLName);
             $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
         }
+        
+        
+        
+       
+        
 
         $zip->close();
 
