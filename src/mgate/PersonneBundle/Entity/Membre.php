@@ -34,6 +34,25 @@ class Membre
      * @ORM\Column(name="identifiant", type="string", length=10, nullable=true, unique=true)
      */
     private $identifiant;
+    
+    /**
+     * @var int $promotion
+     * @ORM\Column(name="promotion", type="smallint", nullable=true)
+     */
+    private $promotion;
+    
+    /**
+     * @var date $datedDeNaissance
+     * @ORM\Column(name="birthdate", type="date", nullable=true)
+     */
+    private $dateDeNaissance;
+    
+    /**
+     * @var string $lieuDeNaissancce
+     * @ORM\Column(name="placeofbirth", type="string", nullable=true)
+     */
+    private $lieuDeNaissance;
+   
 
     /**
      * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="membre", cascade={"persist","remove"})
@@ -160,5 +179,74 @@ class Membre
     public function getMandats()
     {
         return $this->mandats;
+    }
+
+    /**
+     * Set promotion
+     *
+     * @param integer $promotion
+     * @return Membre
+     */
+    public function setPromotion($promotion)
+    {
+        $this->promotion = $promotion;
+    
+        return $this;
+    }
+
+    /**
+     * Get promotion
+     *
+     * @return integer 
+     */
+    public function getPromotion()
+    {
+        return $this->promotion;
+    }
+
+    /**
+     * Set dateDeNaissance
+     *
+     * @param \DateTime $dateDeNaissance
+     * @return Membre
+     */
+    public function setDateDeNaissance($dateDeNaissance)
+    {
+        $this->dateDeNaissance = $dateDeNaissance;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateDeNaissance
+     *
+     * @return \DateTime 
+     */
+    public function getDateDeNaissance()
+    {
+        return $this->dateDeNaissance;
+    }
+
+    /**
+     * Set lieuDeNaissance
+     *
+     * @param string $lieuDeNaissance
+     * @return Membre
+     */
+    public function setLieuDeNaissance($lieuDeNaissance)
+    {
+        $this->lieuDeNaissance = $lieuDeNaissance;
+    
+        return $this;
+    }
+
+    /**
+     * Get lieuDeNaissance
+     *
+     * @return string 
+     */
+    public function getLieuDeNaissance()
+    {
+        return $this->lieuDeNaissance;
     }
 }

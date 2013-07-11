@@ -56,6 +56,15 @@ class MembreController extends Controller {
 
         if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)) {
             $membre = new Membre;
+            
+            $now = new \DateTime("now");
+            $now->modify('+ 3 year');            
+            
+            $membre->setPromotion($now->format("Y"));
+            
+            $now = new \DateTime("now");
+            $now->modify('- 20 year');
+            $membre->setDateDeNaissance($now);
         }
 
         if (!count($membre->getMandats()->toArray())) {
