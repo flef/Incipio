@@ -34,7 +34,9 @@
           <th>Liée à</th>
           <th>Email du compte</th>
           <th>Droit</th>
+          {% if is_granted('ROLE_ADMIN') %}
           <th>Action</th>
+          {% endif %}
         </tr>
       </thead>
       <tbody>
@@ -45,7 +47,9 @@
           <td>{% if user.personne %}{% if user.personne.membre %}<a href="{{ path('mgatePersonne_membre_voir', {'id': user.personne.membre.id}) }}">{{user.personne.prenomNom}}</a>{% else %}exception{% endif %}{% else %}-{% endif %}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.rolesDisplay }}</td>
+          {% if is_granted('ROLE_ADMIN') %}
           <td><a href="{{ path('mgate_user_modifier', {'id': user.id}) }}">modifier</a></td>
+          {% endif %}
         </tr>
               {% else %}
                   <li>Pas (encore !) d'utilisateur</li>
