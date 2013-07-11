@@ -22,11 +22,15 @@
         <li class="nav-header">Membre:</li>
         <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister</a></li>
         <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter</a></li>
+        {% if is_granted('ROLE_CA') %}
+        <li class="nav-header">Annuaire</li>
+        <li><a href="{{ path('mgatePersonne_annuaire') }}">Annuaire global</a></li>
         <li class="nav-header">Poste:</li>
         <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister</a></li>
         <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter</a></li>
         <li class="nav-header">Compte d'Utilisateur:</li>
         <li><a href="{{ path('mgate_user_lister') }}">Lister / Modifier</a></li>
+        {% endif %}
       </ul>
     </li>
     <li class="dropdown">
