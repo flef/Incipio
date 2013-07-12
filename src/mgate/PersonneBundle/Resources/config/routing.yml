@@ -1,3 +1,14 @@
+mgatePersonne_listeDiffusion:
+    pattern: /listediffusion
+    defaults: { _controller: mgatePersonneBundle:Personne:listeMail }
+    
+mgatePersonne_personne_supprimer:
+    pattern: /personne/supprimer/{id}
+    defaults: {_controller: mgatePersonneBundle:Personne:delete}
+    requirements:
+        id: \d+
+
+
 mgatePersonne_annuaire:
     pattern: /annuaire
     defaults: { _controller: mgatePersonneBundle:Personne:annuaire }
