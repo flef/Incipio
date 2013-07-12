@@ -70,6 +70,19 @@ class Personne {
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
+    
+    /**
+     * @var bool $emailEstValide
+     * 
+     * @ORM\Column(name="emailestvalide", type="boolean", nullable=false, options={"default" = true})
+     */
+    private $emailEstValide;
+    
+    /**
+     * @var bool $estAbonneNewsletter
+     * @ORM\Column(name="estabonnenewsletter", type="boolean", nullable=false, options={"default" = true})
+     */
+    private $estAbonneNewsletter;
 
     /**
      * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Employe", mappedBy="personne", cascade={"persist", "merge", "remove"})
@@ -88,7 +101,7 @@ class Personne {
      * @ORM\JoinColumn(nullable=true)
      */
     private $membre;
-
+    
     // pour afficher Prénom Nom
     // Merci de ne pas supprimer
     public function getPrenomNom() {
@@ -340,4 +353,50 @@ class Personne {
         return $this->membre;
     }
 
+
+    /**
+     * Set emailEstValide
+     *
+     * @param boolean $emailEstValide
+     * @return Personne
+     */
+    public function setEmailEstValide($emailEstValide)
+    {
+        $this->emailEstValide = $emailEstValide;
+    
+        return $this;
+    }
+
+    /**
+     * Get emailEstValide
+     *
+     * @return boolean 
+     */
+    public function getEmailEstValide()
+    {
+        return $this->emailEstValide;
+    }
+
+    /**
+     * Set estAbonneNewsletter
+     *
+     * @param boolean $estAbonneNewsletter
+     * @return Personne
+     */
+    public function setEstAbonneNewsletter($estAbonneNewsletter)
+    {
+        $this->estAbonneNewsletter = $estAbonneNewsletter;
+    
+        return $this;
+    }
+
+    /**
+     * Get estAbonneNewsletter
+     *
+     * @return boolean 
+     */
+    public function getEstAbonneNewsletter()
+    {
+        return $this->estAbonneNewsletter;
+    }
 }
