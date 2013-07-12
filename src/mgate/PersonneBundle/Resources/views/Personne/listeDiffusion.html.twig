@@ -1,0 +1,23 @@
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+{% block title %}Liste de diffusions{% endblock %}
+
+{% block content_bundle %}
+<table class="table table-bordered table-striped">
+    <tr>
+        <td>Liste de diffusion client</td>
+        <td>Liste de diffusion membre Mail Externe</td>
+        <td>Liste de diffusion membre Mail étu</td>
+    </tr>
+    <tr>
+        <td>
+            {% for personne in personnes if personne.employe %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+        </td>
+        <td>
+            {% for personne in personnes if personne.membre %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+        </td>
+        <td>
+            {% for personne in personnes if personne.membre %}{{personne.prenomNom }} &lt;{{ personne.membre.emailEtu }}&gt;;<br />{% endfor %}
+        </td>
+    </tr>
+</table>
+{% endblock %}
