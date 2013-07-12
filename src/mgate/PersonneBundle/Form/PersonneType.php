@@ -35,8 +35,8 @@ class PersonneType extends AbstractType
                 ->add('sexe', new SexeType())
                 ->add('mobile', 'text', array('required'=>false, 'attr'=>$helpMobile))
                 ->add('email', 'email', array('required'=>false, 'attr'=>$helpEmail))
-                ->add('estAbonneNewsletter', 'checkbox', array('label'=>'Abonné Newsletter ?', 'required'=>true))
-                ->add('emailEstValide', 'checkbox', array('label'=>'Email Valide ?', 'required'=>true));
+                ->add('estAbonneNewsletter', 'checkbox', array('label'=>'Abonné Newsletter ?', 'required'=>false))
+                ->add('emailEstValide', 'checkbox', array('label'=>'Email Valide ?', 'required'=>false));
 
         if(!$options['mini'] && !$options['user'])
             $builder->add('fix', 'text', array('required'=>false));
