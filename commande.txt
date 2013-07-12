@@ -1,8 +1,4 @@
-
-cd D:/Data/Docs/Assos/M-GaTE/site/My-M-GaTE
- D:
-
- ne pas hesiter a supprimer des dossier de vendor
+ne pas hesiter a supprimer des dossier de vendor
 installation de composer :
 curl -s https://getcomposer.org/installer | php
 php composer.phar self-update
@@ -35,9 +31,9 @@ Génération / Mise à jour get et setter
 php app/console doctrine:generate:entities mgatePersonneBundle:Prospect
 
 Mettre a jour la base de donnée
-php app/console doctrine:database:drop --force
-php app/console doctrine:database:create
-php app/console doctrine:schema:update --dump-sql
+WARN php app/console doctrine:database:drop --force
+WARN php app/console doctrine:database:create
+WARN php app/console doctrine:schema:update --dump-sql
 php app/console doctrine:schema:update --force
 
 Générer le super administrateur :
