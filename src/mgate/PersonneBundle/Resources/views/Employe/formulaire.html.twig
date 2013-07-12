@@ -1,5 +1,38 @@
 <form method="post" {{ form_enctype(form) }}>
 	
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th colspan="6">Informations</th>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.sexe) }}</td>
+            <td>{{ form_widget(form.personne.sexe) }}</td>
+            <td>{{ form_label(form.personne.prenom) }}</td>
+            <td>{{ form_widget(form.personne.prenom) }}</td>
+            <td>{{ form_label(form.personne.nom) }}</td>
+            <td>{{ form_widget(form.personne.nom) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.mobile) }}</td>
+            <td>{{ form_widget(form.personne.mobile) }}</td>
+            <td>{{ form_label(form.personne.fix) }}</td>
+            <td>{{ form_widget(form.personne.fix) }}</td>
+            <td>{{ form_label(form.poste) }}</td>
+            <td>{{ form_widget(form.poste) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.email) }}</td>
+            <td>{{ form_widget(form.personne.email) }}</td>
+            <td>{{ form_label(form.personne.estAbonneNewsletter)}}</td>
+            <td>{{ form_widget(form.personne.estAbonneNewsletter)}}</td>
+            <td>{{ form_label(form.personne.emailEstValide)}}</td>
+            <td>{{ form_widget(form.personne.emailEstValide)}}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.adresse) }}</td>
+            <td colspan="5">{{ form_widget(form.personne.adresse) }}</td>
+        </tr>
+    </table>
 	{{ form_widget(form) }}
 	
 	<input type="submit" />

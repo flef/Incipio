@@ -13,19 +13,39 @@
         <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">Modifier le prospect</a><br />
  <p>
         <h3>Employes:</h3>
+        <div class="row-fluid">
         {% for employe in prospect.employes %}
-            <li>
-            <h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.personne.sexe }} {{ employe.personne.prenom }} {{ employe.personne.nom }} - {{ employe.poste }}</a></h4>
-            Mobile: {{ employe.personne.mobile }}<br />
-            Fix: {{ employe.personne.fix }}<br />
-            Email: {{ employe.personne.email }}<br />
-            Adresse: {{ employe.personne.adresse }}<br />
-            Mobile: {{ employe.personne.mobile }}<br />
-            </li>
-            <br />
+            <div class="span3">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <td colspan="2"><h4><a href="{{ path('mgatePersonne_employe_modifier', {'id': employe.id}) }}">{{ employe.personne.nomFormel }}</a></h4></td>
+                    </tr>
+                    <tr>
+                        <td>Poste</td>
+                        <td><h5>{{ employe.poste }}</h5></td>
+                    </tr> 
+                    <tr>
+                        <td>Mobile</td>
+                        <td>{{ employe.personne.mobile }}</td>
+                    </tr>
+                    <tr>
+                        <td>Fixe</td>
+                        <td>{{ employe.personne.fix }}</td>
+                    </tr> 
+                    <tr title="{{ employe.personne.emailEstValide ? (employe.personne.estAbonneNewsletter ? "Est Abonné à la Newsletter" : "N'est pas abonné à la newsletter") : "l'Email n'est plus valide" }}" class="{{ employe.personne.emailEstValide ? (employe.personne.estAbonneNewsletter ? "success" : "warning") : "error" }}">
+                        <td>Email</td>
+                        <td>{{ employe.personne.email }}</td>
+                    </tr> 
+                    <tr>
+                        <td>Adresse</td>
+                        <td>{{ employe.personne.adresse }}</td>
+                    </tr>  
+                </table>
+            </div>
         {% else %}
             <li>L'entreprise n'a pas encore d'employés. Attention les documents ont besoin au moins du signataire</li>
         {% endfor %}
+        </div>
         <a href="{{ path('mgatePersonne_employe_ajouter', {'prospect_id': prospect.id}) }}">Ajouter un employé</a>
 </p>
 
