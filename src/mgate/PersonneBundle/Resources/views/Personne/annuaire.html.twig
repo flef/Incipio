@@ -34,16 +34,25 @@
             <th>Email</th>
             <th>Mobile</th>
             <th>Adresse</th>
+            {% if is_granted('ROLE_CA') %}
+            <th>Action</th>
+            {% endif %}
           </tr>
         </thead>
         <tbody>
-        {% for personne in personnes %}
+        {% for personne in personnes if personne.prenom != "Admin" %}
         <tr>
             <td>{{ personne.membre ? "M-GaTE" : personne.employe ? "Client" : "Autre" }}</td>
             <td>{{ personne.prenomNom }}</td>
             <td>{{ personne.email }}</td>
             <td>{{ personne.mobile }}</td>
             <td>{{ personne.adresse }}</td>
+            <td>{% if is_granted('ROLE_ADMIN') and  personne.membre == null and personne.employe == null %}
+            <form id="confirm" action="{{ path('mgatePersonne_personne_supprimer', { 'id': personne.id }) }}" method="post">
+                    <button>Supprimer</button>
+           </form>  
+               {% endif %}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
