@@ -46,8 +46,8 @@
         <tbody>
                 {% for membre in membres %}
           <tr>
-            <td>{{ membre.promotion }}</td>
-            <td>{{ membre.personne.prenomNom }}</td>
+            <td>{{ membre.promotion ? "P" ~ membre.promotion }}</td>
+            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenomNom }}</a></td>
             <td>
                 {% for mandat in membre.mandats %}
                     {{ "Du " ~ mandat.debutMandat | date("d/m/Y") ~ " au " ~mandat.finMandat | date("d/m/Y") ~ " - " ~ mandat.poste.intitule }}<br />

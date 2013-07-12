@@ -37,11 +37,9 @@ class MembreController extends Controller {
             throw $this->createNotFoundException('Unable to find Membre entity.');
         }
 
-        //$deleteForm = $this->createDeleteForm($id);
-
         return $this->render('mgatePersonneBundle:Membre:voir.html.twig', array(
                     'membre' => $entity,
-                /* 'delete_form' => $deleteForm->createView(),        */                ));
+        ));
     }
 
     /*
