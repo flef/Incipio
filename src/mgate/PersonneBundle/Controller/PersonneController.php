@@ -30,7 +30,7 @@ class PersonneController extends Controller {
     public function listeMailAction(){
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('mgatePersonneBundle:Personne')->findBy(array('estAbonneNewsletter' => true, 'emailEstValide' => true));
+        $entities = $em->getRepository('mgatePersonneBundle:Personne')->findAll();
         
         
         return $this->render('mgatePersonneBundle:Personne:listeDiffusion.html.twig', array(

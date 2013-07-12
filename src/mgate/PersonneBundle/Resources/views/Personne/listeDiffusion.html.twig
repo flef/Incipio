@@ -4,16 +4,32 @@
 {% block content_bundle %}
 <table class="table table-bordered table-striped">
     <tr>
-        <td>Liste de diffusion client</td>
-        <td>Liste de diffusion membre Mail Externe</td>
-        <td>Liste de diffusion membre Mail étu</td>
+        <td>Liste de diffusion client - Abonné Newsletter</td>
+        <td>Liste de diffusion membre Mail Externe - Newsletter</td>
+        <td>Liste de diffusion membre Mail étu - Newsletter</td>
     </tr>
     <tr>
         <td>
-            {% for personne in personnes if personne.employe %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+            {% for personne in personnes if personne.employe and personne.emailestvalide and personne.estabonnenewsletter and personne.email %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
         </td>
         <td>
-            {% for personne in personnes if personne.membre %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter and  personne.email %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+        </td>
+        <td>
+            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter  %}{{personne.prenomNom }} &lt;{{ personne.membre.emailEtu }}&gt;;<br />{% endfor %}
+        </td>
+    </tr>
+    <tr>
+        <td>Liste de diffusion client - Complète</td>
+        <td>Liste de diffusion membre Mail Externe - Complète</td>
+        <td>Liste de diffusion membre Mail étu - Complète</td>
+    </tr>
+    <tr>
+        <td>
+            {% for personne in personnes if personne.employe and personne.email and personne.emailestvalide %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+        </td>
+        <td>
+            {% for personne in personnes if personne.membre and personne.email and personne.emailestvalide %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
         </td>
         <td>
             {% for personne in personnes if personne.membre %}{{personne.prenomNom }} &lt;{{ personne.membre.emailEtu }}&gt;;<br />{% endfor %}
