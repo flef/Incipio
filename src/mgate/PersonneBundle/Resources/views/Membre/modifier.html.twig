@@ -5,57 +5,63 @@
 <h2>Ajouter/Modifier un membre</h2>
 
 <form method="POST" {{ form_enctype(form) }}>
-<!--<input type="submit" value="Enregistrer" />
-<input type="submit" value="Ajouter mandat" name="add"/>-->
+    <!--<input type="submit" value="Enregistrer" />
+    <input type="submit" value="Ajouter mandat" name="add"/>-->
 
-<table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
-    <tr>
-        <th colspan="6">Informations</th>
-    </tr>
-    <tr>
-        <td>{{ form_label(form.personne.sexe) }}</td>
-        <td>{{ form_widget(form.personne.sexe) }}</td>
-        <td>{{ form_label(form.personne.prenom) }}</td>
-        <td>{{ form_widget(form.personne.prenom) }}</td>
-        <td>{{ form_label(form.personne.nom) }}</td>
-        <td>{{ form_widget(form.personne.nom) }}</td>
-    </tr>
-    <tr>
-        <td>{{ form_label(form.personne.mobile) }}</td>
-        <td>{{ form_widget(form.personne.mobile) }}</td>
-        <td>{{ form_label(form.personne.email) }}</td>
-        <td>{{ form_widget(form.personne.email) }}</td>
-        <td>{{ form_label(form.identifiant) }}</td>
-        <td>{{ form_widget(form.identifiant) }}</td>
-    </tr>
-    <tr>
-        <td>{{ form_label(form.promotion) }}</td>
-        <td>{{ form_widget(form.promotion) }}</td>
-        <td>{{ form_label(form.dateDeNaissance) }}</td>
-        <td>{{ form_widget(form.dateDeNaissance) }}</td>
-        <td>{{ form_label(form.lieuDeNaissance) }}</td>
-        <td>{{ form_widget(form.lieuDeNaissance) }}</td>
-    </tr>
-    <tr>
-        <td>{{ form_label(form.personne.adresse) }}</td>
-        <td colspan="5">{{ form_widget(form.personne.adresse) }}</td>
-    </tr>
-    <tr>
-        <td colspan="6"><button class="btn" type="submit" value="Ajouter mandat" name="add"><i class="icon-plus"></i></button> <h4 style="display: inline;">Postes occupés</h4></td>
-    </tr>
+    <table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
+        <tr>
+            <th colspan="6">Informations</th>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.sexe) }}</td>
+            <td>{{ form_widget(form.personne.sexe) }}</td>
+            <td>{{ form_label(form.personne.prenom) }}</td>
+            <td>{{ form_widget(form.personne.prenom) }}</td>
+            <td>{{ form_label(form.personne.nom) }}</td>
+            <td>{{ form_widget(form.personne.nom) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.mobile) }}</td>
+            <td>{{ form_widget(form.personne.mobile) }}</td>
+            <td>{{ form_label(form.promotion) }}</td>
+            <td>{{ form_widget(form.promotion) }}</td>
+            <td>{{ form_label(form.identifiant) }}</td>
+            <td>{{ form_widget(form.identifiant) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.email) }}</td>
+            <td>{{ form_widget(form.personne.email) }}</td>
+            <td>{{ form_label(form.personne.estAbonneNewsletter)}}</td>
+            <td>{{ form_widget(form.personne.estAbonneNewsletter)}}</td>
+            <td>{{ form_label(form.personne.emailEstValide)}}</td>
+            <td>{{ form_widget(form.personne.emailEstValide)}}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.dateDeNaissance) }}</td>
+            <td>{{ form_widget(form.dateDeNaissance) }}</td>
+            <td>{{ form_label(form.lieuDeNaissance) }}</td>
+            <td colspan="3">{{ form_widget(form.lieuDeNaissance) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne.adresse) }}</td>
+            <td colspan="5">{{ form_widget(form.personne.adresse) }}</td>
+        </tr>
+        <tr>
+            <td colspan="6"><button class="btn" type="submit" value="Ajouter mandat" name="add"><i class="icon-plus"></i></button> <h4 style="display: inline;">Postes occupés</h4></td>
+        </tr>
     {% for mandat in form.mandats %}
-    <tr class="mandats">
-        <td>{{ form_label(mandat.poste) }}</td>
-        <td>{{ form_widget(mandat.poste) }}</td>
-        <td>{{ form_label(mandat.debutMandat) }}</td>
-        <td>{{ form_widget(mandat.debutMandat) }}</td>
-        <td>{{ form_label(mandat.finMandat) }}</td>
-        <td>{{ form_widget(mandat.finMandat) }}</td>
-    </tr>
+        <tr class="mandats">
+            <td>{{ form_label(mandat.poste) }}</td>
+            <td>{{ form_widget(mandat.poste) }}</td>
+            <td>{{ form_label(mandat.debutMandat) }}</td>
+            <td>{{ form_widget(mandat.debutMandat) }}</td>
+            <td>{{ form_label(mandat.finMandat) }}</td>
+            <td>{{ form_widget(mandat.finMandat) }}</td>
+        </tr>
     {% endfor %}
-</table>
+    </table>
 {{ form_rest(form) }}
-<input type="submit" value="Enregistrer" />
+    <input type="submit" value="Enregistrer" />
 </form>
 {#
 <form method="post" {{ form_enctype(form) }}>
@@ -65,66 +71,66 @@
 	<input type="submit" />
 </form>
 #}
-            <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+<form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
-                    <button>Supprimer le membre</button>
-                </form>    
+        <button>Supprimer le membre</button>
+    </form>    
 
-                <p>
-                    <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
-                </p>
+    <p>
+        <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
+    </p>
 {% endblock %}
 
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
 
-                <script type="text/javascript">
-                    var isDirty = false;
+    <script type="text/javascript">
+        var isDirty = false;
 
-                    jQuery(document).ready(function() {
+        jQuery(document).ready(function() {
         
-                        //Verification avant de quitter
-                        $(':input').change(function(){
-                            if(!isDirty){
-                               isDirty = true;
-                            }
-                        });
-                        $(window).bind('beforeunload', function(){
-                            if(isDirty)
-                                return "Do you really want to leave now?";
-                        });
-                        $('form').submit(function() {
-                            isDirty = false;
-                            return true;
-                        });
+            //Verification avant de quitter
+            $(':input').change(function(){
+                if(!isDirty){
+                   isDirty = true;
+                }
+            });
+            $(window).bind('beforeunload', function(){
+                if(isDirty)
+                    return "Do you really want to leave now?";
+            });
+            $('form').submit(function() {
+                isDirty = false;
+                return true;
+            });
         
-                        //Rajout des boutons (X, up, down) pour les phases
-                        $('.mandats').each(function() {
-                            addPhaseBouton($(this));
-                        });
+            //Rajout des boutons (X, up, down) pour les phases
+            $('.mandats').each(function() {
+                addPhaseBouton($(this));
+            });
         
-                    });
+        });
     
-                    function addPhaseBouton($tagFormLi) {
-                        var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
-                        $tagFormLi.children().first().append($delete);
+        function addPhaseBouton($tagFormLi) {
+            var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+            $tagFormLi.children().first().append($delete);
         
-                        $delete.on('click', function(e) {
-                            // prevent the link from creating a "#" on the URL
-                            e.preventDefault();
+            $delete.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
             
-                            //CONFIRM confirmation suppression
-                            var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
-                            bootbox.confirm(message, function(result) {
-                                if (result) {
-                                    $tagFormLi.remove();
-                                }
-                            });
-                           });
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer cette phase ?";
+                bootbox.confirm(message, function(result) {
+                    if (result) {
+                        $tagFormLi.remove();
                     }
+                });
+               });
+        }
         
-                 </script>
+        </script>
 {% endblock %}
 
 
