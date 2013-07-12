@@ -681,6 +681,9 @@ class TraitementController extends Controller {
                         $cx = $splited[3];
                         $cy = $images[$splited[0]]['height'] * $cx / $images[$splited[0]]['width'];
                         
+                        $cx = round($cx);
+                        $cy = round($cy);
+                        
                         $replacement = array();
                         preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $templateXML,$replacement);
                         $replacement = $replacement[0];
