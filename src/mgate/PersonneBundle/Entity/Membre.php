@@ -92,7 +92,7 @@ class Membre {
 
         if ($promo = $this->getPromotion()) {
             if ($promo < $now)
-                return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom() . $this->getPersonne()->getNom())) . "@emse-ismin.fr";
+                return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom(). '.' . $this->getPersonne()->getNom())) . "@emse-ismin.fr";
             if ($promo < 2014)
                 return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent(substr($this->getPersonne ()->getPrenom (), 0, 1) . $this->getPersonne ()->getNom ())) . "@etu.emse.fr";
             else

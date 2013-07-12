@@ -5,16 +5,44 @@
 {% endblock %}
 
 {% block content_bundle %}
-<p>
-	<h2>{{ membre.personne.sexe }} {{ membre.personne.nom }} {{ membre.personne.prenom }}</h2>
-	<i>{#% if membre.poste %} {{membre.poste.intitule}}{% else %}Sans poste{% endif %#}</i><br />
-            Mobile: {{ membre.personne.mobile }}<br />
-            Fix: {{ membre.personne.fix }}<br />
-            Email: {{ membre.personne.email }}<br />
-            Adresse: {{ membre.personne.adresse }}<br />
-            Mobile: {{ membre.personne.mobile }}<br />
-</p>
-
+        <div style="max-width: 800px;">
+<table class="table table-bordered table-striped">
+        <tr>
+            <th colspan="3">Informations</th>
+        </tr>
+        <tr>
+            <td colspan="3"><h4>{{ membre.personne.nomformel }}</h4></td>
+        </tr>
+        <tr>
+            <td><i class="icon-headphones"></i> {{ membre.personne.mobile }}</td>
+            <td><i class="icon-book"></i> P{{ membre.promotion }}</td>
+            <td><i class="icon-barcode"></i> Identifiant : {{ membre.identifiant }}</td>
+        </tr>
+        <tr>
+            <td><i class="icon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
+            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span></td>
+            <td><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+        </tr>
+        <tr>
+            <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
+            <td colspan="2">Né à : {{ membre.lieuDeNaissance }}</td>            
+        </tr>
+        <tr>
+            <td>Adresse</td>
+            <td colspan="3">{{ membre.personne.adresse }}</td>
+        </tr>
+        <tr>
+            <td colspan="3"><h4>Postes occupés</h4></td>
+        </tr>
+    {% for mandat in membre.mandats %}
+        <tr class="mandats">
+            <td>{{ mandat.poste.intitule }}</td>
+            <td>Du : {{ mandat.debutMandat | date("d/m/Y") }}</td>
+            <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
+        </tr>
+    {% endfor %}
+</table>
+            </div>
 <p>
     <a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">Modifier le membre</a><br />
     <a href="{{ path('mgatePersonne_membre_homepage') }}">Retour à la liste des membres</a>
