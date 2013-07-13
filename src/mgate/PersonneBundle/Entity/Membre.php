@@ -40,6 +40,12 @@ class Membre {
      * @ORM\Column(name="promotion", type="smallint", nullable=true)
      */
     private $promotion;
+    
+    /**
+     * @var int $appartement
+     * @ORM\Column(name="appartement", type="smallint", nullable=true)
+     */
+    private $appartement;
 
     /**
      * @var date $datedDeNaissance

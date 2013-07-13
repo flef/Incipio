@@ -437,16 +437,35 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
             }
             
-            $Factures_Intermédiaires_HT = (float) 0;
+            $Solde_Intermediaire_HT = (float) 0;
+            $Factures_Intermediaires_HT = (float) 0;
             if($etude->getFis()){
+                $i = 0;
                 foreach($etude->getFis() as $fi)
                 {
-                    $Factures_Intermédiaires_HT += $fi->getMontantHT();
+                    if($doc != 'FI' || $i < $key)
+                        $Factures_Intermediaires_HT += $fi->getMontantHT();
+                    else if ($i == $key)
+                        $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
+                    //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
+                    //IL FAUT AJOUTER UN CHAMP NUM DE FI
+                    $i++;
                 }
             }
-            $Part_TVA_Deja_Paye = (float) ($Factures_Intermédiaires_HT + $Acompte_HT) * $Taux_TVA / 100;
-            $Deja_Paye_TTC =  (float) $Acompte_TTC + $Factures_Intermédiaires_HT * (1 + $Taux_TVA / 100);
-            $this->array_push_assoc($champs, 'Factures_Intermédiaires_HT', $Factures_Intermédiaires_HT);
+            
+            $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
+            $Part_TVA_Deja_Paye = (float) $Deja_Paye_HT * $Taux_TVA / 100;
+            $Deja_Paye_TTC =  (float) $Deja_Paye_HT * (1 + $Taux_TVA / 100);
+            $Part_TVA_Solde_Intermediaire = (float) $Solde_Intermediaire_HT * $Taux_TVA / 100;
+            $Solde_Intermediaire_TTC = (float) $Solde_Intermediaire_HT * (1 + $Taux_TVA / 100);
+            $Solde_Intermediaire_TTC_Lettres = $converter->ConvNumberLetter($Solde_Intermediaire_TTC,1);
+            
+            $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC_Lettres', $Solde_Intermediaire_TTC_Lettres);
+            $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC', $Solde_Intermediaire_TTC);
+            $this->array_push_assoc($champs, 'Solde_Intermediaire_HT', $Solde_Intermediaire_HT);
+            $this->array_push_assoc($champs, 'Part_TVA_Solde_Intermediaire', $Part_TVA_Solde_Intermediaire);
+            $this->array_push_assoc($champs, 'Factures_Intermediaires_HT', $Factures_Intermediaires_HT);
+            $this->array_push_assoc($champs, 'Deja_Paye_HT', $Deja_Paye_HT );
             $this->array_push_assoc($champs, 'Deja_Paye_TTC', $Deja_Paye_TTC );
             $this->array_push_assoc($champs, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
     
@@ -487,8 +506,8 @@ class TraitementController extends Controller {
         
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS', 'PVI') as $abrv){
-            if ($etude->getDoc($abrv))
+        foreach (array('AP','CC','FA','PVR','FS', 'PVI','RM','DM','FI') as $abrv){
+            if ($etude->getDoc($abrv, $key))
                 $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
             }
         if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
@@ -497,12 +516,9 @@ class TraitementController extends Controller {
         }
             
         if ($etude->getDoc('RM', $key)){
-           $this->array_push_assoc($champs, 'Reference_RM', $etudeManager->getRefDoc($etude, 'RM', $key));
-           $this->array_push_assoc($champs, 'Reference_DM', $etudeManager->getRefDoc($etude, 'DM', $key));
            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
         }
         
-
         //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
