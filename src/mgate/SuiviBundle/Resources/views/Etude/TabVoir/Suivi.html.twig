@@ -9,7 +9,7 @@
 {% set activeAP = (( etude.ap and etude.ap.dateSignature and etude.ap.redige and etude.ap.relu and etude.ap.spt1 and etude.ap.spt2 and etude.ap.envoye and etude.ap.receptionne ) ? "" : "in") %}
 {% set activeCC = (( etude.cc and etude.cc.dateSignature and etude.cc.redige and etude.cc.relu and etude.cc.spt1 and etude.cc.spt2 and etude.cc.envoye and etude.cc.receptionne ) ? "" : "in") %}
 {% set activeRM = (( activeAP or activeCC ) ? "in" : "") %}
-{% set activeFA = (( activeAP or activeCC ) ? "in" : "") %}
+{% set activeFA = (( activeAP and activeCC ) ? "in" : "") %}
 
 <div class="navbar">
     <div class="navbar-inner">
@@ -163,7 +163,7 @@
             <td>
                 <a title="Modifier" href="{{ path('mgateSuivi_facture_modifier', {'id_facture': fi.id}) }}"><i class="icon-pencil"></i></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{#{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }#}#"><i class="icon-circle-arrow-down"></i></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><i class="icon-circle-arrow-down"></i></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Supprimer" href="{{ path('mgateSuivi_facture_supprimer', { 'id': fi.id }) }}"><i class="icon-remove"></i></a>
             </td>
