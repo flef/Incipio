@@ -433,6 +433,15 @@ class TraitementController extends Controller {
                 $Date_Limite->modify('+ 30 day');
                 $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
             }
+
+            $Reste_HT = $etude->getFs()->getMontantHT();
+            $Reste_TTC = (float) round($Reste_HT * (1 + $Taux_TVA / 100), 2);
+            $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);
+            $Reste_TVA = (float) round($Reste_HT * $Taux_TVA / 100, 2);
+            $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);
+            $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
+            $this->array_push_assoc($champs, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
+            $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
         }
 
         //Factures de solde et intermediaires
@@ -466,18 +475,6 @@ class TraitementController extends Controller {
         $this->array_push_assoc($champs, 'Deja_Paye_HT', $Deja_Paye_HT);
         $this->array_push_assoc($champs, 'Deja_Paye_TTC', $Deja_Paye_TTC);
         $this->array_push_assoc($champs, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
-
-        $Reste_HT = $etude->getFs()->getMontantHT();
-
-        $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);
-
-        $Reste_TTC = (float) round($Reste_HT * (1 + $Taux_TVA / 100), 2);
-        $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);
-        $Reste_TVA = (float) round($Reste_HT * $Taux_TVA / 100, 2);
-        $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
-        $this->array_push_assoc($champs, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
-        $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
-
 
         //PREPARE PVI
         $nbrPVI = count($etude->getPvis());
