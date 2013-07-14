@@ -17,7 +17,7 @@ class TraitementController extends Controller {
     private $EGD = '¤¤';                                                        //End   Grammar     Delimiter
     private $SLD = 'µ';                                                         //Start Liaison     Delimiter
     private $ELD = 'µµ';                                                        //End   Liaison     Delimiter
- 
+
     private function repeatTR(&$templateXML, $nombreRepeat) {
 
         $regexRepeatSTART = $this->STRD;
@@ -33,13 +33,13 @@ class TraitementController extends Controller {
                      * $nombreRepeat[0] = nombrePhase
                      * $nombreRepeat[1] = nombreDev
                      */
-                    if(preg_match("#{{DEV}}#", $matches[1]))
+                    if (preg_match("#{{DEV}}#", $matches[1]))
                         $repetition = $nombreRepeat[1];
                     else
                         $repetition = $nombreRepeat[0];
                     $matches[1] = preg_replace('#{{\w+}}#', '', $matches[1]);
                     //
-                    
+
                     if (preg_match("#w:vMerge\s*/>#", $matches[1]))//Vérification de rowspan
                         $premiereLigne = preg_replace('#<w:vMerge\s*/>#', "<w:vMerge w:val=\"restart\"/>", $matches[1]);
                     else
@@ -51,7 +51,7 @@ class TraitementController extends Controller {
                         $outputString .= preg_replace('#' . $SFD . 'Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
                 };
-              
+
         $templateXML = preg_replace_callback($regexpRepeat, $callback, $templateXML);
 
         return $templateXML;
@@ -66,19 +66,19 @@ class TraitementController extends Controller {
         $EFD = $this->EFD;
         $callback = function ($matches) use ($nombreRepeat, $SFD, $EFD) { //Fonction de callback prétraitement de la zone à répéter
                     $outputString = "";
-                    
+
                     /* Selection du nombre de répétition :
                      * $nombreRepeat[0] = nombrePhase
                      * $nombreRepeat[1] = nombreDev
                      */
-                    if(preg_match("#{{DEV}}#", $matches[1]))
+                    if (preg_match("#{{DEV}}#", $matches[1]))
                         $repetition = $nombreRepeat[1];
                     else
                         $repetition = $nombreRepeat[0];
                     $matches[1] = preg_replace('#{{\w+}}#', '', $matches[1]);
                     //
-                    
-                    
+
+
                     for ($i = 1; $i <= $repetition; $i++)
                         $outputString .= preg_replace('#' . $SFD . 'Index' . $EFD . '#U', "$i", $matches[1]);
                     return $outputString;
@@ -99,7 +99,7 @@ class TraitementController extends Controller {
     //Remplissage des %champs%
     private function remplirChamps(&$templateXML, $fieldValues) {
         $SFD = $this->SFD;
-        
+
         $EFD = $this->EFD;
 
         foreach ($fieldValues as $field => $values) {//Remplacement des champs
@@ -152,7 +152,7 @@ class TraitementController extends Controller {
     //effectu les "liaisons" le/l' la/l' ... pattern : µde|d'|variableµ
     private function liasons(&$templateXML) {
         $regexp = '#µ(.*?)\|([^µ.]*)\|([^µ.]*)µ#';
-    
+
         $that = $this;
         $callback = function ($matches) use ($that) {//Fonction de callback
                     return (($that->commenceParUneVoyelle($matches[3]) == NULL) ? $matches[1] : $matches[2]) . $matches[3];
@@ -253,11 +253,10 @@ class TraitementController extends Controller {
         $Nbr_JEH = (int) $etudeManager->getNbrJEH($etude);
         $Nbr_JEH_Lettres = $converter->ConvNumberLetter($Nbr_JEH);
 
-        if ($etudeManager->getDateLancement($etude)){
+        if ($etudeManager->getDateLancement($etude)) {
             $Mois_Lancement = $this->nombreVersMois(intval($etudeManager->getDateLancement($etude)->format('m')));
             $Date_Debut_Etude = $etudeManager->getDateLancement($etude)->format("d/m/Y");
-        }
-        else{
+        } else {
             $Mois_Lancement = NULL;
             $Date_Debut_Etude = NULL;
         }
@@ -275,7 +274,7 @@ class TraitementController extends Controller {
         else
             $Delais_Semaines = NULL;
 
-        
+
 
         //Etude
 
@@ -371,11 +370,11 @@ class TraitementController extends Controller {
             }
         }
 
-        
-        
-        
-        
-        
+
+
+
+
+
 
 
 
@@ -419,106 +418,102 @@ class TraitementController extends Controller {
 
 
         //Convention Client
-      
         //Facture Acompte
         if ($etude->getFa()) {
-            if($etude->getFa()->getDateSignature()){
-            $Date_Limite = clone $etude->getFa()->getDateSignature();
-            $Date_Limite->modify('+ 30 day');
-            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+            if ($etude->getFa()->getDateSignature()) {
+                $Date_Limite = clone $etude->getFa()->getDateSignature();
+                $Date_Limite->modify('+ 30 day');
+                $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
             }
         }
         //Facture de solde
-        if($etude->getFs())
-        {
-            if($etude->getFs()->getDateSignature()){
-            $Date_Limite = clone $etude->getFs()->getDateSignature();
-            $Date_Limite->modify('+ 30 day');
-            $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+        if ($etude->getFs()) {
+            if ($etude->getFs()->getDateSignature()) {
+                $Date_Limite = clone $etude->getFs()->getDateSignature();
+                $Date_Limite->modify('+ 30 day');
+                $this->array_push_assoc($champs, 'Date_Limite', $Date_Limite->format("d/m/Y"));
             }
-            
-            $Solde_Intermediaire_HT = (float) 0;
-            $Factures_Intermediaires_HT = (float) 0;
-            if($etude->getFis()){
-                $i = 0;
-                foreach($etude->getFis() as $fi)
-                {
-                    if($doc != 'FI' || $i < $key)
-                        $Factures_Intermediaires_HT += $fi->getMontantHT();
-                    else if ($i == $key)
-                        $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
-                    //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
-                    //IL FAUT AJOUTER UN CHAMP NUM DE FI
-                    $i++;
-                }
-            }
-            
-            $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
-            $Part_TVA_Deja_Paye = (float) $Deja_Paye_HT * $Taux_TVA / 100;
-            $Deja_Paye_TTC =  (float) $Deja_Paye_HT * (1 + $Taux_TVA / 100);
-            $Part_TVA_Solde_Intermediaire = (float) $Solde_Intermediaire_HT * $Taux_TVA / 100;
-            $Solde_Intermediaire_TTC = (float) $Solde_Intermediaire_HT * (1 + $Taux_TVA / 100);
-            $Solde_Intermediaire_TTC_Lettres = $converter->ConvNumberLetter($Solde_Intermediaire_TTC,1);
-            
-            $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC_Lettres', $Solde_Intermediaire_TTC_Lettres);
-            $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC', $Solde_Intermediaire_TTC);
-            $this->array_push_assoc($champs, 'Solde_Intermediaire_HT', $Solde_Intermediaire_HT);
-            $this->array_push_assoc($champs, 'Part_TVA_Solde_Intermediaire', $Part_TVA_Solde_Intermediaire);
-            $this->array_push_assoc($champs, 'Factures_Intermediaires_HT', $Factures_Intermediaires_HT);
-            $this->array_push_assoc($champs, 'Deja_Paye_HT', $Deja_Paye_HT );
-            $this->array_push_assoc($champs, 'Deja_Paye_TTC', $Deja_Paye_TTC );
-            $this->array_push_assoc($champs, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
-    
-            $Reste_HT = $etude->getFs()->getMontantHT();
-            
-            $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);  
-            
-            $Reste_TTC = (float) round($Reste_HT*(1+$Taux_TVA/100),2);
-            $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
-            
-            $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);;
-            $this->array_push_assoc($champs, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
-            
-            $Reste_TVA = (float) round($Reste_HT*$Taux_TVA/100,2);
-            $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
-            
         }
+
+        //Factures de solde et intermediaires
+        $Solde_Intermediaire_HT = (float) 0;
+        $Factures_Intermediaires_HT = (float) 0;
+        if ($etude->getFis()) {
+            $i = 0;
+            foreach ($etude->getFis() as $fi) {
+                if ($doc != 'FI' || $i < $key)
+                    $Factures_Intermediaires_HT += $fi->getMontantHT();
+                else if ($i == $key)
+                    $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
+                //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
+                //IL FAUT AJOUTER UN CHAMP NUM DE FI
+                $i++;
+            }
+        }
+
+        $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
+        $Part_TVA_Deja_Paye = (float) $Deja_Paye_HT * $Taux_TVA / 100;
+        $Deja_Paye_TTC = (float) $Deja_Paye_HT * (1 + $Taux_TVA / 100);
+        $Part_TVA_Solde_Intermediaire = (float) $Solde_Intermediaire_HT * $Taux_TVA / 100;
+        $Solde_Intermediaire_TTC = (float) $Solde_Intermediaire_HT * (1 + $Taux_TVA / 100);
+        $Solde_Intermediaire_TTC_Lettres = $converter->ConvNumberLetter($Solde_Intermediaire_TTC, 1);
+
+        $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC_Lettres', $Solde_Intermediaire_TTC_Lettres);
+        $this->array_push_assoc($champs, 'Solde_Intermediaire_TTC', $Solde_Intermediaire_TTC);
+        $this->array_push_assoc($champs, 'Solde_Intermediaire_HT', $Solde_Intermediaire_HT);
+        $this->array_push_assoc($champs, 'Part_TVA_Solde_Intermediaire', $Part_TVA_Solde_Intermediaire);
+        $this->array_push_assoc($champs, 'Factures_Intermediaires_HT', $Factures_Intermediaires_HT);
+        $this->array_push_assoc($champs, 'Deja_Paye_HT', $Deja_Paye_HT);
+        $this->array_push_assoc($champs, 'Deja_Paye_TTC', $Deja_Paye_TTC);
+        $this->array_push_assoc($champs, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
+
+        $Reste_HT = $etude->getFs()->getMontantHT();
+
+        $this->array_push_assoc($champs, 'Reste_HT', $Reste_HT);
+
+        $Reste_TTC = (float) round($Reste_HT * (1 + $Taux_TVA / 100), 2);
+        $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);
+        $Reste_TVA = (float) round($Reste_HT * $Taux_TVA / 100, 2);
+        $this->array_push_assoc($champs, 'Reste_TTC', $Reste_TTC);
+        $this->array_push_assoc($champs, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
+        $this->array_push_assoc($champs, 'Reste_TVA', $Reste_TVA);
+
 
         //PREPARE PVI
         $nbrPVI = count($etude->getPvis());
-        if( $doc == 'PVI' && $key < $nbrPVI)
+        if ($doc == 'PVI' && $key < $nbrPVI)
             $phasePVI = $etude->getPvis($key)->getPhaseID();
-        else 
-            $phasePVI = -1;
-        
-        //PVR
-        if($etude->getAvs())
-           $Nbr_Avenant = count($etude->getAvs()->getValues());
         else
-           $Nbr_Avenant = 0;
-        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant+1);
-        
+            $phasePVI = -1;
+
+        //PVR
+        if ($etude->getAvs())
+            $Nbr_Avenant = count($etude->getAvs()->getValues());
+        else
+            $Nbr_Avenant = 0;
+        $this->array_push_assoc($champs, 'Nbr_Avenant', $Nbr_Avenant + 1);
+
         //PVI
-        if($doc == 'PVI'){
-            if($key < count($etude->getPvis()))
+        if ($doc == 'PVI') {
+            if ($key < count($etude->getPvis()))
                 $this->array_push_assoc($champs, 'Phase_PVI', $phasePVI);
         }
-        
+
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
-        foreach (array('AP','CC','FA','PVR','FS', 'PVI','RM','DM','FI') as $abrv){
+        foreach (array('AP', 'CC', 'FA', 'PVR', 'FS', 'PVI', 'RM', 'DM', 'FI') as $abrv) {
             if ($etude->getDoc($abrv, $key))
-                $this->array_push_assoc($champs, 'Reference_'.$abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
-            }
-        if($etude->getDoc('AV',$Nbr_Avenant-1)){//key of AV1 = 0
+                $this->array_push_assoc($champs, 'Reference_' . $abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
+        }
+        if ($etude->getDoc('AV', $Nbr_Avenant - 1)) {//key of AV1 = 0
             if ($etude->getDoc('CC'))
-                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant-1));
+                $this->array_push_assoc($champs, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant - 1));
         }
-            
-        if ($etude->getDoc('RM', $key)){
-           $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
+
+        if ($etude->getDoc('RM', $key)) {
+            $this->array_push_assoc($champs, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
         }
-        
+
         //Phases
         foreach ($phases as $phase) {
             $i = $phase->getPosition() + 1;
@@ -532,7 +527,7 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
             if ($phase->getDateDebut())
                 $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
-            if ($phase->getDateDebut()){
+            if ($phase->getDateDebut()) {
                 $dateFin = clone $phase->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
                 $dateFin->modify('+' . $phase->getDelai() . ' day');
                 $this->array_push_assoc($champs, 'Phase_' . $i . '_Date_Fin', $dateFin->format('d/m/Y'));
@@ -542,32 +537,31 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
             $this->array_push_assoc($champs, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
-            
-            
-            
+
+
+
             //PVI
-            if($doc == 'PVI' && $i == $phasePVI){
-                $this->array_push_assoc($champs, 'Phase_PVI_Objectif', $phase->getObjectif());                   
+            if ($doc == 'PVI' && $i == $phasePVI) {
+                $this->array_push_assoc($champs, 'Phase_PVI_Objectif', $phase->getObjectif());
             }
         }
-        
+
         //DM : Autres dev
         $i = 1;
-        foreach($etude->getMissions() as $mission){
-            
-            if($i == $key + 1 ){ // Phase concernant l'intervenant
+        foreach ($etude->getMissions() as $mission) {
+
+            if ($i == $key + 1) { // Phase concernant l'intervenant
                 $phaseDev = '';
-                foreach($mission->getPhaseMission()->getValues() as $phaseMission)
-                {
-                    if($phaseMission->getNbrJEH())
-                        $phaseDev .= ($phaseMission->getPhase()->getPosition() + 1) . ' - ' .$phaseMission->getPhase()->getTitre() . '<w:br />';
+                foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
+                    if ($phaseMission->getNbrJEH())
+                        $phaseDev .= ($phaseMission->getPhase()->getPosition() + 1) . ' - ' . $phaseMission->getPhase()->getTitre() . '<w:br />';
                 }
                 $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
-                
+
                 //Referent Technique
-                if($mission){
-                    if($refTechnique = $mission->getReferentTechnique()){
-                        $this->array_push_assoc($champs, 'Prenom_Referent_Technique',$refTechnique->getPersonne()->getPrenom());
+                if ($mission) {
+                    if ($refTechnique = $mission->getReferentTechnique()) {
+                        $this->array_push_assoc($champs, 'Prenom_Referent_Technique', $refTechnique->getPersonne()->getPrenom());
                         $this->array_push_assoc($champs, 'Nom_Referent_Technique', $refTechnique->getPersonne()->getNom());
                         $this->array_push_assoc($champs, 'Mail_Referent_Technique', $refTechnique->getPersonne()->getEmail());
                         $this->array_push_assoc($champs, 'Tel_Referent_Technique', $refTechnique->getPersonne()->getMobile());
@@ -575,17 +569,17 @@ class TraitementController extends Controller {
                 }
             }
             if ($mission) { // Autre intervenants
-                if($intervenant = $mission->getIntervenant())
-                if ($intervenant =  $intervenant->getPersonne()) {
-                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Nom',$intervenant->getNomFormel());
-                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Mail',$intervenant->getEmail());
-                    $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Tel',$intervenant->getMobile());
-                }
+                if ($intervenant = $mission->getIntervenant())
+                    if ($intervenant = $intervenant->getPersonne()) {
+                        $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Nom', $intervenant->getNomFormel());
+                        $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Mail', $intervenant->getEmail());
+                        $this->array_push_assoc($champs, 'Developpeur_' . $i . '_Tel', $intervenant->getMobile());
+                    }
             }
             $i++;
         }
-        
-        
+
+
 
 
         //Intervenant
@@ -606,7 +600,7 @@ class TraitementController extends Controller {
                 $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
                 $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
             }
-            $Mission_Montant_JEH_Verse *= 1-($mission->getPourcentageJunior()/100);
+            $Mission_Montant_JEH_Verse *= 1 - ($mission->getPourcentageJunior() / 100);
 
             $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
             $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
@@ -615,12 +609,12 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
             $this->array_push_assoc($champs, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
-            
-            if($mission->getFinOm())
-            $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
+
+            if ($mission->getFinOm())
+                $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
-        
-  
+
+
         return $champs;
     }
 
@@ -684,37 +678,34 @@ class TraitementController extends Controller {
 
         return $templatesXMLTraite;
     }
-    
-    private function traiterImages(&$templatesXML, $images){
+
+    private function traiterImages(&$templatesXML, $images) {
         $allmatches = array();
         foreach ($templatesXML as $key => $templateXML) {
             $i = preg_match_all('#<!--IMAGE\|(.*?)\|\/IMAGE-->#', $templateXML, $matches);
-            while($i--){
+            while ($i--) {
                 $splited = preg_split("#\|#", $matches[1][$i]);
-                if(isset($images[$splited[0]])){
-                    if(preg_match("#VAR#", $splited[0]))
-                    {
+                if (isset($images[$splited[0]])) {
+                    if (preg_match("#VAR#", $splited[0])) {
                         $cx = $splited[3];
                         $cy = $images[$splited[0]]['height'] * $cx / $images[$splited[0]]['width'];
-                        
+
                         $cx = round($cx);
                         $cy = round($cy);
-                        
+
                         $replacement = array();
-                        preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $templateXML,$replacement);
+                        preg_match("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $templateXML, $replacement);
                         $replacement = $replacement[0];
-                        $replacement = preg_replace("#cy=\"$splited[4]\"#","cy=\"$cy\"",$replacement);
-                        $templatesXML[$key] = preg_replace("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#",$replacement, $templateXML);
+                        $replacement = preg_replace("#cy=\"$splited[4]\"#", "cy=\"$cy\"", $replacement);
+                        $templatesXML[$key] = preg_replace("#wp:extent cx=\"$splited[3]\" cy=\"$splited[4]\".*wp:docPr.*a:blip r:embed=\"$splited[1]\".*a:ext cx=\"$splited[3]\" cy=\"$splited[4]\"#", $replacement, $templateXML);
                     }
-                }                
+                }
                 array_push($allmatches, $splited);
             }
         }
         return $allmatches;
     }
-    
-    
-    
+
     private function publipostage($id_etude, $doc, $key) {
         $key = intval($key);
 
@@ -722,7 +713,7 @@ class TraitementController extends Controller {
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombreRepeat = Array(count($etude->getPhases()), count($etude->getMissions()));
         $champs = $this->getAllChamp($etude, $doc, $key);
-        
+
 
         //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
@@ -732,12 +723,12 @@ class TraitementController extends Controller {
 
         $templatesXMLtraite = $this->traiterTemplates($chemin, $nombreRepeat, $champs);
         $champsBrut = $this->verifierTemplates($templatesXMLtraite);
-        
-        
+
+
         $repertoire = 'tmp';
-        
+
         //SI DM on prend la ref de RM et ont remplace RM par DM
-        if($doc == 'DM'){
+        if ($doc == 'DM') {
             $doc = 'RM';
             $isDM = true;
         }
@@ -746,25 +737,23 @@ class TraitementController extends Controller {
             $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $key);
         else
             $refDocx = 'ERROR';
-        
+
         //On remplace DM par RM si DM
-        if(isset($isDM) && $isDM)
+        if (isset($isDM) && $isDM)
             $refDocx = preg_replace("#RM#", 'DM', $refDocx);
-        
+
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
         copy($chemin, $repertoire . '/' . $idDocx);
         $zip = new \ZipArchive();
         $zip->open($repertoire . '/' . $idDocx);
-        
-        
+
+
         $images = array();
         //Gantt
-        if($doc == 'AP')
-        {
+        if ($doc == 'AP') {
             $chartManager = $this->get('mgate.chart_manager');
-            $ob=$chartManager->getGantt($etude, "ap");
-            if($chartManager->exportGantt($ob, $idDocx))
-            {
+            $ob = $chartManager->getGantt($etude, "ap");
+            if ($chartManager->exportGantt($ob, $idDocx)) {
                 $image = array();
                 $image['fileLocation'] = "$repertoire/$idDocx.png";
                 $info = getimagesize("$repertoire/$idDocx.png");
@@ -772,13 +761,11 @@ class TraitementController extends Controller {
                 $image['height'] = $info[1];
                 $images['imageVARganttAP'] = $image;
             }
-            
         }
 
         //Intégration temporaire
         $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
-        foreach ($imagesInDocx as $image)
-        {
+        foreach ($imagesInDocx as $image) {
             $zip->deleteName('word/media/' . $image[2]);
             $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
         }
@@ -787,11 +774,11 @@ class TraitementController extends Controller {
             $zip->deleteName('word/' . $templateXMLName);
             $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
         }
-        
-        
-        
-       
-        
+
+
+
+
+
 
         $zip->close();
 
@@ -807,14 +794,14 @@ class TraitementController extends Controller {
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc);
         $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
         $_SESSION['idZip'] = $idZip;
-   
-        foreach ($etude->getMissions() as $key => $mission) {            
+
+        foreach ($etude->getMissions() as $key => $mission) {
             $this->publipostage($id_etude, $doc, $key);
             $this->telechargerAction('', true);
-         }
+        }
 
         $_SESSION['refDocx'] = $refDocx;
-        
+
         $this->telechargerAction('', false, true);
     }
 
