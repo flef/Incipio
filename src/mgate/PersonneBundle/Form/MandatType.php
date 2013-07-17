@@ -10,8 +10,8 @@ class MandatType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder
-                ->add('debutMandat', 'genemu_jquerydate', array('label'=>'Date de début', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
-                ->add('finMandat', 'genemu_jquerydate', array('label'=>'Date de Fin', 'format'=>'d/MM/y', 'required'=>false, 'widget'=>'single_text'))
+                ->add('debutMandat', 'genemu_jquerydate', array('label'=>'Date de début', 'format' => 'dd/MM/yyyy', 'required'=>false, 'widget'=>'single_text'))
+                ->add('finMandat', 'genemu_jquerydate', array('label'=>'Date de Fin', 'format' => 'dd/MM/yyyy','required'=>false, 'widget'=>'single_text'))
                 ->add('poste', 'entity', 
                     array ('label' => 'Intitulé',
                            'class' => 'mgate\\PersonneBundle\\Entity\\Poste',

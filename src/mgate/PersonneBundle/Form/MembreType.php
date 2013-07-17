@@ -15,8 +15,9 @@ class MembreType extends AbstractType
                 ->add('personne', new PersonneType(), array('label'=>' ', 'user'=>true))
                 ->add('identifiant', 'text', array('label'=>'Identifiant', 'required'=>false,'read_only'=>true))
                 ->add('promotion','integer', array('label'=>'Promotion', 'required'=>false))
-                ->add('dateDeNaissance','date', array('label'=> 'Date de naissance','widget'=>'single_text', 'required'=>false))
+                ->add('dateDeNaissance','date', array('label'=> 'Date de naissance (jj/mm/aaaa)','widget'=>'single_text', 'format' => 'dd/MM/yyyy', 'required'=>false))
                 ->add('lieuDeNaissance', 'text', array('label'=> 'Lieu de naissance', 'required'=>false))
+                ->add('appartement','integer', array('label'=> 'Appartement', 'required'=>false))
                 ->add('mandats', 'collection', array(
                 'type' => new MandatType,
                 'allow_add' => true,

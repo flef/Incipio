@@ -1,35 +1,42 @@
 {% extends "mgatePersonneBundle::layout.html.twig" %}
 
 {% block title %}
-	Affichage d'un Membre - {{ parent() }}
+Affichage d'un Membre - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-        <div style="max-width: 800px;">
-<table class="table table-bordered table-striped">
+<div style="max-width: 800px;">
+    <table class="table table-bordered table-striped">
         <tr>
-            <th colspan="3">Informations</th>
+            <td rowspan="4" style="text-align: center;">
+                <img src="http://ismin.emse.fr/ismin/Photos/P{{membre.promotion}}/{{membre.personne.nom |lower }}_{{membre.personne.prenom | lower }}.jpg"/>
+            </td>
+            <th colspan="2">Informations</th>
         </tr>
         <tr>
-            <td colspan="3"><h4>{{ membre.personne.nomformel }}</h4></td>
+            <td colspan="2"><h4>{{ membre.personne.nomformel }}</h4></td>
         </tr>
         <tr>
-            <td><i class="icon-headphones"></i> {{ membre.personne.mobile }}</td>
             <td><i class="icon-book"></i> P{{ membre.promotion }}</td>
             <td><i class="icon-barcode"></i> Identifiant : {{ membre.identifiant }}</td>
         </tr>
         <tr>
-            <td><i class="icon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
             <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span></td>
             <td><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+        </tr>
+        <tr>
+            <td><i class="icon-headphones"></i> {{ membre.personne.mobile }}</td>
+            <td colspan="2"><i class="icon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
         </tr>
         <tr>
             <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
             <td colspan="2">Né à : {{ membre.lieuDeNaissance }}</td>            
         </tr>
         <tr>
+            <td>Chambre</td>
+            <td>{{ membre.appartement }}</td>
             <td>Adresse</td>
-            <td colspan="3">{{ membre.personne.adresse }}</td>
+            <td>{{ membre.personne.adresse }}</td>
         </tr>
         <tr>
             <td colspan="3"><h4>Postes occupés</h4></td>
@@ -41,8 +48,8 @@
             <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
         </tr>
     {% endfor %}
-</table>
-            </div>
+    </table>
+</div>
 <p>
     <a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">Modifier le membre</a><br />
     <a href="{{ path('mgatePersonne_membre_homepage') }}">Retour à la liste des membres</a>
