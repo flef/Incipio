@@ -64,7 +64,7 @@ class DocTypeType extends AbstractType
         }
 
                                
-            $builder->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false, 'widget'=>'single_text'));
+            $builder->add('dateSignature', 'genemu_jquerydate', array('label'=>'Date de Signature du document', 'required'=>false,'format' => 'dd/MM/yyyy', 'widget'=>'single_text'));
             
     }
     
