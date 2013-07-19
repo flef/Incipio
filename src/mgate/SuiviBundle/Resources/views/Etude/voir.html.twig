@@ -1,9 +1,5 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-{% block stylesheets %}
-{{ parent() }}
-<link rel="stylesheet" href="{{ asset('css/gantt.css')}}" /> 
-{% endblock %}
 
 {% block title %}
 Affichage d'une étude - {{ parent() }}
@@ -67,38 +63,10 @@ Affichage d'une étude - {{ parent() }}
 
 {% endblock %}
 
-{% block javascript_quick %}
-{{ parent() }}
-                <script src="{{ asset('js/jquery.fn.gantt.js')}}"></script>
-                <script>
-                //Egalisation de la hauteur des lignes des phases
-                function equalHeight(group) {
-                   var tallest = 0;
-                   group.each(function() {
-                      thisHeight = $(this).height();     
-                      if(thisHeight > tallest) {
-                         tallest = thisHeight;
-                      }
-                   });
-                   group.css("height" , tallest);
-                }
-
-                $(window).load(function(){
-                    $("#tab2").addClass("active");
-                    var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
-                    for( var i = 1; i <= nombreDeLigneParPhase; i++){
-                        equalHeight($(".egalize tr:nth-child("+i+") th"));
-                    };
-                    $("#tab2").removeClass("active");
-                });
-                    </script>
-{% endblock %}
-
- {% block javascript %}
+                
+{% block javascript %}
 {{ parent() }}
 {{ form_javascript(formSuivi) }}
-    <!--<script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
-    <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>-->
     <script src="{{ asset('js/highcharts.js') }}"></script>
     <script src="{{ asset('js/highcharts-fr.js') }}"></script>
     <script src="{{ asset('js/exporting.js') }}"></script>
@@ -107,7 +75,6 @@ Affichage d'une étude - {{ parent() }}
         {{ chart(chart) }}
     </script>
 
-    <!--script src="http://taitems.github.com/UX-Lab/core/js/prettify.js"></script-->
     <script>
     function docStateChange()
     {
@@ -158,7 +125,5 @@ Affichage d'une étude - {{ parent() }}
 
     });
 
-
-    {% include "mgateSuiviBundle:Etude:Blocks/ganttAvancement.js.twig" with  {'etude':  etude, 'id' : 0} %}
     </script>
 {% endblock %}
