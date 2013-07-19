@@ -25,12 +25,14 @@
         {% if is_granted('ROLE_CA') %}
         <li class="nav-header">Annuaire</li>
         <li><a href="{{ path('mgatePersonne_annuaire') }}">Annuaire global</a></li>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-header">Poste:</li>
         <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister</a></li>
         <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter</a></li>
         <li class="nav-header">Compte d'Utilisateur:</li>
         <li><a href="{{ path('mgate_user_lister') }}">Lister / Modifier</a></li>
-        {% endif %}
+        {% endif %}        
       </ul>
     </li>
     <li class="dropdown">
@@ -45,5 +47,7 @@
         <li><a href="{{ path('mgate_treso_urssaf') }}">URSSAF</a></li>
       </ul>
     </li>
+    {% if is_granted('ROLE_ADMIN') %}
     <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+    {% endif %}
 </ul>
