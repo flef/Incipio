@@ -282,4 +282,27 @@ class Membre {
         return $this->lieuDeNaissance;
     }
 
+
+    /**
+     * Set appartement
+     *
+     * @param integer $appartement
+     * @return Membre
+     */
+    public function setAppartement($appartement)
+    {
+        $this->appartement = $appartement;
+    
+        return $this;
+    }
+
+    /**
+     * Get appartement
+     *
+     * @return integer 
+     */
+    public function getAppartement()
+    {
+        return $this->appartement;
+    }
 }
