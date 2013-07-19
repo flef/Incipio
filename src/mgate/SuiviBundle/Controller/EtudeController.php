@@ -13,6 +13,14 @@ use mgate\SuiviBundle\Form\SuiviType;
 
 //use mgate\UserBundle\Entity\User;
 
+define("STATE_ID_EN_NEGOCIATION",1);
+define("STATE_ID_EN_COURS", 2);
+define("STATE_ID_EN_PAUSE",3);
+define("STATE_ID_TERMINEE",4);
+define("STATE_ID_AVORTEE",5);
+
+
+
 class EtudeController extends Controller
 {
     
@@ -41,27 +49,24 @@ class EtudeController extends Controller
         $user = $this->container->get('security.context')->getToken()->getUser()->getPersonne();
  
         //Etudes En Négociation : stateID = 1
-        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'DESC', 'num'=> 'DESC'));
+        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_NEGOCIATION), array('mandat'=> 'DESC', 'num'=> 'DESC'));
         
         //Etudes En Cours : stateID = 2
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'DESC', 'num'=> 'DESC'));
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_COURS), array('mandat'=> 'DESC', 'num'=> 'DESC'));
 
         //Etudes en pause : stateID = 3
-        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 3),array('mandat'=> 'DESC', 'num' => 'DESC'));
+        $etudesEnPause = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_PAUSE),array('mandat'=> 'DESC', 'num' => 'DESC'));
 
         //Etudes Terminees : stateID = 4
         $etudesTermineesParMandat = array();
         for($i = 1; $i <= $MANDAT_MAX; $i++)
-            array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 4, 'mandat' => $i), array('num' => 'DESC')));
+            array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_TERMINEE, 'mandat' => $i), array('num' => 'DESC')));
            
         
         //Etudes Avortees : stateID = 5
         $etudesAvorteesParMandat = array();
         for($i = 1; $i <= $MANDAT_MAX; $i++)
-            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 5,'mandat' => $i),array('num' => 'DESC')));
-
-        $chartManager = $this->get('mgate.chart_manager');
-        $ob=$chartManager->getGanttSuivi($etudesEnCours);
+            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_AVORTEE,'mandat' => $i),array('num' => 'DESC')));
         
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
             'etudesEnNegociation' => $etudesEnNegociation,
@@ -69,7 +74,6 @@ class EtudeController extends Controller
             'etudesEnPause' => $etudesEnPause,
             'etudesTermineesParMandat' => $etudesTermineesParMandat,
             'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
-            'chart' => $ob
         ));
          
     }
@@ -94,13 +98,9 @@ class EtudeController extends Controller
                 $etude->setStateDescription($stateDescription);
                 $etude->setStateID($stateID);
                 $em->persist($etude);
-
                 $em->flush();
             }
-            
-            
             return new Response('ok !');
-         
     }
     
     
@@ -280,6 +280,7 @@ class EtudeController extends Controller
          * Cependant en cas de suppression d'une étude, chose qui n'arrive pas tous les jours, les données seront perdues !!
          * Perdues Perdues !!!
          */
+        $etudesEnCours = array();
         
         $NbrEtudes = 0;
         foreach ($etudesParMandat as $etudesInMandat)
@@ -293,7 +294,9 @@ class EtudeController extends Controller
             {
                 $form = $form->add((string) (2*$id), 'hidden', array('label' => 'refEtude', 'data' => $this->get('mgate.etude_manager')->getRefEtude($etude)))
                              ->add((string) (2*$id+1), 'textarea', array('label' => $this->get('mgate.etude_manager')->getRefEtude($etude), 'required' => false, 'data' => $etude->getStateDescription() ));
-                $id++;                
+                $id++;
+                if($etude->getStateID() == STATE_ID_EN_COURS)
+                array_push($etudesEnCours, $etude);
             }
         }  
         $form = $form->getForm();
@@ -324,13 +327,15 @@ class EtudeController extends Controller
          }
         
         
-        
+        $chartManager = $this->get('mgate.chart_manager');
+        $ob=$chartManager->getGanttSuivi($etudesEnCours);        
         
         
         
         return $this->render('mgateSuiviBundle:Etude:suiviEtudes.html.twig', array(
             'etudesParMandat' => $etudesParMandat,
             'form' => $form->createView(),
+            'chart' => $ob,
         ));
          
     }
@@ -394,18 +399,16 @@ class EtudeController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        $etude = new \mgate\SuiviBundle\Entity\Etude;
-        
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);
         
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
         //Etudes En Négociation : stateID = 1
-        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 1), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        $etudesEnNegociation = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_NEGOCIATION), array('mandat'=> 'ASC', 'num'=> 'ASC'));
         
         //Etudes En Cours : stateID = 2
-        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 2), array('mandat'=> 'ASC', 'num'=> 'ASC'));
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_COURS), array('mandat'=> 'ASC', 'num'=> 'ASC'));
         
         $etudes = array_merge($etudesEnNegociation,$etudesEnCours);
 

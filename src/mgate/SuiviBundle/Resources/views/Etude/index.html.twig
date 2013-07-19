@@ -41,19 +41,10 @@ Accueil - {{ parent() }}
         </div>
     </div>
 
-    <script src="{{ asset('js/bootboxjs.js')}}"></script>
-        <script>
-            {% include "mgateSuiviBundle:Etude:Tools/Avancement.js.twig" %}
-            {% include "mgateSuiviBundle:Etude:Tools/CommentairesSuivi.js.twig" %}
-            </script>
+
 {% endblock %}
             
 {% block javascript %}
 {{ parent() }}
-            <script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
-            <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
-            <script src="{{ asset('js/hightcharts.js') }}"></script>
-            <script type="text/javascript">
-                {{ chart(chart) }}
-            </script>
+    <script src="{{ asset('js/bootboxjs.js')}}"></script>
 {% endblock %}
