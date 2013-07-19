@@ -6,6 +6,7 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
 
 {% block content_bundle %}
 <form method="post" {{ form_enctype(form) }}>
+    <div id="ganttChart" style="width: 100%;"></div>
     <br />
     <input type="submit" value="Enregistrer les commentaires"/>
     <br />
@@ -44,5 +45,15 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
     </table>
     <input type="submit" value="Enregistrer les commentaires"/>
 </form>
+{% endblock %}
 
+{% block javascript %}
+{{ parent() }}
+    <script src="{{ asset('js/highcharts.js') }}"></script>
+    <script src="{{ asset('js/highcharts-fr.js') }}"></script>
+    <script src="{{ asset('js/exporting.js') }}"></script>
+    
+    <script type="text/javascript">
+        {{ chart(chart) }}
+    </script>
 {% endblock %}

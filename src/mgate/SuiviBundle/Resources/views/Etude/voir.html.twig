@@ -1,14 +1,10 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
-
 {% block title %}
 Affichage d'une étude - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-
-
-
 <div class="tabs-container no-margin"><!-- verticaltabs-container-->
     <ul class="nav nav-tabs no-margin" style="font-weight: bold;"><!-- margin: 40px 30px; -->
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif</a></li>
@@ -41,29 +37,37 @@ Affichage d'une étude - {{ parent() }}
     </div>
 </div>
 
- {# 
-        <li>
-            <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
-                {{ form_widget(delete_form) }}
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-#}	
-                </p>
-
-        {% if etude.thread|default('0') %}
-            {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': etude.thread.id} %}
-        {% endif %} 
-
-
-
-
-
-
-
+{% if etude.thread|default('0') %}
+    {% include 'FOSCommentBundle:Thread:async.html.twig' with {'id': etude.thread.id} %}
+{% endif %} 
 {% endblock %}
 
-                
+{% block javascript_quick %}
+{{ parent() }}
+<script>
+//Egalisation de la hauteur des lignes des phases
+function equalHeight(group) {
+    var tallest = 0;
+    group.each(function() {
+        thisHeight = $(this).height();     
+        if(thisHeight > tallest) {
+            tallest = thisHeight;
+        }
+    });
+    group.css("height" , tallest);
+}
+
+$(window).load(function(){
+    $("#tab2").addClass("active");
+    var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
+        for( var i = 1; i <= nombreDeLigneParPhase; i++){
+            equalHeight($(".egalize tr:nth-child("+i+") th"));
+        };
+    $("#tab2").removeClass("active");
+});
+</script>
+{% endblock %}
+
 {% block javascript %}
 {{ parent() }}
 {{ form_javascript(formSuivi) }}
