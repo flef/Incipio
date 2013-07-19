@@ -60,12 +60,16 @@ class EtudeController extends Controller
         for($i = 1; $i <= $MANDAT_MAX; $i++)
             array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => 5,'mandat' => $i),array('num' => 'DESC')));
 
+        $chartManager = $this->get('mgate.chart_manager');
+        $ob=$chartManager->getGanttSuivi($etudesEnCours);
+        
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
             'etudesEnNegociation' => $etudesEnNegociation,
             'etudesEnCours' => $etudesEnCours,
             'etudesEnPause' => $etudesEnPause,
             'etudesTermineesParMandat' => $etudesTermineesParMandat,
             'etudesAvorteesParMandat' => $etudesAvorteesParMandat,
+            'chart' => $ob
         ));
          
     }
@@ -163,7 +167,6 @@ class EtudeController extends Controller
             throw $this->createNotFoundException('Unable to find Etude entity.');
         
         $chartManager = $this->get('mgate.chart_manager');
-        
         $ob=$chartManager->getGantt($etude, "suivi");
 
        
@@ -420,8 +423,7 @@ class EtudeController extends Controller
         $nextID = $etudes[$nId]->getId();
         $prevID = $etudes[$pId]->getId();
         
-         $chartManager = $this->get('mgate.chart_manager');
-        
+        $chartManager = $this->get('mgate.chart_manager');
         $ob=$chartManager->getGantt($etude, "suivi");
 
        
