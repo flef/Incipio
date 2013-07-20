@@ -119,7 +119,7 @@ class TraitementController extends Controller {
 
     //Converti les retours à la ligne en retour à la ligne pour word
     private function nl2wbr($input) {
-        return preg_replace('#\\r\\n|\\n|\\r#', '<w:br />', $input);
+        return preg_replace('#(\\r\\n)|(\\n)|(\\r)#', '<w:br />', $input);
     }
 
     //Accord en nombre
@@ -579,7 +579,7 @@ class TraitementController extends Controller {
         array_multisort($phaseDev);
         $phaseDevString = "";
         foreach ($phaseDev as $key => $value)
-            $phaseDevString .= ($key) . ' - ' . $value . '\n';
+            $phaseDevString .= ($key) . ' - ' . $value . '\r\n';
         $this->array_push_assoc($champs, 'Phase_Dev', $phaseDevString);
 
 
