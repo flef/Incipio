@@ -499,7 +499,7 @@ class TraitementController extends Controller {
         //Références
         $this->array_push_assoc($champs, 'Reference_Etude', $etudeManager->getRefEtude($etude));
         foreach (array('AP', 'CC', 'FA', 'PVR', 'FS', 'PVI', 'RM', 'DM', 'FI') as $abrv) {
-            if ($etude->getDoc($abrv, $key))
+            if ($etude->getDoc($abrv, $key) || $abrv == 'DM')
                 $this->array_push_assoc($champs, 'Reference_' . $abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
         }
         if ($etude->getDoc('AV', $Nbr_Avenant - 1)) {//key of AV1 = 0
@@ -545,15 +545,16 @@ class TraitementController extends Controller {
 
         //DM : Autres dev
         $i = 1;
+        $phaseDev = array();
         foreach ($etude->getMissions() as $mission) {
 
             if ($i == $key + 1) { // Phase concernant l'intervenant
                 $phaseDev = '';
                 foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
                     if ($phaseMission->getNbrJEH())
-                        $phaseDev .= ($phaseMission->getPhase()->getPosition() + 1) . ' - ' . $phaseMission->getPhase()->getTitre() . '<w:br />';
+                        $phaseDev[$phaseMission->getPhase()->getPosition() + 1] = $phaseMission->getPhase()->getTitre();
                 }
-                $this->array_push_assoc($champs, 'Phase_Dev', $phaseDev);
+                
 
                 //Referent Technique
                 if ($mission) {
@@ -575,6 +576,11 @@ class TraitementController extends Controller {
             }
             $i++;
         }
+        array_multisort($phaseDev);
+        $phaseDevString = "";
+        foreach ($phaseDev as $key => $value)
+            $phaseDevString .= ($key) . ' - ' . $value . '<w:br />';
+        $this->array_push_assoc($champs, 'Phase_Dev', $phaseDevString);
 
 
 
@@ -610,8 +616,6 @@ class TraitementController extends Controller {
             if ($mission->getFinOm())
                 $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
-
-
         return $champs;
     }
 
@@ -747,7 +751,7 @@ class TraitementController extends Controller {
 
         $images = array();
         //Gantt
-        if ($doc == 'AP') {
+        if ($doc == 'AP' || $doc == 'DM') {
             $chartManager = $this->get('mgate.chart_manager');
             $ob = $chartManager->getGantt($etude, "ap");
             if ($chartManager->exportGantt($ob, $idDocx)) {
