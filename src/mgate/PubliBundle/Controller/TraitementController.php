@@ -579,7 +579,7 @@ class TraitementController extends Controller {
         array_multisort($phaseDev);
         $phaseDevString = "";
         foreach ($phaseDev as $key => $value)
-            $phaseDevString .= ($key) . ' - ' . $value . '<w:br />';
+            $phaseDevString .= ($key) . ' - ' . $value . '\n';
         $this->array_push_assoc($champs, 'Phase_Dev', $phaseDevString);
 
 
@@ -747,7 +747,6 @@ class TraitementController extends Controller {
         copy($chemin, $repertoire . '/' . $idDocx);
         $zip = new \ZipArchive();
         $zip->open($repertoire . '/' . $idDocx);
-
 
         $images = array();
         //Gantt
