@@ -578,13 +578,10 @@ class TraitementController extends Controller {
         }
         array_multisort($phaseDev);
         $phaseDevString = "";
-        foreach ($phaseDev as $key => $value)
-            $phaseDevString .= ($key) . ' - ' . $value . '\r\n';
+        foreach ($phaseDev as $keys => $value)
+            $phaseDevString .= ($keys) . ' - ' . $value . '\r\n';
         $this->array_push_assoc($champs, 'Phase_Dev', $phaseDevString);
-
-
-
-
+        
         //Intervenant
         $mission = $etude->getMissions()->get($key);
         if ($mission) {
