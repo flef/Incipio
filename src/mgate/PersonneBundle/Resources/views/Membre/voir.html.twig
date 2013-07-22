@@ -8,7 +8,7 @@ Affichage d'un Membre - {{ parent() }}
 <div style="max-width: 800px;">
     <table class="table table-bordered table-striped">
         <tr>
-            <td rowspan="4" style="text-align: center;">
+            <td rowspan="4" colspan="2" style="text-align: center;">
                 <img src="http://ismin.emse.fr/ismin/Photos/P{{membre.promotion}}/{{membre.personne.nom |lower }}_{{membre.personne.prenom | lower }}.jpg"/>
             </td>
             <th colspan="2">Informations</th>
@@ -26,11 +26,11 @@ Affichage d'un Membre - {{ parent() }}
         </tr>
         <tr>
             <td><i class="icon-headphones"></i> {{ membre.personne.mobile }}</td>
-            <td colspan="2"><i class="icon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
+            <td colspan="3"><i class="icon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
         </tr>
         <tr>
             <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
-            <td colspan="2">Né à : {{ membre.lieuDeNaissance }}</td>            
+            <td colspan="3">Né à : {{ membre.lieuDeNaissance }}</td>            
         </tr>
         <tr>
             <td>Chambre</td>
@@ -39,11 +39,11 @@ Affichage d'un Membre - {{ parent() }}
             <td>{{ membre.personne.adresse }}</td>
         </tr>
         <tr>
-            <td colspan="3"><h4>Postes occupés</h4></td>
+            <td colspan="4"><h4>Postes occupés</h4></td>
         </tr>
     {% for mandat in membre.mandats %}
         <tr class="mandats">
-            <td>{{ mandat.poste.intitule }}</td>
+            <td colspan="2">{{ mandat.poste.intitule }}</td>
             <td>Du : {{ mandat.debutMandat | date("d/m/Y") }}</td>
             <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
         </tr>
