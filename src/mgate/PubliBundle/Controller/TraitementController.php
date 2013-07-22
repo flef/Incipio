@@ -747,9 +747,9 @@ class TraitementController extends Controller {
 
         $images = array();
         //Gantt
-        if ($doc == 'AP' || $doc == 'DM') {
+        if ($doc == 'AP' || (isset($isDM) && $isDM)) {
             $chartManager = $this->get('mgate.chart_manager');
-            $ob = $chartManager->getGantt($etude, "ap");
+            $ob = $chartManager->getGantt($etude, $doc);
             if ($chartManager->exportGantt($ob, $idDocx)) {
                 $image = array();
                 $image['fileLocation'] = "$repertoire/$idDocx.png";

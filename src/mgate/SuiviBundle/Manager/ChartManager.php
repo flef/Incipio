@@ -178,10 +178,6 @@ class ChartManager /*extends \Twig_Extension*/ {
     
     public function exportGantt(Highchart $ob, $filename)
     {
-        /*<script src="{{ asset('bundles/obhighcharts/js/highcharts/highcharts.js') }}"></script>
-        <script src="{{ asset('bundles/obhighcharts/js/highcharts/modules/exporting.js') }}"></script>
-        <script src="{{ asset('js/highcharts.js') }}"></script>*/
-        
         $logger = $this->logger;
         
         // Create the file
