@@ -22,8 +22,7 @@ class RepartitionJEH
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
-     * 
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission", inversedBy="RepartitionJEH") 
      */
     private $mission;
 
@@ -36,5 +35,28 @@ class RepartitionJEH
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set mission
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $mission
+     * @return RepartitionJEH
+     */
+    public function setMission(\mgate\SuiviBundle\Entity\Mission $mission = null)
+    {
+        $this->mission = $mission;
+    
+        return $this;
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \mgate\SuiviBundle\Entity\Mission 
+     */
+    public function getMission()
+    {
+        return $this->mission;
     }
 }
