@@ -22,20 +22,20 @@ class RepartitionJEH
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission", inversedBy="RepartitionJEH") 
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission", inversedBy="repartitionsJEH") 
      */
     private $mission;
     
     /**
      * @var integer $nbrJEH
-     * @ORM\Column(name="nombreJEH", type="integer")
+     * @ORM\Column(name="nombreJEH", type="integer", nullable=true)
      */
     private $nbrJEH;
 
 
     /**
      * @var integer $prixJEH
-     * @ORM\Column(name="prixJEH", type="integer")
+     * @ORM\Column(name="prixJEH", type="integer", nullable=true)
      */
     private $prixJEH;
 

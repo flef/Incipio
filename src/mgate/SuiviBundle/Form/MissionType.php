@@ -36,7 +36,14 @@ class MissionType extends DocTypeType
                'property' => 'personne.prenomNom',
                'label' => 'Référent Technique',
                'required' => false
-               ));
+               ))
+            ->add('repartitionsJEH', 'collection', array(
+                'type' => new RepartitionJEHType(),
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
+                ));
 
             //->add('avancement','integer',array('label'=>'Avancement en %'))
             //->add('rapportDemande','checkbox', array('label'=>'Rapport pédagogique demandé','required'=>false))
