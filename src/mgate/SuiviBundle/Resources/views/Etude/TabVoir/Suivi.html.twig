@@ -76,7 +76,7 @@
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Intervenants</a></li>
         {% if etude.missions | length %}
-            <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Répartition JEH</a></li>
+            <!--li><a href="{#{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }#}"><i class="icon-tasks"></i>  Répartition JEH</a></li-->
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les RM</a></li>
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les DM</a></li>
         {% endif %}

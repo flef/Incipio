@@ -125,11 +125,11 @@ mgateSuivi_state:
 #    requirements:
 #        id: \d+
        
-mgateSuivi_missions_repartition:
-    pattern: /missions/repartition/{id}
-    defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
-    requirements:
-        id: \d+        
+#mgateSuivi_missions_repartition:
+#    pattern: /missions/repartition/{id}
+#    defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
+#    requirements:
+#        id: \d+        
         
 
 mgateSuivi_clientcontact_ajouter:
