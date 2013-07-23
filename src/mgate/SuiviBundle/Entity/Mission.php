@@ -67,6 +67,12 @@ class Mission extends DocType
      * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
      */
     private $pourcentageJunior;
+    
+    /**
+     * @var RepartitionJEH $repartitionsJEH
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="mission", cascade={"persist", "remove"})
+     */
+    private $repartitionsJEH;
 
     /**
      * @var integer $avancement
@@ -398,5 +404,38 @@ class Mission extends DocType
     public function getReferentTechnique()
     {
         return $this->referentTechnique;
+    }
+
+    /**
+     * Add repartitionsJEH
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH
+     * @return Mission
+     */
+    public function addRepartitionsJEH(\mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH)
+    {
+        $this->repartitionsJEH[] = $repartitionsJEH;
+    
+        return $this;
+    }
+
+    /**
+     * Remove repartitionsJEH
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH
+     */
+    public function removeRepartitionsJEH(\mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH)
+    {
+        $this->repartitionsJEH->removeElement($repartitionsJEH);
+    }
+
+    /**
+     * Get repartitionsJEH
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRepartitionsJEH()
+    {
+        return $this->repartitionsJEH;
     }
 }
