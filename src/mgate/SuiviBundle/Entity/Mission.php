@@ -30,19 +30,19 @@ class Mission extends DocType
     protected $etude;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist", "merge", "remove"})
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $referentTechnique;
     
     /**
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist","remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $phaseMission;
 
     /** , inversedBy="missions", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
