@@ -1,0 +1,71 @@
+
+
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+Accueil - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+<div class="row">
+{%for etude in etudes %}
+        <div class="span4">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <td colspan="2">Etude {{etude.id}}</td>
+                </tr>
+    {%for mission in etude.missions%}
+                {%set ANbrJEH = 0 %}
+{%set ATotal = 0%}
+{%set NNbrJEH = 0 %}
+{%set NTotal = 0%}
+
+                <tr>
+                    <td colspan="2">Mission {{mission.id}}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Ancienne Méthode</th>
+                </tr>
+                <tr>
+                </tr>
+        {%for phaseMission in mission.phaseMission if phaseMission.nbrJEH %}
+        {%set ANbrJEH = ANbrJEH + phaseMission.nbrJEH %}
+        {%set ATotal = ATotal + phaseMission.nbrJEH * phaseMission.phase.prixJEH %}
+                <tr>
+                    <td>{{ phaseMission.nbrJEH }}</td>
+                    <td>{{ phaseMission.phase.prixJEH }}</td>
+                </tr>
+       {%endfor%}
+                <tr>
+                    <td>Total JEH</td>
+                    <td>Total Prix</td>
+                </tr>
+                <tr>
+                    <td>{{ ANbrJEH }}</td>
+                    <td>{{ ATotal }}</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Nouvelle Méthode</th>
+                </tr>
+                {%for repartition in mission.repartitionsJEH %}
+                        {%set NNbrJEH = NNbrJEH + repartition.nbrJEH %}
+        {%set NTotal = NTotal + repartition.nbrJEH * repartition.prixJEH %}
+                <tr>
+                    <td>{{ repartition.nbrJEH }}</td>
+                    <td>{{ repartition.prixJEH }}</td>
+                </tr>
+                {%endfor%}
+                <tr class="{{ ATotal == NTotal and NNbrJEH == ANbrJEH ? "success" : "error"}}">
+                    <td>{{ANbrJEH}} = {{NNbrJEH}}</td>
+                    <td>{{ATotal}} = {{NTotal}}</td>
+                </tr>
+                <tr><td colspan="2">############</td></tr>
+    {%endfor%}
+                
+            </table>
+        </div>
+
+{%endfor%}
+    </div>
+
+{%endblock%}
