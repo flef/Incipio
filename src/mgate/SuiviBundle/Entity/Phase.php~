@@ -104,7 +104,7 @@ class Phase
     
     /**
      * @var interger $avenant
-     * @abstract statu de la phase en cas d'avenant : 0 : Phase original | 1 : Phase ajoutée | -1 : Phase supprimée
+     * @abstract statu de la phase en cas d'avenant : 0 : Phase original 1 : Phase ajoutée 2 : Phase supprimée
      * @ORM\Column(name="avanantStatut", type="integer", options={"default"=0})
      */
     private $avenantStatut;
@@ -413,51 +413,5 @@ class Phase
     public function getPhaseMission()
     {
         return $this->phaseMission;
-    }
-
-    /**
-     * Set avenantStatut
-     *
-     * @param integer $avenantStatut
-     * @return Phase
-     */
-    public function setAvenantStatut($avenantStatut)
-    {
-        $this->avenantStatut = $avenantStatut;
-    
-        return $this;
-    }
-
-    /**
-     * Get avenantStatut
-     *
-     * @return integer 
-     */
-    public function getAvenantStatut()
-    {
-        return $this->avenantStatut;
-    }
-
-    /**
-     * Set avenantModification
-     *
-     * @param \mgate\SuiviBundle\Entity\Phase $avenantModification
-     * @return Phase
-     */
-    public function setAvenantModification(\mgate\SuiviBundle\Entity\Phase $avenantModification = null)
-    {
-        $this->avenantModification = $avenantModification;
-    
-        return $this;
-    }
-
-    /**
-     * Get avenantModification
-     *
-     * @return \mgate\SuiviBundle\Entity\Phase 
-     */
-    public function getAvenantModification()
-    {
-        return $this->avenantModification;
     }
 }
