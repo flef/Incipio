@@ -32,6 +32,12 @@ class AvMission extends DocType
      * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="AvMission", cascade={"persist","remove"})
      */
     private $nouvelleRepartition;
+    
+    /**
+     * @var interger $nouveauPourcentage
+     * @ORM\Column(name="nouveauPourcentage", type="integer")
+     */
+    private $nouveauPourcentage;
 
     /**
      * @var integer $differentielDelai
@@ -133,5 +139,28 @@ class AvMission extends DocType
     public function getMission()
     {
         return $this->mission;
+    }
+
+    /**
+     * Set nouveauPourcentage
+     *
+     * @param integer $nouveauPourcentage
+     * @return AvMission
+     */
+    public function setNouveauPourcentage($nouveauPourcentage)
+    {
+        $this->nouveauPourcentage = $nouveauPourcentage;
+    
+        return $this;
+    }
+
+    /**
+     * Get nouveauPourcentage
+     *
+     * @return integer 
+     */
+    public function getNouveauPourcentage()
+    {
+        return $this->nouveauPourcentage;
     }
 }
