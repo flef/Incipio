@@ -26,6 +26,30 @@ class Av extends DocType
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
+    
+    /**
+     * @ORM\Column(name="differentielDelai", type="integer", nullable=false,  options={"default"=0})
+     * @var date
+     */
+    private $differentielDelai;
+    
+    /**
+     * @ORM\Column(name="objet", type="text", nullable=false)
+     * @var string
+     */
+    private $objet;
+    
+    /**
+     * @var AvMission $avenantsMissions
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\AvMission", mappedBy="Av", cascade={"persist","remove"})
+     */
+    private $avenantsMissions;
+    
+    /**
+     * @var array $clauses
+     * @ORM\Column(name="clauses", type="array")
+     */
+    private $clauses;
 
     /**
      * Get id
@@ -58,5 +82,114 @@ class Av extends DocType
     public function getEtude()
     {
         return $this->etude;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->avenantsMissions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set differentielDelai
+     *
+     * @param integer $differentielDelai
+     * @return Av
+     */
+    public function setDifferentielDelai($differentielDelai)
+    {
+        $this->differentielDelai = $differentielDelai;
+    
+        return $this;
+    }
+
+    /**
+     * Get differentielDelai
+     *
+     * @return integer 
+     */
+    public function getDifferentielDelai()
+    {
+        return $this->differentielDelai;
+    }
+
+    /**
+     * Set objet
+     *
+     * @param string $objet
+     * @return Av
+     */
+    public function setObjet($objet)
+    {
+        $this->objet = $objet;
+    
+        return $this;
+    }
+
+    /**
+     * Get objet
+     *
+     * @return string 
+     */
+    public function getObjet()
+    {
+        return $this->objet;
+    }
+
+    /**
+     * Add avenantsMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avenantsMissions
+     * @return Av
+     */
+    public function addAvenantsMission(\mgate\SuiviBundle\Entity\AvMission $avenantsMissions)
+    {
+        $this->avenantsMissions[] = $avenantsMissions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove avenantsMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avenantsMissions
+     */
+    public function removeAvenantsMission(\mgate\SuiviBundle\Entity\AvMission $avenantsMissions)
+    {
+        $this->avenantsMissions->removeElement($avenantsMissions);
+    }
+
+    /**
+     * Get avenantsMissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAvenantsMissions()
+    {
+        return $this->avenantsMissions;
+    }
+
+    /**
+     * Set clauses
+     *
+     * @param array $clauses
+     * @return Av
+     */
+    public function setClauses($clauses)
+    {
+        $this->clauses = $clauses;
+    
+        return $this;
+    }
+
+    /**
+     * Get clauses
+     *
+     * @return array 
+     */
+    public function getClauses()
+    {
+        return $this->clauses;
     }
 }
