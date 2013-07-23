@@ -28,21 +28,6 @@ class Av extends DocType
     protected $etude;
 
     /**
-     * @var integer $fraisDossier
-     *
-     * @ORM\Column(name="fraisDossier", type="integer")
-     */
-    private $fraisDossier;
-
-    /**
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="text")
-     */
-    private $type;
-
-
-    /**
      * Get id
      *
      * @return integer 
@@ -50,52 +35,6 @@ class Av extends DocType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fraisDossier
-     *
-     * @param integer $fraisDossier
-     * @return Av
-     */
-    public function setFraisDossier($fraisDossier)
-    {
-        $this->fraisDossier = $fraisDossier;
-    
-        return $this;
-    }
-
-    /**
-     * Get fraisDossier
-     *
-     * @return integer 
-     */
-    public function getFraisDossier()
-    {
-        return $this->fraisDossier;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return Av
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
