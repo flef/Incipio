@@ -25,6 +25,19 @@ class RepartitionJEH
      * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission", inversedBy="RepartitionJEH") 
      */
     private $mission;
+    
+    /**
+     * @var integer $nbrJEH
+     * @ORM\Column(name="nombreJEH", type="integer")
+     */
+    private $nbrJEH;
+
+
+    /**
+     * @var integer $prixJEH
+     * @ORM\Column(name="prixJEH", type="integer")
+     */
+    private $prixJEH;
 
 
     /**
@@ -58,5 +71,51 @@ class RepartitionJEH
     public function getMission()
     {
         return $this->mission;
+    }
+
+    /**
+     * Set nbrJEH
+     *
+     * @param integer $nbrJEH
+     * @return RepartitionJEH
+     */
+    public function setNbrJEH($nbrJEH)
+    {
+        $this->nbrJEH = $nbrJEH;
+    
+        return $this;
+    }
+
+    /**
+     * Get nbrJEH
+     *
+     * @return integer 
+     */
+    public function getNbrJEH()
+    {
+        return $this->nbrJEH;
+    }
+
+    /**
+     * Set prixJEH
+     *
+     * @param integer $prixJEH
+     * @return RepartitionJEH
+     */
+    public function setPrixJEH($prixJEH)
+    {
+        $this->prixJEH = $prixJEH;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixJEH
+     *
+     * @return integer 
+     */
+    public function getPrixJEH()
+    {
+        return $this->prixJEH;
     }
 }

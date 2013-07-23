@@ -10,7 +10,8 @@ class PhaseMissionType extends AbstractType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
-	// Je ne sais pas trop comment faire, Stéphane 
+	// Je ne sais pas trop comment faire, Stéphane
+        // Alors ne fait pas :)
         
         $builder /*->add('phase', 'collection', array(
                 'type' => new PhaseType,

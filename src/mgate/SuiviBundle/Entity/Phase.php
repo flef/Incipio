@@ -38,6 +38,7 @@ class Phase
      */
     protected $etude;
     
+    //TO DELETE
     /**
      * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="phase", cascade={"persist"})
      */
