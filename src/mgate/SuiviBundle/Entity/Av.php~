@@ -169,27 +169,4 @@ class Av extends DocType
     {
         return $this->avenantsMissions;
     }
-
-    /**
-     * Set clauses
-     *
-     * @param array $clauses
-     * @return Av
-     */
-    public function setClauses($clauses)
-    {
-        $this->clauses = $clauses;
-    
-        return $this;
-    }
-
-    /**
-     * Get clauses
-     *
-     * @return array 
-     */
-    public function getClauses()
-    {
-        return $this->clauses;
-    }
 }
