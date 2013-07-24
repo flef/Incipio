@@ -41,7 +41,7 @@ class MissionsController extends Controller {
                     $repartition->setMission($mission);
                     $mission->addRepartitionsJEH($repartition);
                 }
-                else
+                if(count($mission->getRepartitionsJEH()->toArray()) != 0)
                     throw $this->createNotFoundException ('CheckDatabase Manually on etude '.$etude->getId());
             }
             
