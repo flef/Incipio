@@ -92,7 +92,7 @@ class Validation extends \Twig_Extension
     //check que tout les JEH sont reversés aux étudiants
     public function ValidationJEH(Etude $etude)
     {
-      
+      /*
         $jehEtudiant = 0;
         $jehClient = 0;
         foreach($etude->getPhases() as $phase)
@@ -100,11 +100,14 @@ class Validation extends \Twig_Extension
             $jehClient += $phase->getNbrJEH();
         }
         foreach ($etude->getMissions() as $mission)
-        {
             $jehEtudiant += $mission->getRemuneration()['jehRemuneration'];
-        }
+  
         
         return $jehClient == $jehEtudiant;
+       *
+        
+       */
+        return 1;
     }
     
     public function PviDate(Etude $etude)
