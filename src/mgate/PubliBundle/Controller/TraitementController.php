@@ -599,8 +599,10 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
                 $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $mission->getIntervenant()->getPersonne()->getNomFormel());
             }
-            $Mission_Nbre_JEH = (int) $mission->getRemuneration()['jehRemuneration'];
-            $Mission_Montant_JEH_Verse = (float) $mission->getRemuneration()['montantRemuneration'];
+            
+            $Mission_Remuneration = $mission->getRemuneration();
+            $Mission_Nbre_JEH = (int) $Mission_Remuneration['jehRemuneration'];
+            $Mission_Montant_JEH_Verse = (float) $Mission_Remuneration['montantRemuneration'];
 
             $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
             $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
