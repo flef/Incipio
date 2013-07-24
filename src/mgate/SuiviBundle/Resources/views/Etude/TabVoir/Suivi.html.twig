@@ -105,6 +105,15 @@
                         Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "??" }}
                     </td>
                 </tr>
+                {% set remuneration = mission.remuneration %}
+                <tr>
+                    <th>Nbre JEH</th>
+                    <td>{{ remuneration.jehRemuneration }} JEH</td>
+                </tr>
+                <tr>
+                    <th>Montant Brut</th>
+                    <td>{{ remuneration.montantRemuneration }} €</td>
+                </tr>
                 <tr>
                     <th>Date de signature</th>
 
