@@ -229,14 +229,11 @@ class EtudeController extends Controller
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
                 throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
             
-            foreach ($entity->getMissions() as $mission) {
-                foreach ($mission->getPhaseMission() as $PhaseMission) {
-                    $em->remove($PhaseMission); // suppression répartition JEH
-                }
-                $em->remove($mission); 
-            }
+            /**
+             * @todo Cascade remove
+             */
             foreach ($entity->getPhases() as $phase) {
-                $em->remove($phase); //suppression des phases
+                $em->remove($phase); //suppression des phases 
             }            
 
             $em->remove($entity);

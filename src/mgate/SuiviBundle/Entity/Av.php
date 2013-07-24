@@ -26,21 +26,30 @@ class Av extends DocType
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
-
+    
     /**
-     * @var integer $fraisDossier
-     *
-     * @ORM\Column(name="fraisDossier", type="integer")
+     * @ORM\Column(name="differentielDelai", type="integer", nullable=false,  options={"default"=0})
+     * @var date
      */
-    private $fraisDossier;
-
+    private $differentielDelai;
+    
     /**
-     * @var string $type
-     *
-     * @ORM\Column(name="type", type="text")
+     * @ORM\Column(name="objet", type="text", nullable=false)
+     * @var string
      */
-    private $type;
-
+    private $objet;
+    
+    /**
+     * @var AvMission $avenantsMissions
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\AvMission", mappedBy="Av", cascade={"persist","remove"})
+     */
+    private $avenantsMissions;
+    
+    /**
+     * @var array $clauses
+     * @ORM\Column(name="clauses", type="array")
+     */
+    private $clauses;
 
     /**
      * Get id
@@ -50,52 +59,6 @@ class Av extends DocType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fraisDossier
-     *
-     * @param integer $fraisDossier
-     * @return Av
-     */
-    public function setFraisDossier($fraisDossier)
-    {
-        $this->fraisDossier = $fraisDossier;
-    
-        return $this;
-    }
-
-    /**
-     * Get fraisDossier
-     *
-     * @return integer 
-     */
-    public function getFraisDossier()
-    {
-        return $this->fraisDossier;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return Av
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 
     /**
@@ -119,5 +82,114 @@ class Av extends DocType
     public function getEtude()
     {
         return $this->etude;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->avenantsMissions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set differentielDelai
+     *
+     * @param integer $differentielDelai
+     * @return Av
+     */
+    public function setDifferentielDelai($differentielDelai)
+    {
+        $this->differentielDelai = $differentielDelai;
+    
+        return $this;
+    }
+
+    /**
+     * Get differentielDelai
+     *
+     * @return integer 
+     */
+    public function getDifferentielDelai()
+    {
+        return $this->differentielDelai;
+    }
+
+    /**
+     * Set objet
+     *
+     * @param string $objet
+     * @return Av
+     */
+    public function setObjet($objet)
+    {
+        $this->objet = $objet;
+    
+        return $this;
+    }
+
+    /**
+     * Get objet
+     *
+     * @return string 
+     */
+    public function getObjet()
+    {
+        return $this->objet;
+    }
+
+    /**
+     * Add avenantsMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avenantsMissions
+     * @return Av
+     */
+    public function addAvenantsMission(\mgate\SuiviBundle\Entity\AvMission $avenantsMissions)
+    {
+        $this->avenantsMissions[] = $avenantsMissions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove avenantsMissions
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avenantsMissions
+     */
+    public function removeAvenantsMission(\mgate\SuiviBundle\Entity\AvMission $avenantsMissions)
+    {
+        $this->avenantsMissions->removeElement($avenantsMissions);
+    }
+
+    /**
+     * Get avenantsMissions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAvenantsMissions()
+    {
+        return $this->avenantsMissions;
+    }
+
+    /**
+     * Set clauses
+     *
+     * @param array $clauses
+     * @return Av
+     */
+    public function setClauses($clauses)
+    {
+        $this->clauses = $clauses;
+    
+        return $this;
+    }
+
+    /**
+     * Get clauses
+     *
+     * @return array 
+     */
+    public function getClauses()
+    {
+        return $this->clauses;
     }
 }
