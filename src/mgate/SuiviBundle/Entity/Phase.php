@@ -38,12 +38,6 @@ class Phase
      */
     protected $etude;
     
-    //TO DELETE
-    /**
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="phase", cascade={"persist"})
-     */
-    private $phaseMission;
-
     /**
      * @var integer $nbrJEH
      *
@@ -383,39 +377,6 @@ class Phase
         return $tab[$this->validation];
     }
     
-    /**
-     * Add phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     * @return Phase
-     */
-    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
-    {
-        $this->phaseMission[] = $phaseMission;
-    
-        return $this;
-    }
-
-    /**
-     * Remove phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     */
-    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
-    {
-        $this->phaseMission->removeElement($phaseMission);
-    }
-
-    /**
-     * Get phaseMission
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhaseMission()
-    {
-        return $this->phaseMission;
-    }
-
     /**
      * Set avenantStatut
      *

@@ -35,13 +35,8 @@ class Mission extends DocType {
      */
     private $referentTechnique;
 
+    
     /**
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist","remove"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $phaseMission;
-
-    /** , inversedBy="missions", cascade={"persist"}
      * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -323,44 +318,7 @@ class Mission extends DocType {
         return $this->etude;
     }
 
-    /**
-     * Constructor
-     */
-    public function __construct() {
-        $this->phaseMission = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pourcentageJunior = 40;
-    }
-
-    /**
-     * Add phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     * @return Mission
-     */
-    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission) {
-        $this->phaseMission[] = $phaseMission;
-
-        return $this;
-    }
-
-    /**
-     * Remove phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     */
-    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission) {
-        $this->phaseMission->removeElement($phaseMission);
-    }
-
-    /**
-     * Get phaseMission
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhaseMission() {
-        return $this->phaseMission;
-    }
-
+    
     /**
      * Set pourcentageJunior
      *
@@ -433,4 +391,13 @@ class Mission extends DocType {
         return $this->repartitionsJEH;
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->repartitionsJEH = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pourcentageJunior = 40;
+    }
+    
 }
