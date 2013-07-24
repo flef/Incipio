@@ -32,7 +32,10 @@ class Validation extends \Twig_Extension
         );
     }
     
-    //vérifie 80€ < prix JEH < 300€, contrainte à mettre dans l'entity ?
+    /**
+     * @todo vérifie 80€ < prix JEH < 300€, contrainte à mettre dans l'entity ?
+     */
+    
     public function prixJEH(Etude $etude)
     {
         $array = array();
@@ -89,24 +92,22 @@ class Validation extends \Twig_Extension
     //check que tout les JEH sont reversés aux étudiants
     public function ValidationJEH(Etude $etude)
     {
-      
+      /*
         $jehEtudiant = 0;
         $jehClient = 0;
         foreach($etude->getPhases() as $phase)
         {
-            foreach($phase->getPhaseMission() as $phaseMission)
-            {
-                $jehEtudiant = $jehEtudiant + $phaseMission->getNbrJEH();
-            }
-            
-            $jehClient = $jehClient + $phase->getNbrJEH();
+            $jehClient += $phase->getNbrJEH();
         }
+        foreach ($etude->getMissions() as $mission)
+            $jehEtudiant += $mission->getRemuneration()['jehRemuneration'];
+  
         
-        if($jehClient == $jehEtudiant)
-        {
-            return 1;//ok tout les jeh sont reversés aux étudiants
-        }
-        else return 0;
+        return $jehClient == $jehEtudiant;
+       *
+        
+       */
+        return 1;
     }
     
     public function PviDate(Etude $etude)

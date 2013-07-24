@@ -22,11 +22,28 @@ class AvMission extends DocType
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="avMissions", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @var Mission
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
      */
-    protected $etude;
+    private $mission;
+    
+    /**
+     * @var integer $nouvelleRepartition
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="AvMission", cascade={"persist","remove"})
+     */
+    private $nouvelleRepartition;
+    
+    /**
+     * @var interger $nouveauPourcentage
+     * @ORM\Column(name="nouveauPourcentage", type="integer")
+     */
+    private $nouveauPourcentage;
 
+    /**
+     * @var integer $differentielDelai
+     * @ORM\Column(name="differentielDelai", type="integer")
+     */
+    private $differentielDelai;
 
     /**
      * Get id
@@ -37,27 +54,113 @@ class AvMission extends DocType
     {
         return $this->id;
     }
-
     /**
-     * Set etude
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->nouvelleRepartition = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set differentielDelai
      *
-     * @param mgate\SuiviBundle\Entity\Etude $etude
+     * @param integer $differentielDelai
      * @return AvMission
      */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    public function setDifferentielDelai($differentielDelai)
     {
-        $this->etude = $etude;
+        $this->differentielDelai = $differentielDelai;
     
         return $this;
     }
 
     /**
-     * Get etude
+     * Get differentielDelai
      *
-     * @return mgate\SuiviBundle\Entity\Etude 
+     * @return integer 
      */
-    public function getEtude()
+    public function getDifferentielDelai()
     {
-        return $this->etude;
+        return $this->differentielDelai;
+    }
+
+    /**
+     * Add nouvelleRepartition
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $nouvelleRepartition
+     * @return AvMission
+     */
+    public function addNouvelleRepartition(\mgate\SuiviBundle\Entity\RepartitionJEH $nouvelleRepartition)
+    {
+        $this->nouvelleRepartition[] = $nouvelleRepartition;
+    
+        return $this;
+    }
+
+    /**
+     * Remove nouvelleRepartition
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $nouvelleRepartition
+     */
+    public function removeNouvelleRepartition(\mgate\SuiviBundle\Entity\RepartitionJEH $nouvelleRepartition)
+    {
+        $this->nouvelleRepartition->removeElement($nouvelleRepartition);
+    }
+
+    /**
+     * Get nouvelleRepartition
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNouvelleRepartition()
+    {
+        return $this->nouvelleRepartition;
+    }
+
+    /**
+     * Set mission
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $mission
+     * @return AvMission
+     */
+    public function setMission(\mgate\SuiviBundle\Entity\Mission $mission = null)
+    {
+        $this->mission = $mission;
+    
+        return $this;
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \mgate\SuiviBundle\Entity\Mission 
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+    /**
+     * Set nouveauPourcentage
+     *
+     * @param integer $nouveauPourcentage
+     * @return AvMission
+     */
+    public function setNouveauPourcentage($nouveauPourcentage)
+    {
+        $this->nouveauPourcentage = $nouveauPourcentage;
+    
+        return $this;
+    }
+
+    /**
+     * Get nouveauPourcentage
+     *
+     * @return integer 
+     */
+    public function getNouveauPourcentage()
+    {
+        return $this->nouveauPourcentage;
     }
 }
