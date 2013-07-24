@@ -548,13 +548,18 @@ class TraitementController extends Controller {
         $phaseDev = array();
         foreach ($etude->getMissions() as $mission) {
 
+            /**
+             * @todo Issue #21
+             */
             if ($i == $key + 1) { // Phase concernant l'intervenant
-                $phaseDev = '';
+               
+                
+                /* $phaseDev = '';
                 foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
                     if ($phaseMission->getNbrJEH())
                         $phaseDev[$phaseMission->getPhase()->getPosition() + 1] = $phaseMission->getPhase()->getTitre();
                 }
-                
+              */  
 
                 //Referent Technique
                 if ($mission) {
@@ -594,13 +599,8 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
                 $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $mission->getIntervenant()->getPersonne()->getNomFormel());
             }
-            $Mission_Nbre_JEH = (int) 0;
-            $Mission_Montant_JEH_Verse = (float) 0;
-            foreach ($mission->getPhaseMission() as $phaseMission) {
-                $Mission_Nbre_JEH += $phaseMission->getNbrJEH();
-                $Mission_Montant_JEH_Verse += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
-            }
-            $Mission_Montant_JEH_Verse *= 1 - ($mission->getPourcentageJunior() / 100);
+            $Mission_Nbre_JEH = (int) $mission->getRemuneration()['jehRemuneration'];
+            $Mission_Montant_JEH_Verse = (float) $mission->getRemuneration()['montantRemuneration'];
 
             $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
             $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
