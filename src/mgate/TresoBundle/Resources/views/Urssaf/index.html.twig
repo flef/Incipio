@@ -70,10 +70,10 @@
            <td>
                {% set totalJEH = 0 %}
                {% set totalRem = 0 %}
-               {% for phasemission in rm.phaseMission if phasemission.nbrJEH > 0 %}
-               {% set totalJEH = totalJEH + phasemission.nbrJEH %}
-               {% set totalRem = totalRem + phasemission.nbrJEH * phasemission.phase.prixJEH * (1-rm.pourcentageJunior/100) %}
-                <div>Phase n°{{ phasemission.phase.position+ 1 }} : {{ phasemission.nbrJEH }} * {{ phasemission.phase.prixJEH * (1-rm.pourcentageJunior/100)}} = {{ phasemission.phase.prixJEH*phasemission.nbrJEH*(1-rm.pourcentageJunior/100) }} €</div>
+               {% for repartition in rm.repartitionsJEH if repartition %}
+               {% set totalJEH = totalJEH + repartition.nbrJEH %}
+               {% set totalRem = totalRem + repartition.nbrJEH * repartition.prixJEH * (1-rm.pourcentageJunior/100) %}
+                <div>Repartition n°{{ loop.index }} : {{ repartition.nbrJEH }} * {{ repartition.prixJEH * (1-rm.pourcentageJunior/100)}} = {{ repartition.prixJEH * repartition.nbrJEH*(1-rm.pourcentageJunior/100) }} €</div>
                 {% endfor %}
                 <div>Total : {{ totalJEH }} JEH - {{ totalRem }} €</div>
             </td>
