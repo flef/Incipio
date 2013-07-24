@@ -11,48 +11,6 @@ use mgate\SuiviBundle\Form\MissionsType;
 use mgate\SuiviBundle\Entity\Mission;
 
 class MissionsController extends Controller {
-
-        
-    /**
-     * @todo A supprimer
-     * @abstract Fonction qui assure la transition entre l'ancienne et la nouvelle répartition JEH
-     */
-    /**
-     * @Secure(roles="ROLE_ADMIN")
-     */
-    public function majBDDAction() {
-        $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
-        
-
-        foreach ($entities as $etude){
-            foreach ($etude->getMissions() as $mission){
-                $NbrJEH = 0;
-                $Total = 0;
-                foreach ($mission->getPhaseMission() as $phaseMission){
-                    $NbrJEH += $phaseMission->getNbrJEH();
-                    $Total += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
-                }
-                 if(count($mission->getRepartitionsJEH()->toArray()) !== 0)
-                    throw $this->createNotFoundException ('CheckDatabase Manually on etude '.$etude->getId());
-                if($NbrJEH){
-                    $repartition = new \mgate\SuiviBundle\Entity\RepartitionJEH;
-                    $repartition->setNbrJEH($NbrJEH);
-                    $repartition->setPrixJEH($Total/$NbrJEH);
-                    $repartition->setMission($mission);
-                    $mission->addRepartitionsJEH($repartition);
-                }               
-            }
-            
-        $em->persist($etude);
-        $em->flush();
-        }
-
-        return $this->render('mgateSuiviBundle:Etude:majBDD.html.twig', array(
-                    'etudes' => $entities,
-                ));
-    }
         
     /**
      * @Secure(roles="ROLE_SUIVEUR")
