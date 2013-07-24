@@ -13,7 +13,7 @@ class RepartitionJEHType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add('nbrJEH','integer',array('required'=>true))
-                ->add('prixJEH', 'integer', array('required'=>true));
+                ->add('prixJEH', 'integer', array('required'=>true, 'attr' => array('min' => 80, 'max' => 300)));
     }
     
     public function getName() {
