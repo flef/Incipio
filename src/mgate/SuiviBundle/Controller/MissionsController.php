@@ -34,15 +34,15 @@ class MissionsController extends Controller {
                     $NbrJEH += $phaseMission->getNbrJEH();
                     $Total += $phaseMission->getNbrJEH() * $phaseMission->getPhase()->getPrixJEH();
                 }
-                if($NbrJEH && count($mission->getRepartitionsJEH()->toArray()) == 0){
+                 if(count($mission->getRepartitionsJEH()->toArray()) !== 0)
+                    throw $this->createNotFoundException ('CheckDatabase Manually on etude '.$etude->getId());
+                if($NbrJEH){
                     $repartition = new \mgate\SuiviBundle\Entity\RepartitionJEH;
                     $repartition->setNbrJEH($NbrJEH);
                     $repartition->setPrixJEH($Total/$NbrJEH);
                     $repartition->setMission($mission);
                     $mission->addRepartitionsJEH($repartition);
-                }
-                if(count($mission->getRepartitionsJEH()->toArray()) != 0)
-                    throw $this->createNotFoundException ('CheckDatabase Manually on etude '.$etude->getId());
+                }               
             }
             
         $em->persist($etude);
