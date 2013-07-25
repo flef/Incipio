@@ -16,8 +16,6 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  */
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
-
-        
     /**
      * @var bool
      */
@@ -27,29 +25,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      */
     private $newProspect;
-    
-    
+
     /**
      * @var integer $stateID
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
     private $stateID;
-    
+
     /**
      * @var string $Description
      *
      * @ORM\Column(name="stateDescription", type="text", nullable=true)
      */
     private $stateDescription;
-    
+
     /**
      * @var boolean $confidentiel
      *
      * @ORM\Column(name="confidentiel", type="boolean", nullable=true)
      */
     private $confidentiel;
-
 
     /**
      * @var integer $id
@@ -77,7 +73,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\JoinColumn(nullable=true)
      */
     private $thread;
-    
+
     /**
      * @var \DateTime $dateCreation
      *
@@ -205,10 +201,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $cc;
 
     /**
-     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist","remove"})
      */
     private $missions;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
@@ -228,7 +224,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToMany(targetEntity="AvMission", mappedBy="etude")
      */
     private $avMissions;
-
 
     /** proces verbal recette
      * @ORM\OneToOne(targetEntity="ProcesVerbal", inversedBy="etude", cascade={"persist"})
@@ -328,7 +323,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             case 'PVR':
                 return $this->getPvr();
             case 'PVI':
-                    return $this->getPvis($key);
+                return $this->getPvis($key);
             case 'AV':
                 return $this->getAvs()->get($key);
             case 'RM':
@@ -646,22 +641,20 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->auditType;
     }
 
-    public static function getAuditTypeChoice()
-    {
-        return array(   '1' => 'Déontologique',
-                        '2' => 'Exhaustif');
+    public static function getAuditTypeChoice() {
+        return array('1' => 'Déontologique',
+            '2' => 'Exhaustif');
     }
-    public static function getAuditTypeChoiceAssert()
-    {
+
+    public static function getAuditTypeChoiceAssert() {
         return array_keys(Etude::getAuditTypeChoice());
     }
-    
-    public function getAuditTypeToString()
-    {
+
+    public function getAuditTypeToString() {
         $tab = $this->getAuditTypeChoice();
         return $tab[$this->auditType];
     }
-    
+
     /**
      * Set acompte
      *
@@ -787,30 +780,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getTypePrestation() {
         return $this->typePrestation;
     }
- 
-    public static function getTypePrestationChoice()
-    {
-        return array(   '1' => 'ingénieur informatique',
-                        '2' => 'ingénieur électronique',
-                        '3' => 'ingénieur informatique et électronique',
-                        '4'=> 'ingénieur microélectronique');
+
+    public static function getTypePrestationChoice() {
+        return array('1' => 'ingénieur informatique',
+            '2' => 'ingénieur électronique',
+            '3' => 'ingénieur informatique et électronique',
+            '4' => 'ingénieur microélectronique');
     }
-    public static function getTypePrestationChoiceAssert()
-    {
+
+    public static function getTypePrestationChoiceAssert() {
         return array_keys(Etude::getTypePrestationChoice());
     }
-    
-    public function getTypePrestationToString()
-    {
-        if($this->typePrestation)
-        {
+
+    public function getTypePrestationToString() {
+        if ($this->typePrestation) {
             $tab = $this->getTypePrestationChoice();
             return $tab[$this->typePrestation];
         }
-        else 
+        else
             return null;
     }
-    
+
     /**
      * Set prospect
      *
@@ -1020,7 +1010,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getMissions() {
         return $this->missions;
     }
-    
+
     /**
      * Add facture
      *
@@ -1080,25 +1070,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getPvis($key = -1) {
         $pvis = array();
-        
+
         $i = 0;
         // En fait pvis ca prend toutes les PV qui sont lié a l'etude $this
         // C'est le principe de OneToMany, d'ou la selection ci-dessous
-        foreach ($this->pvis as $value)
-        {
-            if($value->getType()=="pvi"){
-                $pvis[]=$value;
+        foreach ($this->pvis as $value) {
+            if ($value->getType() == "pvi") {
+                $pvis[] = $value;
                 $i++;
             }
         }
-         if($key >= 0){
-            if($key < $i) return $pvis[$key];
-            else return NULL;
+        if ($key >= 0) {
+            if ($key < $i)
+                return $pvis[$key];
+            else
+                return NULL;
         }
-        if(count($pvis)) return $pvis;        
-        else return NULL;
+        if (count($pvis))
+            return $pvis;
+        else
+            return NULL;
     }
-
 
     /**
      * Add avs
@@ -1184,7 +1176,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->pvr;
     }
 
-     /**
+    /**
      * Add fi
      *
      * @param \mgate\SuiviBundle\Entity\Facture $fi
@@ -1207,6 +1199,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->fis->removeElement($fi);
     }
 
+    function compare($a, $b) {
+        if ($a->getDateSignature() == $b->getDateSignature())
+            return 0;
+        else
+            return ($a->getDateSignature() < $b->getDateSignature()) ? -1 : 1;
+    }
+
     /**
      * Get fis
      *
@@ -1214,38 +1213,41 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getFis($key = -1) {
         $fis = array();
-        
-        // En fait fis ca prend toutes les facture qui sont lié a l'etude $this
-        // C'est le principe de OneToMany, d'ou la selection ci-dessous
+
         $i = -1;
-        foreach ($this->factures as $value)
-        {
-            if($value->getType()=="fi"){
-                $fis[]=$value;
+        foreach ($this->factures as $value) {
+            if ($value->getType() == "fi") {
+                $fis[] = $value;
                 $i++;
             }
         }
-        if($key >= 0){
-            if($key < $i) return $fis[$key];
-            else return NULL;
+
+        if ($key >= 0) {
+            if ($key < $i)
+                return $fis[$key];
+            else
+                return NULL;
         }
-        if(count($fis)) return $fis;
-        else return NULL;
+        if (count($fis)) {
+            usort($fis, array($this, 'compare'));
+            return $fis;
+        }
+        else
+            return NULL;
     }
-    
+
     /**
      * Get fa
      *
      * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFa() {
-        foreach ($this->factures as $facture)
-        {
-            if($facture->getType()=="fa")
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fa")
                 return $facture;
         }
     }
-    
+
     /**
      * Set fa
      *
@@ -1254,18 +1256,15 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function setFa(\mgate\SuiviBundle\Entity\Facture $fa) {
         $fa->setEtude($this);
         $fa->setType('fa');
-        
-        foreach ($this->factures as $facture)
-        {
-            if($facture->getType()=="fa")
-            {
-                $facture=$fa;
+
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fa") {
+                $facture = $fa;
                 return;
             }
         }
-        $this->factures[]=$fa;
+        $this->factures[] = $fa;
     }
-
 
     /**
      * Get fs
@@ -1273,13 +1272,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFs() {
-        foreach ($this->factures as $facture)
-        {
-            if($facture->getType()=="fs")
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fs")
                 return $facture;
         }
     }
-    
+
     /**
      * Set fs
      *
@@ -1288,28 +1286,25 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
         $fs->setEtude($this);
         $fs->setType('fs');
-        
-        foreach ($this->factures as $facture)
-        {
-            if($facture->getType()=="fs")
-            {
-                $facture=$fs;
+
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fs") {
+                $facture = $fs;
                 return;
             }
         }
-        $this->factures[]=$fs;
-    } 
-    
+        $this->factures[] = $fs;
+    }
+
     /**
      * Set thread
      *
      * @param \mgate\CommentBundle\Entity\Thread $thread
      * @return Prospect
      */
-    public function setThread(\mgate\CommentBundle\Entity\Thread $thread)
-    {
+    public function setThread(\mgate\CommentBundle\Entity\Thread $thread) {
         $this->thread = $thread;
-    
+
         return $this;
     }
 
@@ -1318,8 +1313,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return mgate\CommentBundle\Entity\Thread 
      */
-    public function getThread()
-    {
+    public function getThread() {
         return $this->thread;
     }
 
@@ -1329,10 +1323,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @param integer $stateID
      * @return Etude
      */
-    public function setStateID($stateID)
-    {
+    public function setStateID($stateID) {
         $this->stateID = $stateID;
-    
+
         return $this;
     }
 
@@ -1341,40 +1334,36 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return integer 
      */
-    public function getStateID()
-    {
+    public function getStateID() {
         return $this->stateID;
     }
 
-    public static function getStateIDChoice()
-    {
-        return array(   '1' => 'En négociation',
-                        '2' => 'En cours',
-                        '3' => 'En pause',
-                        '4' => 'Clorurée',
-                        '5' => 'Avortée');
+    public static function getStateIDChoice() {
+        return array('1' => 'En négociation',
+            '2' => 'En cours',
+            '3' => 'En pause',
+            '4' => 'Clorurée',
+            '5' => 'Avortée');
     }
-    public static function getStateIDChoiceAssert()
-    {
+
+    public static function getStateIDChoiceAssert() {
         return array_keys(Etude::getStateIDChoice());
     }
-    
-    public function getStateIDToString()
-    {
+
+    public function getStateIDToString() {
         $tab = $this->getStateIDChoice();
         return $tab[$this->stateID];
     }
-    
+
     /**
      * Set stateDescription
      *
      * @param string $stateDescription
      * @return Etude
      */
-    public function setStateDescription($stateDescription)
-    {
+    public function setStateDescription($stateDescription) {
         $this->stateDescription = $stateDescription;
-    
+
         return $this;
     }
 
@@ -1383,8 +1372,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return string 
      */
-    public function getStateDescription()
-    {
+    public function getStateDescription() {
         return $this->stateDescription;
     }
 
@@ -1394,10 +1382,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @param boolean $confidentiel
      * @return Etude
      */
-    public function setConfidentiel($confidentiel)
-    {
+    public function setConfidentiel($confidentiel) {
         $this->confidentiel = $confidentiel;
-    
+
         return $this;
     }
 
@@ -1406,8 +1393,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @return boolean 
      */
-    public function getConfidentiel()
-    {
+    public function getConfidentiel() {
         return $this->confidentiel;
     }
+
 }
