@@ -3,26 +3,38 @@
 {% block content_bundle %}
 
 <h2>Modifier les {{ form.missions | length  }} intervenants</h2>
-<form method="POST" {{ form_enctype(form) }}>
+<form name="missionsForm" method="POST" {{ form_enctype(form) }}>
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
 <p><br /><input type="submit" value="Ajouter une mission" name="add"/> - <input type="submit" value="Enregistrer les missions" /></p>
-
+<input type="hidden" value="" name="idMission" id="idMission"/>
     <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">
-        {# itere sur chaque tag existant et affiche son unique champ : name #}
         {% for mission in form.missions %}
             <li>
+        <table>
+        <tr>
+            <td colspan="4">
+                
+                <button class="btn" type="submit" value="Ajouter des JEH" name="addRepartition" onclick="document.forms['missionsForm'].elements['idMission'].value = {{loop.index0}};"><i class="icon-plus"></i></button> <h4 style="display: inline;">Répartition des JEH</h4></td>
+        </tr>
+        {% for repartitionJEH in mission.repartitionsJEH %}
+        <tr class="repartitions">
+            <td>{{ form_label(repartitionJEH.nbrJEH) }}</td>
+            <td>{{ form_widget(repartitionJEH.nbrJEH) }}</td>
+            <td>{{ form_label(repartitionJEH.prixJEH) }}</td>
+            <td>{{ form_widget(repartitionJEH.prixJEH) }}</td>
+        </tr>
+        {% endfor %}
+        
+        </table>
+                        
                 <h4 class="titreMission"></h4>{{ form_widget(mission) }}
             </li><br />
         {% endfor %}
     </u1>
     <br />
     {{ form_rest(form) }}
-
-
-
-<p><br /><input type="submit" value="Ajouter une mission" name="add"/> - <input type="submit" value="Enregistrer les missions" /></p>
 
 </form>
 
@@ -39,6 +51,95 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
+
+ <script type="text/javascript">
+        var isDirty = false;
+
+        jQuery(document).ready(function() {
+        
+            //Verification avant de quitter
+            $(':input').change(function(){
+                if(!isDirty){
+                   isDirty = true;
+                }
+            });
+            $(window).bind('beforeunload', function(){
+                if(isDirty)
+                    return "Voulez-vous quitter sans enregistrer ?";
+            });
+            $('form').submit(function() {
+                isDirty = false;
+                return true;
+            });
+        
+            //Rajout des boutons (X, up, down) pour les phases
+            $('.repartitions').each(function() {
+                addPhaseBouton($(this));
+            });
+        
+        });
+    
+        function addPhaseBouton($tagFormLi) {
+            var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+            $tagFormLi.children().first().append($delete);
+        
+            $delete.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+            
+                //CONFIRM confirmation suppression
+                var message = "Êtes vous sûr de vouloir supprimer ces JEH ?";
+                bootbox.confirm(message, function(result) {
+                    if (result) {
+                        $tagFormLi.remove();
+                    }
+                });
+               });
+        }
+        
+        </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script type="text/javascript">
     

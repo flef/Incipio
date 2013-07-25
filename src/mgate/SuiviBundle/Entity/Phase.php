@@ -39,11 +39,6 @@ class Phase
     protected $etude;
     
     /**
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="phase", cascade={"persist"})
-     */
-    private $phaseMission;
-
-    /**
      * @var integer $nbrJEH
      *
      * @ORM\Column(name="nbrJEH", type="integer", nullable=true)
@@ -101,15 +96,28 @@ class Phase
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
+    
+    /**
+     * @var interger $avenant
+     * @abstract statu de la phase en cas d'avenant : 0 : Phase original | 1 : Phase ajoutée | -1 : Phase supprimée
+     * @ORM\Column(name="avanantStatut", type="integer", options={"default"=0})
+     */
+    private $avenantStatut;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Phase")
+     */
+    private $avenantModification;
         
     
     public function __construct()
     {
         $this->voteCount = 0;
         $this->createdAt = new \DateTime('now');
-        $this->isEnabled = false;
+        //$this->isEnabled = false;
         $this->prixJEH = 300;
         $this->validation = 1;
+        $this->avenantStatut = 0;
     }
 
     /**
@@ -370,35 +378,48 @@ class Phase
     }
     
     /**
-     * Add phaseMission
+     * Set avenantStatut
      *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
+     * @param integer $avenantStatut
      * @return Phase
      */
-    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
+    public function setAvenantStatut($avenantStatut)
     {
-        $this->phaseMission[] = $phaseMission;
+        $this->avenantStatut = $avenantStatut;
     
         return $this;
     }
 
     /**
-     * Remove phaseMission
+     * Get avenantStatut
      *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
+     * @return integer 
      */
-    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
+    public function getAvenantStatut()
     {
-        $this->phaseMission->removeElement($phaseMission);
+        return $this->avenantStatut;
     }
 
     /**
-     * Get phaseMission
+     * Set avenantModification
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @param \mgate\SuiviBundle\Entity\Phase $avenantModification
+     * @return Phase
      */
-    public function getPhaseMission()
+    public function setAvenantModification(\mgate\SuiviBundle\Entity\Phase $avenantModification = null)
     {
-        return $this->phaseMission;
+        $this->avenantModification = $avenantModification;
+    
+        return $this;
+    }
+
+    /**
+     * Get avenantModification
+     *
+     * @return \mgate\SuiviBundle\Entity\Phase 
+     */
+    public function getAvenantModification()
+    {
+        return $this->avenantModification;
     }
 }
