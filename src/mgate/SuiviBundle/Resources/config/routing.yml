@@ -1,3 +1,7 @@
+mgateMajBDD:
+    pattern:  /majBDD/repartitionJEH
+    defaults: {_controller: mgateSuiviBundle:Missions:majBDD }
+
 mgateSuivi_vu_ca:
     pattern:  /ca/{id}
     defaults: {_controller: mgateSuiviBundle:Etude:vuCA }
@@ -121,11 +125,11 @@ mgateSuivi_state:
 #    requirements:
 #        id: \d+
        
-mgateSuivi_missions_repartition:
-    pattern: /missions/repartition/{id}
-    defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
-    requirements:
-        id: \d+        
+#mgateSuivi_missions_repartition:
+#    pattern: /missions/repartition/{id}
+#    defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
+#    requirements:
+#        id: \d+        
         
 
 mgateSuivi_clientcontact_ajouter:

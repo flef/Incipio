@@ -70,14 +70,13 @@
         </tr>
     </table>
 </div>
-
 <div class="navbar">
     <div class="navbar-inner" >
         <span class="brand titre"  data-toggle="collapse" data-target="#rm">Récapitulatif de Mission</span>
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><i class="icon-pencil"></i>  Intervenants</a></li>
         {% if etude.missions | length %}
-            <li><a href="{{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Répartition JEH</a></li>
+            <!--li><a href="{#{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }#}"><i class="icon-tasks"></i>  Répartition JEH</a></li-->
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les RM</a></li>
             <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM'}) }}"><i class="icon-circle-arrow-down"></i> Generer les DM</a></li>
         {% endif %}
@@ -105,6 +104,15 @@
                         Du : {{ mission.debutOm ? mission.debutOm | date("d/m/Y") : "??" }}<br />
                         Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "??" }}
                     </td>
+                </tr>
+                {% set remuneration = mission.remuneration %}
+                <tr>
+                    <th>Nbre JEH</th>
+                    <td>{{ remuneration.jehRemuneration }} JEH</td>
+                </tr>
+                <tr>
+                    <th>Montant Brut</th>
+                    <td>{{ remuneration.montantRemuneration }} €</td>
                 </tr>
                 <tr>
                     <th>Date de signature</th>
@@ -260,8 +268,7 @@
 </div>
 
 
-
-
+{#
 <div class="navbar">
     <div class="navbar-inner">
         <span class="brand titre" data-toggle="collapse" data-target="#avs">Avenants</span>
@@ -283,7 +290,7 @@
 </div>
 
     
-                           
+                #}           
 
     
 

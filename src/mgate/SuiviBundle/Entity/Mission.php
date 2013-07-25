@@ -3,7 +3,7 @@
 namespace mgate\SuiviBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use mgate\SuiviBundle\Entity\RepartitionJEHRepository as RepartitionJEHRepository;
 use mgate\PersonneBundle\Entity\Personne;
 
 /**
@@ -12,8 +12,8 @@ use mgate\PersonneBundle\Entity\Personne;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\MissionRepository")
  */
-class Mission extends DocType
-{
+class Mission extends DocType {
+
     /**
      * @var integer $id
      *
@@ -22,27 +22,22 @@ class Mission extends DocType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="missions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
-    
+
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist", "merge", "remove"})
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $referentTechnique;
+
     
     /**
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\PhaseMission", mappedBy="mission", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
-     */
-    private $phaseMission;
-
-    /** , inversedBy="missions", cascade={"persist"}
-     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre")
      * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
@@ -60,13 +55,19 @@ class Mission extends DocType
      * @ORM\Column(name="finOm", type="datetime", nullable=true)
      */
     private $finOm;
-    
+
     /**
      * @var integer $pourcentageJunior
      *
      * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
      */
     private $pourcentageJunior;
+
+    /**
+     * @var RepartitionJEH $repartitionsJEH
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="mission", cascade={"persist", "remove"})
+     */
+    private $repartitionsJEH;
 
     /**
      * @var integer $avancement
@@ -95,27 +96,49 @@ class Mission extends DocType
      * @ORM\Column(name="remunere", type="boolean", nullable=true)
      */
     private $remunere;
+
+//Ajout fonction rapide
     
-    
+    /**
+     * 
+     * @return array('jehRemuneration','montantRemuneration');
+     */
+    public function getRemuneration() {
+        $nbrJEHRemuneration = (int) 0;
+        $prixRemuneration = (float) 0;
+        foreach ($this->getRepartitionsJEH() as $repartitionJEH){
+            $nbrJEHRemuneration += $repartitionJEH->getNbrJEH();
+            $prixRemuneration += $repartitionJEH->getNbrJEH() * $repartitionJEH->getPrixJEH();
+        }
+        $prixRemuneration *= 1 - $this->getPourcentageJunior() / 100;            
+            
+        return array('jehRemuneration' => $nbrJEHRemuneration, 'montantRemuneration' => $prixRemuneration);
+    }
+
 //Block astuce pour ajout direct d'intervenant dans formulaire
     public function getMission() {
         return $this;
     }
+
     private $knownIntervenant = false;
     private $newIntervenant;
-    
+
     public function isKnownIntervenant() {
         return $this->knownIntervenant;
     }
+
     public function setKnownIntervenant($boolean) {
         $this->knownIntervenant = $boolean;
     }
+
     public function getNewIntervenant() {
         return $this->newIntervenant;
     }
+
     public function setNewIntervenant($var) {
         $this->newIntervenant = $var;
     }
+
 // Fin du block 
 
     /**
@@ -123,8 +146,7 @@ class Mission extends DocType
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -134,10 +156,9 @@ class Mission extends DocType
      * @param mgate\PersonneBundle\Entity\Membre $intervenant
      * @return Mission
      */
-    public function setIntervenant(\mgate\PersonneBundle\Entity\Membre $intervenant)
-    {
+    public function setIntervenant(\mgate\PersonneBundle\Entity\Membre $intervenant) {
         $this->intervenant = $intervenant;
-    
+
         return $this;
     }
 
@@ -146,8 +167,7 @@ class Mission extends DocType
      *
      * @return mgate\PersonneBundle\Entity\Membre
      */
-    public function getIntervenant()
-    {
+    public function getIntervenant() {
         return $this->intervenant;
     }
 
@@ -157,10 +177,9 @@ class Mission extends DocType
      * @param \DateTime $debutOm
      * @return Mission
      */
-    public function setDebutOm($debutOm)
-    {
+    public function setDebutOm($debutOm) {
         $this->debutOm = $debutOm;
-    
+
         return $this;
     }
 
@@ -169,8 +188,7 @@ class Mission extends DocType
      *
      * @return \DateTime 
      */
-    public function getDebutOm()
-    {
+    public function getDebutOm() {
         return $this->debutOm;
     }
 
@@ -180,10 +198,9 @@ class Mission extends DocType
      * @param \DateTime $finOm
      * @return Mission
      */
-    public function setFinOm($finOm)
-    {
+    public function setFinOm($finOm) {
         $this->finOm = $finOm;
-    
+
         return $this;
     }
 
@@ -192,8 +209,7 @@ class Mission extends DocType
      *
      * @return \DateTime 
      */
-    public function getFinOm()
-    {
+    public function getFinOm() {
         return $this->finOm;
     }
 
@@ -203,10 +219,9 @@ class Mission extends DocType
      * @param integer $avancement
      * @return Mission
      */
-    public function setAvancement($avancement)
-    {
+    public function setAvancement($avancement) {
         $this->avancement = $avancement;
-    
+
         return $this;
     }
 
@@ -215,8 +230,7 @@ class Mission extends DocType
      *
      * @return integer 
      */
-    public function getAvancement()
-    {
+    public function getAvancement() {
         return $this->avancement;
     }
 
@@ -226,10 +240,9 @@ class Mission extends DocType
      * @param boolean $rapportDemande
      * @return Mission
      */
-    public function setRapportDemande($rapportDemande)
-    {
+    public function setRapportDemande($rapportDemande) {
         $this->rapportDemande = $rapportDemande;
-    
+
         return $this;
     }
 
@@ -238,8 +251,7 @@ class Mission extends DocType
      *
      * @return boolean 
      */
-    public function getRapportDemande()
-    {
+    public function getRapportDemande() {
         return $this->rapportDemande;
     }
 
@@ -249,10 +261,9 @@ class Mission extends DocType
      * @param boolean $rapportRelu
      * @return Mission
      */
-    public function setRapportRelu($rapportRelu)
-    {
+    public function setRapportRelu($rapportRelu) {
         $this->rapportRelu = $rapportRelu;
-    
+
         return $this;
     }
 
@@ -261,8 +272,7 @@ class Mission extends DocType
      *
      * @return boolean 
      */
-    public function getRapportRelu()
-    {
+    public function getRapportRelu() {
         return $this->rapportRelu;
     }
 
@@ -272,10 +282,9 @@ class Mission extends DocType
      * @param boolean $remunere
      * @return Mission
      */
-    public function setRemunere($remunere)
-    {
+    public function setRemunere($remunere) {
         $this->remunere = $remunere;
-    
+
         return $this;
     }
 
@@ -284,8 +293,7 @@ class Mission extends DocType
      *
      * @return boolean 
      */
-    public function getRemunere()
-    {
+    public function getRemunere() {
         return $this->remunere;
     }
 
@@ -295,10 +303,9 @@ class Mission extends DocType
      * @param mgate\SuiviBundle\Entity\Etude $etude
      * @return Mission
      */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
-    {
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude) {
         $this->etude = $etude;
-    
+
         return $this;
     }
 
@@ -307,51 +314,10 @@ class Mission extends DocType
      *
      * @return mgate\SuiviBundle\Entity\Etude 
      */
-    public function getEtude()
-    {
+    public function getEtude() {
         return $this->etude;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->phaseMission = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pourcentageJunior = 40;
-    }
-    
-    /**
-     * Add phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     * @return Mission
-     */
-    public function addPhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
-    {
-        $this->phaseMission[] = $phaseMission;
-    
-        return $this;
-    }
 
-    /**
-     * Remove phaseMission
-     *
-     * @param \mgate\SuiviBundle\Entity\PhaseMission $phaseMission
-     */
-    public function removePhaseMission(\mgate\SuiviBundle\Entity\PhaseMission $phaseMission)
-    {
-        $this->phaseMission->removeElement($phaseMission);
-    }
-
-    /**
-     * Get phaseMission
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPhaseMission()
-    {
-        return $this->phaseMission;
-    }
     
     /**
      * Set pourcentageJunior
@@ -373,9 +339,6 @@ class Mission extends DocType
     public function getPourcentageJunior() {
         return $this->pourcentageJunior;
     }
-    
-
-   
 
     /**
      * Set referentTechnique
@@ -383,10 +346,9 @@ class Mission extends DocType
      * @param \mgate\PersonneBundle\Entity\Membre $referentTechnique
      * @return Mission
      */
-    public function setReferentTechnique(\mgate\PersonneBundle\Entity\Membre $referentTechnique = null)
-    {
+    public function setReferentTechnique(\mgate\PersonneBundle\Entity\Membre $referentTechnique = null) {
         $this->referentTechnique = $referentTechnique;
-    
+
         return $this;
     }
 
@@ -395,8 +357,47 @@ class Mission extends DocType
      *
      * @return \mgate\PersonneBundle\Entity\Membre 
      */
-    public function getReferentTechnique()
-    {
+    public function getReferentTechnique() {
         return $this->referentTechnique;
     }
+
+    /**
+     * Add repartitionsJEH
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH
+     * @return Mission
+     */
+    public function addRepartitionsJEH(\mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH) {
+        $this->repartitionsJEH[] = $repartitionsJEH;
+
+        return $this;
+    }
+
+    /**
+     * Remove repartitionsJEH
+     *
+     * @param \mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH
+     */
+    public function removeRepartitionsJEH(\mgate\SuiviBundle\Entity\RepartitionJEH $repartitionsJEH) {
+        $this->repartitionsJEH->removeElement($repartitionsJEH);
+    }
+
+    /**
+     * Get repartitionsJEH
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRepartitionsJEH() {
+        return $this->repartitionsJEH;
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->repartitionsJEH = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pourcentageJunior = 40;
+    }
+    
 }
