@@ -230,6 +230,7 @@ class TraitementController extends Controller {
         return $mois;
     }
 
+   
     private function getAllChamp($etude, $doc, $key = 0) {
         //External
         $etudeManager = $this->get('mgate.etude_manager');
@@ -705,8 +706,10 @@ class TraitementController extends Controller {
         }
         return $allmatches;
     }
+    
+    
 
-    private function publipostage($id_etude, $doc, $key) {
+    private function publipostageEtude($id_etude, $doc, $key) {
         $key = intval($key);
 
         $etude = $this->getEtudeFromID($id_etude);
@@ -788,14 +791,14 @@ class TraitementController extends Controller {
         return $champsBrut;
     }
 
-    public function publiposterMultiple($id_etude, $doc) {
+    public function publiposterMultipleEtude($id_etude, $doc) {
         $etude = $this->getEtudeFromID($id_etude);
         $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc);
         $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
         $_SESSION['idZip'] = $idZip;
 
         foreach ($etude->getMissions() as $key => $mission) {
-            $this->publipostage($id_etude, $doc, $key);
+            $this->publipostageEtude($id_etude, $doc, $key);
             $this->telechargerAction('', true);
         }
 
@@ -804,14 +807,15 @@ class TraitementController extends Controller {
         $this->telechargerAction('', false, true);
     }
 
+
     /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function publiposterAction($id_etude, $doc, $key) {
+    public function publiposterEtudeAction($id_etude, $doc, $key) {
         if (($doc == 'RM' || $doc == 'DM') && $key == -1)
-            $champsBrut = $this->publiposterMultiple($id_etude, $doc);
+            $champsBrut = $this->publiposterMultipleEtude($id_etude, $doc);
         else
-            $champsBrut = $this->publipostage($id_etude, $doc, $key);
+            $champsBrut = $this->publipostageEtude($id_etude, $doc, $key);
 
         if (count($champsBrut)) {
             return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
@@ -907,5 +911,126 @@ class TraitementController extends Controller {
             $jourVersSemaine .= ($semaine > 0 ? " et " : "" ) . $jour_str . " jour" . ($jour > 1 ? "s" : "");
         return $jourVersSemaine;
     }
+    
+    
+/*Publipostage documents élèves
+ *  
+ */
+    
+    
+        /** publication du doc
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function publiposterEleveAction($id_eleve, $doc, $key) {
+        $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
+        
+        if (count($champsBrut)) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+        } else {
+
+            return $this->telechargerAction($doc);
+        }
+    }
+    
+    private function publipostageEleve($id, $doc, $key) {
+        $key = intval($key);
+
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        if (!$personne = $em->getRepository('mgatePersonneBundle:Personne')->find($id))
+            throw $this->createNotFoundException('mgatePersonneBundle:Personne'.'[id=' . $id . '] inexistant');
+        
+        $chemin = $this->getDoctypeAbsolutePathFromName($doc);
+        $champs = $this->getAllChampEleve($personne, $doc, $key);
+        
+
+        if ($this->container->getParameter('debugEnable')) {
+            $path = $this->container->getParameter('pathToDoctype');
+            $chemin = $path . $doc . '.docx';
+        }
+
+        $templatesXMLtraite = $this->traiterTemplates($chemin, 0, $champs);
+        $champsBrut = $this->verifierTemplates($templatesXMLtraite);
+
+
+        $repertoire = 'tmp';
+
+        //A changer
+        $mandat = new \DateTime("now");
+        $dateAn = $mandat->format("y");
+        $mandat = $mandat->format("m") < 4 ? $dateAn - 8 : $dateAn - 7;
+        if($personne->getMembre())
+            $refDocx = '[M-GaTE]'.$mandat.'-'.$doc.'-'.$personne->getMembre()->getIdentifiant();
+        //Fin a changer
+        
+        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+        copy($chemin, $repertoire . '/' . $idDocx);
+        $zip = new \ZipArchive();
+        $zip->open($repertoire . '/' . $idDocx);
+
+        foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
+            $zip->deleteName('word/' . $templateXMLName);
+            $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+        }
+        $zip->close();
+
+        $_SESSION['idDocx'] = $idDocx;
+        $_SESSION['refDocx'] = $refDocx;
+
+        return $champsBrut;
+    }
+
+    private function getAllChampEleve($personne, $doc, $key){
+        $champs = array();
+     
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        // Signataire M-GaTE
+        $signataire = $em->getRepository('mgatePersonneBundle:Personne')->getLastMembresByPoste('president')->getQuery()->execute();
+        if ($signataire){
+            $signataire = $signataire[0];
+            $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', 'président');
+            $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire->getPrenomNom());
+        }
+        
+        // Info Personne
+        $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $personne->getNomFormel());
+        $this->array_push_assoc($champs, 'Nom_Etudiant', $personne->getNom());
+        $this->array_push_assoc($champs, 'Prenom_Etudiant', $personne->getPrenom());
+        $this->array_push_assoc($champs, 'Adresse_Fiscale_Etudiant', $personne->getAdresse());
+        $this->array_push_assoc($champs, 'Telephone_Etudiant', $personne->getMobile());
+        
+        // Info Membre
+        $membre = $personne->getMembre();
+        
+        if($membre){
+            $this->array_push_assoc($champs, 'Lieu_Naissance_Etudiant', $membre->getLieuDeNaissance());
+            $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
+            $this->array_push_assoc($champs, 'Promotion_Etudiant', $membre->getPromotion());
+            
+            // Info Référence
+            //A changer
+            $mandat = new \DateTime("now");
+            $dateAn = $mandat->format("y");
+            $mandat = $mandat->format("m") < 4 ? $dateAn - 8 : $dateAn - 7;
+
+            foreach (array('CE','AC') as $doctype)
+                $this->array_push_assoc($champs, 'Reference_'.$doctype, '[M-GaTE]'.$mandat.'-'.$doctype.'-'.$membre->getIdentifiant());
+            
+            /**
+             * @todo
+             */
+            $date = new \DateTime("now");
+            $this->array_push_assoc($champs, 'Date_Signature', $date->format("d/m/Y"));
+            $this->array_push_assoc($champs, 'Date_Cheque', $date->format("d/m/Y"));
+            
+        }
+        return $champs;
+    }
+    
+    
+    
+    
+    
 
 }

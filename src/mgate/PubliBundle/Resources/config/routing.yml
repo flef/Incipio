@@ -5,7 +5,7 @@ mgate_publi_homepage:
  
 mgate_publi_publiposter:
     pattern: /publi/publiposter/{id_etude}/{doc}/{key}
-    defaults: {_controller: mgatePubliBundle:Traitement:publiposter, key : -1}
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposterEtude, key : -1}
     requirements:
         id_etude:  \d+
         key: \d+
@@ -23,3 +23,12 @@ mgate_publi_documenttype_index:
 mgate_publi_documenttype_upload:
     pattern: /publi/documenttype/upload
     defaults: {_controller: mgatePubliBundle:DocumentType:upload}
+
+
+mgate_publi_publiposter_eleve:
+    pattern: /documents/telecharger/eleve/{id_eleve}/{doc}/{key}
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposterEleve, key : -1}
+    requirements:
+        id_eleve:  \d+
+        key: \d+
+        doc: AC|AA|CE
