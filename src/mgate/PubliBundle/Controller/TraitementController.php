@@ -918,7 +918,7 @@ class TraitementController extends Controller {
  */
     
     
-        /** publication du doc
+    /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function publiposterEleveAction($id_eleve, $doc, $key) {
