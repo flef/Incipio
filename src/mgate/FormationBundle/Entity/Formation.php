@@ -19,7 +19,7 @@ class Formation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    private $id; 
 
     /**
      * @var integer
@@ -44,21 +44,45 @@ class Formation
 
     
     /**
-     * @var mgate\PersonneBundle\Entity\Membre
+     * @var mgate\PersonneBundle\Entity\Personne
      *
-     * @ORM\ManyToMany(targetEntity="mgate\PersonneBundle\Entity\Membre")
+     * @ORM\ManyToMany(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinTable(name="formation_formateurs")
      */
     private $formateurs;
 
     /**
-     * @var mgate\PersonneBundle\Entity\Membre
+     * @var mgate\PersonneBundle\Entity\Personne
      *
-     * @ORM\ManyToMany(targetEntity="mgate\PersonneBundle\Entity\Membre")
+     * @ORM\ManyToMany(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinTable(name="formation_membresPresents")
      */
     private $membresPresents;
 
+    /**
+     * @var DateTime
+     * @ORM\Column(name="dateDebut", type="datetime")
+     */
+    private $dateDebut;
+    
+    /**
+     * @var DateTime
+     * @ORM\Column(name="dateFin", type="datetime")
+     */
+    private $dateFin;
+    
+    /**
+     * @var string
+     * @ORM\Column(name="doc", type="string", length=255, nullable=true)
+     */
+    private $docPath;
+    
+    
+    
+    public static function getCategoriesChoice() {
+        return array('1' => 'Déontologique',
+            '2' => 'Exhaustif');
+    }
 
     /**
      * Get id
@@ -183,5 +207,128 @@ class Formation
     public function getMembresPresents()
     {
         return $this->membresPresents;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->formateurs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->membresPresents = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set dateDebut
+     *
+     * @param \DateTime $dateDebut
+     * @return Formation
+     */
+    public function setDateDebut($dateDebut)
+    {
+        $this->dateDebut = $dateDebut;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateDebut
+     *
+     * @return \DateTime 
+     */
+    public function getDateDebut()
+    {
+        return $this->dateDebut;
+    }
+
+    /**
+     * Set dateFin
+     *
+     * @param \DateTime $dateFin
+     * @return Formation
+     */
+    public function setDateFin($dateFin)
+    {
+        $this->dateFin = $dateFin;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateFin
+     *
+     * @return \DateTime 
+     */
+    public function getDateFin()
+    {
+        return $this->dateFin;
+    }
+
+    /**
+     * Set docPath
+     *
+     * @param string $docPath
+     * @return Formation
+     */
+    public function setDocPath($docPath)
+    {
+        $this->docPath = $docPath;
+    
+        return $this;
+    }
+
+    /**
+     * Get docPath
+     *
+     * @return string 
+     */
+    public function getDocPath()
+    {
+        return $this->docPath;
+    }
+
+    /**
+     * Add formateurs
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $formateurs
+     * @return Formation
+     */
+    public function addFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs)
+    {
+        $this->formateurs[] = $formateurs;
+    
+        return $this;
+    }
+
+    /**
+     * Remove formateurs
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $formateurs
+     */
+    public function removeFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs)
+    {
+        $this->formateurs->removeElement($formateurs);
+    }
+
+    /**
+     * Add membresPresents
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $membresPresents
+     * @return Formation
+     */
+    public function addMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents)
+    {
+        $this->membresPresents[] = $membresPresents;
+    
+        return $this;
+    }
+
+    /**
+     * Remove membresPresents
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $membresPresents
+     */
+    public function removeMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents)
+    {
+        $this->membresPresents->removeElement($membresPresents);
     }
 }
