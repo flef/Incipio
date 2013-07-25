@@ -43,6 +43,11 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
+    public function getLastMembresByPoste($poste)
+    {
+        return $this->getMembresByPoste($poste)->setMaxResults(1);
+    }
+    
     
     public function getEmployeOnly($prospect = null)
     {
