@@ -1,0 +1,3 @@
+mgate_formation_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: mgateFormationBundle:Default:index }
