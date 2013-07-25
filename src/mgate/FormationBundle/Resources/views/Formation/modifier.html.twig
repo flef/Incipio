@@ -1,0 +1,15 @@
+{% extends "mgateFormationBundle::layout.html.twig" %}
+{% block content_bundle %}
+<h2>Formulaires</h2>
+<form method="post" {{ form_enctype(form) }}>
+	
+	{{ form_widget(form) }}
+	
+	<input type="submit" value="Enregistrer les Formations"/>      
+</form>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
