@@ -2,6 +2,17 @@
 {% block content_bundle %}
 <h2>Formulaires</h2>
 <form method="post" {{ form_enctype(form) }}>
+    <table class="table table-bordered table-striped" id="formateurs" data-prototype="{{ form_widget(form.formateurs.vars.prototype) | e }}">
+        <tr>
+            <th colspan="2"><a href="#" id="addFormateur">+</a> Formateurs</th>
+        </tr>
+        {% for formateur in form.formateurs %}
+        <tr>
+            <td>X</td>
+            <td>{{ form_widget(formateur) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 	
 	{{ form_widget(form) }}
 	
@@ -12,4 +23,59 @@
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
+<script type="text/javascript">
+// Récupère le div qui contient la collection de tags
+var collectionHolder = $('#formateurs');
+var $addFormateurButton = $("#addFormateur");
+var deleteFormateurButton = $('<a href="#">-</a>');
+
+jQuery(document).ready(function() {
+    var i = 0;
+    $addFormateurButton.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+
+        // ajoute un nouveau formulaire formateur (voir le prochain bloc de code)
+        addTagForm(collectionHolder, i);
+        i++;
+    });
+});
+
+
+function addTagForm(collectionHolder, i) {
+    // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+    var prototype = collectionHolder.attr('data-prototype');
+
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+    newForm = '<tr id="formateur'+i+'"><td id="removePlace"></td><td>'+newForm+'</td></tr>';
+    
+    
+    // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+    var $newForm = collectionHolder.append(newForm); 
+    addDeleteButton('tr#formateur'+i);
+    
+}   
+
+      
+function addDeleteButton($tag) {
+    var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+    $($tag).children().first().append($delete);
+      
+    $delete.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        //CONFIRM confirmation suppression
+        var message = "Êtes vous sûr de vouloir supprimer ce formateur ?";
+        bootbox.confirm(message, function(result) {
+            if (result) {
+                $tag.remove();
+            }
+        });
+   });
+    
+}  
+        </script>
 {% endblock %}
