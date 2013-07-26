@@ -2,11 +2,11 @@ mgate_formation_modifier:
     pattern:  /admin/formations/modifier/{id}
     defaults: { _controller: mgateFormationBundle:Formation:modifier }
     requirements:
-        key: \d+
+        id: \d+
     
 mgate_formation_ajouter:
     pattern:  /admin/formations/ajouter
-    defaults: { _controller: mgateFormationBundle:Formation:modifier, key : -1}
+    defaults: { _controller: mgateFormationBundle:Formation:modifier, id : -1}
     
 mgate_formations_index_admin:
     pattern:  /admin/formations/
