@@ -38,6 +38,7 @@ class AppKernel extends Kernel
             new mgate\StatBundle\mgateStatBundle(),
             new mgate\NavbarBundle\NavbarBundle(),
             new mgate\TresoBundle\mgateTresoBundle(),
+            new mgate\FormationBundle\mgateFormationBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

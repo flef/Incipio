@@ -1,0 +1,31 @@
+{% extends "mgateFormationBundle::layout.html.twig" %}
+{% block content_bundle %}
+<h2>Formations - Espace Admin</h2>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Documents</th>
+        <th>Date</th>
+        <th>Titre</th>
+        <th>Desription</th>
+        <th>Formateurs</th>
+        <th>Durée</th>
+        <th>Personnes présentes</th>        
+    </tr>
+    {% for formation in formations %}
+    <tr>
+        <td><i class="icon-circle-arrow-down"></i></td>
+        <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
+        <td>{{ formation.titre | title }}</td>
+        <td>{{ formation.description }}</td>
+        <td>{%for membre in formation.formateurs %} {{membre.prenomNom}};{%endfor%}</td>
+        <td>{{ (formation.dateFin | date("u") - formation.dateDebut | date("u")) / 3600}} minutes</td>
+        <td>
+            <span title="{%for membre in formation.membresPresents %} {{membre.prenomNom}} -{%endfor%}">
+            {{ formation.membresPresents |length }} membres</span>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
