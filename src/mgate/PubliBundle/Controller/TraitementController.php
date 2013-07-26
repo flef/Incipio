@@ -924,8 +924,8 @@ class TraitementController extends Controller {
     public function publiposterEleveAction($id_eleve, $doc, $key) {
         $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
         
-        if (count($champsBrut)) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+        if (count($champsBrut[0])) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0],SORT_STRING), 'aides' => $champsBrut[1]));
         } else {
 
             return $this->telechargerAction($doc);
@@ -942,7 +942,7 @@ class TraitementController extends Controller {
         
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $champs = $this->getAllChampEleve($personne, $doc, $key);
-        
+        $aides = $this->getAidesEleve($id, $personne->getMembre()->getId() ? $personne->getMembre()->getId() : null,  $doc, $key);
 
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
@@ -977,7 +977,7 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
 
-        return $champsBrut;
+        return array($champsBrut, $aides);
     }
 
     private function getAllChampEleve($personne, $doc, $key){
@@ -1005,7 +1005,8 @@ class TraitementController extends Controller {
         
         if($membre){
             $this->array_push_assoc($champs, 'Lieu_Naissance_Etudiant', $membre->getLieuDeNaissance());
-            $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
+            if($membre->getDateDeNaissance())
+                $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
             $this->array_push_assoc($champs, 'Promotion_Etudiant', $membre->getPromotion());
             
             // Info Référence
@@ -1026,6 +1027,40 @@ class TraitementController extends Controller {
             
         }
         return $champs;
+    }
+    
+    private function getAidesEleve($personne_id,$membre_id, $doc, $key){
+        $aides = array();
+        $router = $this->get('router');        
+        
+        $this->array_push_assoc($aides, 'Fonction_Signataire_Mgate', $router->generate('mgatePersonne_membre_homepage', array(), true));
+        $this->array_push_assoc($aides, 'Nom_Signataire_Mgate', $router->generate('mgatePersonne_membre_homepage', array(), true));
+        
+        // Info Personne
+        $this->array_push_assoc($aides, 'Nom_Formel_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Nom_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Prenom_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Adresse_Fiscale_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Telephone_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        
+        // Info Membre
+        $this->array_push_assoc($aides, 'Lieu_Naissance_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Date_Naissance_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Promotion_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+         
+/*        // Info Référence
+        //A changer
+        foreach (array('CE','AC') as $doctype)
+            $this->array_push_assoc($aides, 'Reference_'.$doctype, '[M-GaTE]'.$mandat.'-'.$doctype.'-'.$membre->getIdentifiant());
+         
+            /**
+             * @todo
+             *
+            $date = new \DateTime("now");
+            $this->array_push_assoc($aides, 'Date_Signature', $date->format("d/m/Y"));
+            $this->array_push_assoc($aides, 'Date_Cheque', $date->format("d/m/Y"));
+        */
+        return $aides;
     }
     
     
