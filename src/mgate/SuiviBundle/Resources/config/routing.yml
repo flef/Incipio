@@ -1,12 +1,6 @@
-mgateMajBDD:
-    pattern:  /majBDD/repartitionJEH
-    defaults: {_controller: mgateSuiviBundle:Missions:majBDD }
-
 mgateSuivi_vu_ca:
     pattern:  /ca/{id}
-    defaults: {_controller: mgateSuiviBundle:Etude:vuCA }
-    requirements:
-      id: \d+
+    defaults: {_controller: mgateSuiviBundle:Etude:vuCA, id:-1 }
 
 mgateSuivi_etude_homepage:
     pattern:  /{page}
