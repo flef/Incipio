@@ -396,7 +396,10 @@ class EtudeController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);
+        if($id>0)
+            $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);
+        else
+            $etude = $em->getRepository('mgateSuiviBundle:Etude')->findOneBy (array('stateID'=> STATE_ID_EN_COURS));
         
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');

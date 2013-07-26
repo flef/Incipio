@@ -1,53 +1,100 @@
 <ul class="nav">
+    <!-- GESTION ASSOCIATIVE -->
+    {% if is_granted('ROLE_SUIVEUR') %}
     <li class="dropdown">
-      <a href="{{ path('mgateSuivi_etude_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'Étude<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Ajouter</a></li>
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Gestion Associative <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li class="nav-header">Membres</li>
+            <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter un membre</a></li>
+            <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister les membres</a></li>
+        </ul>
+    </li>
+    {% endif %}
+    
+    <!-- RECRUTEMENT FORMATIONS PASSATION -->
+    <li class="dropdown">
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Formations <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li class="nav-header">Formations</li>
+            <li><a href="{{ path('mgate_formations_lister') }}">Voir les formations</a></li>
+            {% if is_granted('ROLE_CA') %}
+            <li class="nav-header">Administration</li>
+            <li><a href="{{ path('mgate_formation_ajouter') }}">Ajouter une formation</a></li>
+            <li><a href="{{ path('mgate_formations_index_admin') }}">Gérer les formations</a></li>
+            {% endif %}
+        </ul>
+    </li>
+
+    {% if is_granted('ROLE_SUIVEUR') %}
+    <!-- SUIVI D'ETUDES-->
+    <li class="dropdown">
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'Étude <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Voir les études</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Créer une étude</a></li>
         {% if etudesSuiveur | length %}
-        <li class="nav-header">Mes Etudes:</li>
+            <li class="nav-header">Mes Etudes:</li>
             {% for etude in etudesSuiveur %}
-        <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></li>
             {% endfor%}
         {% endif %}
-        <li class="nav-header">Récapitulatif:</li>
-        <li><a href="{{ path('mgateSuivi_etude_suivi') }}">Suivi d'études</a></li>
-      </ul>
+            {% if is_granted('ROLE_CA') %}
+            <li class="nav-header">Administration</li>
+            <li><a href="{{ path('mgateSuivi_vu_ca') }}">Vu CA</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_suivi') }}">Récapitulatif</a></li>
+            {% endif %}
+        </ul>
     </li>
+    {% endif %}
+    
+    <!-- TRESORERIE-->
+    {% if is_granted('ROLE_CA') %}
     <li class="dropdown">
-      <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Gestion des personnes<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li class="nav-header">Prospect/Client:</li>
-        <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Lister</a></li>
-        <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}">Ajouter</a></li>
-        <li class="nav-header">Membre:</li>
-        <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister</a></li>
-        <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter</a></li>
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Trésorerie<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgate_treso_urssaf') }}">URSSAF</a></li>
+        </ul>
+    </li>
+    {% endif %}
+    
+    <!-- DEVELOPPEMENT COMMERCIAL -->
+    <li class="dropdown">
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Développement Commercial<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li class="nav-header">Prospect/Client</li>
+            <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}">Ajouter un prospect</a></li>
+            <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Voir les prospects</a></li>
         {% if is_granted('ROLE_CA') %}
-        <li class="nav-header">Annuaire</li>
-        <li><a href="{{ path('mgatePersonne_annuaire') }}">Annuaire global</a></li>
+            <li class="nav-header">Annuaire</li>
+            <li><a href="{{ path('mgatePersonne_annuaire') }}">Annuaire global</a></li>
+            <li><a href="{{ path('mgatePersonne_listeDiffusion') }}">Liste de diffusion</a></li>
         {% endif %}
-        {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-header">Poste:</li>
-        <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister</a></li>
-        <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter</a></li>
-        <li class="nav-header">Compte d'Utilisateur:</li>
-        <li><a href="{{ path('mgate_user_lister') }}">Lister / Modifier</a></li>
-        {% endif %}        
-      </ul>
+        </ul>
     </li>
+    
+    <!-- PILOTAGE DE LA J.E. -->
+    {% if is_granted('ROLE_CA') %}
     <li class="dropdown">
-      <a href="{{ path('mgatePersonne_homepage') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Indicateurs<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li><a href="{{ path('mgate_stat_ca') }}">CA signé</a></li>
-      </ul>
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Pilotage de la J.E.<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgate_stat_ca') }}">Indicateur</a></li>
+            <li><a>Statistique</a></li>
+        </ul>
     </li>
-    <li class="dropdown">
-      <a href="" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Trésorerie<b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li><a href="{{ path('mgate_treso_urssaf') }}">URSSAF</a></li>
-      </ul>
-    </li>
+    {% endif %}
+    
+    <!-- ADMINISTRATION DU SITE -->
     {% if is_granted('ROLE_ADMIN') %}
-    <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+    <li class="dropdown">
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Administration<b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+            <li class="nav-header">Postes</li>
+            <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister les postes</a></li>
+            <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter un poste</a></li>
+            <li class="nav-header">Compte d'Utilisateur:</li>
+            <li><a href="{{ path('mgate_user_lister') }}">Lister / Modifier</a></li>
+        </ul>
+    </li>
     {% endif %}
 </ul>
