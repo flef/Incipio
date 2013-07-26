@@ -18,8 +18,34 @@ class FormationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('mgateFormationBundle:Formation')->findAll();
       
-        return $this->render('mgateFormationBundle:Formation:index.html.twig', array(
+        return $this->render('mgateFormationBundle:Gestion:index.html.twig', array(
             'formations' => $entities,
+        ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function listerAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('mgateFormationBundle:Formation')->findAll();
+      
+        return $this->render('mgateFormationBundle:Formations:lister.html.twig', array(
+            'formations' => $entities,
+        ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function voirAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('mgateFormationBundle:Formation')->find($id);
+      
+        return $this->render('mgateFormationBundle:Formations:voir.html.twig', array(
+            'formation' => $entities,
         ));
     }
     
@@ -50,7 +76,7 @@ class FormationController extends Controller
             }
         }
         
-        return $this->render('mgateFormationBundle:Formation:modifier.html.twig', array(
+        return $this->render('mgateFormationBundle:Gestion:modifier.html.twig', array(
             'form' => $form->createView(),
             'formation' => $formation,
         ));
