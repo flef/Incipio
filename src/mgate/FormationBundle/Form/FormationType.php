@@ -29,6 +29,20 @@ class FormationType extends AbstractType {
                         'allow_delete' => true,
                         'by_reference' => false,
                     ))
+                            ->add('membresPresents', 'collection', array(
+                        'type' => 'genemu_jqueryselect2_entity', 
+                    'options' => array('label' => 'Suiveur de projet',
+                    'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                    'property' => 'prenomNom',
+                    'property_path' => true,
+                    'query_builder' => function(PersonneRepository $pr) {
+                        return $pr->getMembreOnly();
+                    },
+                    'required' => false),
+                        'allow_add' => true,
+                        'allow_delete' => true,
+                        'by_reference' => false,
+                    ))
                 ;
     }
 
