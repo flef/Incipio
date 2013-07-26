@@ -9,5 +9,16 @@ mgate_formation_ajouter:
     defaults: { _controller: mgateFormationBundle:Formation:modifier, id : -1}
     
 mgate_formations_index_admin:
-    pattern:  /admin/formations/
+    pattern:  /admin/formations
     defaults: { _controller: mgateFormationBundle:Formation:index}
+
+mgate_formations_lister:
+    pattern:  /formations
+    defaults: { _controller: mgateFormationBundle:Formation:lister}
+    
+mgate_formation_voir:
+    pattern:  /formations/{id}
+    defaults: { _controller: mgateFormationBundle:Formation:voir }
+    requirements:
+        id: \d+
+    
