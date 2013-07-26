@@ -2,6 +2,30 @@
 {% block content_bundle %}
 <h2>Formulaires</h2>
 <form method="post" {{ form_enctype(form) }}>
+    <input class="btn" type="submit" value="Enregistrer la Formations"/>
+    <br/><br/>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.titre) }}</th>
+            <td>{{ form_widget(form.titre) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.description) }}</th>
+            <td>{{ form_widget(form.description) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.categorie) }}</th>
+            <td>{{ form_widget(form.categorie) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.dateDebut) }}</th>
+            <td>{{ form_widget(form.dateDebut) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.dateFin) }}</th>
+            <td>{{ form_widget(form.dateFin) }}</td>
+        </tr>
+    </table>
     <table class="table table-bordered table-striped" id="formateurs" data-prototype="{{ form_widget(form.formateurs.vars.prototype) | e }}">
         <tr>
             <th colspan="2"><a href="#" id="addFormateur">+</a> Formateurs</th>
@@ -13,21 +37,25 @@
         </tr>
         {% endfor %}
     </table>
-    <table class="table table-bordered table-striped" id="membres" data-prototype="{{ form_widget(form.membresPresents.vars.prototype) | e }}">
+    <table class="table table-bordered table-striped">
         <tr>
             <th colspan="2"><a href="#" id="addMembres">+</a> Membres Présents</th>
         </tr>
-        {% for membre in form.membresPresents %}
-        <tr id="membre">
-            <td></td>
-            <td>{{ form_widget(membre) }}</td>
-        </tr>
-        {% endfor %}
+        <tr><td colspan="2">
+            <div class="row" id="membres" data-prototype="{{ form_widget(form.membresPresents.vars.prototype) | e }}">
+            {% for membre in form.membresPresents %}
+            <div class="span4" id="membre">
+            <span>{# delete button #}</span>
+            {{ form_widget(membre) }}
+            </div>
+            {% endfor %}
+            </div>
+        </td></tr>
     </table>
 	
 	{{ form_widget(form) }}
 	
-	<input type="submit" value="Enregistrer les Formations"/>      
+	<input class="btn" type="submit" value="Enregistrer les Formations"/>      
 </form>
 {% endblock %}
 
@@ -48,7 +76,7 @@ jQuery(document).ready(function() {
     $("tr#formateur").each(function(){
         addDeleteButton(this);
     });
-    $("tr#membre").each(function(){
+    $("div#membre").each(function(){
         addDeleteButton(this);
     });
     
@@ -80,12 +108,14 @@ function addTagForm(collectionHolder, i, type) {
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
     var newForm = prototype.replace(/__name__/g, collectionHolderFormateurs.children().length);
-    newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
-    
+    if(type == 'formateur')
+        newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
+    else
+        newForm= '<div class="span4" id="'+type+i+'"><span></span> '+newForm+'</div>';
     
     // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
     var $newForm = collectionHolder.append(newForm); 
-    addDeleteButton('tr#'+type+i);
+    addDeleteButton($('#'+type+i));
     
 }   
 
@@ -99,7 +129,7 @@ function addDeleteButton($tag) {
         e.preventDefault();
 
         //CONFIRM confirmation suppression
-        var message = "Êtes vous sûr de vouloir supprimer ce formateur ?";
+        var message = "Êtes vous sûr de vouloir supprimer ce membre ?";
         bootbox.confirm(message, function(result) {
             if (result) {
                 $tag.remove();

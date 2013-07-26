@@ -80,8 +80,13 @@ class Formation
     
     
     public static function getCategoriesChoice() {
-        return array('1' => 'Déontologique',
-            '2' => 'Exhaustif');
+        return array('0' => 'Junior-Entreprise - Généralité',
+            '1' => 'Suivi d\'études',
+            '2' => 'Gestion Associative',
+            '3' => 'Trésorerie',
+            '4' => 'Qualité',
+            '5' => 'RFP',
+            '6' => 'Autre');
     }
 
     /**
