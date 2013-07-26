@@ -34,10 +34,7 @@ class FormationController extends Controller
         {
             $formation = new Formation;
         }
-        
-        
-        $formateursToRemove = $formation->getFormateurs()->toArray();
-        
+      
         $form = $this->createForm(new FormationType, $formation);
         
         if( $this->get('request')->getMethod() == 'POST' )
@@ -46,17 +43,6 @@ class FormationController extends Controller
                
             if( $form->isValid() )
             {
-                // Recherche des formateurs à supprimer
-                foreach ($formation->getFormateurs() as $formateur){
-                    $key = array_search($formateur, $formateursToRemove);
-                    if($key !== FALSE)
-                        unset($formateursToRemove[$key]);
-                }
-                    //Supression de la BDD
-                foreach ($formateursToRemove as $formateur){
-                    $em->remove($formateur);
-                }
-                                
                 $em->persist($formation);
                 $em->flush();
                 

@@ -7,9 +7,20 @@
             <th colspan="2"><a href="#" id="addFormateur">+</a> Formateurs</th>
         </tr>
         {% for formateur in form.formateurs %}
-        <tr>
-            <td>X</td>
+        <tr id="formateur">
+            <td></td>
             <td>{{ form_widget(formateur) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <table class="table table-bordered table-striped" id="membres" data-prototype="{{ form_widget(form.membresPresents.vars.prototype) | e }}">
+        <tr>
+            <th colspan="2"><a href="#" id="addMembres">+</a> Membres Présents</th>
+        </tr>
+        {% for membre in form.membresPresents %}
+        <tr id="membre">
+            <td></td>
+            <td>{{ form_widget(membre) }}</td>
         </tr>
         {% endfor %}
     </table>
@@ -25,36 +36,56 @@
     {{ form_javascript(form) }}
 <script type="text/javascript">
 // Récupère le div qui contient la collection de tags
-var collectionHolder = $('#formateurs');
+var collectionHolderFormateurs = $('#formateurs');
 var $addFormateurButton = $("#addFormateur");
-var deleteFormateurButton = $('<a href="#">-</a>');
+
+var collectionHolderMembres = $('#membres');
+var $addMembreButton = $("#addMembres");
 
 jQuery(document).ready(function() {
     var i = 0;
+    var j = 0;
+    $("tr#formateur").each(function(){
+        addDeleteButton(this);
+    });
+    $("tr#membre").each(function(){
+        addDeleteButton(this);
+    });
+    
+    
     $addFormateurButton.on('click', function(e) {
         // empêche le lien de créer un « # » dans l'URL
         e.preventDefault();
 
         // ajoute un nouveau formulaire formateur (voir le prochain bloc de code)
-        addTagForm(collectionHolder, i);
+        addTagForm(collectionHolderFormateurs, i, 'formateur');
         i++;
+    });
+    
+    $addMembreButton.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+
+        // ajoute un nouveau formulaire formateur (voir le prochain bloc de code)
+        addTagForm(collectionHolderMembres, j, 'membre');
+        j++;
     });
 });
 
 
-function addTagForm(collectionHolder, i) {
+function addTagForm(collectionHolder, i, type) {
     // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
     var prototype = collectionHolder.attr('data-prototype');
 
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
-    var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
-    newForm = '<tr id="formateur'+i+'"><td id="removePlace"></td><td>'+newForm+'</td></tr>';
+    var newForm = prototype.replace(/__name__/g, collectionHolderFormateurs.children().length);
+    newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
     
     
     // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
     var $newForm = collectionHolder.append(newForm); 
-    addDeleteButton('tr#formateur'+i);
+    addDeleteButton('tr#'+type+i);
     
 }   
 
