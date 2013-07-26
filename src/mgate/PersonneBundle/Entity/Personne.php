@@ -97,7 +97,7 @@ class Personne {
     private $user;
 
     /**
-     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="membre", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", mappedBy="personne", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $membre;

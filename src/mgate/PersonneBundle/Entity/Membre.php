@@ -23,7 +23,7 @@ class Membre {
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Personne", inversedBy="membre", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", inversedBy="membre", cascade={"persist", "merge", "remove"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $personne;
