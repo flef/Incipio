@@ -1,15 +1,10 @@
-mgate_publi_homepage:
-    pattern:  /hellooo/{name}
-    defaults: { _controller: mgatePubliBundle:Default:index }
-
- 
 mgate_publi_publiposter:
-    pattern: /publi/publiposter/{id_etude}/{doc}/{key}
+    pattern: /documents/telecharger/etude/{id_etude}/{doc}/{key}
     defaults: {_controller: mgatePubliBundle:Traitement:publiposterEtude, key : -1}
     requirements:
         id_etude:  \d+
         key: \d+
-        doc: AP|CC|FA|RM|PVR|PVI|FS|DM|FI
+        doc: AP|CC|FA|RM|PVR|PVI|FS|DM|FI|BV
         #change tolower
     
 mgate_publi_telecharger:
