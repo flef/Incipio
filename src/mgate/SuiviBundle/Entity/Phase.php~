@@ -34,7 +34,7 @@ class Phase
     /**
      * Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $etude;
     
@@ -92,7 +92,7 @@ class Phase
     /**
      * @var integer $validation
      *
-     * @ORM\Column(name="validation", type="integer", nullable=true)
+     * @ORM\Column(name="validation", type="integer", nullable=false)
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
@@ -414,28 +414,5 @@ class Phase
     public function getAvenantModification()
     {
         return $this->avenantModification;
-    }
-
-    /**
-     * Set avenant
-     *
-     * @param \mgate\SuiviBundle\Entity\Av $avenant
-     * @return Phase
-     */
-    public function setAvenant(\mgate\SuiviBundle\Entity\Av $avenant = null)
-    {
-        $this->avenant = $avenant;
-    
-        return $this;
-    }
-
-    /**
-     * Get avenant
-     *
-     * @return \mgate\SuiviBundle\Entity\Av 
-     */
-    public function getAvenant()
-    {
-        return $this->avenant;
     }
 }
