@@ -10,19 +10,13 @@ use mgate\PersonneBundle\Form;
 class AvMissionType extends DocTypeType
 {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
-    {
-	    DocTypeType::buildForm($builder,$options);
-              
-            
-            /*             ->add('prospect', 'collection', array('type'  => new \mgate\PersonneBundle\Form\ProspectType,
-                                              'prototype' => true,
-                                              'allow_add' => true)); */
-            
+    {   
+        //DocTypeType::buildForm($builder,$options);
     }
 
     public function getName()
     {
-        return 'alex_suivibundle_avmssiontype';
+        return 'mgate_suivibundle_avmssiontype';
     }
 
     public function getDefaultOptions(array $options)

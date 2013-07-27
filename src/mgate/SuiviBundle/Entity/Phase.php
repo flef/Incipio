@@ -34,7 +34,7 @@ class Phase
     /**
      * Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
     
@@ -92,24 +92,17 @@ class Phase
     /**
      * @var integer $validation
      *
-     * @ORM\Column(name="validation", type="integer", nullable=false)
+     * @ORM\Column(name="validation", type="integer", nullable=true)
      * @Assert\Choice(callback = "getValidationChoiceAssert")
      */
     private $validation;
     
     /**
-     * @var interger $avenant
-     * @abstract statu de la phase en cas d'avenant : 0 : Phase original | 1 : Phase ajoutée | -1 : Phase supprimée
-     * @ORM\Column(name="avanantStatut", type="integer", options={"default"=0})
+     * @ORM\ManyToOne(targetEntity="Av", inversedBy="phases")
      */
-    private $avenantStatut;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="Phase")
-     */
-    private $avenantModification;
-        
-    
+    private $avenant;
+
+
     public function __construct()
     {
         $this->voteCount = 0;
@@ -136,7 +129,7 @@ class Phase
      * @param mgate\SuiviBundle\Entity\Etude $etude
      * @return Phase
      */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    public function setEtude($etude = NULL)
     {
         $this->etude = $etude;
     
@@ -421,5 +414,28 @@ class Phase
     public function getAvenantModification()
     {
         return $this->avenantModification;
+    }
+
+    /**
+     * Set avenant
+     *
+     * @param \mgate\SuiviBundle\Entity\Av $avenant
+     * @return Phase
+     */
+    public function setAvenant(\mgate\SuiviBundle\Entity\Av $avenant = null)
+    {
+        $this->avenant = $avenant;
+    
+        return $this;
+    }
+
+    /**
+     * Get avenant
+     *
+     * @return \mgate\SuiviBundle\Entity\Av 
+     */
+    public function getAvenant()
+    {
+        return $this->avenant;
     }
 }
