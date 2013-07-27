@@ -1,20 +1,34 @@
-<body>
-{% if nbreChampsNonRemplis > 0 %}
-Les champs suivant n'ont pas été correctement remplis<br/>
-<ul>
+{% extends "::layout.html.twig" %}
 
-{% for champs in champsNonRemplis %}
-    
-    
-    <li>{{loop.index}} - {{champs}}</li>
-{% endfor %}
-</ul>
-{% else %}
-Congrats, tous les champs sont remplis<br/>
+{% block content %}
+
+{% if nbreChampsNonRemplis  > 0 %}
+<br/><br/>
+<div style="max-width: 500px">
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr><th colspan="2">Les champs suivants n'ont pas été remplis</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Nom du champ</th>
+            <th>Aide</th>
+        </tr>
+        {% for champs in champsNonRemplis %}
+        <tr>
+        {% if aides is defined %}
+            <td><a href="{{aides[champs] | default("#")}}">{{champs}}</a></td>
+            <td></td>
+        {% else %}
+        <td colspan="2">{{champs}}</td>
+        {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
 {% endif %}
-
-
 <form action="{{ path('mgate_publi_telecharger')}}" method="post" >
     <input type="submit" value="Telecharger"/>
 </form>
-    </body>
+{% endblock %}
