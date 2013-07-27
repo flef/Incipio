@@ -17,10 +17,10 @@
         {% for champs in champsNonRemplis %}
         <tr>
         {% if aides is defined %}
-            <td><a href="{{aides[champs] | default("")}}">{{champs}}</a></td>
+            <td><a href="{{aides[champs] | default("#")}}">{{champs}}</a></td>
             <td></td>
         {% else %}
-        <td colspan="2"></td>
+        <td colspan="2">{{champs}}</td>
         {% endif %}
         </tr>
         {% endfor %}
