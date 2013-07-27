@@ -9,6 +9,101 @@ use mgate\SuiviBundle\Entity\Av;
 use mgate\SuiviBundle\Form\AvHandler;
 use mgate\SuiviBundle\Form\AvType;
 
+class PhaseChange {
+
+    private $position = false;
+    private $nbrJEH = false;
+    private $prixJEH = false;
+    private $titre = false;
+    private $objectif = false;
+    private $methodo = false;
+    private $dateDebut = false;
+    private $validation = false;
+    private $delai = false;
+
+    public function getPosition() {
+        return $this->position;
+    }
+
+    public function setPosition($x) {
+        $this->position = $x;
+        return $this;
+    }
+
+    public function getNbrJEH() {
+        return $this->nbrJEH;
+    }
+
+    public function getPrixJEH() {
+        return $this->prixJEH;
+    }
+
+    public function getTitre() {
+        return $this->titre;
+    }
+
+    public function getObjectif() {
+        return $this->objectif;
+    }
+
+    public function getMethodo() {
+        return $this->methodo;
+    }
+
+    public function getDateDebut() {
+        return $this->dateDebut;
+    }
+
+    public function getValidation() {
+        return $this->validation;
+    }
+
+    public function getDelai() {
+        return $this->delai;
+    }
+
+    public function setNbrJEH($x) {
+        $this->nbrJEH = $x;
+        return $this;
+    }
+
+    public function setPrixJEH($x) {
+        $this->prixJEH = $x;
+        return $this;
+    }
+
+    public function setTitre($x) {
+        $this->titre = $x;
+        return $this;
+    }
+
+    public function setObjectif($x) {
+        $this->objectif = $x;
+        return $this;
+    }
+
+    public function setMethodo($x) {
+        $this->methodo = $x;
+        return $this;
+    }
+
+    public function setDateDebut($x) {
+        $this->dateDebut = $x;
+        return $this;
+    }
+
+    public function setValidation($x) {
+        $this->validation = $x;
+        return $this;
+    }
+
+    public function setDelai($x) {
+        $this->delai = $x;
+        return $this;
+    }
+
+}
+
 class AvController extends Controller {
 
     /**
@@ -58,18 +153,20 @@ class AvController extends Controller {
         return NULL;
     }
 
-    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Validation', 'Delai',);
+    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Validation', 'Delai', 'position');
 
-    private function mergePhaseIfNotNull(&$phaseReceptor, $phaseToMerge) {
+    private function mergePhaseIfNotNull($phaseReceptor, $phaseToMerge, $changes) {
         foreach (AvController::$phaseMethodes as $methode) {
             $getMethode = 'get' . $methode;
             $setMethode = 'set' . $methode;
-            if ($phaseToMerge->$getMethode() != NULL)
+            if ($phaseToMerge->$getMethode() != NULL) {
+                $changes->$setMethode(true);
                 $phaseReceptor->$setMethode($phaseToMerge->$getMethode());
+            }
         }
     }
 
-    private function nullFielIfEqual(&$phaseReceptor, $phaseToCompare) {
+    private function nullFielIfEqual($phaseReceptor, $phaseToCompare) {
         $isNotNull = false;
         foreach (AvController::$phaseMethodes as $methode) {
             $getMethode = 'get' . $methode;
@@ -94,18 +191,24 @@ class AvController extends Controller {
 
         $phasesAv = $av->getPhases()->toArray();
 
-        foreach ($av->getPhases() as $phase){
+
+        foreach ($av->getPhases() as $phase) {
             $av->removePhase($phase);
             $em->remove($phase);
         }
 
+        $phasesChanges = array();
         foreach ($av->getEtude()->getPhases() as $phase) {
             $phaseAV = clone $phase;
-            if($phaseOriginAV = $this->getPhaseByPosition($phaseAV->getPosition(), $phasesAv)){
-                $this->mergePhaseIfNotNull($phaseAV, $phaseOriginAV);
+            $changes = new PhaseChange();
+
+            if ($phaseOriginAV = $this->getPhaseByPosition($phaseAV->getPosition(), $phasesAv)) {
+                $this->mergePhaseIfNotNull($phaseAV, $phaseOriginAV, $changes);
             }
+
             $phaseAV->setEtude()->setAvenant($av);
             $av->addPhase($phaseAV);
+            $phasesChanges[] = $changes;
         }
 
         $form = $this->createForm(new AvType, $av, array('prospect' => $av->getEtude()->getProspect()));
@@ -125,7 +228,7 @@ class AvController extends Controller {
                     if (isset($phaseEtude)) {
                         $toKeep = $this->nullFielIfEqual($phase, $phaseEtude);
                     }
-                    
+
                     if ($toKeep)
                         $av->addPhase($phase);
 
@@ -143,6 +246,7 @@ class AvController extends Controller {
         return $this->render('mgateSuiviBundle:Av:modifier.html.twig', array(
                     'form' => $form->createView(),
                     'av' => $av,
+                    'changes' => $phasesChanges,
                 ));
     }
 
