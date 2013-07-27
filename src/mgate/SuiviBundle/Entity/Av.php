@@ -50,7 +50,21 @@ class Av extends DocType
      * @ORM\Column(name="clauses", type="array")
      */
     private $clauses;
-
+    
+    /**
+     * @var Collection phase differentiel
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\Phase", mappedBy="avenant", cascade={"persist", "remove"})
+     */
+    private $phases;
+    
+    public static function getClausesChoices(){
+        return array(1 => 'Avenant de Délai',
+            2 => 'Avenant de Méthodologie',
+            3 => 'Avenant de Montant',
+            4 => 'Avenant de Mission',
+            5 => 'Avenant de Rupture');
+    }
+    
     /**
      * Get id
      *
@@ -191,5 +205,38 @@ class Av extends DocType
     public function getClauses()
     {
         return $this->clauses;
+    }
+
+    /**
+     * Add phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     * @return Av
+     */
+    public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases)
+    {
+        $this->phases[] = $phases;
+    
+        return $this;
+    }
+
+    /**
+     * Remove phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     */
+    public function removePhase(\mgate\SuiviBundle\Entity\Phase $phases)
+    {
+        $this->phases->removeElement($phases);
+    }
+
+    /**
+     * Get phases
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhases()
+    {
+        return $this->phases;
     }
 }
