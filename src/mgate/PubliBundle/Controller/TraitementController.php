@@ -230,7 +230,6 @@ class TraitementController extends Controller {
         return $mois;
     }
 
-   
     private function getAllChamp($etude, $doc, $key = 0) {
         //External
         $etudeManager = $this->get('mgate.etude_manager');
@@ -455,8 +454,6 @@ class TraitementController extends Controller {
                     $Factures_Intermediaires_HT += $fi->getMontantHT();
                 else if ($i == $key)
                     $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
-                //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
-                //IL FAUT AJOUTER UN CHAMP NUM DE FI
                 $i++;
             }
         }
@@ -553,14 +550,14 @@ class TraitementController extends Controller {
              * @todo Issue #21
              */
             if ($i == $key + 1) { // Phase concernant l'intervenant
-               
-                
+
+
                 /* $phaseDev = '';
-                foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
-                    if ($phaseMission->getNbrJEH())
-                        $phaseDev[$phaseMission->getPhase()->getPosition() + 1] = $phaseMission->getPhase()->getTitre();
-                }
-              */  
+                  foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
+                  if ($phaseMission->getNbrJEH())
+                  $phaseDev[$phaseMission->getPhase()->getPosition() + 1] = $phaseMission->getPhase()->getTitre();
+                  }
+                 */
 
                 //Referent Technique
                 if ($mission) {
@@ -587,7 +584,7 @@ class TraitementController extends Controller {
         foreach ($phaseDev as $keys => $value)
             $phaseDevString .= ($keys) . ' - ' . $value . '\r\n';
         $this->array_push_assoc($champs, 'Phase_Dev', $phaseDevString);
-        
+
         //Intervenant
         $mission = $etude->getMissions()->get($key);
         if ($mission) {
@@ -600,7 +597,7 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
                 $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $mission->getIntervenant()->getPersonne()->getNomFormel());
             }
-            
+
             $Mission_Remuneration = $mission->getRemuneration();
             $Mission_Nbre_JEH = (int) $Mission_Remuneration['jehRemuneration'];
             $Mission_Montant_JEH_Verse = (float) $Mission_Remuneration['montantRemuneration'];
@@ -617,6 +614,322 @@ class TraitementController extends Controller {
                 $this->array_push_assoc($champs, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
         }
         return $champs;
+    }
+
+    private function getDocRedigerRoute($doc, $key = 0) {
+        $route = array(
+            'AP' => 'mgateSuivi_ap_rediger',
+            'CC' => 'mgateSuivi_cc_rediger',
+            'FA' => 'mgateSuivi_facture_voir',
+            'FI' => 'mgateSuivi_facture_voir',
+            'FS' => 'mgateSuivi_facture_voir',
+            'PVI' => 'mgateSuivi_procesverbal_voir',
+            'PVR' => 'mgateSuivi_procesverbal_voir',
+            'RM' => 'mgateSuivi_missions_modifier',
+            'DM' => 'mgateSuivi_missions_modifier',
+        );
+
+
+
+        return $route[$doc];
+    }
+
+    private function getAidesEtude($etude, $doc, $key = 0) {
+        $router = $this->get('router');
+
+
+        $phases = $etude->getPhases();
+        $nombrePhase = (int) count($phases);
+
+        // $router->generate('mgateSuivi_ap_rediger', array(), true)
+
+        $aides = Array(
+            'Presentation_Projet' => $router->generate('mgateSuivi_ap_rediger', array('id' => $etude->getId()), true),
+            'Description_Prestation' => $router->generate('mgateSuivi_ap_rediger', array('id' => $etude->getId()), true),
+            'Type_Prestation' => $router->generate('mgateSuivi_ap_rediger', array('id' => $etude->getId()), true),
+            'Capacites_Dev' => $router->generate('mgateSuivi_ap_rediger', array('id' => $etude->getId()), true),
+            'Nbr_JEH_Total' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Nbr_JEH_Total_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_JEH_HT' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_JEH_HT_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Frais_HT' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Frais_HT_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Etude_HT' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Etude_HT_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Etude_TTC' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Montant_Total_Etude_TTC_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Part_TVA_Montant_Total_Etude' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Part_TVA_Montant_Total_Etude_Lettres' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Nbr_Phases' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Mois_Lancement' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Mois_Fin' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Delais_Semaines' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Acompte_HT' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Acompte_HT_Lettres' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Acompte_TTC' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Acompte_TTC_Lettres' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Acompte_TVA' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Acompte_TVA_Lettres' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Solde_PVR_HT' => '',
+            'Solde_PVR_TTC' => '',
+            'Solde_PVR_HT_Lettres' => '',
+            'Solde_PVR_TTC_Lettres' => '',
+            'Acompte_Pourcentage' => $router->generate('mgateSuivi_cc_rediger', array('id' => $etude->getId()), true),
+            'Date_Debut_Etude' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+            'Date_Fin_Etude' => $router->generate('mgateSuivi_phases_modifier', array('id' => $etude->getId()), true),
+        );
+
+        $this->array_push_assoc($aides, 'Date_Signature', $router->generate($this->getDocRedigerRoute($doc, $key), array('id' => $etude->getId()), true));
+        $this->array_push_assoc($aides, 'Nom_Signataire_Mgate', $router->generate($this->getDocRedigerRoute($doc, $key), array('id' => $etude->getId()), true));
+        $this->array_push_assoc($aides, 'Nom_Signataire_Client', $router->generate($this->getDocRedigerRoute($doc, $key), array('id' => $etude->getId()), true));
+        if ($etude->getDoc($doc, $key) != NULL) {
+            //Signataire 1 : Signataire M-GaTE
+            if ($etude->getDoc($doc, $key)->getSignataire1() != NULL) {
+                $signataire1 = $etude->getDoc($doc, $key)->getSignataire1();
+                if ($signataire1 = $signataire1->getMembre()) {
+                    $this->array_push_assoc($aides, 'Fonction_Signataire_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $signataire1->getId()), true));
+                    $this->array_push_assoc($aides, 'Sexe_Signataire_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $signataire1->getId()), true));
+                }
+            }
+            //Signataire 2 : Signataire Client
+            if ($etude->getDoc($doc, $key)->getSignataire2() != NULL) {
+                $signataire2 = $etude->getDoc($doc, $key)->getSignataire2();
+                if ($signataire2 = $signataire2->getEmploye()) {
+                    $this->array_push_assoc($aides, 'Fonction_Signataire_Client', $router->generate('mgatePersonne_employe_voir', array('id' => $signataire2->getId()), true));
+                }
+            }
+        }
+
+        //Prospect
+        $this->array_push_assoc($aides, 'Nom_Client', $router->generate($this->getDocRedigerRoute($doc, $key), array('id' => $etude->getId()), true));
+        if ($etude->getProspect() != NULL) {
+            $this->array_push_assoc($aides, 'Entite_Sociale', $router->generate('mgatePersonne_prospect_voir', array('id' => $etude->getProspect()->getId()), true));
+            $this->array_push_assoc($aides, 'Adresse_Client', $router->generate('mgatePersonne_prospect_voir', array('id' => $etude->getProspect()->getId()), true));
+        }
+
+
+        //Suiveur
+        $this->array_push_assoc($aides, 'Nom_suiveur', $router->generate($this->getDocRedigerRoute($doc, $key), array('id' => $etude->getId()), true));
+        if ($etude->getSuiveur() != NULL && $suiveur = $etude->getSuiveur()->getMembre()) {
+            $this->array_push_assoc($aides, 'Mail_suiveur', $router->generate('mgatePersonne_membre_voir', array('id' => $suiveur->getId()), true));
+            $this->array_push_assoc($aides, 'Tel_suiveur', $router->generate('mgatePersonne_membre_voir', array('id' => $suiveur->getId()), true));
+        }
+
+
+        //Avant-Projet
+        if ($etude->getAp() != NULL) {
+            $this->array_push_assoc($aides, 'Nbre_Developpeurs', $router->generate($this->getDocRedigerRoute('AP'), array('id' => $etude->getId()), true));
+            $this->array_push_assoc($aides, 'Nbre_Developpeurs_Lettres', $router->generate($this->getDocRedigerRoute('AP'), array('id' => $etude->getId()), true));
+            $this->array_push_assoc($aides, 'Nom_Contact_Mgate', $router->generate($this->getDocRedigerRoute('AP'), array('id' => $etude->getId()), true));
+            if ($etude->getAp()->getContactMgate() && $etude->getAp()->getContactMgate()->getMembre() && $etude->getAp()->getContactMgate()->getMembre()->getId()) {
+                $contact = $etude->getAp()->getContactMgate()->getMembre()->getId();
+                $this->array_push_assoc($aides, 'Prenom_Contact_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $contact), true));
+                $this->array_push_assoc($aides, 'Mail_Contact_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $contact), true));
+                $this->array_push_assoc($aides, 'Tel_Contact_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $contact), true));
+                $this->array_push_assoc($aides, 'Fonction_Contact_Mgate', $router->generate('mgatePersonne_membre_voir', array('id' => $contact), true));
+            }
+        }
+
+         /*//Convention Client
+          //Facture Acompte
+          if ($etude->getFa()) {
+          if ($etude->getFa()->getDateSignature()) {
+          $Date_Limite = clone $etude->getFa()->getDateSignature();
+          $Date_Limite->modify('+ 30 day');
+          $this->array_push_assoc($aides, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+          }
+          }
+          //Facture de solde
+          if ($etude->getFs()) {
+          if ($etude->getFs()->getDateSignature()) {
+          $Date_Limite = clone $etude->getFs()->getDateSignature();
+          $Date_Limite->modify('+ 30 day');
+          $this->array_push_assoc($aides, 'Date_Limite', $Date_Limite->format("d/m/Y"));
+          }
+
+          $Reste_HT = $etude->getFs()->getMontantHT();
+          $Reste_TTC = (float) round($Reste_HT * (1 + $Taux_TVA / 100), 2);
+          $Reste_TTC_Lettres = $converter->ConvNumberLetter($Reste_TTC, 1);
+          $Reste_TVA = (float) round($Reste_HT * $Taux_TVA / 100, 2);
+          $this->array_push_assoc($aides, 'Reste_HT', $Reste_HT);
+          $this->array_push_assoc($aides, 'Reste_TTC', $Reste_TTC);
+          $this->array_push_assoc($aides, 'Reste_TTC_Lettres', $Reste_TTC_Lettres);
+          $this->array_push_assoc($aides, 'Reste_TVA', $Reste_TVA);
+          }
+
+          //Factures de solde et intermediaires
+          $Solde_Intermediaire_HT = (float) 0;
+          $Factures_Intermediaires_HT = (float) 0;
+          if ($etude->getFis()) {
+          $i = 0;
+          foreach ($etude->getFis() as $fi) {
+          if ($doc != 'FI' || $i < $key)
+          $Factures_Intermediaires_HT += $fi->getMontantHT();
+          else if ($i == $key)
+          $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
+          //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
+          //IL FAUT AJOUTER UN CHAMP NUM DE FI
+          $i++;
+          }
+          }
+
+          $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
+          $Part_TVA_Deja_Paye = (float) $Deja_Paye_HT * $Taux_TVA / 100;
+          $Deja_Paye_TTC = (float) $Deja_Paye_HT * (1 + $Taux_TVA / 100);
+          $Part_TVA_Solde_Intermediaire = (float) $Solde_Intermediaire_HT * $Taux_TVA / 100;
+          $Solde_Intermediaire_TTC = (float) $Solde_Intermediaire_HT * (1 + $Taux_TVA / 100);
+          $Solde_Intermediaire_TTC_Lettres = $converter->ConvNumberLetter($Solde_Intermediaire_TTC, 1);
+
+          $this->array_push_assoc($aides, 'Solde_Intermediaire_TTC_Lettres', $Solde_Intermediaire_TTC_Lettres);
+          $this->array_push_assoc($aides, 'Solde_Intermediaire_TTC', $Solde_Intermediaire_TTC);
+          $this->array_push_assoc($aides, 'Solde_Intermediaire_HT', $Solde_Intermediaire_HT);
+          $this->array_push_assoc($aides, 'Part_TVA_Solde_Intermediaire', $Part_TVA_Solde_Intermediaire);
+          $this->array_push_assoc($aides, 'Factures_Intermediaires_HT', $Factures_Intermediaires_HT);
+          $this->array_push_assoc($aides, 'Deja_Paye_HT', $Deja_Paye_HT);
+          $this->array_push_assoc($aides, 'Deja_Paye_TTC', $Deja_Paye_TTC);
+          $this->array_push_assoc($aides, 'Part_TVA_Deja_Paye', $Part_TVA_Deja_Paye);
+
+          //PREPARE PVI
+          $nbrPVI = count($etude->getPvis());
+          if ($doc == 'PVI' && $key < $nbrPVI)
+          $phasePVI = $etude->getPvis($key)->getPhaseID();
+          else
+          $phasePVI = -1;
+
+          //PVR
+          if ($etude->getAvs())
+          $Nbr_Avenant = count($etude->getAvs()->getValues());
+          else
+          $Nbr_Avenant = 0;
+          $this->array_push_assoc($aides, 'Nbr_Avenant', $Nbr_Avenant + 1);
+
+          //PVI
+          if ($doc == 'PVI') {
+          if ($key < count($etude->getPvis()))
+          $this->array_push_assoc($aides, 'Phase_PVI', $phasePVI);
+          }
+
+          //Références
+          $this->array_push_assoc($aides, 'Reference_Etude', $etudeManager->getRefEtude($etude));
+          foreach (array('AP', 'CC', 'FA', 'PVR', 'FS', 'PVI', 'RM', 'DM', 'FI') as $abrv) {
+          if ($etude->getDoc($abrv, $key) || $abrv == 'DM')
+          $this->array_push_assoc($aides, 'Reference_' . $abrv, $etudeManager->getRefDoc($etude, $abrv, $key));
+          }
+          if ($etude->getDoc('AV', $Nbr_Avenant - 1)) {//key of AV1 = 0
+          if ($etude->getDoc('CC'))
+          $this->array_push_assoc($aides, 'Reference_AVCC', $etudeManager->getRefDoc($etude, 'AVCC', $Nbr_Avenant - 1));
+          }
+
+          if ($etude->getDoc('RM', $key)) {
+          $this->array_push_assoc($aides, 'Mission_Reference_CE', $etudeManager->getRefDoc($etude, 'CE', $key));
+          }
+
+          //Phases
+          foreach ($phases as $phase) {
+          $i = $phase->getPosition() + 1;
+
+          $validation = $phase->getValidationChoice();
+
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Titre', $phase->getTitre());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Nbre_JEH', (int) $phase->getNbrJEH());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Prix_JEH', (float) $phase->getPrixJEH());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Prix_Phase_HT', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Prix_Phase', (float) $phase->getNbrJEH() * $phase->getPrixJEH());
+          if ($phase->getDateDebut())
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Date_Debut', $phase->getDateDebut()->format('d/m/Y'));
+          if ($phase->getDateDebut()) {
+          $dateFin = clone $phase->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+          $dateFin->modify('+' . $phase->getDelai() . ' day');
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Date_Fin', $dateFin->format('d/m/Y'));
+          }
+          $Delai = $this->jourVersSemaine($phase->getDelai());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Delai', $Delai); //délai en semaine
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Objectif', $phase->getObjectif());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Methodo', $phase->getMethodo());
+          $this->array_push_assoc($aides, 'Phase_' . $i . '_Rendu', $validation[$phase->getValidation()]);
+
+
+
+          //PVI
+          if ($doc == 'PVI' && $i == $phasePVI) {
+          $this->array_push_assoc($aides, 'Phase_PVI_Objectif', $phase->getObjectif());
+          }
+          }
+
+          //DM : Autres dev
+          $i = 1;
+          $phaseDev = array();
+          foreach ($etude->getMissions() as $mission) {
+
+          /**
+         * @todo Issue #21
+
+          if ($i == $key + 1) { // Phase concernant l'intervenant
+
+
+          /* $phaseDev = '';
+          foreach ($mission->getPhaseMission()->getValues() as $phaseMission) {
+          if ($phaseMission->getNbrJEH())
+          $phaseDev[$phaseMission->getPhase()->getPosition() + 1] = $phaseMission->getPhase()->getTitre();
+          }
+         *  
+
+          //Referent Technique
+          if ($mission) {
+          if ($refTechnique = $mission->getReferentTechnique()) {
+          $this->array_push_assoc($aides, 'Prenom_Referent_Technique', $refTechnique->getPersonne()->getPrenom());
+          $this->array_push_assoc($aides, 'Nom_Referent_Technique', $refTechnique->getPersonne()->getNom());
+          $this->array_push_assoc($aides, 'Mail_Referent_Technique', $refTechnique->getPersonne()->getEmail());
+          $this->array_push_assoc($aides, 'Tel_Referent_Technique', $refTechnique->getPersonne()->getMobile());
+          }
+          }
+          }
+          if ($mission) { // Autre intervenants
+          if ($intervenant = $mission->getIntervenant())
+          if ($intervenant = $intervenant->getPersonne()) {
+          $this->array_push_assoc($aides, 'Developpeur_' . $i . '_Nom', $intervenant->getNomFormel());
+          $this->array_push_assoc($aides, 'Developpeur_' . $i . '_Mail', $intervenant->getEmail());
+          $this->array_push_assoc($aides, 'Developpeur_' . $i . '_Tel', $intervenant->getMobile());
+          }
+          }
+          $i++;
+          }
+          array_multisort($phaseDev);
+          $phaseDevString = "";
+          foreach ($phaseDev as $keys => $value)
+          $phaseDevString .= ($keys) . ' - ' . $value . '\r\n';
+          $this->array_push_assoc($aides, 'Phase_Dev', $phaseDevString);
+
+          //Intervenant
+          $mission = $etude->getMissions()->get($key);
+          if ($mission) {
+          if ($mission->getIntervenant()->getPersonne()) {
+          $sexe = ($mission->getIntervenant()->getPersonne()->getSexe() == 'M.' ? 1 : 2 );
+
+          $this->array_push_assoc($aides, 'Nom_Etudiant', $mission->getIntervenant()->getPersonne()->getNom());
+          $this->array_push_assoc($aides, 'Prenom_Etudiant', $mission->getIntervenant()->getPersonne()->getPrenom());
+          $this->array_push_assoc($aides, 'Sexe_Etudiant', $sexe);
+          $this->array_push_assoc($aides, 'Adresse_Etudiant', $mission->getIntervenant()->getPersonne()->getAdresse());
+          $this->array_push_assoc($aides, 'Nom_Formel_Etudiant', $mission->getIntervenant()->getPersonne()->getNomFormel());
+          }
+
+          $Mission_Remuneration = $mission->getRemuneration();
+          $Mission_Nbre_JEH = (int) $Mission_Remuneration['jehRemuneration'];
+          $Mission_Montant_JEH_Verse = (float) $Mission_Remuneration['montantRemuneration'];
+
+          $Mission_Nbre_JEH_Lettres = $converter->ConvNumberLetter($Mission_Nbre_JEH);
+          $Mission_Montant_JEH_Verse_Lettres = $converter->ConvNumberLetter($Mission_Montant_JEH_Verse, 1);
+
+          $this->array_push_assoc($aides, 'Mission_Nbre_JEH', $Mission_Nbre_JEH);
+          $this->array_push_assoc($aides, 'Mission_Nbre_JEH_Lettres', $Mission_Nbre_JEH_Lettres);
+          $this->array_push_assoc($aides, 'Mission_Montant_JEH_Verse', $Mission_Montant_JEH_Verse);
+          $this->array_push_assoc($aides, 'Mission_Montant_JEH_Verse_Lettres', $Mission_Montant_JEH_Verse_Lettres);
+
+          if ($mission->getFinOm())
+          $this->array_push_assoc($aides, 'Date_Fin_Mission', $mission->getFinOm()->format("d/m/Y"));
+          }
+         */
+        return $aides;
     }
 
     private function array_push_assoc(&$array, $key, $value) {
@@ -706,8 +1019,6 @@ class TraitementController extends Controller {
         }
         return $allmatches;
     }
-    
-    
 
     private function publipostageEtude($id_etude, $doc, $key) {
         $key = intval($key);
@@ -716,6 +1027,7 @@ class TraitementController extends Controller {
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $nombreRepeat = Array(count($etude->getPhases()), count($etude->getMissions()));
         $champs = $this->getAllChamp($etude, $doc, $key);
+        $aides = $this->getAidesEtude($etude, $doc, $key);
 
 
         //DEBUG   
@@ -788,7 +1100,7 @@ class TraitementController extends Controller {
         $_SESSION['refDocx'] = $refDocx;
 
 
-        return $champsBrut;
+        return array($champsBrut, $aides);
     }
 
     public function publiposterMultipleEtude($id_etude, $doc) {
@@ -807,7 +1119,6 @@ class TraitementController extends Controller {
         $this->telechargerAction('', false, true);
     }
 
-
     /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
      */
@@ -817,8 +1128,8 @@ class TraitementController extends Controller {
         else
             $champsBrut = $this->publipostageEtude($id_etude, $doc, $key);
 
-        if (count($champsBrut)) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+        if (count($champsBrut[0])) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0]), 'aides' => $champsBrut[1]));
         } else {
 
             return $this->telechargerAction($doc);
@@ -911,38 +1222,36 @@ class TraitementController extends Controller {
             $jourVersSemaine .= ($semaine > 0 ? " et " : "" ) . $jour_str . " jour" . ($jour > 1 ? "s" : "");
         return $jourVersSemaine;
     }
-    
-    
-/*Publipostage documents élèves
- *  
- */
-    
-    
+
+    /* Publipostage documents élèves
+     *  
+     */
+
     /** publication du doc
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function publiposterEleveAction($id_eleve, $doc, $key) {
         $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
-        
-        if (count($champsBrut)) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut), 'champsNonRemplis' => $champsBrut,));
+
+        if (count($champsBrut[0])) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0], SORT_STRING), 'aides' => $champsBrut[1]));
         } else {
 
             return $this->telechargerAction($doc);
         }
     }
-    
+
     private function publipostageEleve($id, $doc, $key) {
         $key = intval($key);
 
         $em = $this->getDoctrine()->getEntityManager();
-        
+
         if (!$personne = $em->getRepository('mgatePersonneBundle:Personne')->find($id))
-            throw $this->createNotFoundException('mgatePersonneBundle:Personne'.'[id=' . $id . '] inexistant');
-        
+            throw $this->createNotFoundException('mgatePersonneBundle:Personne' . '[id=' . $id . '] inexistant');
+
         $chemin = $this->getDoctypeAbsolutePathFromName($doc);
         $champs = $this->getAllChampEleve($personne, $doc, $key);
-        
+        $aides = $this->getAidesEleve($id, $personne->getMembre()->getId() ? $personne->getMembre()->getId() : null, $doc, $key);
 
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
@@ -959,10 +1268,10 @@ class TraitementController extends Controller {
         $mandat = new \DateTime("now");
         $dateAn = $mandat->format("y");
         $mandat = $mandat->format("m") < 4 ? $dateAn - 8 : $dateAn - 7;
-        if($personne->getMembre())
-            $refDocx = '[M-GaTE]'.$mandat.'-'.$doc.'-'.$personne->getMembre()->getIdentifiant();
+        if ($personne->getMembre())
+            $refDocx = '[M-GaTE]' . $mandat . '-' . $doc . '-' . $personne->getMembre()->getIdentifiant();
         //Fin a changer
-        
+
         $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
         copy($chemin, $repertoire . '/' . $idDocx);
         $zip = new \ZipArchive();
@@ -977,60 +1286,89 @@ class TraitementController extends Controller {
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
 
-        return $champsBrut;
+        return array($champsBrut, $aides);
     }
 
-    private function getAllChampEleve($personne, $doc, $key){
+    private function getAllChampEleve($personne, $doc, $key) {
         $champs = array();
-     
+
         $em = $this->getDoctrine()->getEntityManager();
-        
+
         // Signataire M-GaTE
         $signataire = $em->getRepository('mgatePersonneBundle:Personne')->getLastMembresByPoste('president')->getQuery()->execute();
-        if ($signataire){
+        if ($signataire) {
             $signataire = $signataire[0];
             $this->array_push_assoc($champs, 'Fonction_Signataire_Mgate', 'président');
             $this->array_push_assoc($champs, 'Nom_Signataire_Mgate', $signataire->getPrenomNom());
         }
-        
+
         // Info Personne
         $this->array_push_assoc($champs, 'Nom_Formel_Etudiant', $personne->getNomFormel());
         $this->array_push_assoc($champs, 'Nom_Etudiant', $personne->getNom());
         $this->array_push_assoc($champs, 'Prenom_Etudiant', $personne->getPrenom());
         $this->array_push_assoc($champs, 'Adresse_Fiscale_Etudiant', $personne->getAdresse());
         $this->array_push_assoc($champs, 'Telephone_Etudiant', $personne->getMobile());
-        
+
         // Info Membre
         $membre = $personne->getMembre();
-        
-        if($membre){
+
+        if ($membre) {
             $this->array_push_assoc($champs, 'Lieu_Naissance_Etudiant', $membre->getLieuDeNaissance());
-            $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
+            if ($membre->getDateDeNaissance())
+                $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
             $this->array_push_assoc($champs, 'Promotion_Etudiant', $membre->getPromotion());
-            
+
             // Info Référence
             //A changer
             $mandat = new \DateTime("now");
             $dateAn = $mandat->format("y");
             $mandat = $mandat->format("m") < 4 ? $dateAn - 8 : $dateAn - 7;
 
-            foreach (array('CE','AC') as $doctype)
-                $this->array_push_assoc($champs, 'Reference_'.$doctype, '[M-GaTE]'.$mandat.'-'.$doctype.'-'.$membre->getIdentifiant());
-            
+            foreach (array('CE', 'AC') as $doctype)
+                $this->array_push_assoc($champs, 'Reference_' . $doctype, '[M-GaTE]' . $mandat . '-' . $doctype . '-' . $membre->getIdentifiant());
+
             /**
              * @todo
              */
             $date = new \DateTime("now");
             $this->array_push_assoc($champs, 'Date_Signature', $date->format("d/m/Y"));
             $this->array_push_assoc($champs, 'Date_Cheque', $date->format("d/m/Y"));
-            
         }
         return $champs;
     }
-    
-    
-    
-    
-    
+
+    private function getAidesEleve($personne_id, $membre_id, $doc, $key) {
+        $aides = array();
+        $router = $this->get('router');
+
+        $this->array_push_assoc($aides, 'Fonction_Signataire_Mgate', $router->generate('mgatePersonne_membre_homepage', array(), true));
+        $this->array_push_assoc($aides, 'Nom_Signataire_Mgate', $router->generate('mgatePersonne_membre_homepage', array(), true));
+
+        // Info Personne
+        $this->array_push_assoc($aides, 'Nom_Formel_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Nom_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Prenom_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Adresse_Fiscale_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Telephone_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+
+        // Info Membre
+        $this->array_push_assoc($aides, 'Lieu_Naissance_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Date_Naissance_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+        $this->array_push_assoc($aides, 'Promotion_Etudiant', $router->generate('mgatePersonne_membre_voir', array('id' => $membre_id), true));
+
+        /*        // Info Référence
+          //A changer
+          foreach (array('CE','AC') as $doctype)
+          $this->array_push_assoc($aides, 'Reference_'.$doctype, '[M-GaTE]'.$mandat.'-'.$doctype.'-'.$membre->getIdentifiant());
+
+          /**
+         * @todo
+         *
+          $date = new \DateTime("now");
+          $this->array_push_assoc($aides, 'Date_Signature', $date->format("d/m/Y"));
+          $this->array_push_assoc($aides, 'Date_Cheque', $date->format("d/m/Y"));
+         */
+        return $aides;
+    }
 
 }
