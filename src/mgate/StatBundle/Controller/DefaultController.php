@@ -9,6 +9,10 @@ use Ob\HighchartsBundle\Highcharts\Highchart;
 
 use mgate\SuiviBundle\Entity\EtudeRepository;
 
+// A externaliser dans les parametres
+define("STATE_ID_EN_COURS", 2);
+define("STATE_ID_TERMINEE",4);
+
 class DefaultController extends Controller
 {
     /**
@@ -55,8 +59,10 @@ class DefaultController extends Controller
         foreach ($Ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
+            $signee = $etude->getStateID() == STATE_ID_EN_COURS
+                   || $etude->getStateID() == STATE_ID_TERMINEE;
 
-            if($dateSignature)
+            if($dateSignature && $signee)
             {
                 $idMandat=$etudeManager->dateToMandat($dateSignature);
                 

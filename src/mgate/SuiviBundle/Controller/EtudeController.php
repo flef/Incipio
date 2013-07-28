@@ -20,7 +20,6 @@ define("STATE_ID_TERMINEE",4);
 define("STATE_ID_AVORTEE",5);
 
 
-
 class EtudeController extends Controller
 {
     
