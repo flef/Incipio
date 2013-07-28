@@ -34,10 +34,10 @@ Accueil - {{ parent() }}
         </div>
         {% endif %}
         <div class="tab-pane" id="tab5" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesTermineesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig", 'key' : '1'} %}
+            Chargement en cours
         </div>
         <div class="tab-pane" id="tab6" style="min-height: 400px;">
-            {% include "mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig" with  {'etudesParMandat':  etudesAvorteesParMandat, 'twig' : "mgateSuiviBundle:Etude:Tab/EtudesAvortees.html.twig", 'key' : '2'} %}
+            Chargement en cours
         </div>
     </div>
 
@@ -47,4 +47,49 @@ Accueil - {{ parent() }}
 {% block javascript %}
 {{ parent() }}
     <script src="{{ asset('js/bootboxjs.js')}}"></script>
+    
+    
+    <script>
+    //ajax for etudes loading
+    $(document).ready(function() {
+        
+        var alreadyLoaded = "";
+        
+        //listen for tab change
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            var tab = e.target.href.substring(e.target.href.indexOf('#')+1); // activated tabv
+            
+            console.log(document.getElementById(tab).textContent.length);
+            
+            //Check if already loaded
+            if(!alreadyLoaded.contains(tab))
+            {
+                alreadyLoaded+=tab;
+                var select;
+
+                if(tab == "tab5")
+                    select="etudesTermineesParMandat";
+                else if(tab == "tab6")
+                    select="etudesAvorteesParMandat";
+                else
+                    return;
+
+                var url = "{{path('mgateSuivi_etude_getetudes', {'select': 'selectValue'})}}";
+                url=url.replace("selectValue", select);
+
+                $(".loading").show();
+
+                //Request and display
+                var xmlHttp = null;
+                xmlHttp = new XMLHttpRequest();
+                xmlHttp.open( "GET", url, false );
+                xmlHttp.send( null );
+                document.getElementById(tab).innerHTML = xmlHttp.responseText;
+
+                $(".loading").hide();
+            }
+            
+        })
+    });
+    </script>
 {% endblock %}
