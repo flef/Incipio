@@ -62,7 +62,7 @@ Accueil - {{ parent() }}
             console.log(document.getElementById(tab).textContent.length);
             
             //Check if already loaded
-            if(!alreadyLoaded.contains(tab))
+            if(!alreadyLoaded.indexOf(tab)!=-1)
             {
                 alreadyLoaded+=tab;
                 var select;
