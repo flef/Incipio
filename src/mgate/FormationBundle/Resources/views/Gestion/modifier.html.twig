@@ -107,11 +107,14 @@ function addTagForm(collectionHolder, i, type) {
 
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
-    var newForm = prototype.replace(/__name__/g, collectionHolderFormateurs.children().length);
-    if(type == 'formateur')
+    if(type == 'formateur'){
+        var newForm = prototype.replace(/__name__/g, collectionHolderFormateurs.children().first().children().length);
         newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
-    else
+    }
+    else{
+        var newForm = prototype.replace(/__name__/g, collectionHolderMembres.children().length);
         newForm= '<div class="span4" id="'+type+i+'"><span></span> '+newForm+'</div>';
+    }
     
     // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
     var $newForm = collectionHolder.append(newForm); 
