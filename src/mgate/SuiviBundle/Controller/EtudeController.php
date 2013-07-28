@@ -59,14 +59,13 @@ class EtudeController extends Controller
 
         //Etudes Terminees : stateID = 4
         $etudesTermineesParMandat = array();
-        for($i = 1; $i <= $MANDAT_MAX; $i++)
-            array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_TERMINEE, 'mandat' => $i), array('num' => 'DESC')));
-           
+        //for($i = 1; $i <= $MANDAT_MAX; $i++)
+            //array_push ($etudesTermineesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_TERMINEE, 'mandat' => $i), array('num' => 'DESC')));
         
         //Etudes Avortees : stateID = 5
         $etudesAvorteesParMandat = array();
-        for($i = 1; $i <= $MANDAT_MAX; $i++)
-            array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_AVORTEE,'mandat' => $i),array('num' => 'DESC')));
+        //for($i = 1; $i <= $MANDAT_MAX; $i++)
+            //array_push ($etudesAvorteesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_AVORTEE,'mandat' => $i),array('num' => 'DESC')));
         
         return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
             'etudesEnNegociation' => $etudesEnNegociation,
@@ -77,6 +76,39 @@ class EtudeController extends Controller
         ));
          
     }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function getEtudesAction($select)
+    {    
+        $MANDAT_MAX = $this->get('mgate.etude_manager')->getMaxMandat();         
+        
+        $em = $this->getDoctrine()->getManager();
+ 
+        $etudesParMandat = array();
+        $key=0;
+        
+        if($select=="etudesTermineesParMandat")
+        {
+            for($i = 1; $i <= $MANDAT_MAX; $i++)
+                array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_TERMINEE, 'mandat' => $i), array('num' => 'DESC')));
+        
+            $key=1;
+        }
+        elseif($select=="etudesAvorteesParMandat")
+        {
+            for($i = 1; $i <= $MANDAT_MAX; $i++)
+                array_push ($etudesParMandat,$em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_AVORTEE,'mandat' => $i),array('num' => 'DESC')));
+            $key=2;
+        }
+        
+        return $this->render('mgateSuiviBundle:Etude:Tab/EtudesParMandat.html.twig', array(
+            'etudesParMandat' => $etudesParMandat,
+            'key' => $key,
+            'twig' => "mgateSuiviBundle:Etude:Tab/EtudesTerminees.html.twig"
+        ));
+     }
     
     
     /**
@@ -340,7 +372,7 @@ class EtudeController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function suiviUpdateAction($id)
+    public function suiviUpdateAction($select)
     {    
         $em = $this->getDoctrine()->getEntityManager();
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
