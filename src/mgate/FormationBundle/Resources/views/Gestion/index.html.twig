@@ -16,7 +16,7 @@
     <tr>
         <td><i class="icon-circle-arrow-down"></i></td>
         <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
-        <td>{{ formation.titre | title }}</td>
+        <td><a title="Modifier" href="{{ path('mgate_formation_modifier', {'id': formation.id})}}">{{ formation.titre | title }}</a></td>
         <td>{{ formation.description }}</td>
         <td>{%for membre in formation.formateurs %} {{membre.prenomNom}};{%endfor%}</td>
         <td>{{ (formation.dateFin | date("u") - formation.dateDebut | date("u")) / 3600}} minutes</td>
