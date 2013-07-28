@@ -13,7 +13,7 @@ class FormationType extends AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add('titre', 'text', array('label' => 'Titre de la formation', 'required' => false,))
                 ->add('description', 'textarea', array('label' => 'Description de la Formation', 'required' => false,))
-                ->add('categorie', 'choice', array('choices' => Formation::getCategoriesChoice(), 'label' => 'Catégorie', 'required' => false))
+                ->add('categorie', 'choice', array('multiple' => true, 'choices' => Formation::getCategoriesChoice(), 'label' => 'Catégorie', 'required' => false))
                 ->add('dateDebut', 'datetime', array('label' => 'Date de debut (d/MM/y - HH:mm:ss)', 'format' => 'd/MM/y - HH:mm:ss', 'required' => false, 'widget' => 'single_text'))
                 ->add('dateFin', 'datetime', array('label' => 'Date de fin (d/MM/y - HH:mm:ss)', 'format' => 'd/MM/y - HH:mm:ss', 'required' => false, 'widget' => 'single_text'))
                 ->add('formateurs', 'collection', array(
