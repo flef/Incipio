@@ -372,7 +372,7 @@ class EtudeController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function suiviUpdateAction($select)
+    public function suiviUpdateAction($id)
     {    
         $em = $this->getDoctrine()->getEntityManager();
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
