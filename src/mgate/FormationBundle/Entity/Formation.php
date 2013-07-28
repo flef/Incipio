@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="mgate\FormationBundle\Entity\FormationRepository")
  */
-class Formation
-{
+class Formation {
+
     /**
      * @var integer
      *
@@ -19,12 +19,12 @@ class Formation
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id; 
+    private $id;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="categorie", type="smallint")
+     * @ORM\Column(name="categorie", type="array")
      */
     private $categorie;
 
@@ -42,7 +42,6 @@ class Formation
      */
     private $description;
 
-    
     /**
      * @var mgate\PersonneBundle\Entity\Personne
      *
@@ -64,29 +63,40 @@ class Formation
      * @ORM\Column(name="dateDebut", type="datetime")
      */
     private $dateDebut;
-    
+
     /**
      * @var DateTime
      * @ORM\Column(name="dateFin", type="datetime")
      */
     private $dateFin;
-    
+
     /**
      * @var string
      * @ORM\Column(name="doc", type="string", length=255, nullable=true)
      */
     private $docPath;
-    
-    
-    
+
     public static function getCategoriesChoice() {
-        return array('0' => 'Junior-Entreprise - Généralité',
+        return array(
+            '0' => 'Junior-Entreprise - Généralité',
             '1' => 'Suivi d\'études',
             '2' => 'Gestion Associative',
-            '3' => 'Trésorerie',
-            '4' => 'Qualité',
-            '5' => 'RFP',
-            '6' => 'Autre');
+            '3' => 'Recrutement Formation Passation',
+            '4' => 'Trésorerie',
+            '5' => 'Développement Commercial',
+            '6' => 'Communication',
+            '7' => 'Intervenants',
+            '8' => 'Autre',);
+    }
+    
+    public static function getCategoriesChoiceToString($choice = NULL){
+        $choices = self::getCategoriesChoice ();
+        
+        if($choice === NULL)
+            return $choices;
+        else if (array_key_exists ($choice, $choices))
+                return $choices[$choice];
+        else return NULL;
     }
 
     /**
@@ -94,8 +104,7 @@ class Formation
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -105,10 +114,9 @@ class Formation
      * @param integer $categorie
      * @return Formation
      */
-    public function setCategorie($categorie)
-    {
+    public function setCategorie($categorie) {
         $this->categorie = $categorie;
-    
+
         return $this;
     }
 
@@ -117,8 +125,7 @@ class Formation
      *
      * @return integer 
      */
-    public function getCategorie()
-    {
+    public function getCategorie() {
         return $this->categorie;
     }
 
@@ -128,10 +135,9 @@ class Formation
      * @param string $titre
      * @return Formation
      */
-    public function setTitre($titre)
-    {
+    public function setTitre($titre) {
         $this->titre = $titre;
-    
+
         return $this;
     }
 
@@ -140,8 +146,7 @@ class Formation
      *
      * @return string 
      */
-    public function getTitre()
-    {
+    public function getTitre() {
         return $this->titre;
     }
 
@@ -151,10 +156,9 @@ class Formation
      * @param string $description
      * @return Formation
      */
-    public function setDescription($description)
-    {
+    public function setDescription($description) {
         $this->description = $description;
-    
+
         return $this;
     }
 
@@ -163,8 +167,7 @@ class Formation
      *
      * @return string 
      */
-    public function getDescription()
-    {
+    public function getDescription() {
         return $this->description;
     }
 
@@ -174,10 +177,9 @@ class Formation
      * @param \stdClass $formateurs
      * @return Formation
      */
-    public function setFormateurs($formateurs)
-    {
+    public function setFormateurs($formateurs) {
         $this->formateurs = $formateurs;
-    
+
         return $this;
     }
 
@@ -186,8 +188,7 @@ class Formation
      *
      * @return \stdClass 
      */
-    public function getFormateurs()
-    {
+    public function getFormateurs() {
         return $this->formateurs;
     }
 
@@ -197,10 +198,9 @@ class Formation
      * @param \stdClass $membresPresents
      * @return Formation
      */
-    public function setMembresPresents($membresPresents)
-    {
+    public function setMembresPresents($membresPresents) {
         $this->membresPresents = $membresPresents;
-    
+
         return $this;
     }
 
@@ -209,29 +209,27 @@ class Formation
      *
      * @return \stdClass 
      */
-    public function getMembresPresents()
-    {
+    public function getMembresPresents() {
         return $this->membresPresents;
     }
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->formateurs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->membresPresents = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Set dateDebut
      *
      * @param \DateTime $dateDebut
      * @return Formation
      */
-    public function setDateDebut($dateDebut)
-    {
+    public function setDateDebut($dateDebut) {
         $this->dateDebut = $dateDebut;
-    
+
         return $this;
     }
 
@@ -240,8 +238,7 @@ class Formation
      *
      * @return \DateTime 
      */
-    public function getDateDebut()
-    {
+    public function getDateDebut() {
         return $this->dateDebut;
     }
 
@@ -251,10 +248,9 @@ class Formation
      * @param \DateTime $dateFin
      * @return Formation
      */
-    public function setDateFin($dateFin)
-    {
+    public function setDateFin($dateFin) {
         $this->dateFin = $dateFin;
-    
+
         return $this;
     }
 
@@ -263,8 +259,7 @@ class Formation
      *
      * @return \DateTime 
      */
-    public function getDateFin()
-    {
+    public function getDateFin() {
         return $this->dateFin;
     }
 
@@ -274,10 +269,9 @@ class Formation
      * @param string $docPath
      * @return Formation
      */
-    public function setDocPath($docPath)
-    {
+    public function setDocPath($docPath) {
         $this->docPath = $docPath;
-    
+
         return $this;
     }
 
@@ -286,8 +280,7 @@ class Formation
      *
      * @return string 
      */
-    public function getDocPath()
-    {
+    public function getDocPath() {
         return $this->docPath;
     }
 
@@ -297,10 +290,9 @@ class Formation
      * @param \mgate\PersonneBundle\Entity\Personne $formateurs
      * @return Formation
      */
-    public function addFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs)
-    {
+    public function addFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs) {
         $this->formateurs[] = $formateurs;
-    
+
         return $this;
     }
 
@@ -309,8 +301,7 @@ class Formation
      *
      * @param \mgate\PersonneBundle\Entity\Personne $formateurs
      */
-    public function removeFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs)
-    {
+    public function removeFormateur(\mgate\PersonneBundle\Entity\Personne $formateurs) {
         $this->formateurs->removeElement($formateurs);
     }
 
@@ -320,10 +311,9 @@ class Formation
      * @param \mgate\PersonneBundle\Entity\Personne $membresPresents
      * @return Formation
      */
-    public function addMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents)
-    {
+    public function addMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents) {
         $this->membresPresents[] = $membresPresents;
-    
+
         return $this;
     }
 
@@ -332,8 +322,8 @@ class Formation
      *
      * @param \mgate\PersonneBundle\Entity\Personne $membresPresents
      */
-    public function removeMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents)
-    {
+    public function removeMembresPresent(\mgate\PersonneBundle\Entity\Personne $membresPresents) {
         $this->membresPresents->removeElement($membresPresents);
     }
+
 }
