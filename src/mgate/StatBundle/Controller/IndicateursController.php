@@ -174,7 +174,7 @@ class IndicateursController extends Controller
     }
     
     
-        /**
+    /**
      * @Secure(roles="ROLE_CA")
      */    
     public function getRh()
@@ -262,11 +262,11 @@ class IndicateursController extends Controller
             {
                 $idMandat=$etudeManager->dateToMandat($dateFin);
 
-                $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                //$interval2 = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
                 $dateDebutDecale = clone $dateDebut;
-                //$dateDebutDecale->add($interval);
+                //$dateDebutDecale->add($interval2);
                 $dateFinDecale = clone $dateFin;
-                //$dateFinDecale->add($interval);
+                //$dateFinDecale->add($interval2);
                 
                 foreach($mandats[2] as &$entree)
                 {
@@ -301,13 +301,13 @@ class IndicateursController extends Controller
         $ob->chart->type("spline");
         $ob->xAxis->labels(array('style'=>$style));
         $ob->yAxis->labels(array('style'=>$style));
-        $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
+        $ob->title->text("Évolution par mandat du nombre d'intervenant");
         $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
         $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
         $ob->xAxis->type('datetime');
         $ob->xAxis->dateTimeLabelFormats(array('month'  => "%b"));
         $ob->yAxis->min(0);
-        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
+        $ob->yAxis->title(array('text'  => "Nombre d'intervenant", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
         $ob->credits->enabled(false);
