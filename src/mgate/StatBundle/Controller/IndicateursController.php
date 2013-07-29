@@ -47,7 +47,13 @@ class IndicateursController extends Controller
                         ->setMethode('getMachin');
         $indicateursSuivi[] = $chiffreAffaires;
         
-        return $this->render('mgateStatBundle:Indicateurs:index.html.twig', array('indicateursSuivi' => $indicateursSuivi));
+        return $this->render('mgateStatBundle:Indicateurs:index.html.twig',
+                array('indicateursSuivi' => $indicateursSuivi,
+                    'indicateursRfp' => $indicateursRFP,
+                    'indicateursGestion' => $indicateursGestion,
+                    'indicateursCom' => $indicateursCom,
+                    'indicateursTreso' => $indicateursTreso,
+                    ));
     }
     
 

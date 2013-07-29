@@ -22,13 +22,23 @@ Accueil - {{ parent() }}
         <li class=""><a href="#com" data-toggle="tab" data-loaded="false">Développement Commercial</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in" id="gestion">
-            <div class="row">
-            </div>
+        <div class="tab-pane fade active in row" id="gestion">
+            {% for indicateur in indicateursGestion %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
         </div>
-        <div class="tab-pane fade" id="rfp">
-            <div class="row">
-            </div>            
+        <div class="tab-pane fade row" id="rfp">
+           {% for indicateur in indicateursRfp %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
         </div>
         <div class="tab-pane fade row" id="suivi">
                 {% for indicateur in indicateursSuivi %}
@@ -39,13 +49,23 @@ Accueil - {{ parent() }}
                 </div>
                 {% endfor %}
         </div>
-        <div class="tab-pane fade" id="treso">
-            <div class="row">
-            </div>   
+        <div class="tab-pane fade row" id="treso">
+                {% for indicateur in indicateursTreso %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %} 
         </div>
-        <div class="tab-pane fade" id="com">
-            <div class="row">
-            </div>
+        <div class="tab-pane fade row" id="com">
+                {% for indicateur in indicateursCom %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
         </div>
     </div>
 </div>
@@ -66,9 +86,7 @@ function getChartAsync(sender, chart){
         '{{path('mgate_indicateurs_ajax_suivi')}}',
         { chartMethode: chart})
         .done(function(data) {
-          $('#'+sender).children().first().append(data);
-           console.log(data);
-           console.log(sender);
+          $('#jsChart').append(data);
         });
 };
 
