@@ -8,9 +8,9 @@ mgateSuivi_etude_homepage:
     requirements:
       page : \d*
 
-mgateSuivi_etude_getetudes:
-    pattern:  /get/{select}
-    defaults: {_controller: mgateSuiviBundle:Etude:getEtudes}
+mgateSuivi_etude_ajax:
+    pattern:  /get
+    defaults: {_controller: mgateSuiviBundle:Etude:getEtudesAsync}
 
 mgateSuivi_etude_suivi:
     pattern: /etudes/suivi
