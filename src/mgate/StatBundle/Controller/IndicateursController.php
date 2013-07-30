@@ -42,10 +42,10 @@ class IndicateursController extends Controller
 
         $indicateursSuivi[] = $chiffreAffaires;
         
-        $chiffreAffaires = new Indicateur();
-        $chiffreAffaires->setTitre('Evolution de Machin')
-                        ->setMethode('getMachin');
-        $indicateursSuivi[] = $chiffreAffaires;
+        $ressourcesHumaines = new Indicateur();
+        $ressourcesHumaines->setTitre('Evolution RH')
+                        ->setMethode('getRh');
+        $indicateursSuivi[] = $ressourcesHumaines;
         
         return $this->render('mgateStatBundle:Indicateurs:index.html.twig',
                 array('indicateursSuivi' => $indicateursSuivi,
@@ -174,50 +174,109 @@ class IndicateursController extends Controller
     }
     
     
-        /**
+    /**
      * @Secure(roles="ROLE_CA")
      */    
-    public function getMachin()
+    public function getRh()
     {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         $etude = new \mgate\SuiviBundle\Entity\Etude;
-        $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Ap')->findBy(array(), array('dateSignature' => 'asc'));
+        $missions = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Mission')->findBy(array(), array('debutOm' => 'asc'));
         
         //$data = array();
-        $mandats = array(); 
+        $mandats = array();
         $maxMandat = $etudeManager->getMaxMandatCc();
 
         $cumuls=array();
         for($i=0 ; $i<=$maxMandat ; $i++) 
             $cumuls[$i] = 0;
+        
+        $mandats[1]=array();
 
-        foreach ($Ccs as $cc) {
-            $etude = $cc->getEtude();
-            $dateSignature = $cc->getDateSignature();
-            $signee = $etude->getStateID() == 1
-                   || $etude->getStateID() == 5;
+        //Etape 1 remplir toutes les dates
+        foreach ($missions as $mission) {
+            $etude = $mission->getEtude();
+            $dateDebut = $mission->getdebutOm();
+            $dateFin = $mission->getfinOm();
 
-            if($dateSignature && $signee)
+            if($dateDebut && $dateFin)
             {
-                $idMandat=$etudeManager->dateToMandat($dateSignature);
-                
-                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
+                $idMandat=$etudeManager->dateToMandat($dateDebut);
+
+                $cumuls[0]++;
 
                 $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
-                $dateDecale = clone $dateSignature;
-                $dateDecale->add($interval);
+                $dateDebutDecale = clone $dateDebut;
+                //$dateDebutDecale->add($interval);
+                $dateFinDecale = clone $dateFin;
+                //$dateFinDecale->add($interval);
 
-                $mandats[$idMandat][]
-                       = array( "x"=>$dateDecale->getTimestamp()*1000,
-                                "y"=>$cumuls[$idMandat], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
-                                'date'=>$dateDecale->format('d/m/Y'),
-                                'prix'=>$etudeManager->getTotalHT($etude));
+                $addDebut = true;
+                $addFin = true;
+                foreach($mandats[1] as $datePoint)
+                {
+                    if(($dateDebutDecale->getTimestamp()*1000) == $datePoint['x'] )
+                        $addDebut=false;
+                    if(($dateFinDecale->getTimestamp()*1000) == $datePoint['x'] )
+                        $addFin=false;
+                        
+                }
+                
+                if($addDebut)
+                {
+                    $mandats[1][]
+                           = array( "x"=>$dateDebutDecale->getTimestamp()*1000,
+                                    "y"=>0/*$cumuls[0]*/, "name"=>$etudeManager->getRefEtude($etude)." + ".$etude->getNom(),
+                                    'date'=>$dateDebutDecale->format('d/m/Y'),
+                                    'prix'=>$etudeManager->getTotalHT($etude));
+                }
+                if($addFin)
+                {
+                    $mandats[1][]
+                           = array( "x"=>$dateFinDecale->getTimestamp()*1000,
+                                    "y"=>0/*$cumuls[0]*/, "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
+                                    'date'=>$dateDebutDecale->format('d/m/Y'),
+                                    'prix'=>$etudeManager->getTotalHT($etude));
+                }
 
             }
-       }
+        }
         
+        //Etapes 2 trie dans l'ordre
+        $callback = function($a, $b) use($mandats) {
+            return $mandats[1][$a]['x']>$mandats[1][$b]['x'];
+        };
+        uksort($mandats[1], $callback);
+        foreach($mandats[1] as $entree)
+            $mandats[2][] = $entree;
+        $mandats[1]=array();
         
+        //Etapes 3 ++ --
+        foreach ($missions as $mission) {
+            $etude = $mission->getEtude();
+            $dateFin = $mission->getfinOm();
+            $dateDebut = $mission->getdebutOm();
+
+            if($dateDebut && $dateFin)
+            {
+                $idMandat=$etudeManager->dateToMandat($dateFin);
+
+                //$interval2 = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                $dateDebutDecale = clone $dateDebut;
+                //$dateDebutDecale->add($interval2);
+                $dateFinDecale = clone $dateFin;
+                //$dateFinDecale->add($interval2);
+                
+                foreach($mandats[2] as &$entree)
+                {
+                    if($entree['x'] >= $dateDebutDecale->getTimestamp()*1000 && $entree['x'] < $dateFinDecale->getTimestamp()*1000)
+                    {
+                        $entree['y']++;
+                    }
+                }
+            }
+        }
         
         // Chart
         $series = array();
@@ -236,19 +295,19 @@ class IndicateursController extends Controller
         
         //WARN :::
         
-        $ob->chart->renderTo('getMachin');  // The #id of the div where to render the chart
+        $ob->chart->renderTo('getRh');  // The #id of the div where to render the chart
         
         ///
-        
+        $ob->chart->type("spline");
         $ob->xAxis->labels(array('style'=>$style));
         $ob->yAxis->labels(array('style'=>$style));
-        $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
+        $ob->title->text("Évolution par mandat du nombre d'intervenant");
         $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
         $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
         $ob->xAxis->type('datetime');
         $ob->xAxis->dateTimeLabelFormats(array('month'  => "%b"));
         $ob->yAxis->min(0);
-        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
+        $ob->yAxis->title(array('text'  => "Nombre d'intervenant", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
         $ob->credits->enabled(false);
