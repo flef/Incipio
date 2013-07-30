@@ -1,22 +1,15 @@
 <div class="accordion" id="accordion{{key}}">
     {% for mandat in etudesParMandat |reverse %}
-        {% if mandat | length %}
         <div class="accordion-group">
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{key}}" href="#collapse{{key}}{{loop.index}}">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion{{key}}" href="#collapse{{key}}{{loop.index}}" data-mandat="{{ etudesParMandat | length - loop.index0 }}" data-stateID="{{key +3}}" data-loaded="false">
                     Mandat {{ etudesParMandat | length - loop.index0 }}
                 </a>
             </div>
-                {%if etudesParMandat | length - loop.index0 == 6 %}<!--Ouvre l'accordion sur le mandat en cours-->
-            <div id="collapse{{key}}{{loop.index}}" class="accordion-body in collapse" style="height: auto;">
-                {% else %}
             <div id="collapse{{key}}{{loop.index}}" class="accordion-body collapse">
-                {% endif %}
-                <div class="accordion-inner">
-                    {% include twig with  {'etudes':  mandat } %}
+                <div class="accordion-inner mandat{{ etudesParMandat | length - loop.index0 }} stateID{{3+key}}">
                 </div>
             </div>
         </div>
-        {% endif %}
     {% endfor%}
 </div>
