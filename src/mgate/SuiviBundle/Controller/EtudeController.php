@@ -138,7 +138,7 @@ class EtudeController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 if (!$etude->isKnownProspect()) {
@@ -198,7 +198,7 @@ class EtudeController extends Controller {
         $form = $this->createForm(new EtudeType, $etude);
         $deleteForm = $this->createDeleteForm($id);
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $em->persist($etude);
@@ -222,7 +222,7 @@ class EtudeController extends Controller {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -297,7 +297,7 @@ class EtudeController extends Controller {
         $form = $form->getForm();
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             $data = $form->getData();
 

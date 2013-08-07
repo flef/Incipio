@@ -26,7 +26,7 @@ class ProspectController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -99,7 +99,7 @@ class ProspectController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -155,7 +155,7 @@ class ProspectController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid())
         {

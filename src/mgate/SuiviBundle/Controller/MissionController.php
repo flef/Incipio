@@ -63,7 +63,7 @@ class MissionController extends Controller {
         $form = $this->createForm(new MissionType, $mission);
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $em->flush();

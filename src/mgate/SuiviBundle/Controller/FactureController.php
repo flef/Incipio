@@ -77,7 +77,7 @@ class FactureController extends Controller
 
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
        
             if( $form->isValid() )
             {
@@ -130,7 +130,7 @@ class FactureController extends Controller
         $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -232,7 +232,7 @@ class FactureController extends Controller
         $form = $this->createForm(new FactureType, $etude, array('type' => $type));
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
