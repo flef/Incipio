@@ -15,7 +15,7 @@ class AuditType extends AbstractType
                 'e' => 'Exhaustive',
                 'd' => 'Déontologique',
             )
-        );
+        ));
     }
 
     public function getParent(array $options)

@@ -22,7 +22,6 @@ class ClientContactType extends AbstractType
             ->add('faitPar','genemu_jqueryselect2_entity',array ('label' => 'Fait par',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'required' => true))
             
             //->add('thread', new ThreadType) // délicat 
@@ -50,7 +49,7 @@ class ClientContactType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\ClientContact',
-        );
+        ));
     }
 }
 

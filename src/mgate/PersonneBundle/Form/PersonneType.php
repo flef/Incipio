@@ -67,7 +67,7 @@ class PersonneType extends AbstractType
             'mini' => false,
             'user' => false,
             'signataire' => false
-        );
+        ));
     }
 }
 

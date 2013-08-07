@@ -38,7 +38,7 @@ class MembreType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\PersonneBundle\Entity\Membre',
-        );
+        ));
     }
 }
 
