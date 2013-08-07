@@ -40,6 +40,9 @@ class MissionType extends DocTypeType
                ))
             ->add('repartitionsJEH', 'collection', array(
                 'type' => new RepartitionJEHType(),
+				'options' => array(
+                    'data_class' => 'mgate\SuiviBundle\Entity\RepartitionJEH'
+				),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
@@ -59,7 +62,7 @@ class MissionType extends DocTypeType
 
     public function getName()
     {
-        return 'alex_suivibundle_mssiontype';
+        return 'mgate_suivibundle_mssiontype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
