@@ -22,7 +22,6 @@ class FormationType extends AbstractType {
                     'options' => array('label' => 'Suiveur de projet',
                         'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                         'property' => 'prenomNom',
-                        'property_path' => true,
                         'query_builder' => function(PersonneRepository $pr) {
                             return $pr->getMembreOnly();
                         },
@@ -36,7 +35,6 @@ class FormationType extends AbstractType {
                     'options' => array('label' => 'Suiveur de projet',
                         'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                         'property' => 'prenomNom',
-                        'property_path' => true,
                         'query_builder' => function(PersonneRepository $pr) {
                             return $pr->getMembreOnly();
                         },
@@ -52,11 +50,10 @@ class FormationType extends AbstractType {
         return 'mgate_suivibundle_formulairetype';
     }
 
-    public function getDefaultOptions(array $options) {
-        return array(
-            'data_class' => 'mgate\FormationBundle\Entity\Formation',
-            'prospect' => '',
-        );
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
+        'data_class' => 'mgate\FormationBundle\Entity\Formation',
+		));
     }
 
 }

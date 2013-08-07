@@ -7,9 +7,9 @@ use Symfony\Component\Form\FormBuilder;
 
 class AuditType extends AbstractType
 {
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+		$resolver->setDefaults(array(
             'choices' => array(
                 'n' => 'Non audité',
                 'e' => 'Exhaustive',

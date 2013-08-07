@@ -28,7 +28,7 @@ class FactureSubType extends DocTypeType
         return 'mgate_suivibundle_subfacturetype';
     }
 
-    public function getDefaultOptions(array $options) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Facture',
             'type' => null
