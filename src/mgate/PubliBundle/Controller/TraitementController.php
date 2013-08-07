@@ -938,7 +938,7 @@ class TraitementController extends Controller {
     }
 
     private function getEtudeFromID($id_etude) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         //Récupère l'étude avec son id
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude))
@@ -948,7 +948,7 @@ class TraitementController extends Controller {
     }
 
     private function getDoctypeAbsolutePathFromName($doc) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         $request = $this->get('request');
 
@@ -1244,7 +1244,7 @@ class TraitementController extends Controller {
     private function publipostageEleve($id, $doc, $key) {
         $key = intval($key);
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$personne = $em->getRepository('mgatePersonneBundle:Personne')->find($id))
             throw $this->createNotFoundException('mgatePersonneBundle:Personne' . '[id=' . $id . '] inexistant');
@@ -1292,7 +1292,7 @@ class TraitementController extends Controller {
     private function getAllChampEleve($personne, $doc, $key) {
         $champs = array();
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         // Signataire M-GaTE
         $signataire = $em->getRepository('mgatePersonneBundle:Personne')->getLastMembresByPoste('president')->getQuery()->execute();

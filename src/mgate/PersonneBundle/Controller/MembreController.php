@@ -50,7 +50,7 @@ class MembreController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)) {
             $membre = new Membre;
@@ -154,7 +154,7 @@ class MembreController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             if (!$entity = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id))
                 throw $this->createNotFoundException('Membre[id=' . $id . '] inexistant');

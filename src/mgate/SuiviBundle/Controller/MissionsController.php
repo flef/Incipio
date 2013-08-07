@@ -29,7 +29,7 @@ class MissionsController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');

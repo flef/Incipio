@@ -32,7 +32,7 @@ class AvMissionController extends Controller
      */
     public function addAction($id)
     {
-       $em = $this->getDoctrine()->getEntityManager();
+       $em = $this->getDoctrine()->getManager();
 
         // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
@@ -84,7 +84,7 @@ class AvMissionController extends Controller
      */
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $avmission = $em->getRepository('mgate\SuiviBundle\Entity\AvMission')->find($id) )
         {
