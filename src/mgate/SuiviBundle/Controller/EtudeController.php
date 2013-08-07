@@ -135,7 +135,7 @@ class EtudeController extends Controller {
             $etude->setSuiveur($user->getPersonne());
 
         $form = $this->createForm(new EtudeType(), $etude);
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if ($this->get('request')->getMethod() == 'POST') {
             $form->bindRequest($this->get('request'));
@@ -190,7 +190,7 @@ class EtudeController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
@@ -225,7 +225,7 @@ class EtudeController extends Controller {
         $form->bindRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
                 throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
@@ -335,7 +335,7 @@ class EtudeController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function suiviUpdateAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
 
         if (!$etude)
@@ -384,7 +384,7 @@ class EtudeController extends Controller {
      */
     public function vuCAAction($id) {
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if ($id > 0)
             $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id);

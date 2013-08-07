@@ -19,7 +19,7 @@ class ProspectController extends Controller
      */   
     public function ajouterAction($format)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $prospect = new Prospect;
         
         $form = $this->createForm(new ProspectType, $prospect);   
@@ -87,7 +87,7 @@ class ProspectController extends Controller
      */       
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
         {
@@ -128,7 +128,7 @@ class ProspectController extends Controller
       
         $value = $request->get('term');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $members = $em->getRepository('mgatePersonneBundle:Prospect')->ajaxSearch($value);
 
         $json = array();
@@ -159,7 +159,7 @@ class ProspectController extends Controller
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
                 throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');

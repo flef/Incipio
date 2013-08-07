@@ -17,7 +17,7 @@ class PosteController extends Controller
      */     
     public function ajouterAction()
     {
-        $em = $this->getDoctrine()->getEntityManager();    
+        $em = $this->getDoctrine()->getManager();    
         
         $poste = new Poste;
 
@@ -82,7 +82,7 @@ class PosteController extends Controller
      */    
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
             throw $this->createNotFoundException('Poste [id='.$id.'] inexistant');
@@ -122,7 +122,7 @@ class PosteController extends Controller
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
                 throw $this->createNotFoundException('Poste[id='.$id.'] inexistant');

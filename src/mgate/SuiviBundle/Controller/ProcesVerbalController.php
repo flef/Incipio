@@ -54,7 +54,7 @@ class ProcesVerbalController extends Controller
      */
     public function addAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
@@ -90,7 +90,7 @@ class ProcesVerbalController extends Controller
      */
     public function modifierAction($id_pv)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
             throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
@@ -126,7 +126,7 @@ class ProcesVerbalController extends Controller
      */
     public function redigerAction($id_etude, $type)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
             throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
@@ -176,7 +176,7 @@ class ProcesVerbalController extends Controller
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
                 throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');

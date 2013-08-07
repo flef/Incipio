@@ -54,7 +54,7 @@ class MissionController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function redigerAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$mission = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($id)) {
             throw $this->createNotFoundException('Mission[id=' . $id . '] inexistant');
