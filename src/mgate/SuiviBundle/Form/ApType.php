@@ -16,7 +16,6 @@ class ApType extends AbstractType {
         $builder->add('suiveur', 'genemu_jqueryselect2_entity', array('label' => 'Suiveur de projet',
                     'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                     'property' => 'prenomNom',
-                    'property_path' => true,
                     'query_builder' => function(PersonneRepository $pr) {
                         return $pr->getMembreOnly();
                     },
@@ -48,7 +47,6 @@ class SubApType extends DocTypeType {
         $builder->add('contactMgate', 'genemu_jqueryselect2_entity', array('label' => "'En cas d’absence ou de problème, il est également possible de joindre ...' ex: Vice-Président",
             'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
             'property' => 'prenomNom',
-            'property_path' => true,
             'attr' => array('title' => "Dans l'AP: 'En cas d’absence ou de problème, il est également possible de joindre le ...'"),
             'query_builder' => function(PersonneRepository $pr) {
                 return $pr->getMembresByPoste("%vice-president%");

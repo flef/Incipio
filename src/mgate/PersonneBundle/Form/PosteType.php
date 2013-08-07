@@ -26,7 +26,7 @@ class PosteType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\PersonneBundle\Entity\Poste',
-        );
+        ));
     }
 }
 

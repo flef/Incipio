@@ -35,7 +35,7 @@ class PhaseType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Phase',
-        );
+        ));
     }
 }
 
