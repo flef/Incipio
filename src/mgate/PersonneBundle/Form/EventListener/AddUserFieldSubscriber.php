@@ -40,13 +40,13 @@ class AddUserFieldSubscriber implements EventSubscriberInterface
             //return;
 
         $personne=$data;
-        $form->add($this->factory->createNamed('user', 'entity', null,  //attention ne pas oublier null !
+        $form->add('user', 'entity',
                     array ('label' => "Séléctionner un compte d'utilisateur associé s'il existe déjà",
                            'class' => 'mgate\\UserBundle\\Entity\\User',
                            'property' => 'username',
                            'required' => false,
                            'query_builder' => function(UserRepository $ur) use($personne) { return $ur->getNotPersonne($personne); },
-                                   ))); 
+                                   )); 
        
         // check if the product object is "new"
         /*
