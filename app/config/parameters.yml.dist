@@ -1,0 +1,26 @@
+parameters:
+###configuration par defaut, local, wamp
+    database_driver:   pdo_mysql
+    database_host:     localhost
+    database_port:     ~
+    database_name:     symfony
+    database_user:     root
+    database_password: ~
+    
+    mailer_transport:  smtp
+    mailer_host:       localhost
+    mailer_user:       ~
+    mailer_password:   ~
+    
+    su_mail:      'mgate.je@gmail.com'
+    su_username:  'superadmin'
+    su_password:  'motdepasse'
+    
+    locale:            fr
+    secret:            ThisIsNotSecret
+    
+    tva:  0.196
+    
+    pathToDoctype: D:/Dropbox/M-GaTE - Suivi d'Etude/My-M-GaTE/Documents Types/
+    debugEnable: true
+    fileType: .xml
