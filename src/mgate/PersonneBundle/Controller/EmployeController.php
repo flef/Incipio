@@ -33,7 +33,7 @@ class EmployeController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {
@@ -106,7 +106,7 @@ class EmployeController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {
