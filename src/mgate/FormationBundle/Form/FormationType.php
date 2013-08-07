@@ -4,6 +4,7 @@ namespace mgate\FormationBundle\Form;
 
 use mgate\FormationBundle\Entity\Formation;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form\PersonneType;
 use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
