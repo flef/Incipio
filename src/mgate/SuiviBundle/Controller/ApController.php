@@ -72,7 +72,7 @@ class ApController extends Controller {
         $form = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()));
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getAp());
@@ -238,7 +238,7 @@ class ApController extends Controller {
         $form = $this->createForm(new DocTypeSuiviType, $ap); //transmettre etude pour ajouter champ de etude
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $em->flush();

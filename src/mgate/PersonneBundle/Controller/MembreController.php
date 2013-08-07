@@ -89,7 +89,7 @@ class MembreController extends Controller {
         $form = $this->createForm(new MembreType, $membre);
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
 
@@ -151,7 +151,7 @@ class MembreController extends Controller {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

@@ -61,7 +61,7 @@ class DefaultController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -93,7 +93,7 @@ class DefaultController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid())
         {

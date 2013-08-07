@@ -69,7 +69,7 @@ class ProcesVerbalController extends Controller
         $form = $this->createForm(new ProcesVerbalSubType, $proces, array('type' => 'pvi', 'prospect' => $etude->getProspect(),'phases' => count($etude->getPhases()->getValues())));      
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -99,7 +99,7 @@ class ProcesVerbalController extends Controller
         $deleteForm = $this->createDeleteForm($id_pv);
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -145,7 +145,7 @@ class ProcesVerbalController extends Controller
         $form = $this->createForm(new ProcesVerbalType, $etude, array('type' => $type, 'prospect' => $etude->getProspect(), 'phases' => count($etude->getPhases()->getValues())));   
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -172,7 +172,7 @@ class ProcesVerbalController extends Controller
         $form = $this->createDeleteForm($id_pv);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid())
         {
