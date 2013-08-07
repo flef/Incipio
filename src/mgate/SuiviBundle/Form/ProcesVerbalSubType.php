@@ -24,7 +24,7 @@ class ProcesVerbalSubType extends DocTypeType
         return 'mgate_suivibundle_procesverbalsubtype';
     }
 
-    public function getDefaultOptions(array $options) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\ProcesVerbal',
             'type' => null,

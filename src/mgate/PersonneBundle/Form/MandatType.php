@@ -28,9 +28,9 @@ class MandatType extends AbstractType
         return 'mgate_personnebundle_mandatetype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+		$resolver->setDefaults(array(
             'data_class' => 'mgate\PersonneBundle\Entity\Mandat',
         );
     }
