@@ -54,7 +54,7 @@ class FactureController extends Controller
      */
     public function addAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
@@ -122,7 +122,7 @@ class FactureController extends Controller
      */
     public function modifierAction($id_facture)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id_facture) )
             throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
@@ -183,7 +183,7 @@ class FactureController extends Controller
     public function redigerAction($id_etude, $type)
     {
         $erreur = null;
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
         {
@@ -279,7 +279,7 @@ class FactureController extends Controller
      */    
     public function deleteAction($id)
     {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
                 throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');

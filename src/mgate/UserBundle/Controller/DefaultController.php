@@ -97,7 +97,7 @@ class DefaultController extends Controller
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\UserBundle\Entity\User')->find($id) )
                 throw $this->createNotFoundException('User[id='.$id.'] inexistant');
