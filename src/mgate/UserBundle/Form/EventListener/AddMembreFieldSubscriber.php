@@ -41,13 +41,12 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
         //if (!$data->getId())
         {
         $user=$data;
-        $form->add($this->factory->createNamed('personne', 'entity', null,
-                array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
+        $form->add('personne', 'entity', array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
                        'class' => 'mgate\PersonneBundle\Entity\Personne',
                        'property' => 'prenomNom',
                        'required' => false,
                        'query_builder' => function(PersonneRepository $pr) use($user) { return $pr->getMembreNotUser($user); },
-                        )));
+                        ));
                        
         }
         // check if the product object is "new"
