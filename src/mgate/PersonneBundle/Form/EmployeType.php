@@ -23,9 +23,9 @@ class EmployeType extends AbstractType
         return 'mgate_personnebundle_employetype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+		$resolver->setDefaults(array(
             'data_class' => 'mgate\PersonneBundle\Entity\Employe',
             'mini' => false,
             'signataire' => false

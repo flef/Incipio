@@ -74,9 +74,9 @@ class DocTypeType extends AbstractType
         return 'mgate_suivibundle_doctypetype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\DocType',
             'prospect' => null,
         );

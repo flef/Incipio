@@ -21,7 +21,7 @@ class RepartitionJEHType extends AbstractType {
         return 'mgate_suivibundle_RepartitionJEHType';
     }
 
-    public function getDefaultOptions(array $options) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\RepartitionJEH',
             'type' => '',

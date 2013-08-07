@@ -49,7 +49,7 @@ class SuiviType extends AbstractType {
         return 'mgate_suivibundle_suivitype';
     }
 
-    public function getDefaultOptions(array $options) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
         );

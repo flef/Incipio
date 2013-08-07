@@ -21,7 +21,7 @@ class ProcesVerbalType extends AbstractType {
         return 'mgate_suivibundle_ProcesVerbaltype';
     }
 
-    public function getDefaultOptions(array $options) {
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
         return array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'type' => '',
