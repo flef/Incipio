@@ -3,6 +3,7 @@ namespace mgate\SuiviBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class MoyenContactType extends AbstractType
 {

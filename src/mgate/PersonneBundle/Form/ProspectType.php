@@ -3,6 +3,7 @@
 namespace mgate\PersonneBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\CommentBundle\Form\ThreadType;

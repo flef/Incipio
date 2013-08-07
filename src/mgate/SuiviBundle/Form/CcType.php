@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use mgate\SuiviBundle\Entity\Etude;
 
