@@ -44,7 +44,6 @@ class AddUserFieldSubscriber implements EventSubscriberInterface
                     array ('label' => "Séléctionner un compte d'utilisateur associé s'il existe déjà",
                            'class' => 'mgate\\UserBundle\\Entity\\User',
                            'property' => 'username',
-                           'property_path' => true,
                            'required' => false,
                            'query_builder' => function(UserRepository $ur) use($personne) { return $ur->getNotPersonne($personne); },
                                    ))); 

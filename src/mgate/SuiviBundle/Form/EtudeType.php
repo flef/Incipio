@@ -38,7 +38,6 @@ class EtudeType extends AbstractType
                 array ('label' => 'Suiveur de projet',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false));        
               }
@@ -52,7 +51,7 @@ class EtudeType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
-        );
+        ));
     }
 }
 

@@ -28,7 +28,6 @@ class DocTypeType extends AbstractType
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('president%'); },
                        'required' => true));
         }
@@ -38,7 +37,6 @@ class DocTypeType extends AbstractType
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('tresorier'); },
                        'required' => true));
         }
@@ -79,7 +77,7 @@ class DocTypeType extends AbstractType
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\DocType',
             'prospect' => null,
-        );
+        ));
     }
 }
 

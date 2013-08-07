@@ -17,7 +17,6 @@ class MandatType extends AbstractType
                     array ('label' => 'Intitulé',
                            'class' => 'mgate\\PersonneBundle\\Entity\\Poste',
                            'property' => 'intitule',
-                           'property_path' => true,
                            'required' => false,));
                     
           
@@ -32,7 +31,7 @@ class MandatType extends AbstractType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\PersonneBundle\Entity\Mandat',
-        );
+        ));
     }
 }
 

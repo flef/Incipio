@@ -66,6 +66,6 @@ class MissionType extends DocTypeType
 	{
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Mission',
-        );
+        ));
     }
 }

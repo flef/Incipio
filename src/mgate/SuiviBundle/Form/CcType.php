@@ -30,7 +30,7 @@ class CcType extends AbstractType
 		$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'prospect' => '',
-        );
+        ));
     }
 }
 

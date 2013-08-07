@@ -14,7 +14,6 @@ class MoyenContactType extends AbstractType
                 'mail' => 'Mail',
                 'telephone' => 'Téléphone',
                 'physique' => 'Physique',
-                
             )
         ));
     }

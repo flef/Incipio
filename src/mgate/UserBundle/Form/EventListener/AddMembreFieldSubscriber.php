@@ -45,7 +45,6 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
                 array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
                        'class' => 'mgate\PersonneBundle\Entity\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'required' => false,
                        'query_builder' => function(PersonneRepository $pr) use($user) { return $pr->getMembreNotUser($user); },
                         )));

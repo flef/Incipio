@@ -29,7 +29,7 @@ class EmployeType extends AbstractType
             'data_class' => 'mgate\PersonneBundle\Entity\Employe',
             'mini' => false,
             'signataire' => false
-        );
+        ));
     }
 }
 
