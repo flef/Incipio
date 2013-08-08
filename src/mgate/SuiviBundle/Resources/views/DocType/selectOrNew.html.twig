@@ -2,9 +2,9 @@
      /* ...known personne... */
     
     var toggle = true;
-    var known = $('input#{{ known.get('id') }}');
-    var knowned = $('label:contains("{{ knowned.get('label') }}"):first').closest('div')
-    var newed = $('label:contains("{{ newed.get('label') }}"):first').closest('div');
+    var known = $('input#{{ known.vars.id }}');
+    var knowned = $("#{{ knowned.vars.id }}").parent('div');
+    var newed = $("#{{ newed.vars.id }}").parent('div');
     
     known.prop('checked', true);
 

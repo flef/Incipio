@@ -19,14 +19,14 @@ class ProspectController extends Controller
      */   
     public function ajouterAction($format)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $prospect = new Prospect;
         
         $form = $this->createForm(new ProspectType, $prospect);   
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -87,7 +87,7 @@ class ProspectController extends Controller
      */       
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
         {
@@ -99,7 +99,7 @@ class ProspectController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -128,7 +128,7 @@ class ProspectController extends Controller
       
         $value = $request->get('term');
 
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $members = $em->getRepository('mgatePersonneBundle:Prospect')->ajaxSearch($value);
 
         $json = array();
@@ -155,11 +155,11 @@ class ProspectController extends Controller
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
                 throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');

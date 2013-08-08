@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form;
 use mgate\SuiviBundle\Entity\Ap;
@@ -15,7 +16,6 @@ class ApType extends AbstractType {
         $builder->add('suiveur', 'genemu_jqueryselect2_entity', array('label' => 'Suiveur de projet',
                     'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                     'property' => 'prenomNom',
-                    'property_path' => true,
                     'query_builder' => function(PersonneRepository $pr) {
                         return $pr->getMembreOnly();
                     },
@@ -32,11 +32,11 @@ class ApType extends AbstractType {
         return 'mgate_suivibundle_aptype';
     }
 
-    public function getDefaultOptions(array $options) {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'prospect' => '',
-        );
+        ));
     }
 
 }
@@ -47,7 +47,6 @@ class SubApType extends DocTypeType {
         $builder->add('contactMgate', 'genemu_jqueryselect2_entity', array('label' => "'En cas d’absence ou de problème, il est également possible de joindre ...' ex: Vice-Président",
             'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
             'property' => 'prenomNom',
-            'property_path' => true,
             'attr' => array('title' => "Dans l'AP: 'En cas d’absence ou de problème, il est également possible de joindre le ...'"),
             'query_builder' => function(PersonneRepository $pr) {
                 return $pr->getMembresByPoste("%vice-president%");
@@ -62,11 +61,11 @@ class SubApType extends DocTypeType {
         return 'mgate_suivibundle_subaptype';
     }
 
-    public function getDefaultOptions(array $options) {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Ap',
             'prospect' => '',
-        );
+        ));
     }
 
 }

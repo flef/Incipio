@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
@@ -19,11 +20,11 @@ class AvMissionType extends DocTypeType
         return 'mgate_suivibundle_avmssiontype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+	$resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\AvMission',
-        );
+        ));
     }
 }
 

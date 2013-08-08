@@ -49,8 +49,6 @@ class Phase
      * @var integer $prixJEH
      *
      * @ORM\Column(name="prixJEH", type="integer", nullable=true)
-     * @Assert\Min(80)
-     * @Assert\Max(300)
      */
     private $prixJEH;
     
