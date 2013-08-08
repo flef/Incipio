@@ -54,7 +54,7 @@ class FormationController extends Controller
      */
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
         {
@@ -65,7 +65,7 @@ class FormationController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {

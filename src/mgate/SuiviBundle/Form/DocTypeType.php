@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
@@ -27,7 +28,6 @@ class DocTypeType extends AbstractType
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('president%'); },
                        'required' => true));
         }
@@ -37,7 +37,6 @@ class DocTypeType extends AbstractType
                 array ('label' => 'Signataire M-GaTE',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('tresorier'); },
                        'required' => true));
         }
@@ -73,12 +72,12 @@ class DocTypeType extends AbstractType
         return 'mgate_suivibundle_doctypetype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+            $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-            'prospect' => null,
-        );
+            'prospect' => '',
+        ));
     }
 }
 

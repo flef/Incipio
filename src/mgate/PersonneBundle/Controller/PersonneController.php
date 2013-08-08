@@ -44,7 +44,7 @@ class PersonneController extends Controller {
      */    
     public function deleteAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
    
            if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Personne')->find($id) )
                 throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');

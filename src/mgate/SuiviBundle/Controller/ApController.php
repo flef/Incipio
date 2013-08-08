@@ -58,7 +58,7 @@ class ApController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function redigerAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
@@ -72,7 +72,7 @@ class ApController extends Controller {
         $form = $this->createForm(new ApType, $etude, array('prospect' => $etude->getProspect()));
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $this->get('mgate.doctype_manager')->checkSaveNewEmploye($etude->getAp());
@@ -96,7 +96,7 @@ class ApController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function genererAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
@@ -229,7 +229,7 @@ class ApController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function SuiviAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
@@ -238,7 +238,7 @@ class ApController extends Controller {
         $form = $this->createForm(new DocTypeSuiviType, $ap); //transmettre etude pour ajouter champ de etude
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $em->flush();

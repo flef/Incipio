@@ -50,7 +50,7 @@ class MembreController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)) {
             $membre = new Membre;
@@ -89,7 +89,7 @@ class MembreController extends Controller {
         $form = $this->createForm(new MembreType, $membre);
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
 
@@ -151,10 +151,10 @@ class MembreController extends Controller {
         $form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
 
             if (!$entity = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id))
                 throw $this->createNotFoundException('Membre[id=' . $id . '] inexistant');

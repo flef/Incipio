@@ -17,7 +17,7 @@ class EmployeController extends Controller
      */    
     public function ajouterAction($prospect_id, $format)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         
         // On vérifie que le prospect existe bien
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($prospect_id) )
@@ -33,7 +33,7 @@ class EmployeController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {
@@ -94,7 +94,7 @@ class EmployeController extends Controller
      */ 
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $employe = $em->getRepository('mgate\PersonneBundle\Entity\Employe')->find($id) )
         {
@@ -106,7 +106,7 @@ class EmployeController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {

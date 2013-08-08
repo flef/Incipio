@@ -101,46 +101,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script type="text/javascript">
     
     // Fenetre resumant
@@ -283,7 +243,6 @@
     }
     
 </script>
-
 <script>
      /* ...known personne... */
  var toggle = new Array();
@@ -293,15 +252,15 @@
  
  {% for mission in form.missions %}
  
+ 
     toggle[{{ loop.index0 }}] = true;
-    known[{{ loop.index0 }}] = $('input#{{ mission.knownIntervenant.get('id') }}');
-    knowned[{{ loop.index0 }}] = $('#{{ mission.intervenant.get('id') }}').closest('div');
-    newed[{{ loop.index0 }}] = $('#{{ mission.newIntervenant.get('id') }}').closest('div').parent('div').closest('div');
+    known[{{ loop.index0 }}] = $('input#{{ mission.knownIntervenant.vars.id }}');
+    knowned[{{ loop.index0 }}] = $('#{{mission.intervenant.vars.id}}').parent('div');
+    newed[{{ loop.index0 }}] = $('#{{mission.newIntervenant.vars.id}}').parent('div');
     
     known[{{ loop.index0 }}].prop('checked', true);
 
     known[{{ loop.index0 }}].change(function() {
-
         if ($(this).is(':checked')) {
             knowned[{{ loop.index0 }}].find('input').attr('disabled', false);
             if (toggle) knowned[{{ loop.index0 }}].show();
@@ -318,8 +277,5 @@
 
     }).change();
 {% endfor %}
-
 </script> 
-
-
 {% endblock %}
