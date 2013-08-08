@@ -33,10 +33,10 @@ class ApType extends AbstractType {
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'prospect' => '',
-        );
+        ));
     }
 
 }
@@ -62,10 +62,10 @@ class SubApType extends DocTypeType {
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Ap',
             'prospect' => '',
-        );
+        ));
     }
 
 }
