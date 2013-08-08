@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
@@ -26,12 +27,12 @@ class DocTypeSuiviType extends AbstractType
         return 'alex_suivibundle_doctypetype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\DocType',
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+            $resolver->setDefaults(array(
+                'data_class' => 'mgate\SuiviBundle\Entity\DocType',
             /*'cascade_validation' => true,*/
-        );
+            ));
     }
 }
 

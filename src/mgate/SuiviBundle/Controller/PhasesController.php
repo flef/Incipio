@@ -35,7 +35,7 @@ class PhasesController extends Controller
      */
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
@@ -53,7 +53,7 @@ class PhasesController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {

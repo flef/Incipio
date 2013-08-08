@@ -54,7 +54,7 @@ class MissionController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function redigerAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$mission = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($id)) {
             throw $this->createNotFoundException('Mission[id=' . $id . '] inexistant');
@@ -63,7 +63,7 @@ class MissionController extends Controller {
         $form = $this->createForm(new MissionType, $mission);
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $em->flush();
