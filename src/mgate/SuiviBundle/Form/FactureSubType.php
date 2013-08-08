@@ -29,10 +29,10 @@ class FactureSubType extends DocTypeType
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Facture',
             'type' => null
-        );
+        ));
     }
 }
 

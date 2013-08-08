@@ -48,8 +48,8 @@ class EtudeType extends AbstractType
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
-	{
-		$resolver->setDefaults(array(
+    {
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
         ));
     }
