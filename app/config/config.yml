@@ -4,20 +4,18 @@ imports:
 
 framework:
     #esi:             ~
-    translator:      { fallback: %locale% }
+    #translator:      { fallback: %locale% } #pas de version localisée
     secret:          %secret%
     router:
         resource: "%kernel.root_dir%/config/routing.yml"
         strict_requirements: ~
-
     form:            ~
-    csrf_protection: ~
+    csrf_protection: true
     validation:      { enable_annotations: true }
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
-
     trusted_proxies: ~
     session:         ~
     fragments:       ~
@@ -27,13 +25,12 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-
 # Assetic Configuration
 assetic:
     debug:          %kernel.debug%
     use_controller: false
 
-    bundles:		[ "FOSCommentBundle" ]     
+    bundles:		[ "FOSCommentBundle" ]    # rajout de FOSCommentBundle 
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -91,7 +88,7 @@ swiftmailer:
     host:      %mailer_host%
     username:  %mailer_user%
     password:  %mailer_password%
-    spool:     { type: memory }
+    spool:     { type: memory } #à commenter si bug
 
 genemu_form:
     date: ~
