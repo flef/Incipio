@@ -29,10 +29,10 @@ class DocTypeSuiviType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
-		$resolver->setDefaults(array(
-            'data_class' => 'mgate\SuiviBundle\Entity\DocType',
+            $resolver->setDefaults(array(
+                'data_class' => 'mgate\SuiviBundle\Entity\DocType',
             /*'cascade_validation' => true,*/
-        ));
+            ));
     }
 }
 

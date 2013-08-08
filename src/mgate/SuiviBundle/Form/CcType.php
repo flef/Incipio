@@ -27,7 +27,7 @@ class CcType extends AbstractType
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
-		$resolver->setDefaults(array(
+            $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'prospect' => '',
         ));
@@ -46,10 +46,10 @@ class SubCcType extends DocTypeType {
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Cc',
             'prospect' => '',
-        );
+        ));
     }
 
 }

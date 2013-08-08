@@ -24,10 +24,10 @@ class FactureType extends AbstractType {
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
             'type' => '',
-        );
+        ));
     }
 
 }

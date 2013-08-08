@@ -39,10 +39,10 @@ class AvType extends DocTypeType {
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Av',
             'prospect' => '',
-        );
+        ));
     }
 
 }
