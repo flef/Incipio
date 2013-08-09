@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form;
 use mgate\SuiviBundle\Entity\Av;
@@ -37,11 +38,11 @@ class AvType extends DocTypeType {
         return 'mgate_suivibundle_avtype';
     }
 
-    public function getDefaultOptions(array $options) {
-        return array(
+    public function setDefaultOptions(OptionsResolverInterface $resolver) {
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Av',
             'prospect' => '',
-        );
+        ));
     }
 
 }

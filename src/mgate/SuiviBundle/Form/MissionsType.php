@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 
@@ -24,11 +25,11 @@ class MissionsType extends AbstractType
         return 'mgate_suivibundle_missionstype';
     }
 
-    public function getDefaultOptions(array $options)
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
-        );
+        ));
     }
 }
 

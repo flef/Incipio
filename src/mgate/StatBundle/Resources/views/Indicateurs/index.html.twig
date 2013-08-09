@@ -1,0 +1,109 @@
+{% extends "mgateStatBundle::layout.html.twig" %}
+
+{% block title %}
+Accueil - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %} 
+<style>
+            body {
+                width: 95%;
+                margin-left: 5px;
+                margin-right: 5px;
+                padding-top: 80px;
+            }      
+</style>
+<div class="tabbable tabs-left">
+    <ul id="indicateursLink" class="nav nav-tabs">
+        <li class="active"><a href="#gestion" data-toggle="tab" data-loaded="false">Gestion Associative</a></li>
+        <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">Recrutement Formation</a></li>
+        <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">Gestion d'études</a></li>
+        <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">Trésorerie</a></li>
+        <li class=""><a href="#com" data-toggle="tab" data-loaded="false">Développement Commercial</a></li>
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade active in row" id="gestion">
+            {% for indicateur in indicateursGestion %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+        <div class="tab-pane fade row" id="rfp">
+           {% for indicateur in indicateursRfp %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+        <div class="tab-pane fade row" id="suivi">
+                {% for indicateur in indicateursSuivi %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+        <div class="tab-pane fade row" id="treso">
+                {% for indicateur in indicateursTreso %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %} 
+        </div>
+        <div class="tab-pane fade row" id="com">
+                {% for indicateur in indicateursCom %}
+                <div class="indicateur span6" id="{{indicateur.methode}}">
+                    <div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block javascript %}
+    {{ parent() }}
+
+<script src="{{ asset('js/highcharts.js') }}"></script>
+<script src="{{ asset('js/highcharts-fr.js') }}"></script>
+<span id="jsChart"></span>
+
+<script>
+function getChartAsync(sender, chart){
+     $.get(
+        '{{path('mgate_indicateurs_ajax_suivi')}}',
+        { chartMethode: chart})
+        .done(function(data) {
+          $('#jsChart').append(data);
+        });
+};
+
+
+$('#indicateursLink').children().each(
+function(){
+    $(this).click(
+        function(){
+            if($(this).children().first().attr('data-loaded') == 'false'){
+                $($($(this).children().first().attr('href'))).children().each(
+                function(){
+                getChartAsync($(this).attr('id'),$(this).attr('id'));
+                });
+                $(this).children().first().attr('data-loaded',true)
+            }
+        });
+    
+});
+</script>
+{% endblock %}

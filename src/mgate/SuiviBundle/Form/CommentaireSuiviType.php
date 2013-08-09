@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Form\FormBuilderInterface;
 use mgate\SuiviBundle\Entity\Etude;
@@ -17,11 +18,11 @@ class CommentaireSuiviType extends AbstractType {
         return 'mgate_suivibundle_commentairesuivitype';
     }
     
-    public function getDefaultOptions(array $options)
-    {
-        return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\Etude',
-        );
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+            $resolver->setDefaults(array(
+                'data_class' => 'mgate\SuiviBundle\Entity\Etude',
+            ));
     }
     
 }

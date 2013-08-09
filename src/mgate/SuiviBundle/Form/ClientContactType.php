@@ -3,6 +3,7 @@
 namespace mgate\SuiviBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
@@ -21,7 +22,6 @@ class ClientContactType extends AbstractType
             ->add('faitPar','genemu_jqueryselect2_entity',array ('label' => 'Fait par',
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
-                       'property_path' => true,
                        'required' => true))
             
             //->add('thread', new ThreadType) // délicat 
@@ -45,11 +45,11 @@ class ClientContactType extends AbstractType
         return 'alex_suivibundle_clientcontacttype';
     }
 
-    public function getDefaultOptions(array $options)
-    {
-        return array(
-            'data_class' => 'mgate\SuiviBundle\Entity\ClientContact',
-        );
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+	{
+            $resolver->setDefaults(array(
+                'data_class' => 'mgate\SuiviBundle\Entity\ClientContact',
+            ));
     }
 }
 

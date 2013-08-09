@@ -1,11 +1,7 @@
-mgate_stat_homepage:
-    pattern:  /stat/
-    defaults: { _controller: mgateStatBundle:Default:index }
+mgate_indicateurs_index:
+    pattern:  /admin/indicateurs
+    defaults: { _controller: mgateStatBundle:Indicateurs:index }
 
-mgate_stat_ca:
-    pattern:  /stat/ca
-    defaults: { _controller: mgateStatBundle:Default:ca }
-
-mgate_stat_tauxconversion:
-    pattern:  /stat/tauxconversion
-    defaults: { _controller: mgateStatBundle:Default:tauxConversion }
+mgate_indicateurs_ajax_suivi:
+    pattern:  /admin/indicateurs/etudes
+    defaults: { _controller: mgateStatBundle:Indicateurs:ajax }

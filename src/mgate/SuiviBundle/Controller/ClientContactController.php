@@ -36,7 +36,7 @@ class ClientContactController extends Controller
      */
     public function addAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
@@ -89,7 +89,7 @@ class ClientContactController extends Controller
      */
     public function modifierAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $clientcontact = $em->getRepository('mgate\SuiviBundle\Entity\ClientContact')->find($id) )
         {
@@ -100,7 +100,7 @@ class ClientContactController extends Controller
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
                
             if( $form->isValid() )
             {
