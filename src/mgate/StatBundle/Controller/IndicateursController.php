@@ -30,23 +30,44 @@ class IndicateursController extends Controller
      */
     public function indexAction()
     {
+		// Définition des catégories
         $indicateursSuivi = array();
         $indicateursGestion = array();
         $indicateursRFP = array();
         $indicateursTreso = array();
         $indicateursCom = array();
         
+        /************************************************
+        *			Indicateurs Suivi d'études			*
+        *************************************************/
+		//Chiffre d'affaires en fonction du temps sur les Mandats
         $chiffreAffaires = new Indicateur();
         $chiffreAffaires->setTitre('Evolution du Chiffre d\'Affaires')
                         ->setMethode('getCA');
-
         $indicateursSuivi[] = $chiffreAffaires;
         
+		//??
         $ressourcesHumaines = new Indicateur();
         $ressourcesHumaines->setTitre('Evolution RH')
                         ->setMethode('getRh');
         $indicateursSuivi[] = $ressourcesHumaines;
-        
+
+		
+		/************************************************
+		*			Indicateurs Gestion Asso			*
+		*************************************************/
+		/************************************************
+		*				Indicateurs RFP					*
+		*************************************************/
+		/************************************************
+		*			Indicateurs Trésorierie 			*
+		*************************************************/
+		/************************************************
+		*		Indicateurs Prospection Commerciale		*
+		*************************************************/
+		
+		
+		
         return $this->render('mgateStatBundle:Indicateurs:index.html.twig',
                 array('indicateursSuivi' => $indicateursSuivi,
                     'indicateursRfp' => $indicateursRFP,
@@ -75,12 +96,10 @@ class IndicateursController extends Controller
     }
     
     
-    
-    
     /**
      * @Secure(roles="ROLE_CA")
      */    
-    public function getCA()
+    private function getCA()
     {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
@@ -177,7 +196,7 @@ class IndicateursController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */    
-    public function getRh()
+    private function getRh()
     {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
@@ -309,7 +328,6 @@ class IndicateursController extends Controller
         $ob->yAxis->min(0);
         $ob->yAxis->title(array('text'  => "Nombre d'intervenant", 'style'=>$style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
         $ob->credits->enabled(false);
         $ob->legend->floating(true);
         $ob->legend->layout('vertical');
