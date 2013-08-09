@@ -183,7 +183,7 @@ class AvController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function modifierAction($id) {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id)) {
             throw $this->createNotFoundException('Unable to find Etude entity.');
@@ -214,7 +214,7 @@ class AvController extends Controller {
         $form = $this->createForm(new AvType, $av, array('prospect' => $av->getEtude()->getProspect()));
 
         if ($this->get('request')->getMethod() == 'POST') {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if ($form->isValid()) {
                 $phasesEtude = $av->getEtude()->getPhases()->getValues();
