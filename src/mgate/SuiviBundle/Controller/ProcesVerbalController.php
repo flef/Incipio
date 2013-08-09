@@ -54,7 +54,7 @@ class ProcesVerbalController extends Controller
      */
     public function addAction($id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
@@ -69,7 +69,7 @@ class ProcesVerbalController extends Controller
         $form = $this->createForm(new ProcesVerbalSubType, $proces, array('type' => 'pvi', 'prospect' => $etude->getProspect(),'phases' => count($etude->getPhases()->getValues())));      
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
 
             if( $form->isValid() )
             {
@@ -90,7 +90,7 @@ class ProcesVerbalController extends Controller
      */
     public function modifierAction($id_pv)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
             throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
@@ -99,7 +99,7 @@ class ProcesVerbalController extends Controller
         $deleteForm = $this->createDeleteForm($id_pv);
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -126,7 +126,7 @@ class ProcesVerbalController extends Controller
      */
     public function redigerAction($id_etude, $type)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
             throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
@@ -145,7 +145,7 @@ class ProcesVerbalController extends Controller
         $form = $this->createForm(new ProcesVerbalType, $etude, array('type' => $type, 'prospect' => $etude->getProspect(), 'phases' => count($etude->getPhases()->getValues())));   
         if( $this->get('request')->getMethod() == 'POST' )
         {
-            $form->bindRequest($this->get('request'));
+            $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
@@ -172,11 +172,11 @@ class ProcesVerbalController extends Controller
         $form = $this->createDeleteForm($id_pv);
         $request = $this->getRequest();
 
-        $form->bindRequest($request);
+        $form->bind($request);
 
         if ($form->isValid())
         {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
                 throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
