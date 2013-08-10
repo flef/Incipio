@@ -4,173 +4,233 @@ namespace mgate\StatBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-
 use Ob\HighchartsBundle\Highcharts\Highchart;
-
 use mgate\SuiviBundle\Entity\EtudeRepository;
 
 // A externaliser dans les parametres
 define("STATE_ID_EN_COURS_X", 2);
-define("STATE_ID_TERMINEE_X",4);
+define("STATE_ID_TERMINEE_X", 4);
 
-class Indicateur{
+class Indicateur {
+
     private $titre;
     private $methode;
-    public function getTitre() { return $this->titre; } 
-    public function getMethode() { return $this->methode; } 
-    public function setTitre($x) { $this->titre = $x; return $this; } 
-    public function setMethode($x) { $this->methode = $x; return $this; } 
+
+    public function getTitre() {
+        return $this->titre;
+    }
+
+    public function getMethode() {
+        return $this->methode;
+    }
+
+    public function setTitre($x) {
+        $this->titre = $x;
+        return $this;
+    }
+
+    public function setMethode($x) {
+        $this->methode = $x;
+        return $this;
+    }
+
 }
 
+class IndicateursCollection{
+    private $indicateurs;
+    private $autorizedMethods;
+    
+    function __construct() {
+        $this->indicateurs = array();
+        $this->autorizedMethods = array();
+    }
 
-class IndicateursController extends Controller
-{
+    public function addCategorieIndicateurs($categorie){
+        if(!array_key_exists($categorie, $this->indicateurs))
+            $this->indicateurs[$categorie] = array();
+        return $this;
+    }
+    
+    public function setIndicateurs(Indicateur $indicateur, $categorie) {
+        $this->indicateurs[$categorie][] = $indicateur;
+        $this->setAutorizedMethods($indicateur->getMethode());
+        return $this;
+    }
+
+    public function getIndicateurs($categorie = NULL) {
+        if ($categorie !== NULL)
+            return $this->indicateurs[$categorie];
+        else
+            return $categorie;
+    }
+
+    public function getAutorizedMethods() {
+        return $this->autorizedMethods;
+    }
+
+    public function setAutorizedMethods($method) {
+        if(is_string($method))
+            array_push($this->autorizedMethods, $method);
+        else
+            $this->autorizedMethods = $method;
+        return $this;
+    }
+
+}
+
+class IndicateursController extends Controller {
+    
+    public $indicateursCollection;
+    
+    function __construct() {
+        $this->indicateursCollection = new IndicateursCollection();
+        if(isset($_SESSION['autorizedMethods']))
+            $this->indicateursCollection->setAutorizedMethods($_SESSION['autorizedMethods']);
+    }
+    
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function indexAction()
-    {
-		// Définition des catégories
-        $indicateursSuivi = array();
-        $indicateursGestion = array();
-        $indicateursRFP = array();
-        $indicateursTreso = array();
-        $indicateursCom = array();
+    public function indexAction() {
+        if(isset($_SESSION['autorizedMethods']))
+            unset($_SESSION['autorizedMethods']);
+        
+        // Définition des catégories     
+        $this->indicateursCollection
+                ->addCategorieIndicateurs('Suivi')
+                ->addCategorieIndicateurs('Rfp')
+                ->addCategorieIndicateurs('Com')
+                ->addCategorieIndicateurs('Treso')
+                ->addCategorieIndicateurs('Gestion');
         
         /************************************************
-        *			Indicateurs Suivi d'études			*
-        *************************************************/
-		//Chiffre d'affaires en fonction du temps sur les Mandats
+         * 			Indicateurs Suivi d'études			*
+         ************************************************/
+        //Chiffre d'affaires en fonction du temps sur les Mandats
         $chiffreAffaires = new Indicateur();
         $chiffreAffaires->setTitre('Evolution du Chiffre d\'Affaires')
-                        ->setMethode('getCA');
-        $indicateursSuivi[] = $chiffreAffaires;
+                ->setMethode('getCA');
         
-		//??
+
+        //??
         $ressourcesHumaines = new Indicateur();
         $ressourcesHumaines->setTitre('Evolution RH')
-                        ->setMethode('getRh');
-        $indicateursSuivi[] = $ressourcesHumaines;
+                ->setMethode('getRh');
+        
+        
+        $this->indicateursCollection
+                ->setIndicateurs($chiffreAffaires, 'Suivi')
+                ->setIndicateurs($ressourcesHumaines, 'Suivi');
+        /************************************************
+         * 			Indicateurs Gestion Asso			*
+         ************************************************/
+        /************************************************
+         * 				Indicateurs RFP					*
+         ************************************************/
+        /************************************************
+         * 			Indicateurs Trésorierie 			*
+         ************************************************/
+        /************************************************
+         * 		Indicateurs Prospection Commerciale		*
+         ************************************************/
 
-		
-		/************************************************
-		*			Indicateurs Gestion Asso			*
-		*************************************************/
-		/************************************************
-		*				Indicateurs RFP					*
-		*************************************************/
-		/************************************************
-		*			Indicateurs Trésorierie 			*
-		*************************************************/
-		/************************************************
-		*		Indicateurs Prospection Commerciale		*
-		*************************************************/
-		
-		
-		
-        return $this->render('mgateStatBundle:Indicateurs:index.html.twig',
-                array('indicateursSuivi' => $indicateursSuivi,
-                    'indicateursRfp' => $indicateursRFP,
-                    'indicateursGestion' => $indicateursGestion,
-                    'indicateursCom' => $indicateursCom,
-                    'indicateursTreso' => $indicateursTreso,
-                    ));
+
+        //Enregistrement Cross Requete des Méthodes tolérées
+        $_SESSION['autorizedMethods'] = $this->indicateursCollection->getAutorizedMethods();
+        
+        return $this->render('mgateStatBundle:Indicateurs:index.html.twig', 
+                array('indicateursSuivi' => $this->indicateursCollection->getIndicateurs('Suivi'),
+                    'indicateursRfp' => $this->indicateursCollection->getIndicateurs('Rfp'),
+                    'indicateursGestion' => $this->indicateursCollection->getIndicateurs('Gestion'),
+                    'indicateursCom' => $this->indicateursCollection->getIndicateurs('Com'),
+                    'indicateursTreso' => $this->indicateursCollection->getIndicateurs('Treso'),
+                ));
     }
-    
 
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function ajaxAction()
-    {
+    public function ajaxAction() {
         $request = $this->get('request');
 
-        if($request->getMethod() == 'GET')
-        {
+        if ($request->getMethod() == 'GET') {
             $chartMethode = $request->query->get('chartMethode');
-            
-            if($chartMethode)      
+            if (in_array($chartMethode, $this->indicateursCollection->getAutorizedMethods()))
                 return $this->$chartMethode();
         }
-        return $this->render('mgateStatBundle:Indicateurs:index.html.twig', array('indicateurs' => array()));
+        return new \Symfony\Component\HttpFoundation\Response('<!-- Chart '. $chartMethode .' does not exist. -->');
     }
-    
-    
+
     /**
      * @Secure(roles="ROLE_CA")
-     */    
-    private function getCA()
-    {
+     */
+    private function getCA() {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         $etude = new \mgate\SuiviBundle\Entity\Etude;
         $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
-        
+
         //$data = array();
-        $mandats = array(); 
+        $mandats = array();
         $maxMandat = $etudeManager->getMaxMandatCc();
 
-        $cumuls=array();
-        for($i=0 ; $i<=$maxMandat ; $i++) 
+        $cumuls = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
             $cumuls[$i] = 0;
 
         foreach ($Ccs as $cc) {
             $etude = $cc->getEtude();
             $dateSignature = $cc->getDateSignature();
             $signee = $etude->getStateID() == STATE_ID_EN_COURS_X
-                   || $etude->getStateID() == STATE_ID_TERMINEE_X;
+                    || $etude->getStateID() == STATE_ID_TERMINEE_X;
 
-            if($dateSignature && $signee)
-            {
-                $idMandat=$etudeManager->dateToMandat($dateSignature);
-                
+            if ($dateSignature && $signee) {
+                $idMandat = $etudeManager->dateToMandat($dateSignature);
+
                 $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
 
-                $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                $interval = new \DateInterval('P' . ($maxMandat - $idMandat) . 'Y');
                 $dateDecale = clone $dateSignature;
                 $dateDecale->add($interval);
 
                 $mandats[$idMandat][]
-                       = array( "x"=>$dateDecale->getTimestamp()*1000,
-                                "y"=>$cumuls[$idMandat], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
-                                'date'=>$dateDecale->format('d/m/Y'),
-                                'prix'=>$etudeManager->getTotalHT($etude));
-
+                        = array("x" => $dateDecale->getTimestamp() * 1000,
+                    "y" => $cumuls[$idMandat], "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
+                    'date' => $dateDecale->format('d/m/Y'),
+                    'prix' => $etudeManager->getTotalHT($etude));
             }
-       }
-        
-        
-        
-        // Chart
-        $series = array();
-        foreach ($mandats as $idMandat => $data)
-        {
-            //if($idMandat>=4)
-            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data);
         }
 
-        $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
+
+
+        // Chart
+        $series = array();
+        foreach ($mandats as $idMandat => $data) {
+            //if($idMandat>=4)
+            $series[] = array("name" => "Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), "data" => $data);
+        }
+
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
 
         $ob = new Highchart();
         $ob->global->useUTC(false);
-        
-        
-        
+
+
+
         //WARN :::
-        
+
         $ob->chart->renderTo('getCA');  // The #id of the div where to render the chart
-        
         ///
-        
-        $ob->xAxis->labels(array('style'=>$style));
-        $ob->yAxis->labels(array('style'=>$style));
+
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
         $ob->title->text('Évolution par mandat du chiffre d\'affaire signé cumulé');
-        $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
-        $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->title(array('text' => "Date", 'style' => $style));
         $ob->xAxis->type('datetime');
-        $ob->xAxis->dateTimeLabelFormats(array('month'  => "%b"));
+        $ob->xAxis->dateTimeLabelFormats(array('month' => "%b"));
         $ob->yAxis->min(0);
-        $ob->yAxis->title(array('text'  => "Chiffre d'Affaire signé cumulé", 'style'=>$style));
+        $ob->yAxis->title(array('text' => "Chiffre d'Affaire signé cumulé", 'style' => $style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name} à {point.prix} €');
         $ob->credits->enabled(false);
@@ -183,35 +243,33 @@ class IndicateursController extends Controller
         $ob->legend->align('left');
         $ob->legend->backgroundColor('#FFFFFF');
         $ob->legend->itemStyle($style);
-        $ob->plotOptions->series(array('lineWidth'=>5, 'marker'=>array('radius'=>8)));
+        $ob->plotOptions->series(array('lineWidth' => 5, 'marker' => array('radius' => 8)));
         $ob->series($series);
 
         //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
-        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(    
-            'chart' => $ob
-        ));
+        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(
+                    'chart' => $ob
+                ));
     }
-    
-    
+
     /**
      * @Secure(roles="ROLE_CA")
-     */    
-    private function getRh()
-    {
+     */
+    private function getRh() {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         $etude = new \mgate\SuiviBundle\Entity\Etude;
         $missions = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Mission')->findBy(array(), array('debutOm' => 'asc'));
-        
+
         //$data = array();
         $mandats = array();
         $maxMandat = $etudeManager->getMaxMandatCc();
 
-        $cumuls=array();
-        for($i=0 ; $i<=$maxMandat ; $i++) 
+        $cumuls = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
             $cumuls[$i] = 0;
-        
-        $mandats[1]=array();
+
+        $mandats[1] = array();
 
         //Etape 1 remplir toutes les dates
         foreach ($missions as $mission) {
@@ -219,13 +277,12 @@ class IndicateursController extends Controller
             $dateDebut = $mission->getdebutOm();
             $dateFin = $mission->getfinOm();
 
-            if($dateDebut && $dateFin)
-            {
-                $idMandat=$etudeManager->dateToMandat($dateDebut);
+            if ($dateDebut && $dateFin) {
+                $idMandat = $etudeManager->dateToMandat($dateDebut);
 
                 $cumuls[0]++;
 
-                $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                //$interval = new \DateInterval('P' . ($maxMandat - $idMandat) . 'Y');
                 $dateDebutDecale = clone $dateDebut;
                 //$dateDebutDecale->add($interval);
                 $dateFinDecale = clone $dateFin;
@@ -233,100 +290,90 @@ class IndicateursController extends Controller
 
                 $addDebut = true;
                 $addFin = true;
-                foreach($mandats[1] as $datePoint)
-                {
-                    if(($dateDebutDecale->getTimestamp()*1000) == $datePoint['x'] )
-                        $addDebut=false;
-                    if(($dateFinDecale->getTimestamp()*1000) == $datePoint['x'] )
-                        $addFin=false;
-                        
-                }
-                
-                if($addDebut)
-                {
-                    $mandats[1][]
-                           = array( "x"=>$dateDebutDecale->getTimestamp()*1000,
-                                    "y"=>0/*$cumuls[0]*/, "name"=>$etudeManager->getRefEtude($etude)." + ".$etude->getNom(),
-                                    'date'=>$dateDebutDecale->format('d/m/Y'),
-                                    'prix'=>$etudeManager->getTotalHT($etude));
-                }
-                if($addFin)
-                {
-                    $mandats[1][]
-                           = array( "x"=>$dateFinDecale->getTimestamp()*1000,
-                                    "y"=>0/*$cumuls[0]*/, "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
-                                    'date'=>$dateDebutDecale->format('d/m/Y'),
-                                    'prix'=>$etudeManager->getTotalHT($etude));
+                foreach ($mandats[1] as $datePoint) {
+                    if (($dateDebutDecale->getTimestamp() * 1000) == $datePoint['x'])
+                        $addDebut = false;
+                    if (($dateFinDecale->getTimestamp() * 1000) == $datePoint['x'])
+                        $addFin = false;
                 }
 
+                if ($addDebut) {
+                    $mandats[1][]
+                            = array("x" => $dateDebutDecale->getTimestamp() * 1000,
+                        "y" => 0/* $cumuls[0] */, "name" => $etudeManager->getRefEtude($etude) . " + " . $etude->getNom(),
+                        'date' => $dateDebutDecale->format('d/m/Y'),
+                        'prix' => $etudeManager->getTotalHT($etude));
+                }
+                if ($addFin) {
+                    $mandats[1][]
+                            = array("x" => $dateFinDecale->getTimestamp() * 1000,
+                        "y" => 0/* $cumuls[0] */, "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
+                        'date' => $dateDebutDecale->format('d/m/Y'),
+                        'prix' => $etudeManager->getTotalHT($etude));
+                }
             }
         }
-        
+
         //Etapes 2 trie dans l'ordre
         $callback = function($a, $b) use($mandats) {
-            return $mandats[1][$a]['x']>$mandats[1][$b]['x'];
-        };
+                    return $mandats[1][$a]['x'] > $mandats[1][$b]['x'];
+                };
         uksort($mandats[1], $callback);
-        foreach($mandats[1] as $entree)
+        foreach ($mandats[1] as $entree)
             $mandats[2][] = $entree;
-        $mandats[1]=array();
-        
+        $mandats[1] = array();
+
         //Etapes 3 ++ --
         foreach ($missions as $mission) {
             $etude = $mission->getEtude();
             $dateFin = $mission->getfinOm();
             $dateDebut = $mission->getdebutOm();
 
-            if($dateDebut && $dateFin)
-            {
-                $idMandat=$etudeManager->dateToMandat($dateFin);
+            if ($dateDebut && $dateFin) {
+                $idMandat = $etudeManager->dateToMandat($dateFin);
 
                 //$interval2 = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
                 $dateDebutDecale = clone $dateDebut;
                 //$dateDebutDecale->add($interval2);
                 $dateFinDecale = clone $dateFin;
                 //$dateFinDecale->add($interval2);
-                
-                foreach($mandats[2] as &$entree)
-                {
-                    if($entree['x'] >= $dateDebutDecale->getTimestamp()*1000 && $entree['x'] < $dateFinDecale->getTimestamp()*1000)
-                    {
+
+                foreach ($mandats[2] as &$entree) {
+                    if ($entree['x'] >= $dateDebutDecale->getTimestamp() * 1000 && $entree['x'] < $dateFinDecale->getTimestamp() * 1000) {
                         $entree['y']++;
                     }
                 }
             }
         }
-        
+
         // Chart
         $series = array();
-        foreach ($mandats as $idMandat => $data)
-        {
+        foreach ($mandats as $idMandat => $data) {
             //if($idMandat>=4)
-            $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data);
+            $series[] = array("name" => "Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), "data" => $data);
         }
 
-        $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
 
         $ob = new Highchart();
         $ob->global->useUTC(false);
-        
-        
-        
+
+
+
         //WARN :::
-        
+
         $ob->chart->renderTo('getRh');  // The #id of the div where to render the chart
-        
         ///
         $ob->chart->type("spline");
-        $ob->xAxis->labels(array('style'=>$style));
-        $ob->yAxis->labels(array('style'=>$style));
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
         $ob->title->text("Évolution par mandat du nombre d'intervenant");
-        $ob->title->style(array('fontWeight'=>'bold', 'fontSize'=>'20px'));
-        $ob->xAxis->title(array('text'  => "Date", 'style'=>$style));
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->title(array('text' => "Date", 'style' => $style));
         $ob->xAxis->type('datetime');
-        $ob->xAxis->dateTimeLabelFormats(array('month'  => "%b"));
+        $ob->xAxis->dateTimeLabelFormats(array('month' => "%b"));
         $ob->yAxis->min(0);
-        $ob->yAxis->title(array('text'  => "Nombre d'intervenant", 'style'=>$style));
+        $ob->yAxis->title(array('text' => "Nombre d'intervenant", 'style' => $style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->credits->enabled(false);
         $ob->legend->floating(true);
@@ -338,13 +385,13 @@ class IndicateursController extends Controller
         $ob->legend->align('left');
         $ob->legend->backgroundColor('#FFFFFF');
         $ob->legend->itemStyle($style);
-        $ob->plotOptions->series(array('lineWidth'=>5, 'marker'=>array('radius'=>8)));
+        $ob->plotOptions->series(array('lineWidth' => 5, 'marker' => array('radius' => 8)));
         $ob->series($series);
 
         //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
-        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(    
-            'chart' => $ob
-        ));
+        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(
+                    'chart' => $ob
+                ));
     }
 
 }
