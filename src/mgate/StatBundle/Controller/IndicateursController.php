@@ -247,7 +247,7 @@ class IndicateursController extends Controller {
         $ob->series($series);
 
         //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
-        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
                     'chart' => $ob
                 ));
     }
@@ -389,7 +389,7 @@ class IndicateursController extends Controller {
         $ob->series($series);
 
         //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
-        return $this->render('mgateStatBundle:Indicateurs:indicateur.html.twig', array(
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
                     'chart' => $ob
                 ));
     }
