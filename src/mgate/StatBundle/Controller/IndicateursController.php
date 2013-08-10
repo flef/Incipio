@@ -89,10 +89,8 @@ class IndicateursController extends Controller
         {
             $chartMethode = $request->query->get('chartMethode');
             
-            if($chartMethode == "getCA")      
-                return $this->getCA();
-            elseif($chartMethode == "getRh")      
-                return $this->getRh();
+            if($chartMethode)      
+                return $this->$chartMethode();
         }
         return $this->render('mgateStatBundle:Indicateurs:index.html.twig', array('indicateurs' => array()));
     }
@@ -227,7 +225,7 @@ class IndicateursController extends Controller
 
                 $cumuls[0]++;
 
-                //$interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
+                $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
                 $dateDebutDecale = clone $dateDebut;
                 //$dateDebutDecale->add($interval);
                 $dateFinDecale = clone $dateFin;
