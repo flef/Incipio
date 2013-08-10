@@ -1,26 +1,4 @@
 <ul class="nav">
-    {% if is_granted('ROLE_SUIVEUR') %}
-    <!-- SUIVI D'ETUDES-->
-    <li class="dropdown">
-        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'Étude <b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Voir les études</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Créer une étude</a></li>
-        {% if etudesSuiveur | length %}
-            <li class="nav-header">Mes Etudes:</li>
-            {% for etude in etudesSuiveur %}
-            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></li>
-            {% endfor%}
-        {% endif %}
-            {% if is_granted('ROLE_CA') %}
-            <li class="nav-header">Administration</li>
-            <li><a href="{{ path('mgateSuivi_vu_ca') }}">Vu CA</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_suivi') }}">Récapitulatif</a></li>
-            {% endif %}
-        </ul>
-    </li>
-    {% endif %}
-    
     <!-- GESTION ASSOCIATIVE -->
     {% if is_granted('ROLE_SUIVEUR') %}
     <li class="dropdown">
@@ -46,6 +24,28 @@
             {% endif %}
         </ul>
     </li>
+
+    {% if is_granted('ROLE_SUIVEUR') %}
+    <!-- SUIVI D'ETUDES-->
+    <li class="dropdown">
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'Étude <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Voir les études</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Créer une étude</a></li>
+        {% if etudesSuiveur | length %}
+            <li class="nav-header">Mes Etudes:</li>
+            {% for etude in etudesSuiveur %}
+            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></li>
+            {% endfor%}
+        {% endif %}
+            {% if is_granted('ROLE_CA') %}
+            <li class="nav-header">Administration</li>
+            <li><a href="{{ path('mgateSuivi_vu_ca') }}">Vu CA</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_suivi') }}">Récapitulatif</a></li>
+            {% endif %}
+        </ul>
+    </li>
+    {% endif %}
     
     <!-- TRESORERIE-->
     {% if is_granted('ROLE_CA') %}
@@ -72,10 +72,10 @@
         </ul>
     </li>
     
-    <!-- PILOTAGE -->
+    <!-- PILOTAGE DE LA J.E. -->
     {% if is_granted('ROLE_CA') %}
     <li class="dropdown">
-        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Pilotage<b class="caret"></b></a>
+        <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Pilotage de la J.E.<b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li><a href="{{ path('mgate_indicateurs_index') }}">Indicateur</a></li>
             <li><a>Statistique</a></li>
