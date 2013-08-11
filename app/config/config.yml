@@ -56,7 +56,7 @@ doctrine:
         entity_managers:
             default:
                 auto_mapping: true
-                mappings: 
+                mappings:
                     gedmo_translatable:
                         type: annotation
                         prefix: Gedmo\Translatable\Entity
@@ -180,3 +180,11 @@ jms_serializer:
 #            another-name:
 #                namespace_prefix: "My\\BarBundle"
 #                path: "@MyBarBundle/Resources/config/serializer"
+
+# necessaire pour les champs des entities : on create, on update
+stof_doctrine_extensions:
+    default_locale: fr_FR
+    orm:
+        default:
+            tree: true
+            timestampable: true # on create, on update
