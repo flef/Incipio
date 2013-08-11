@@ -56,16 +56,12 @@ class FactureController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) ) {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-        
         $facture = new Facture;
-        
         $etude->addFi($facture);
-        
         $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
         
         $time = time();
@@ -73,8 +69,6 @@ class FactureController extends Controller
         $facture->setDateSignature($now);
         
         $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));   
-        
-
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bind($this->get('request'));

@@ -210,10 +210,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $factures;
 
-    /** proces verbal intermedaire
-     * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude")
+    /**
+     * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude", cascade={"persist", "remove"})
      */
-    private $pvis;
+    private $procesVerbaux;
 
     /**
      * @ORM\OneToMany(targetEntity="Av", mappedBy="etude")
@@ -224,11 +224,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToMany(targetEntity="AvMission", mappedBy="etude")
      */
     private $avMissions;
-
-    /** proces verbal recette
-     * @ORM\OneToOne(targetEntity="ProcesVerbal", inversedBy="etude", cascade={"persist"})
-     */
-    private $pvr;
 
     /**
      * @var boolean $acompte
@@ -282,7 +277,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pvis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->procesVerbaux = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
 
@@ -1041,6 +1036,25 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->factures;
     }
 
+    
+    /**
+     * Remove procesVerbal
+     *
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $facture
+     */
+    public function removeProcesVerbal(\mgate\SuiviBundle\Entity\ProcesVerbal $pv) {
+        $this->procesVerbaux->removeElement($pv);
+    }
+
+    /**
+     * Get factures
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProcesVerbaux() {
+        return $this->procesVerbaux;
+    }
+    
     /**
      * Add pvis
      *
@@ -1050,6 +1064,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function addPvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvi) {
         $this->pvis[] = $pvi;
         $pvi->setEtude($this);
+        $pvi->setType('pvi');
 
         return $this;
     }
@@ -1066,32 +1081,35 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get pvis
      *
-     * @return array
+     * @return mixed(array, ProcesVerbal)
      */
     public function getPvis($key = -1) {
         $pvis = array();
 
-        $i = 0;
-        // En fait pvis ca prend toutes les PV qui sont lié a l'etude $this
-        // C'est le principe de OneToMany, d'ou la selection ci-dessous
-        foreach ($this->pvis as $value) {
+        $i = -1;
+        foreach ($this->procesVerbaux as $value) {
             if ($value->getType() == "pvi") {
                 $pvis[] = $value;
                 $i++;
             }
         }
+
         if ($key >= 0) {
             if ($key < $i)
                 return $pvis[$key];
             else
                 return NULL;
         }
-        if (count($pvis))
+        if (count($pvis)) {
+            usort($pvis, array($this, 'trieDateSignature'));
             return $pvis;
+        }
         else
             return NULL;
     }
 
+    
+    
     /**
      * Add avs
      *
@@ -1159,12 +1177,17 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return Etude
      */
     public function setPvr(\mgate\SuiviBundle\Entity\ProcesVerbal $pvr) {
-        if ($pvr != null)
-            $pvr->setEtude($this);
+        $pvr->setEtude($this);
+        $pvr->setType('pvr');
 
-        $this->pvr = $pvr;
-
-        return $this;
+        foreach ($this->procesVerbaux as $pv) {
+            if ($pv->getType() == "pvr") {
+                $pv = $pvr;
+                return $this;
+            }
+        }
+        $this->procesVerbaux[] = $pvr;
+        
     }
 
     /**
@@ -1173,7 +1196,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return \mgate\SuiviBundle\Entity\ProcesVerbal
      */
     public function getPvr() {
-        return $this->pvr;
+        foreach ($this->procesVerbaux as $pv) {
+            if ($pv->getType() == "pvr")
+                return $pv;
+        }
     }
 
     /**
@@ -1199,7 +1225,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->fis->removeElement($fi);
     }
 
-    function compare($a, $b) {
+    function trieDateSignature($a, $b) {
         if ($a->getDateSignature() == $b->getDateSignature())
             return 0;
         else
@@ -1229,7 +1255,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
                 return NULL;
         }
         if (count($fis)) {
-            usort($fis, array($this, 'compare'));
+            usort($fis, array($this, 'trieDateSignature'));
             return $fis;
         }
         else
