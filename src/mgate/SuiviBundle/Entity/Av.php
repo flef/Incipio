@@ -41,7 +41,7 @@ class Av extends DocType
     
     /**
      * @var AvMission $avenantsMissions
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\AvMission", mappedBy="Av", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\AvMission", mappedBy="avenant", cascade={"persist","remove"})
      */
     private $avenantsMissions;
     
