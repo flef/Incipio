@@ -39,7 +39,11 @@ class RepartitionJEH
      */
     private $prixJEH;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="AvMission", inversedBy="nouvelleRepartition")
+     */
+    private $avMission;
+    
     /**
      * Get id
      *
@@ -117,5 +121,28 @@ class RepartitionJEH
     public function getPrixJEH()
     {
         return $this->prixJEH;
+    }
+    
+    /**
+     * Set avMission
+     *
+     * @param \mgate\SuiviBundle\Entity\AvMission $avenant
+     * @return RepartitionJEH
+     */
+    public function setAvMission(\mgate\SuiviBundle\Entity\AvMission $avMission = null)
+    {
+        $this->avMission = $avMission;
+    
+        return $this;
+    }
+
+    /**
+     * Get avMission
+     *
+     * @return \mgate\SuiviBundle\Entity\AvMission
+     */
+    public function getAvMission()
+    {
+        return $this->avMission;
     }
 }
