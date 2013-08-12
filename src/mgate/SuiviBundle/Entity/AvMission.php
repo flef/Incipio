@@ -22,6 +22,12 @@ class AvMission extends DocType
     private $id;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="avMissions", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $etude;
+    
+    /**
      * @var Mission
      * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
      */
@@ -190,5 +196,29 @@ class AvMission extends DocType
     public function getAvenant()
     {
         return $this->avenant;
+    }
+    
+    
+    /**
+     * Set etude
+     *
+     * @param mgate\SuiviBundle\Entity\Etude $etude
+     * @return AvMission
+     */
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
+    {
+        $this->etude = $etude;
+    
+        return $this;
+    }
+
+    /**
+     * Get etude
+     *
+     * @return mgate\SuiviBundle\Entity\Etude 
+     */
+    public function getEtude()
+    {
+        return $this->etude;
     }
 }
