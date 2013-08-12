@@ -56,14 +56,11 @@ class ProcesVerbalController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
+        if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) ) {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
         
-        
         $proces = new ProcesVerbal;
-        $proces->setType("pvi");
         $etude->addPvi($proces);
         
         $form = $this->createForm(new ProcesVerbalSubType, $proces, array('type' => 'pvi', 'prospect' => $etude->getProspect(),'phases' => count($etude->getPhases()->getValues())));      
