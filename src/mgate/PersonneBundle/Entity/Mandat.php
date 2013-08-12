@@ -39,7 +39,7 @@ class Mandat
     
     /**
      *
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", inversedBy="Mandat")
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", inversedBy="mandats")
      */
     private $membre;
     
