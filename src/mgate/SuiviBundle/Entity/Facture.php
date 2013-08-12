@@ -70,7 +70,7 @@ class Facture extends DocType
      * Set etude
      *
      * @param mgate\SuiviBundle\Entity\Etude $etude
-     * @return Fi
+     * @return Facture
      */
     public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
     {
@@ -93,7 +93,7 @@ class Facture extends DocType
      * Set type
      *
      * @param string $type
-     * @return Etude
+     * @return Facture
      */
     public function setType($type)
     {
