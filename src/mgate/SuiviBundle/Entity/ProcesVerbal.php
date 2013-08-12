@@ -22,7 +22,7 @@ class ProcesVerbal extends DocType
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="procesVerbaux", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
