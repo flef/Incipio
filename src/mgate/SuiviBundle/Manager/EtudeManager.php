@@ -306,121 +306,95 @@ class EtudeManager extends \Twig_Extension {
     }
     
     
-    public  function getErrors(Etude $etude)
-    {
-      $errors = array();
-        
-      if($etude->getAp()!=NULL && $etude->getCc()!=NULL)
-      {
-        if($etude->getCc()->getDateSignature()!=NULL && $etude->getAp()->getDateSignature() > $etude->getCc()->getDateSignature())
-        {
-              $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure
-                  ou égale à la date de signature de la Convention Client.');  
-              array_push($errors, $error);
+    public function getErrors(Etude $etude) {
+        $errors = array();
+
+        if ($etude->getAp() && $etude->getCc()) {
+            if ($etude->getCc()->getDateSignature() != NULL && $etude->getAp()->getDateSignature() > $etude->getCc()->getDateSignature()) {
+                $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure
+                  ou égale à la date de signature de la Convention Client.');
+                array_push($errors, $error);
+            }
         }
-      }
-      
-      foreach($etude->getMissions() as $mission)
-      {
-        if( $mission->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $mission->getDateSignature())
-        {
-            $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                  ou égale à la date de signature des récapitulatifs de mission.'); 
-            array_push($errors, $error);
-            break;
+
+        if ($etude->getCc()) {
+            foreach ($etude->getMissions() as $mission) {
+                if ($mission->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $mission->getDateSignature()) {
+                    $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                    ou égale à la date de signature des récapitulatifs de mission.');
+                    array_push($errors, $error);
+                    break;
+                }
+            }
         }
-      }
-      
-      if($etude->getPvis()){
-        foreach($etude->getPvis() as $pvi)
-        {
-          if($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature())
-          {
-              $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                   à la date de signature des PVIS.'); 
-              array_push($errors, $error);
-              break;
-          }
+
+        if ($etude->getCc()) {
+            foreach ($etude->getPvis() as $pvi) {
+                if ($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature()) {
+                    $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
+                   à la date de signature des PVIS.');
+                    array_push($errors, $error);
+                    break;
+                }
+            }
         }
-      }
-      //ordre PVI
-      if($etude->getPvis()){
-        foreach($etude->getPvis() as $pvi)
-        {
-            if(isset($pviAnterieur))
-            {
-              if($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature())
-              {
-                  $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
-                 '); 
-                  array_push($errors, $error);
-                  break;
-              }
+        //ordre PVI
+        foreach ($etude->getPvis() as $pvi) {
+            if (isset($pviAnterieur)) {
+                if ($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature()) {
+                    $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
+           ');
+                    array_push($errors, $error);
+                    break;
+                }
             }
             $pviAnterieur = $pvi;
         }
-      }
-      foreach($etude->getMissions() as $mission)
-      {
-          if($etude->getPvis()){
-            foreach($etude->getPvis() as $pvi)
-            {
-                if($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature())
-                {
+
+        foreach ($etude->getMissions() as $mission) {
+            foreach ($etude->getPvis() as $pvi) {
+                if ($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature()) {
                     $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
-                   à la date de signature des PVIS.'); 
-                      array_push($errors, $error);
-                      break;
+               à la date de signature des PVIS.');
+                    array_push($errors, $error);
+                    break;
                 }
             }
-          }
-      }
-      
-      if($etude->getPvr())
-      {
-        if($etude->getDateFin() != NULL && $etude->getPvr()->getDateSignature() >= $etude->getDateFin())
-        {
-               $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure
-                   à la date de fin de l\'étude. Consulter Convention Client ou Avenant à la Convention Client pour la fin l\'étude.'); 
-                      array_push($errors, $error);
         }
-      }
-      
+
+        if ($etude->getPvr()) {
+            if ($etude->getDateFin() != NULL && $etude->getPvr()->getDateSignature() >= $etude->getDateFin()) {
+                $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure
+                   à la date de fin de l\'étude. Consulter Convention Client ou Avenant à la Convention Client pour la fin l\'étude.');
+                array_push($errors, $error);
+            }
+        }
+
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P10D');
-        if($this->getDateFin($etude))
-        {
-            if(!$etude->getPvr())
-            {    
-                if($now<$this->getDateFin($etude) && $this->getDateFin($etude)->sub($DateAvert0)<$now)
-                {
-                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
+        if ($this->getDateFin($etude)) {
+            if (!$etude->getPvr()) {
+                if ($now < $this->getDateFin($etude) && $this->getDateFin($etude)->sub($DateAvert0) < $now) {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');
+                    array_push($errors, $error);
+                } else if ($this->getDateFin($etude) < $now) {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'la fin de l\'étude est passée. Pensez à faire un PVR ou des avenants à la CC et au(x) RM.');
                     array_push($errors, $error);
                 }
-                else if($this->getDateFin($etude)<$now)
-                {
-                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'la fin de l\'étude est passée. Pensez à faire un PVR ou des avenants à la CC et au(x) RM.');  
-                    array_push($errors, $error);
-                }
-            }
-            else
-            {
-                if($etude->getPvr()->getDateSignature()>$this->getDateFin($etude))
-                {
-                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La date du PVR est située après la fin de l\'étude.');  
+            } else {
+                if ($etude->getPvr()->getDateSignature() > $this->getDateFin($etude)) {
+                    $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La date du PVR est située après la fin de l\'étude.');
                     array_push($errors, $error);
                 }
             }
         }
-        
-        if(strlen($etude->getPresentationProjet()) < 300)
-        {
-            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 300 caractères');  
+
+        if (strlen($etude->getPresentationProjet()) < 300) {
+            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 300 caractères');
             array_push($errors, $error);
         }
-        
+
         return $errors;
-        
     }
     
     public  function getWarnings(Etude $etude)
@@ -456,16 +430,18 @@ class EtudeManager extends \Twig_Extension {
         }
         
         $DateAvertSignatureRm=new \DateInterval('P5D');
-        foreach($etude->getMissions() as $mission)
-        {
-            if($mission->getRedige())
-            {    
-                if($mission->getDateSignature()){
-                    if($etude->getCc()->getDateSignature() != NULL && $mission->getDateSignature()->sub($DateAvertSignatureRm) > $etude->getCc()->getDateSignature())
-                    {
-                        $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'La date de signature du RM ne devrait pas être autant éloignée de la date de la signature de la CC.');  
-                        array_push($warnings, $warning);
-                        break;
+        if($etude->getCc()){
+            foreach($etude->getMissions() as $mission)
+            {
+                if($mission->getRedige())
+                {    
+                    if($mission->getDateSignature()){
+                        if($etude->getCc()->getDateSignature() != NULL && $mission->getDateSignature()->sub($DateAvertSignatureRm) > $etude->getCc()->getDateSignature())
+                        {
+                            $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'La date de signature du RM ne devrait pas être autant éloignée de la date de la signature de la CC.');  
+                            array_push($warnings, $warning);
+                            break;
+                        }
                     }
                 }
             }
