@@ -44,6 +44,11 @@ class AvMission extends DocType
      * @ORM\Column(name="differentielDelai", type="integer")
      */
     private $differentielDelai;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Av", inversedBy="avenantsMissions")
+     */
+    private $avenant;
 
     /**
      * Get id
@@ -162,5 +167,28 @@ class AvMission extends DocType
     public function getNouveauPourcentage()
     {
         return $this->nouveauPourcentage;
+    }
+    
+    /**
+     * Set avenant
+     *
+     * @param \mgate\SuiviBundle\Entity\Av $avenant
+     * @return AvMission
+     */
+    public function setAvenant(\mgate\SuiviBundle\Entity\Av $avenant = null)
+    {
+        $this->avenant = $avenant;
+    
+        return $this;
+    }
+
+    /**
+     * Get avenant
+     *
+     * @return \mgate\SuiviBundle\Entity\Av 
+     */
+    public function getAvenant()
+    {
+        return $this->avenant;
     }
 }
