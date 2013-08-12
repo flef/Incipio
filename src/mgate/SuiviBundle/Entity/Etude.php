@@ -1098,12 +1098,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             else
                 return NULL;
         }
-        if (count($pvis)) {
-            usort($pvis, array($this, 'trieDateSignature'));
-            return $pvis;
-        }
-        else
-            return NULL;
+        
+        usort($pvis, array($this, 'trieDateSignature'));
+        return $pvis;
     }
 
     
@@ -1250,12 +1247,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             else
                 return NULL;
         }
-        if (count($fis)) {
-            usort($fis, array($this, 'trieDateSignature'));
-            return $fis;
-        }
-        else
-            return NULL;
+        
+        usort($fis, array($this, 'trieDateSignature'));
+        return $fis;
     }
 
     /**
