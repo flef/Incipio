@@ -29,7 +29,7 @@ class AvMission extends DocType
     
     /**
      * @var integer $nouvelleRepartition
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="AvMission", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="avMission", cascade={"persist","remove"})
      */
     private $nouvelleRepartition;
     
