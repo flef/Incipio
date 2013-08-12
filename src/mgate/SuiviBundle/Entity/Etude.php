@@ -1086,16 +1086,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getPvis($key = -1) {
         $pvis = array();
 
-        $i = -1;
         foreach ($this->procesVerbaux as $value) {
             if ($value->getType() == "pvi") {
                 $pvis[] = $value;
-                $i++;
             }
         }
 
         if ($key >= 0) {
-            if ($key < $i)
+            if ($key < count($pvis))
                 return $pvis[$key];
             else
                 return NULL;
@@ -1240,16 +1238,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getFis($key = -1) {
         $fis = array();
 
-        $i = -1;
         foreach ($this->factures as $value) {
             if ($value->getType() == "fi") {
                 $fis[] = $value;
-                $i++;
             }
         }
 
         if ($key >= 0) {
-            if ($key < $i)
+            if ($key < count($fis))
                 return $fis[$key];
             else
                 return NULL;
