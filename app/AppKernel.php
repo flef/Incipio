@@ -41,9 +41,10 @@ class AppKernel extends Kernel
             
             //new Io\FormBundle\IoFormBundle(),
 			new JMS\SerializerBundle\JMSSerializerBundle($this),
-			new JMS\AopBundle\JMSAopBundle(),
-            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
-            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+                        // JMS Security Extra Bundle :
+                        new JMS\AopBundle\JMSAopBundle(),
+                        new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+                        new JMS\DiExtraBundle\JMSDiExtraBundle($this),
 			
 			/****************************************
 			*				M-GaTE					*
