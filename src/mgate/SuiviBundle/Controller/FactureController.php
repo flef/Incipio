@@ -80,10 +80,8 @@ class FactureController extends Controller
                     
                     if($etude->getFa())
                         $montantHT -= $etude->getFa()->getMontantHT();
-                    if($etude->getFis()){
-                        foreach($etude->getFis() as $fi)
-                            $montantHT -= $fi->getMontantHT();
-                    }
+                    foreach($etude->getFis() as $fi)
+                        $montantHT -= $fi->getMontantHT();
                     if($etude->getFs())
                         $montantHT -= $etude->getFs()->getMontantHT();
                     
@@ -134,11 +132,8 @@ class FactureController extends Controller
                     
                     if($etude->getFa())
                         $montantHT -= $etude->getFa()->getMontantHT();
-                    
-                    if($etude->getFis()){
-                        foreach($etude->getFis() as $fi)
-                            $montantHT -= $fi->getMontantHT();
-                    }
+                    foreach($etude->getFis() as $fi)
+                        $montantHT -= $fi->getMontantHT();
                     if($etude->getFs())
                         $montantHT -= $etude->getFs()->getMontantHT();
                                         
@@ -211,10 +206,8 @@ class FactureController extends Controller
                 $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                 if($etude->getFa())
                     $montantHT -= $etude->getFa()->getMontantHT();
-                if($etude->getFis()){
-                    foreach($etude->getFis() as $fi)
-                        $montantHT -= $fi->getMontantHT();
-                }
+                foreach($etude->getFis() as $fi)
+                    $montantHT -= $fi->getMontantHT();
                 
                 if($montantHT < 0)
                     throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
@@ -238,10 +231,8 @@ class FactureController extends Controller
                     $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                     if($etude->getFa())
                         $montantHT -= $etude->getFa()->getMontantHT();
-                    if($etude->getFis()){
-                        foreach($etude->getFis() as $fi)
-                            $montantHT -= $fi->getMontantHT();
-                    }
+                    foreach($etude->getFis() as $fi)
+                        $montantHT -= $fi->getMontantHT();
 
                     if($montantHT < 0)
                         throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));

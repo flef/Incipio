@@ -447,15 +447,13 @@ class TraitementController extends Controller {
         //Factures de solde et intermediaires
         $Solde_Intermediaire_HT = (float) 0;
         $Factures_Intermediaires_HT = (float) 0;
-        if ($etude->getFis()) {
-            $i = 0;
-            foreach ($etude->getFis() as $fi) {
-                if ($doc != 'FI' || $i < $key)
-                    $Factures_Intermediaires_HT += $fi->getMontantHT();
-                else if ($i == $key)
-                    $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
-                $i++;
-            }
+        $i = 0;
+        foreach ($etude->getFis() as $fi) {
+            if ($doc != 'FI' || $i < $key)
+                $Factures_Intermediaires_HT += $fi->getMontantHT();
+            else if ($i == $key)
+                $Solde_Intermediaire_HT = (float) $fi->getMontantHT();
+            $i++;
         }
 
         $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
@@ -760,7 +758,6 @@ class TraitementController extends Controller {
           //Factures de solde et intermediaires
           $Solde_Intermediaire_HT = (float) 0;
           $Factures_Intermediaires_HT = (float) 0;
-          if ($etude->getFis()) {
           $i = 0;
           foreach ($etude->getFis() as $fi) {
           if ($doc != 'FI' || $i < $key)
@@ -770,7 +767,6 @@ class TraitementController extends Controller {
           //WARN INCORECTE LE NUM LES FI NE SONT PAS TOUJOURS DANS L'ORDRE EN BDD IDEM POUR GET REF DOC
           //IL FAUT AJOUTER UN CHAMP NUM DE FI
           $i++;
-          }
           }
 
           $Deja_Paye_HT = (float) ($Acompte_HT + $Factures_Intermediaires_HT);
