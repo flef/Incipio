@@ -5,8 +5,8 @@
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Gestion Associative <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li class="nav-header">Membres</li>
-            <li><a href="{{ path('mgatePersonne_membre_ajouter') }}">Ajouter un membre</a></li>
-            <li><a href="{{ path('mgatePersonne_membre_homepage') }}">Lister les membres</a></li>
+            <li><a href="{{ path('mgatePersonne_membre_homepage') }}"><i class="icon-list"></i> Lister les membres</a></li>
+            <li><a href="{{ path('mgatePersonne_membre_ajouter') }}"><i class="icon-plus"></i> Ajouter un membre</a></li>
         </ul>
     </li>
     {% endif %}
@@ -16,11 +16,11 @@
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Formations <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li class="nav-header">Formations</li>
-            <li><a href="{{ path('mgate_formations_lister') }}">Voir les formations</a></li>
+            <li><a href="{{ path('mgate_formations_lister') }}"><i class="icon-briefcase"></i> Voir les formations</a></li>
             {% if is_granted('ROLE_CA') %}
             <li class="nav-header">Administration</li>
-            <li><a href="{{ path('mgate_formation_ajouter') }}">Ajouter une formation</a></li>
-            <li><a href="{{ path('mgate_formations_index_admin') }}">Gérer les formations</a></li>
+            <li><a href="{{ path('mgate_formations_index_admin') }}"><i class="icon-list"></i> Gérer les formations</a></li>
+            <li><a href="{{ path('mgate_formation_ajouter') }}"><i class="icon-plus"></i> Ajouter une formation</a></li>
             {% endif %}
         </ul>
     </li>
@@ -30,18 +30,18 @@
     <li class="dropdown">
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Suivi d'Étude <b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Voir les études</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}">Créer une étude</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_homepage') }}"><i class="icon-list"></i> Voir les études</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_ajouter') }}"><i class="icon-plus"></i> Créer une étude</a></li>
         {% if etudesSuiveur | length %}
             <li class="nav-header">Mes Etudes:</li>
             {% for etude in etudesSuiveur %}
-            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"><i class="icon-thumbs-up"></i> {{ getRefEtude(etude) }}</a></li>
             {% endfor%}
         {% endif %}
             {% if is_granted('ROLE_CA') %}
             <li class="nav-header">Administration</li>
-            <li><a href="{{ path('mgateSuivi_vu_ca') }}">Vu CA</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_suivi') }}">Récapitulatif</a></li>
+            <li><a href="{{ path('mgateSuivi_vu_ca') }}"><i class="icon-eye-open"></i> Vu CA</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_suivi') }}"><i class="icon-calendar"></i> Récapitulatif</a></li>
             {% endif %}
         </ul>
     </li>
@@ -52,7 +52,7 @@
     <li class="dropdown">
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Trésorerie<b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="{{ path('mgate_treso_urssaf') }}">URSSAF</a></li>
+            <li><a href="{{ path('mgate_treso_urssaf') }}"><i class="icon-info-sign"></i> URSSAF</a></li>
         </ul>
     </li>
     {% endif %}
@@ -62,12 +62,12 @@
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Développement Commercial<b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li class="nav-header">Prospect/Client</li>
-            <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}">Ajouter un prospect</a></li>
-            <li><a href="{{ path('mgatePersonne_prospect_homepage') }}">Voir les prospects</a></li>
+            <li><a href="{{ path('mgatePersonne_prospect_homepage') }}"><i class="icon-list"></i> Voir les prospects</a></li>
+            <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}"><i class="icon-plus"></i> Ajouter un prospect</a></li>
         {% if is_granted('ROLE_CA') %}
             <li class="nav-header">Annuaire</li>
-            <li><a href="{{ path('mgatePersonne_annuaire') }}">Annuaire global</a></li>
-            <li><a href="{{ path('mgatePersonne_listeDiffusion') }}">Liste de diffusion</a></li>
+            <li><a href="{{ path('mgatePersonne_annuaire') }}"><i class="icon-book"></i> Annuaire global</a></li>
+            <li><a href="{{ path('mgatePersonne_listeDiffusion') }}"><i class="icon-envelope"></i> Liste de diffusion</a></li>
         {% endif %}
         </ul>
     </li>
@@ -77,8 +77,7 @@
     <li class="dropdown">
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Pilotage de la J.E.<b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="{{ path('mgate_indicateurs_index') }}">Indicateur</a></li>
-            <li><a>Statistique</a></li>
+            <li><a href="{{ path('mgate_indicateurs_index') }}"><i class="icon-globe"></i> Indicateur</a></li>
         </ul>
     </li>
     {% endif %}
@@ -88,12 +87,12 @@
     <li class="dropdown">
         <a class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown">Administration<b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="{{ path('mgate_publi_documenttype_index') }}">Gestion des Doctypes</a></li>
+            <li><a href="{{ path('mgate_publi_documenttype_index') }}"><i class="icon-wrench"></i> Gestion des Doctypes</a></li>
             <li class="nav-header">Postes</li>
-            <li><a href="{{ path('mgatePersonne_poste_homepage') }}">Lister les postes</a></li>
-            <li><a href="{{ path('mgatePersonne_poste_ajouter') }}">Ajouter un poste</a></li>
+            <li><a href="{{ path('mgatePersonne_poste_homepage') }}"><i class="icon-list"></i> Lister les postes</a></li>
+            <li><a href="{{ path('mgatePersonne_poste_ajouter') }}"><i class="icon-plus"></i> Ajouter un poste</a></li>
             <li class="nav-header">Compte d'Utilisateur:</li>
-            <li><a href="{{ path('mgate_user_lister') }}">Lister / Modifier</a></li>
+            <li><a href="{{ path('mgate_user_lister') }}"><i class="icon-pencil"></i> Lister / Modifier</a></li>
         </ul>
     </li>
     {% endif %}
