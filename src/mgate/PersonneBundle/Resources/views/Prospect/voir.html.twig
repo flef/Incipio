@@ -7,7 +7,7 @@
 {% block content_bundle %}
 
 	<h2>{{ prospect.nom }}</h2>
-	<i>{{ prospect.entite }}</i>
+	<i>{{ prospect.EntiteToString }}</i>
 
         <p>Adresse :<br/>{{ prospect.adresse }}</p>
         <a href="{{ path('mgatePersonne_prospect_modifier', {'id': prospect.id}) }}">Modifier le prospect</a><br />

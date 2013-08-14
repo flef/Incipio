@@ -3,7 +3,7 @@
 namespace mgate\PersonneBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 use \mgate\CommentBundle\Entity;
 
 /**
@@ -45,7 +45,8 @@ class Prospect
     /**
      * @var string $entite
      *
-     * @ORM\Column(name="entite", type="string", length=255, nullable=true)
+     * @ORM\Column(name="entite", type="integer", nullable=true)
+     * @Assert\Choice(callback = "getEntiteChoiceAssert")
      */
     private $entite;
     
@@ -174,6 +175,30 @@ class Prospect
     public function getEntite()
     {
         return $this->entite;
+    }
+    
+    public static function getEntiteChoice()
+    {
+        return array(   0 => "Autre Type d'Entreprise",
+            1 => 'Particulier',
+            2 => 'Association',
+            3 => 'Start-Up',
+            4 => 'Micro-Entreprises (moins de 10 salariés)',
+            5 => 'Très Petites Entreprises (moins de 20 salariés)',
+            6 => 'Petites et les Moyennes Entreprises (moins de 250 salariés)',
+            7 => 'Entreprises de Taille Intermédiaire (moins de 5000 salariés)',
+            8 => 'Grandes Entreprises (plus de 5000 salariés)',
+            );
+    }
+    public static function getEntiteChoiceAssert()
+    {
+        return array_keys(self::getEntiteChoice());
+    }
+    
+    public function getEntiteToString()
+    {
+        $tab = $this->getEntiteChoice();
+        return $tab[$this->entite];
     }
 
     /**

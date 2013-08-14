@@ -382,7 +382,7 @@ class TraitementController extends Controller {
         if ($etude->getProspect() != NULL) {
             $this->array_push_assoc($champs, 'Nom_Client', $etude->getProspect()->getNom());
             if ($etude->getProspect()->getEntite())
-                $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntite());
+                $this->array_push_assoc($champs, 'Entite_Sociale', $etude->getProspect()->getEntiteToString());
             else
                 $this->array_push_assoc($champs, 'Entite_Sociale', ' ');
             $this->array_push_assoc($champs, 'Adresse_Client', $etude->getProspect()->getAdresse());
