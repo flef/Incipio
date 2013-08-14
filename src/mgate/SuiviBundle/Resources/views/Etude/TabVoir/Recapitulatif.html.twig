@@ -80,7 +80,7 @@
     {% for contact in etude.clientContacts%}
     <tr>
         <td>
-            <a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': contact.id}) }}">Contact n°{{loop.index}}</a>
+            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">Contact n°{{loop.index}}</a>
         </td>
         <td>
         {% set dernierContact = dernierContact | date("U") < contact.date |date("U") ? contact.date : dernierContact %}
