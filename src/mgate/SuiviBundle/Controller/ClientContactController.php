@@ -62,6 +62,13 @@ class ClientContactController extends Controller
         ));
         
     }
+    
+    private function compareDate(ClientContact $a,ClientContact $b) {
+        if ($a->getDate() == $b->getDate())
+            return 0;
+        else
+            return ($a->getDate() < $b->getDate()) ? -1 : 1;
+    }
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -70,17 +77,21 @@ class ClientContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id); // Ligne qui posse problème
+        $contactClient = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id);
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find AvMission entity.');
+        if (!$contactClient) {
+            throw $this->createNotFoundException('Unable to find ClientContact entity.');
         }
 
-        //$deleteForm = $this->createDeleteForm($id);
+        $etude = $contactClient->getEtude();
+        $contactsClient = $etude->getClientContacts()->toArray();
+        usort($contactsClient, array($this, 'compareDate'));
 
         return $this->render('mgateSuiviBundle:ClientContact:voir.html.twig', array(
-            'clientcontact'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),  */      ));
+            'contactsClient'      => $contactsClient,
+            'selectedContactClient' => $contactClient,
+            'etude' => $etude,
+            ));
         
     }
     
