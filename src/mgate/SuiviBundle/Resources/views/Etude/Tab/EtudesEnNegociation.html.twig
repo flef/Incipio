@@ -61,6 +61,7 @@
             {% set dernierContact = 0 %}
             {% for contact in etude.clientContacts%}
                     {% set dernierContact = dernierContact | date("U") < contact.date |date("U") ? contact.date : dernierContact %}
+                    <a href="{{ path('mgateSuivi_clientcontact_voir', {'id' : contact.id }) }}">
                     {% if contact.moyenContact == 'telephone'%}
                         <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-headphones"></i> 
                     {% elseif contact.moyenContact == 'mail'%}
@@ -68,6 +69,7 @@
                     {% else %}
                         <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-eye-open"></i> 
                     {% endif %}
+                    </a>
             {% endfor %}
             </td>
             <td>
