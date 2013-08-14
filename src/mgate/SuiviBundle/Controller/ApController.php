@@ -138,7 +138,7 @@ class ApController extends Controller {
             );
         if ($prospect != NULL)
             $testProspect = array('Nom du prospect' => $prospect->getNom(),
-                'Entite' => $prospect->getEntite(),
+                'Entite' => $prospect->getEntiteToString(),
                 'Adresse du prospect' => $prospect->getAdresse()
             );
         $etude->getAp()->setGenerer(1); //initialisation avant test
