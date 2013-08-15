@@ -63,7 +63,7 @@ class Av extends DocType
             3 => 'Avenant de Montant',
             4 => 'Avenant de Mission',
             5 => 'Avenant de Rupture');
-    }
+    }  
     
     /**
      * Get id

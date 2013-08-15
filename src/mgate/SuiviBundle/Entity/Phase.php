@@ -99,6 +99,13 @@ class Phase
      * @ORM\ManyToOne(targetEntity="Av", inversedBy="phases")
      */
     private $avenant;
+    
+    /**
+     * @var integer $etat 0 : modifiée, 1:ajoutée -1 : supprimée
+     *
+     * @ORM\Column(name="etatSurAvenant", type="integer", nullable=true)
+     */
+    private $etatSurAvenant;
 
 
     public function __construct()
@@ -368,52 +375,8 @@ class Phase
         return $tab[$this->validation];
     }
     
-    /**
-     * Set avenantStatut
-     *
-     * @param integer $avenantStatut
-     * @return Phase
-     */
-    public function setAvenantStatut($avenantStatut)
-    {
-        $this->avenantStatut = $avenantStatut;
     
-        return $this;
-    }
-
-    /**
-     * Get avenantStatut
-     *
-     * @return integer 
-     */
-    public function getAvenantStatut()
-    {
-        return $this->avenantStatut;
-    }
-
-    /**
-     * Set avenantModification
-     *
-     * @param \mgate\SuiviBundle\Entity\Phase $avenantModification
-     * @return Phase
-     */
-    public function setAvenantModification(\mgate\SuiviBundle\Entity\Phase $avenantModification = null)
-    {
-        $this->avenantModification = $avenantModification;
     
-        return $this;
-    }
-
-    /**
-     * Get avenantModification
-     *
-     * @return \mgate\SuiviBundle\Entity\Phase 
-     */
-    public function getAvenantModification()
-    {
-        return $this->avenantModification;
-    }
-
     /**
      * Set avenant
      *
@@ -435,5 +398,46 @@ class Phase
     public function getAvenant()
     {
         return $this->avenant;
+    }
+
+    
+    public static function getEtatSurAvenantChoice()
+    {
+        return array(   0 => "Modifiée", //Inutile
+                        1 => "Ajoutée",
+                        -1 => "Supprimée");
+    }
+    public static function getEtatSurAvenantChoiceAssert()
+    {
+        return array_keys(Phase::getEtatSurAvenantChoice());
+    }
+    
+    public function getEtatSurAvenantToString()
+    {
+        $tab = $this->getValidationChoice();
+        return $tab[$this->validation];
+    }
+    
+    /**
+     * Set etatSurAvenant
+     *
+     * @param integer $etatSurAvenant
+     * @return Phase
+     */
+    public function setEtatSurAvenant($etatSurAvenant)
+    {
+        $this->etatSurAvenant = $etatSurAvenant;
+    
+        return $this;
+    }
+
+    /**
+     * Get etatSurAvenant
+     *
+     * @return integer 
+     */
+    public function getEtatSurAvenant()
+    {
+        return $this->etatSurAvenant;
     }
 }
