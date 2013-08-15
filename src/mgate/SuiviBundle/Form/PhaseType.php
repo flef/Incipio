@@ -21,6 +21,9 @@ class PhaseType extends AbstractType {
                 ->add('prixJEH', 'integer', array('label' => 'Prix du JEH HT', 'required' => false, 'attr' => array('class' => 'prixJEH')))
                 ->add('dateDebut', 'genemu_jquerydate', array('label' => 'Date de début', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'))
                 ->add('delai', 'integer', array('label' => 'Durée en nombre de jours', 'required' => false));
+        
+        if($options['isAvenant'])
+            $builder->add('etatSurAvenant', 'choice', array('choices' => Phase::getEtatSurAvenantChoice(), 'required' => false));
     }
 
     public function getName() {
@@ -30,6 +33,7 @@ class PhaseType extends AbstractType {
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Phase',
+            'isAvenant' => false,
         ));
     }
 

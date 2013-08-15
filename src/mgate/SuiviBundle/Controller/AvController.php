@@ -123,7 +123,7 @@ class AvController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function addAction($id) {
-        $this->modifierAction($id);
+        $this->modifierAction(null, $id);
     }
 
     /**
@@ -173,10 +173,10 @@ class AvController extends Controller {
             $destination->$setMethode($source->$getMethode());
         }
     }
-    
-    private function phaseChange($phase){
-       $isNotNull = false;
-       foreach (AvController::$phaseMethodes as $methode) {
+
+    private function phaseChange($phase) {
+        $isNotNull = false;
+        foreach (AvController::$phaseMethodes as $methode) {
             $getMethode = 'get' . $methode;
             $isNotNull = $isNotNull || ($phase->$getMethode() != NULL && $methode != "Position");
         }
@@ -199,12 +199,19 @@ class AvController extends Controller {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function modifierAction($id) {
+    public function modifierAction($id, $idEtude = null) {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id)) {
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+        if ($idEtude) {
+            if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($idEtude))
+                throw $this->createNotFoundException('Unable to find Etude entity.');
+            $av = new Av;
+            $av->setEtude($etude);
+            $etude->addAv($av);
         }
+        else if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id))
+            throw $this->createNotFoundException('Unable to find Av entity.');
+
 
         $phasesAv = $av->getPhases()->toArray();
 
@@ -220,9 +227,9 @@ class AvController extends Controller {
 
             $changes = new PhaseChange();
             $phaseAV = new \mgate\SuiviBundle\Entity\Phase;
-            
+
             $this->copyPhase($phase, $phaseAV);
-            
+
             if ($phaseOriginAV = $this->getPhaseByPosition($phaseAV->getPosition(), $phasesAv))
                 $this->mergePhaseIfNotNull($phaseAV, $phaseOriginAV, $changes);
 
@@ -255,8 +262,9 @@ class AvController extends Controller {
                     unset($phaseEtude);
                 }
 
-                foreach ($av->getPhases() as $phase){
-                    if($this->phaseChange($phase)) // S'il n'y a plus de modification sur la phase
+                foreach ($av->getPhases() as $phase) {
+                    $phase->setEtatSurAvenant(0);
+                    if ($this->phaseChange($phase)) // S'il n'y a plus de modification sur la phase
                         $em->persist($phase);
                     else
                         $av->removePhase($phase);
