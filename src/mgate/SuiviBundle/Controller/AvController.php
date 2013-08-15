@@ -153,7 +153,7 @@ class AvController extends Controller {
         return NULL;
     }
 
-    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Validation', 'Delai', 'position');
+    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Validation', 'Delai', 'Position');
 
     private function mergePhaseIfNotNull($phaseReceptor, $phaseToMerge, $changes) {
         foreach (AvController::$phaseMethodes as $methode) {
@@ -166,12 +166,29 @@ class AvController extends Controller {
         }
     }
 
+    private function copyPhase($source, $destination) {
+        foreach (AvController::$phaseMethodes as $methode) {
+            $getMethode = 'get' . $methode;
+            $setMethode = 'set' . $methode;
+            $destination->$setMethode($source->$getMethode());
+        }
+    }
+    
+    private function phaseChange($phase){
+       $isNotNull = false;
+       foreach (AvController::$phaseMethodes as $methode) {
+            $getMethode = 'get' . $methode;
+            $isNotNull = $isNotNull || ($phase->$getMethode() != NULL && $methode != "Position");
+        }
+        return $isNotNull;
+    }
+
     private function nullFielIfEqual($phaseReceptor, $phaseToCompare) {
         $isNotNull = false;
         foreach (AvController::$phaseMethodes as $methode) {
             $getMethode = 'get' . $methode;
             $setMethode = 'set' . $methode;
-            if ($phaseReceptor->$getMethode() == $phaseToCompare->$getMethode())
+            if ($phaseReceptor->$getMethode() == $phaseToCompare->$getMethode() && $methode != "Position")
                 $phaseReceptor->$setMethode(NULL);
             else
                 $isNotNull = true;
@@ -191,20 +208,23 @@ class AvController extends Controller {
 
         $phasesAv = $av->getPhases()->toArray();
 
-
         foreach ($av->getPhases() as $phase) {
             $av->removePhase($phase);
             $em->remove($phase);
         }
 
         $phasesChanges = array();
-        foreach ($av->getEtude()->getPhases() as $phase) {
-            $phaseAV = clone $phase;
-            $changes = new PhaseChange();
 
-            if ($phaseOriginAV = $this->getPhaseByPosition($phaseAV->getPosition(), $phasesAv)) {
+        $phasesEtude = $av->getEtude()->getPhases()->toArray();
+        foreach ($phasesEtude as $phase) {
+
+            $changes = new PhaseChange();
+            $phaseAV = new \mgate\SuiviBundle\Entity\Phase;
+            
+            $this->copyPhase($phase, $phaseAV);
+            
+            if ($phaseOriginAV = $this->getPhaseByPosition($phaseAV->getPosition(), $phasesAv))
                 $this->mergePhaseIfNotNull($phaseAV, $phaseOriginAV, $changes);
-            }
 
             $phaseAV->setEtude()->setAvenant($av);
             $av->addPhase($phaseAV);
@@ -235,14 +255,17 @@ class AvController extends Controller {
                     unset($phaseEtude);
                 }
 
-                foreach ($av->getPhases() as $phase)
-                    $em->persist($phase);
+                foreach ($av->getPhases() as $phase){
+                    if($this->phaseChange($phase)) // S'il n'y a plus de modification sur la phase
+                        $em->persist($phase);
+                    else
+                        $av->removePhase($phase);
+                }
                 $em->persist($av);
                 $em->flush();
                 return $this->redirect($this->generateUrl('mgateSuivi_av_voir', array('id' => $av->getId())));
             }
         }
-
         return $this->render('mgateSuiviBundle:Av:modifier.html.twig', array(
                     'form' => $form->createView(),
                     'av' => $av,
