@@ -34,7 +34,15 @@ Modifier un Avant-Projet - {{ parent() }}
 
         <table class="table table-bordered table-striped" style="max-width: 800px">
             <tr>
-                <td style="max-width: 250px;">{{  form_label(form.objet) }}</td>
+                <td width="400px">{{  form_row(form.signataire1) }}</td>
+                <td>{{  form_row(form.signataire2) }}</td>
+            </tr>
+            <tr>
+                <td>{{  form_row(form.version) }}</td>
+                <td>{{  form_row(form.dateSignature) }}</td>
+            </tr>
+            <tr>
+                <td>{{  form_label(form.objet) }}</span></td>
                 <td>{{  form_widget(form.objet) }}</td>
             </tr>
             <tr>
@@ -46,10 +54,9 @@ Modifier un Avant-Projet - {{ parent() }}
                 <td>{{  form_widget(form.differentielDelai) }}</td>
             </tr> 
         </table>
-        
-        
-        
-
+        <h3>Gestion des Répartions JEH (à venir)</h3>
+        <h3>Gestion des Phases</h3>
+        <h5><i class="icon-plus"></i> Ajouter une phase (à venir)</h5>
         <div class="row">
         {% for phase in form.phases %}
         {% set change = changes[loop.index0] | default(0) %}
@@ -90,12 +97,16 @@ Modifier un Avant-Projet - {{ parent() }}
                             <th>Delai (Jours)</th>
                             <td>{{ form_widget(phase.delai)}}</td>
                         </tr>
+                        <tr>
+                            <th>Etat Sur avenant</th>
+                            <td>{{ form_widget(phase.etatSurAvenant)}}</td>
+                        </tr>
                     </table>
                 </div>
         {% endfor %}
-
-	{{ form_widget(form) }}
-
+            </div>
+        
+            
                 <input type="submit" value="Enregistrer l'Avenant"/>      
         </form>
 
@@ -110,7 +121,6 @@ Modifier un Avant-Projet - {{ parent() }}
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
-    {% include "mgateSuiviBundle:DocType:selectOrNew.html.twig" with { known: form.knownSignataire2, knowned: form.signataire2, newed: form.newSignataire2 }%} 
         <script>
         $( document ).ready(function(){
                 $('input.position').each(function(i) {

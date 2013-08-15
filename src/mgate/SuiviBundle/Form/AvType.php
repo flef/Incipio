@@ -18,6 +18,7 @@ class AvType extends DocTypeType {
         ->add('clauses', 'choice', array('label' => 'Type d\'avenant', 'multiple' => true, 'choices' => Av::getClausesChoices()))
         ->add('phases', 'collection', array(
                 'type' => new PhaseType,
+                'options' => array('isAvenant' => true),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,

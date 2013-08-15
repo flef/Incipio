@@ -268,30 +268,27 @@
 </div>
 
 
-{#
 <div class="navbar">
     <div class="navbar-inner">
         <span class="brand titre" data-toggle="collapse" data-target="#avs">Avenants</span>
         <ul class="nav">
             <li><a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}">Ajouter un Avenant</a></li>
-            <li><a href="{{ path('mgateSuivi_avmission_ajouter', {'id': etude.id}) }}">Ajouter un Avenant au Récapitulatif de Mission</a></li>
         </ul>
     </div>
 </div>
 <div id="avs" class="collapse">
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Avenant</th>
+            <th>Date de Signature</th>
+            <th>Type</th>
+        </tr>
     {% for av in etude.avs %}
-                            <li><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
+        <tr>
+            <td><a href="{{ path('mgateSuivi_av_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></td>
+            <td>{{ av.dateSignature ? av.dateSignature | date('d/m/Y') }}</td>
+            <td>{% for value in av.clauses %}{{ av.ClausesChoices[value] }}<br />{% endfor %}</td>
+        </tr>
     {% endfor %}
-
-    {% for av in etude.avMissions %}
-                            <li><a href="{{ path('mgateSuivi_avmission_modifier', {'id': av.id}) }}">Avenant n°{{av.id}}</a></li>
-    {% endfor %}
-                      
+    </table>                      
 </div>
-
-    
-                #}           
-
-    
-
-      
