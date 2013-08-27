@@ -44,7 +44,7 @@
         <tr><td colspan="2">
             <div class="row" id="membres" data-prototype="{{ form_widget(form.membresPresents.vars.prototype) | e }}">
             {% for membre in form.membresPresents %}
-            <div class="span4" id="membre">
+            <div class="col-md-4" id="membre">
             <span>{# delete button #}</span>
             {{ form_widget(membre) }}
             </div>
@@ -113,7 +113,7 @@ function addTagForm(collectionHolder, i, type) {
     }
     else{
         var newForm = prototype.replace(/__name__/g, collectionHolderMembres.children().length);
-        newForm= '<div class="span4" id="'+type+i+'"><span></span> '+newForm+'</div>';
+        newForm= '<div class="col-md-4" id="'+type+i+'"><span></span> '+newForm+'</div>';
     }
     
     // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
