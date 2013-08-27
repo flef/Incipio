@@ -52,7 +52,7 @@ function getEtudesAsync(stateID, mandat){
         '{{ path('mgateSuivi_etude_ajax') }}',
         { stateID: stateID, mandat: mandat})
         .done(function(data) {
-            $('.accordion-inner.mandat'+mandat+'.stateID'+stateID).append(data);
+            $('.panel-body.mandat'+mandat+'.stateID'+stateID).append(data);
            console.log(data);
         });
 };
