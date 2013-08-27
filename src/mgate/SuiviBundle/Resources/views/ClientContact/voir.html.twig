@@ -6,9 +6,9 @@
 
 {% block breadcrumb %}
 <ul class="breadcrumb no-margin">
-    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a> <span class="divider">/</span></li>
+    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>
     {% if etude is defined %}
-    <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a> <span class="divider">/</span></li>
+    <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a></li>
     <li class="active">-</li>
     {% endif %}
 </ul>
