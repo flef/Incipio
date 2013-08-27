@@ -24,7 +24,7 @@ Accueil - {{ parent() }}
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade active in row" id="gestion">
             {% for indicateur in indicateursGestion %}
-                <div class="indicateur span6" id="{{indicateur.methode}}">
+                <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
                         <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
                     </div>
@@ -33,7 +33,7 @@ Accueil - {{ parent() }}
         </div>
         <div class="tab-pane fade row" id="rfp">
            {% for indicateur in indicateursRfp %}
-                <div class="indicateur span6" id="{{indicateur.methode}}">
+                <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
                         <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
                     </div>
@@ -42,7 +42,7 @@ Accueil - {{ parent() }}
         </div>
         <div class="tab-pane fade row" id="suivi">
                 {% for indicateur in indicateursSuivi %}
-                <div class="indicateur span6" id="{{indicateur.methode}}">
+                <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
                         <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
                     </div>
@@ -51,7 +51,7 @@ Accueil - {{ parent() }}
         </div>
         <div class="tab-pane fade row" id="treso">
                 {% for indicateur in indicateursTreso %}
-                <div class="indicateur span6" id="{{indicateur.methode}}">
+                <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
                         <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
                     </div>
@@ -60,7 +60,7 @@ Accueil - {{ parent() }}
         </div>
         <div class="tab-pane fade row" id="com">
                 {% for indicateur in indicateursCom %}
-                <div class="indicateur span6" id="{{indicateur.methode}}">
+                <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
                         <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
                     </div>
