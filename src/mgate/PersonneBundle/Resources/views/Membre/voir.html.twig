@@ -11,9 +11,9 @@ Affichage d'un Membre - {{ parent() }}
             <td rowspan="4" colspan="2" style="text-align: center;">
                 <img src="http://ismin.emse.fr/ismin/Photos/P{{membre.promotion}}/{{membre.personne.nom |lower }}_{{membre.personne.prenom | lower }}.jpg"/>
             </td>
-            <th colspan="2"><a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.id, 'doc' : "AA" }) }}">FA</a>
-                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.id, 'doc' : "CE" }) }}">CE</a>
-                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.id, 'doc' : "AC" }) }}">AC</a> Informations</th>
+            <th colspan="2"><a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne..id, 'doc' : "AA" }) }}">FA</a>
+                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "CE" }) }}">CE</a>
+                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "AC" }) }}">AC</a> Informations</th>
         </tr>
         <tr>
             <td colspan="2"><h4>{{ membre.personne.nomformel }}</h4></td>
