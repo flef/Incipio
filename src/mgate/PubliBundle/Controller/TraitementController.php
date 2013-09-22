@@ -1323,12 +1323,14 @@ class TraitementController extends Controller {
             foreach (array('CE', 'AC') as $doctype)
                 $this->array_push_assoc($champs, 'Reference_' . $doctype, '[M-GaTE]' . $mandat . '-' . $doctype . '-' . $membre->getIdentifiant());
 
-            /**
-             * @todo
-             */
-            $date = new \DateTime("now");
-            $this->array_push_assoc($champs, 'Date_Signature', $date->format("d/m/Y"));
-            $this->array_push_assoc($champs, 'Date_Cheque', $date->format("d/m/Y"));
+            foreach($membre->getMandats() as $mandat){
+                if($mandat->getPoste()->getIntitule() == "Membre")
+                    $lastMemberMandat = $mandat;
+            }
+            if(isset($lastMemberMandat) && $lastMemberMandat->getDebutMandat()){
+                $this->array_push_assoc($champs, 'Date_Signature', $lastMemberMandat->getDebutMandat()->format("d/m/Y"));
+                $this->array_push_assoc($champs, 'Date_Cheque', $lastMemberMandat->getDebutMandat()->format("d/m/Y"));
+            }
         }
         return $champs;
     }
