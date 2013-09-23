@@ -1304,6 +1304,7 @@ class TraitementController extends Controller {
         $this->array_push_assoc($champs, 'Prenom_Etudiant', $personne->getPrenom());
         $this->array_push_assoc($champs, 'Adresse_Fiscale_Etudiant', $personne->getAdresse());
         $this->array_push_assoc($champs, 'Telephone_Etudiant', $personne->getMobile());
+        $this->array_push_assoc($champs, 'Sexe_Etudiant', $personne->getSexe() == 'M.' ? 1 : 2);
 
         // Info Membre
         $membre = $personne->getMembre();
@@ -1312,7 +1313,8 @@ class TraitementController extends Controller {
             $this->array_push_assoc($champs, 'Lieu_Naissance_Etudiant', $membre->getLieuDeNaissance());
             if ($membre->getDateDeNaissance())
                 $this->array_push_assoc($champs, 'Date_Naissance_Etudiant', $membre->getDateDeNaissance()->format("d/m/Y"));
-            $this->array_push_assoc($champs, 'Promotion_Etudiant', $membre->getPromotion());
+            $this->array_push_assoc($champs, 'Promotion_Etudiant', (string)$membre->getPromotion()); // Cast pour ne pas formater le nombre
+            
 
             // Info Référence
             //A changer
