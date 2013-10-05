@@ -10,9 +10,11 @@
             $(document).ready(function() {
                     $('#example').dataTable({
                         "bPaginate": false,
+						"aaSorting": [[0,'desc']],
                     });
             } );
     </script>
+	
 {% endblock %}
 {% block stylesheets %}
 {{ parent() }}
@@ -30,7 +32,8 @@
         <thead>
           <tr>
             <th>Promotion</th>
-            <th>Prénom Nom</th>
+            <th>Prénom</th>
+			<th>Nom</th>
             <th>Poste</th>
             <th>Identifiant</th>
             <th>Email</th>
@@ -40,6 +43,7 @@
             {% if is_granted('ROLE_CA') %}
             <th>Date de naissance</th>
             <th>Lieu de naissance</th>
+			<th>Nationalité</th>
             {% endif %}
             <th>Action</th>
           </tr>
@@ -48,7 +52,8 @@
                 {% for membre in membres %}
           <tr>
             <td>{{ membre.promotion ? "P" ~ membre.promotion }}</td>
-            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenomNom }}</a></td>
+            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a></td>
+			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a></td>
             <td>
                 {% for mandat in membre.mandats %}
                     {{ "Du " ~ mandat.debutMandat | date("d/m/Y") ~ " au " ~mandat.finMandat | date("d/m/Y") ~ " - " ~ mandat.poste.intitule }}<br />
@@ -62,6 +67,7 @@
             {% if is_granted('ROLE_CA') %}
             <td>{{ membre.dateDeNaissance ? membre.dateDeNaissance | date('d/m/Y') }}</td>
             <td>{{ membre.lieuDeNaissance }}</td>
+			<td>{{ membre.nationalite }}</td>
             {% endif %}
             <td><a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">modifier</a></td>
           </tr>
