@@ -32,7 +32,8 @@ Affichage d'un Membre - {{ parent() }}
         </tr>
         <tr>
             <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
-            <td colspan="3">Né à : {{ membre.lieuDeNaissance }}</td>            
+            <td>Né à : {{ membre.lieuDeNaissance }}</td>
+			<td colspan="2">Nationalité : {{ membre.nationalite }}</td>
         </tr>
         <tr>
             <td>Chambre</td>
