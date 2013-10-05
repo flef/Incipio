@@ -64,7 +64,7 @@ class MembreController extends Controller {
             $now->modify('- 20 year');
             $membre->setDateDeNaissance($now);
         }
-
+        /*
         if (!count($membre->getMandats()->toArray())) {
             $mandatNew = new Mandat;
             $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
@@ -78,7 +78,7 @@ class MembreController extends Controller {
             $mandatNew->setDebutMandat($dt);
             $mandatNew->setFinMandat($dtl);
             $membre->addMandat($mandatNew);
-        }
+        }*/
 
 
         $form = $this->createForm(new MembreType, $membre);
