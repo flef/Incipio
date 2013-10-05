@@ -63,6 +63,12 @@ class Membre {
      * @ORM\OneToMany(targetEntity="mgate\PersonneBundle\Entity\Mandat", mappedBy="membre", cascade={"persist","remove"})
      */
     private $mandats;
+	
+	/**
+     * @var string $nationalite
+     * @ORM\Column(name="nationalite", type="string", nullable=true)
+     */
+    private $nationalite;
 
     private function enMinusculeSansAccent($texte){
     $texte = mb_strtolower($texte, 'UTF-8');
@@ -304,5 +310,28 @@ class Membre {
     public function getAppartement()
     {
         return $this->appartement;
+    }
+	
+	 /**
+     * Set nationalite
+     *
+     * @param string $nationalite
+     * @return Membre
+     */
+    public function setNationalite($nationalite)
+    {
+        $this->nationalite = $nationalite;
+    
+        return $this;
+    }
+
+    /**
+     * Get nationalite
+     *
+     * @return string 
+     */
+    public function getNationalite()
+    {
+        return $this->nationalite;
     }
 }
