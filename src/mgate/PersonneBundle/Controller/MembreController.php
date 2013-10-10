@@ -64,7 +64,7 @@ class MembreController extends Controller {
             $now->modify('- 20 year');
             $membre->setDateDeNaissance($now);
         }
-
+        /*
         if (!count($membre->getMandats()->toArray())) {
             $mandatNew = new Mandat;
             $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
@@ -78,7 +78,7 @@ class MembreController extends Controller {
             $mandatNew->setDebutMandat($dt);
             $mandatNew->setFinMandat($dtl);
             $membre->addMandat($mandatNew);
-        }
+        }*/
 
 
         $form = $this->createForm(new MembreType, $membre);
@@ -136,12 +136,15 @@ class MembreController extends Controller {
                 $form = $this->createForm(new MembreType(), $membre);
             }
         }
-
-
+        // TODO A modifier, l'ajout de poste dois se faire en js cf formation membre
+        if ($this->get('request')->get('save'))
+            return $this->redirect($this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre->getId())));
+        
         return $this->render('mgatePersonneBundle:Membre:modifier.html.twig', array(
                     'form' => $form->createView(),
                     'delete_form' => $deleteForm->createView(),
                 ));
+             
     }
 
     /**
