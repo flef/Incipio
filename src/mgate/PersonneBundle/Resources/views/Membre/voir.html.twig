@@ -9,9 +9,11 @@ Affichage d'un Membre - {{ parent() }}
     <table class="table table-bordered table-striped">
         <tr>
             <td rowspan="4" colspan="2" style="text-align: center;">
-                <img src="http://ismin.emse.fr/ismin/Photos/P{{membre.promotion}}/{{membre.personne.nom |lower }}_{{membre.personne.prenom | lower }}.jpg"/>
+                <img class="img-polaroid" style="height: 200px" src="http://ismin.emse.fr/ismin/Photos/P{{membre.promotion}}/{{membre.personne.nom |lower |replace({' ': '_'}) }}_{{membre.personne.prenom | lower |replace({' ': '_'}) }}.jpg"/>
             </td>
-            <th colspan="2">Informations</th>
+            <th colspan="2"><a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "AA" }) }}">FA</a>
+                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "CE" }) }}">CE</a>
+                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "AC" }) }}">AC</a> Informations</th>
         </tr>
         <tr>
             <td colspan="2"><h4>{{ membre.personne.nomformel }}</h4></td>
@@ -30,7 +32,8 @@ Affichage d'un Membre - {{ parent() }}
         </tr>
         <tr>
             <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
-            <td colspan="3">Né à : {{ membre.lieuDeNaissance }}</td>            
+            <td>Né à : {{ membre.lieuDeNaissance }}</td>
+			<td colspan="2">Nationalité : {{ membre.nationalite }}</td>
         </tr>
         <tr>
             <td>Chambre</td>

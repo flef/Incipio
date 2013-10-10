@@ -40,7 +40,9 @@
             <td>{{ form_label(form.dateDeNaissance) }}</td>
             <td>{{ form_widget(form.dateDeNaissance) }}</td>
             <td>{{ form_label(form.lieuDeNaissance) }}</td>
-            <td colspan="3">{{ form_widget(form.lieuDeNaissance) }}</td>
+            <td>{{ form_widget(form.lieuDeNaissance) }}</td>
+			<td>{{ form_label(form.nationalite) }}</td>
+            <td>{{ form_widget(form.nationalite) }}</td>
         </tr>
         <tr>
             <td>{{ form_label(form.appartement) }}</td>
@@ -63,7 +65,7 @@
     {% endfor %}
     </table>
 {{ form_rest(form) }}
-    <input type="submit" value="Enregistrer" />
+    <input name="save" type="submit" value="Enregistrer" />
 </form>
 {#
 <form method="post" {{ form_enctype(form) }}>
