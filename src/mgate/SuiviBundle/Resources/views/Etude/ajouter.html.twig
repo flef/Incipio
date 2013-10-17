@@ -11,10 +11,45 @@
 <form method="post" {{ form_enctype(form) }}>
     
     {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+	<br>
+	<table class="table table-bordered table-striped standard">
+		<tr>
+            <th>{{ form_label(form.knownProspect) }}</th>
+            <td>{{ form_widget(form.knownProspect) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.prospect) }}</th>
+            <td>{{ form_widget(form.prospect) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.nom) }}</th>
+            <td>{{ form_widget(form.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.description) }}</th>
+            <td>{{ form_widget(form.description) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.mandat) }}</th>
+            <td>{{ form_widget(form.mandat) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.num) }}</th>
+            <td>{{ form_widget(form.num) }}</td>
+        </tr>
+		<tr>
+            <th>{{ form_label(form.confidentiel) }}</th>
+            <td>{{ form_widget(form.confidentiel) }}</td>
+        </tr>
+		<tr>
+            <th>{{ form_label(form.suiveur) }}</th>
+            <td>{{ form_widget(form.suiveur) }}</td>
+        </tr>
+    </table>
     {{ form_widget(form) }}
     
 	
-	<input type="submit" value="Enregistrer l'étude"/>
+	<input type="submit" value="Enregistrer l'étude" class="btn"/>
 </form>
 
  
