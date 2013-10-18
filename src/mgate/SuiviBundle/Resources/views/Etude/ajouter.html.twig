@@ -18,6 +18,24 @@
             <td>{{ form_widget(form.knownProspect) }}</td>
         </tr>
         <tr>
+            <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">Nouveau prospect</th>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.nom) }}</th>
+            <td>{{ form_widget(form.newProspect.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.entite) }}</th>
+            <td>{{ form_widget(form.newProspect.entite) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.adresse) }}</th>
+            <td>{{ form_widget(form.newProspect.adresse) }}</td>
+        </tr>
+        <tr>
+            <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">L'étude</th>
+        </tr>
+        <tr>
             <th>{{ form_label(form.prospect) }}</th>
             <td>{{ form_widget(form.prospect) }}</td>
         </tr>
