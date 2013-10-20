@@ -2,8 +2,77 @@
 
 <form method="post" {{ form_enctype(form) }}>
 	
+	<table class="table table-bordered table-striped standard">
+	<tr>
+		<th>{{ form_label(form.cc.version) }}</th>
+        <td>{{ form_widget(form.cc.version) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.signataire1) }}</th>
+        <td>{{ form_widget(form.cc.signataire1) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.knownSignataire2) }}</th>
+        <td>{{ form_widget(form.cc.knownSignataire2) }}</td>
+	</tr>
+	<tr>
+		<th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2" class="success">Nouveau signataire client</th>
+    </tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.prenom) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.prenom) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.nom) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.nom) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.sexe) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.sexe) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.mobile) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.mobile) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.email) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.email) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.estAbonneNewsletter) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.estAbonneNewsletter) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.personne.emailEstValide) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.personne.emailEstValide) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.newSignataire2.poste) }}</th>
+		<td>{{ form_widget(form.cc.newSignataire2.poste) }}</td>
+	</tr>
+	<tr>
+		<th id="{{ form.cc.newSignataire2.vars.id }}_block" colspan="2" class="success">Convention client</th>
+    </tr>
+	<tr>
+		<th>{{ form_label(form.cc.signataire2) }}</th>
+        <td>{{ form_widget(form.cc.signataire2) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.cc.dateSignature) }}</th>
+        <td>{{ form_widget(form.cc.dateSignature) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.acompte) }}</th>
+        <td>{{ form_widget(form.acompte) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.pourcentageAcompte) }}</th>
+        <td>{{ form_widget(form.pourcentageAcompte) }}</td>
+	</tr>
+	</table>
+	
 	{{ form_widget(form) }}
 	
-	<input type="submit" value="Enregistrer la CC"/>
-        <input type="submit" value="Enregistrer la CC et passer au PVI" name="pvi" id="pvi"/>
-</form>
+	<input type="submit" value="Enregistrer la CC" class="btn"/>
+        <input type="submit" value="Enregistrer la CC et passer au PVI" name="pvi" id="pvi" class="btn"/>
+</form><br>
