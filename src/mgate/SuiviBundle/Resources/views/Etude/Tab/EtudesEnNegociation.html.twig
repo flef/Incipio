@@ -67,7 +67,7 @@
                     {% elseif contact.moyenContact == 'mail'%}
                         <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
                     {% else %}
-                        <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-eye-open"></i> 
+                        <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
                     {% endif %}
                     </a>
             {% endfor %}
