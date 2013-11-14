@@ -32,9 +32,9 @@ class GroupePhases
     /**
      * @var string
      *
-     * @ORM\Column(name="string", type="string", length=255)
+     * @ORM\Column(name="titre", type="string", length=255)
      */
-    private $string;
+    private $titre;
 
     /**
      * @var integer
@@ -51,7 +51,7 @@ class GroupePhases
     private $description;
     
     /**
-     * @ORM\OneToMany(targetEntity="Phase", mappedBy="groupe", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="groupe")
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $phases;
@@ -72,28 +72,51 @@ class GroupePhases
     {
         return $this->id;
     }
-
+    
     /**
-     * Set string
+     * Set etude
      *
-     * @param string $string
+     * @param mgate\SuiviBundle\Entity\Etude $etude
      * @return GroupePhases
      */
-    public function setString($string)
+    public function setEtude($etude = NULL)
     {
-        $this->string = $string;
+        $this->etude = $etude;
     
         return $this;
     }
 
     /**
-     * Get string
+     * Get etude
      *
-     * @return string 
+     * @return mgate\SuiviBundle\Entity\Etude 
      */
-    public function getString()
+    public function getEtude()
     {
-        return $this->string;
+        return $this->etude;
+    }
+
+    /**
+     * Set titre
+     *
+     * @param string $titre
+     * @return GroupePhases
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+    
+        return $this;
+    }
+
+    /**
+     * Get titre
+     *
+     * @return titre 
+     */
+    public function getTitre()
+    {
+        return $this->titre;
     }
 
     /**
