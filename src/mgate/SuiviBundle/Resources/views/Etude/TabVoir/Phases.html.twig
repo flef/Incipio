@@ -24,10 +24,10 @@
 	<div class="tab-content">
 		<div class="tab-pane active" id="groupes">
 			<h4><a href="{{ path('mgateSuivi_groupes_modifier', {'id': etude.id}) }}">Modifier les groupes</a></h4>
+            {% if etude.groupes | length == 0 %}
+            <h4>Il n'y a pas de Groupe de Phase pour cette étude...</h4>
+            {% endif %}
 		<div class="row">
-	   {% if etude.groupes | length == 0 %}
-				<h4> Il n'y a pas de Groupe de Phase !!</h4>
-	   {% endif %}
 	   {% for groupe in etude.groupes %}
 			<div class="col-md-4">
 				<table class="table table-striped table-bordered" >
@@ -94,6 +94,8 @@
 			</table>
 		</div>
 		<div class="tab-pane" id="budget">
+            {% set nbJEH = 0 %}
+            {% set total = 0 %} 
 			<table class="table table-striped table-bordered" >
 				<tr>
 					<th></th>
@@ -103,14 +105,22 @@
 					<th>Total</th>
 		 	   </tr>
 				{% for phase in etude.phases %}
+               {% set nbJEH = nbJEH + phase.nbrJEH %}
+               {% set total = total + phase.nbrJEH * phase.prixJEH %}
 				<tr>
 					<th>Phase n°{{phase.position+1}}</th>
 					<td>{{phase.titre | nl2br }}</td>
-					<td>{{phase.nbrJEH}} JEH</td>
-					<td>{{phase.prixJEH}} €</td>
-					<td>{{phase.nbrJEH * phase.prixJEH}} €</td>
+					<td align="right">{{phase.nbrJEH}} JEH</td>
+					<td align="right">{{phase.prixJEH | number_format(2, ',', ' ')}} €</td>
+					<td align="right">{{(phase.nbrJEH * phase.prixJEH )| number_format(2, ',', ' ')}} €</td>
 				</tr>
 				{% endfor %}
+                <tr>
+                    <td colspan="2"></td>
+                    <td align="right">{{ nbJEH }} JEH</td>
+                    <td align="right">{{ (total / nbJEH) | number_format(2, ',', ' ')}} €</td>
+                    <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
+                </tr>
 			</table>
 		</div>
 	</div>
