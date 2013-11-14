@@ -9,9 +9,9 @@
     </a>
     <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
     <ul class="dropdown-menu">
-        <li><a href="mailto:{{ intervenant.personne.email | default("#")}}"><i class="icon-envelope"></i> Contacter</a></li>
-        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : idEtude, 'doc': 'RM', 'key' : keyMission }) }}"><i class="icon-envelope"></i> Générer</a></li>
-        <li><a href="#" id="avancement" data-title="{{ idEtude }}" data-content="{{ keyMission }}"><i class="icon-envelope"></i> Modifier l'avancement</a></li>
+        <li><a href="mailto:{{ intervenant.personne.email | default("#")}}"><i class="glyphicon glyphicon-envelope"></i> Contacter</a></li>
+        <li><a href="{{ path('mgate_publi_publiposter', {'id_etude' : idEtude, 'doc': 'RM', 'key' : keyMission }) }}"><i class="glyphicon glyphicon-envelope"></i> Générer</a></li>
+        <li><a href="#" id="avancement" data-title="{{ idEtude }}" data-content="{{ keyMission }}"><i class="glyphicon glyphicon-envelope"></i> Modifier l'avancement</a></li>
         <li class="divider"></li>
         <li><a href="#"><i class="i"></i> autre</a></li>
     </ul>
