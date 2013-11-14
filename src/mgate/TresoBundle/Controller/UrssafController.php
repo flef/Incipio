@@ -13,7 +13,7 @@ class UrssafController extends Controller
         
         $defaultData = array('message' => 'Type your message here');
         $form = $this->createFormBuilder($defaultData)
-            ->add('date', 'genemu_jquerydate', array('label'=>'Nombre de développeur au :', 'required'=>true, 'widget'=>'single_text'))
+            ->add('date', 'genemu_jquerydate', array('label'=>'Nombre de développeur au :', 'required'=>true, 'widget'=>'single_text', 'data'=>date_create(),'format' => 'dd/MM/yyyy',))
             ->getForm();
 
         $RMs =  array();
