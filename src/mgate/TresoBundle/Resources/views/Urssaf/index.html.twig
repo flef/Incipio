@@ -11,13 +11,14 @@
 
 <form method="post" {{ form_enctype(form) }}>
     {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
-    {{ form_widget(form) }}
-
-    <input type="submit" value="Chercher"/>
+	{{ form_label(form.date) }} {{ form_widget(form.date) }}
+	{{ form_widget(form) }}
+	<br>
+    <input type="submit" value="Chercher" class="btn"/>
 </form>
         
         
-        
+<br>
 <table class="table table-striped" id="myTable">
       <thead>
           <tr>

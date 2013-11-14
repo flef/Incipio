@@ -30,7 +30,7 @@ class EtudeType extends AbstractType
                 ))
             ->add('newProspect', new ProspectType(), array('label' => 'Nouveau prospect:', 'required' => false))
             ->add('nom', 'text',array('label'=>'Nom interne de l\'étude'))
-            ->add('description','textarea',array('label'=>'Présentation interne de l\'étude', 'required' => false))
+            ->add('description','textarea',array('label'=>'Présentation interne de l\'étude', 'required' => false, 'attr'=>array('cols'=>'100%','rows'=>5),))
             ->add('mandat', 'integer' )
             ->add('num', 'integer', array('label'=>'Numéro de l\'étude', 'required' => false))
             ->add('confidentiel', 'checkbox', array('label' => 'Confidentialité :', 'required' => false, 'attr'=>array("title"=>"Si l'étude est confidentielle, elle ne sera visible que par vous et les membres du CA.")))
