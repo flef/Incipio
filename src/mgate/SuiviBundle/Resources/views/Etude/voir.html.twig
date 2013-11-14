@@ -59,10 +59,12 @@ function equalHeight(group) {
 
 $(window).load(function(){
     $("#tab2").addClass("active");
+    $("#methodo").addClass("active");
     var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
         for( var i = 1; i <= nombreDeLigneParPhase; i++){
             equalHeight($(".egalize tr:nth-child("+i+") th"));
         };
+    $("#methodo").removeClass("active");
     $("#tab2").removeClass("active");
 });
 </script>
