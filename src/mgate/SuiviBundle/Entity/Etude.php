@@ -1070,7 +1070,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return Etude
      */
     public function addPvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvi) {
-        $this->pvis[] = $pvi;
+        $this->procesVerbaux[] = $pvi;
         $pvi->setEtude($this);
         $pvi->setType('pvi');
 
@@ -1083,7 +1083,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @param \mgate\SuiviBundle\Entity\PvProcesVerbali $pvis
      */
     public function removePvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvis) {
-        $this->pvis->removeElement($pvis);
+        $this->procesVerbaux->removeElement($pvis);
     }
 
     /**
