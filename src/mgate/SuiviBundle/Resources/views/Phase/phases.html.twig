@@ -34,7 +34,7 @@
         {# itere sur chaque tag existant et affiche son unique champ : name #}
         {% for phase in form.phases %}
                     
-                <div class="span6">
+                <div class="col-md-6">
                     <table class="table table-striped table-bordered">
                         <tr>
                             <th colspan="2"><div class="btn-group"></div>       <span class="titrePhase"></span> {{  form_widget(phase.position)}}</th>
@@ -201,7 +201,7 @@
         });
         
         //Ajouter le drag and drop
-        {# $("#phases").dragsort({ dragSelector: "li", dragBetween: true, dragEnd: updateOrder, placeHolderTemplate: "<div class='span6'></div>" }); #}
+        {# $("#phases").dragsort({ dragSelector: "li", dragBetween: true, dragEnd: updateOrder, placeHolderTemplate: "<div class='col-md-6'></div>" }); #}
         collectionHolder.sortable({
             // limitons les deplacements sur l'axe des ordonnees, ce sera plus propre
 

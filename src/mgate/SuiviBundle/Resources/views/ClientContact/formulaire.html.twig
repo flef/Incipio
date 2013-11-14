@@ -2,8 +2,30 @@
 
 <form method="post" {{ form_enctype(form) }}>
 	
+	<table class="table table-bordered table-striped standard">
+	<tr>
+		<th>{{ form_label(form.faitPar) }}</th>
+        <td>{{ form_widget(form.faitPar) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.date) }}</th>
+        <td>{{ form_widget(form.date) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.objet) }}</th>
+        <td>{{ form_widget(form.objet) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.contenu) }}</th>
+        <td>{{ form_widget(form.contenu) }}</td>
+	</tr>
+	<tr>
+		<th>{{ form_label(form.moyenContact) }}</th>
+        <td>{{ form_widget(form.moyenContact) }}</td>
+	</tr>
+	</table>
 	{{ form_widget(form) }}
 	
-	<input type="submit" value="Enregistrer le nouveau contact du client"/>
+	<input type="submit" value="Enregistrer le nouveau contact du client" class="btn"/>
         
 </form>

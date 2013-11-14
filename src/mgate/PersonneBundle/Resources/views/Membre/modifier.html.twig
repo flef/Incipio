@@ -65,7 +65,7 @@
     {% endfor %}
     </table>
 {{ form_rest(form) }}
-    <input name="save" type="submit" value="Enregistrer" />
+    <input name="save" type="submit" value="Enregistrer" class="btn" />
 </form>
 {#
 <form method="post" {{ form_enctype(form) }}>
@@ -77,9 +77,10 @@
 #}
 <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
-        <button>Supprimer le membre</button>
+		<br>
+        <button class="btn">Supprimer le membre</button>
     </form>    
-
+	<br>
     <p>
         <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>
     </p>

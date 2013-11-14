@@ -3,34 +3,35 @@
 {% set nonValide = asset('img/cross.png') %}
 {% set enCours   = asset('img/progress.png') %}
 {% block menu %}
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <a class="brand" href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a>
-        <ul class="nav pull-right">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+        <a class="brand" href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"><h4>{{ getRefEtude(etude) }} - {{ etude.nom }}</h4></a>
+    </div>
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav navbar-right">
             <li>
-            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': prevID}) }}"><i class="icon-chevron-left"></i> Précédent</a></li>
+            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': prevID}) }}"><i class="glyphicon glyphicon-arrow-left"></i> Précédent</a></li>
             </li>
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Accès Rapide <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-th-list"></i> Accès Rapide <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li class="nav-header">En négociation</li>
+                    <li class="nav-header"> <i class="glyphicon glyphicon-unchecked"></i> En négociation</li>
                     {% for id, etudeRef in listEtudesNegociate %}
-                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}">{{etudeRef}}</a></li>
+                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}"><i class="glyphicon glyphicon-minus"></i> {{etudeRef}}</a></li>
                     {% endfor %}
                     <li class="divider"></li>
-                    <li class="nav-header">En cours</li>
+                    <li class="nav-header"> <i class="glyphicon glyphicon-check"></i> En cours</li>
                     {% for id, etudeRef in listEtudesCurrent %}
-                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}">{{etudeRef}}</a></li>
+                    <li><a href="{{ path('mgateSuivi_vu_ca', {'id': id}) }}"><i class="glyphicon glyphicon-minus"></i> {{etudeRef}}</a></li>
                     {% endfor %}
                 </ul>
             </li>
-            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': nextID}) }}">Suivant <i class="icon-chevron-right"></i></a></li>
+            <li><a href="{{ path('mgateSuivi_vu_ca', {'id': nextID}) }}">Suivant <i class="glyphicon glyphicon-arrow-right"></i></a></li>
         </ul>
 
 
     </div>
-
-</div>
+</nav>
             {% endblock %}
 {% block breadcrumb %}
 {% endblock %}

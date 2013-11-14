@@ -80,23 +80,17 @@ $(window).load(function(){
     </script>
 
     <script>
-    function docStateChange()
-    {
+    function docStateChange(){
     $('.docTabRow').each(
-        function(i, e)
-        {
+        function(i, e){
             var ok = true;
-            console.log(e.children);
             $(e).children().children('input[type=checkbox]').each(
-                function(index, elem)
-                {
+                function(index, elem){
                     ok = ok && elem.checked;
                 }
             );
             if(!ok)
-            {
                 $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
-            }
             else
                 $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
             ok = true;
