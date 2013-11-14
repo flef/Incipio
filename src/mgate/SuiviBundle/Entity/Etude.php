@@ -1428,8 +1428,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @param \mgate\SuiviBundle\Entity\GroupePhases $groupes
      * @return Etude
      */
-    public function addGroupes(\mgate\SuiviBundle\Entity\GroupePhases $groupes) {
-        $this->groupes[] = $groupes;
+    public function addGroupe(\mgate\SuiviBundle\Entity\GroupePhases $groupe) {
+        $this->groupes[] = $groupe;
 
         return $this;
     }
@@ -1439,8 +1439,8 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      * @param \mgate\SuiviBundle\Entity\GroupePhases $groupes
      */
-    public function removeGroupes(\mgate\SuiviBundle\Entity\GroupePhases $groupes) {
-        $this->groupes->removeElement($groupes);
+    public function removeGroupe(\mgate\SuiviBundle\Entity\GroupePhases $groupe) {
+        $this->groupes->removeElement($groupe);
     }
 
     /**
