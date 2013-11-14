@@ -56,6 +56,12 @@ class GroupePhases
      */
     private $phases;
 
+    /**
+     * Constructor
+     */
+    public function __construct() {
+        $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -135,4 +141,36 @@ class GroupePhases
     {
         return $this->description;
     }
+    
+    
+        /**
+     * Add phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     * @return GroupePhases
+     */
+    public function addPhase(\mgate\SuiviBundle\Entity\Phase $phases) {
+        $this->phases[] = $phases;
+
+        return $this;
+    }
+
+    /**
+     * Remove phases
+     *
+     * @param \mgate\SuiviBundle\Entity\Phase $phases
+     */
+    public function removePhase(\mgate\SuiviBundle\Entity\Phase $phases) {
+        $this->phases->removeElement($phases);
+    }
+
+    /**
+     * Get phases
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPhases() {
+        return $this->phases;
+    }
+    
 }
