@@ -3,8 +3,8 @@
     
     var toggle = true;
     var known = $('input#{{ known.vars.id }}');
-    var knowned = $("#{{ knowned.vars.id }}").parent('div');
-    var newed = $("#{{ newed.vars.id }}").parent('div');
+    var knowned = $("[id^='{{ knowned.vars.id }}']").closest('tr');
+    var newed = $("[id^='{{ newed.vars.id }}']").closest('tr');
     
     known.prop('checked', true);
 

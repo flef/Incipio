@@ -1,15 +1,13 @@
-<ul class="nav pull-right">
-    <li><div style="min-height: 32px; min-width: 32px;"><div class="loading"><img src="{{ asset('img/ajax-loader.gif') }}" /></div></div></li>
-</ul>
-<ul class="nav pull-right">
+<ul class="nav navbar-nav navbar-right">   
     <li class="dropdown">
-        <a href="{{ path('fos_user_profile_show') }}" class="dropdown-toggle disabled" data-toggle="dropdown" data-hover="dropdown"><i class="icon-cog"></i> Mon compte <b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <li class="nav-header">{{ app.user.username }}</li> 
-        <li><a href="{{ path('fos_user_profile_edit') }}"><i class="icon-pencil"></i> Modifier mon pseudo</a></li>
-        <li><a href="{{ path('fos_user_change_password') }}"><i class="icon-pencil"></i> Modifier mon mot de passe</a></li>
-        <li class="divider"></li>
-        <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-remove-sign"></i> Déconnexion</a></li>
-      </ul>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li class="dropdown-header">{{ app.user.username }}</li>
+            <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-pencil"></span> Modifier mon pseudo</a></li>
+            <li><a href="{{ path('fos_user_change_password') }}"><span class="glyphicon glyphicon-pencil"></span> Modifier mon mot de passe</a></li>
+            <li class="divider"></li>
+            <li><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-remove-sign"></span> Déconnexion</a></li>
+        </ul>
     </li>
+	<li><div style="min-height: 32px; min-width: 32px;"><div class="loading"><img src="{{ asset('img/ajax-loader.gif') }}" /></div></div></li>
 </ul>

@@ -2,7 +2,22 @@
 
 <form method="post" {{ form_enctype(form) }}>
 	
+	<table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.nom) }}</th>
+            <td>{{ form_widget(form.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.entite) }}</th>
+            <td>{{ form_widget(form.entite) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.adresse) }}</th>
+            <td>{{ form_widget(form.adresse) }}</td>
+        </tr>
+    </table>
+	
 	{{ form_widget(form) }}
 	
-	<input type="submit" />
+	<input type="submit" class="btn"/>
 </form>

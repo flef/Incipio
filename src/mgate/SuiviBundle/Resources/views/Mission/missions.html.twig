@@ -7,7 +7,7 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
-<p><br /><input type="submit" value="Ajouter une mission" name="add"/> - <input type="submit" value="Enregistrer les missions" /></p>
+<p><br /><input type="submit" value="Ajouter une mission" name="add" class="btn"/> - <input type="submit" value="Enregistrer les missions" class="btn"/></p>
 <input type="hidden" value="" name="idMission" id="idMission"/>
     <u1 class="missions" id="missions" data-prototype="{{ form_widget(form.missions.vars.prototype) | e }}">
         {% for mission in form.missions %}
@@ -44,7 +44,7 @@
 <div id="dialog" title="Résumé et vérification">
     <p>Nombre de JEH:<span class="nbrJEH">//</span></p>
     <p>Prix sans les frais:<span class="prix">//</span>€ HT</p>
-    <p><button id="myButtonUpdate">Raffraichir</button></p>
+    <p><button id="myButtonUpdate">Rafraichir</button></p>
 </div>
 {% endblock %}
 
