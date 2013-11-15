@@ -14,7 +14,7 @@
     </tr>
     {% for formation in formations %}
     <tr>
-        <td><i class="icon-circle-arrow-down"></i></td>
+        <td><i class="glyphicon glyphicon-circle-arrow-down"></i></td>
         <td>{{ formation.dateDebut | date("d/m/Y") }}</td>
         <td><a title="Modifier" href="{{ path('mgate_formation_modifier', {'id': formation.id})}}">{{ formation.titre | title }}</a></td>
         <td>{{ formation.description }}</td>
