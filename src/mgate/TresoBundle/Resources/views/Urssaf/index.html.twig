@@ -52,7 +52,7 @@
 
         {% for rm in RMs %}
 <tr>
-    <td><i id="commentaire" class="icon-search" data-title="{{ rm.id }}" data-content="0"></i></td>
+    <td><i id="commentaire" class="glyphicon glyphicon-search" data-title="{{ rm.id }}" data-content="0"></i></td>
     <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': rm.etude.id}) }}"> {{ getRefEtude(rm.etude) }}</a></div></td>
     <td>{{ rm.etude.prospect.nom }}
         <br /><br />
