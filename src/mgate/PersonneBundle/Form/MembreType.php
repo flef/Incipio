@@ -16,7 +16,7 @@ class MembreType extends AbstractType {
                 ->add('promotion', 'integer', array('label' => 'Promotion', 'required' => false))
                 ->add('dateDeNaissance', 'date', array('label' => 'Date de naissance (jj/mm/aaaa)', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'required' => false))
                 ->add('lieuDeNaissance', 'text', array('label' => 'Lieu de naissance', 'required' => false))
-				->add('nationalite', 'genemu_jqueryselect2_choice', array('label' => 'Nationalité', 'required' => false, 'choices' => array('Afghan' => 'Afghan', 'Albanais' => 'Albanais',
+				->add('nationalite', 'genemu_jqueryselect2_choice', array('label' => 'Nationalité', 'required' => false, 'preferred_choices' => array('Français'), 'choices' => array('Afghan' => 'Afghan', 'Albanais' => 'Albanais',
 				'Algérien' => 'Algérien', 'Allemand' => 'Allemand', 'Américain' => 'Américain', 'Angolais' => 'Angolais', 'Argentin' => 'Argentin', 'Arménien' => 'Arménien',
 				'Australien' => 'Australien', 'Autrichien' => 'Autrichien', 'Bangladais' => 'Bangladais', 'Belge' => 'Belge', 'Béninois' => 'Béninois', 'Bosniaque' => 'Bosniaque',
 				'Botswanais' => 'Botswanais', 'Bhoutan' => 'Bhoutan', 'Brésilien' => 'Brésilien', 'Britannique' => 'Britannique', 'Bulgare' => 'Bulgare', 'Burkinabè' => 'Burkinabè',
