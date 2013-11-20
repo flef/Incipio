@@ -12,10 +12,6 @@
          select{
          width: 98%;
          }
-          input{
-              width: 95%;
-         height: 100%;
-              }
 
 </style>
 
@@ -24,11 +20,9 @@
     {# affiche l'unique champ de la tache : description #}
     {#{ form_row(form.description) }#}
         
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/>
+<p><input type="submit" value="Ajouter une phase" name="add"/>
  - <input type="submit" value="Enregistrer les phases" /></p>
 
-
-    <div class="boutonAdd"></div>
         {# itere sur chaque tag existant et affiche son unique champ : name #}
             <div class="row phases" id="phases" data-prototype="{{ form_widget(form.phases.vars.prototype) | e }}">
         {# itere sur chaque tag existant et affiche son unique champ : name #}
@@ -38,6 +32,10 @@
                     <table class="table table-striped table-bordered">
                         <tr>
                             <th colspan="2"><div class="btn-group"></div>       <span class="titrePhase"></span> {{  form_widget(phase.position)}}</th>
+                        </tr>
+                        <tr>
+                            <th>{{  form_label(phase.groupe)}}</th>
+                            <td>{{  form_widget(phase.groupe)}}</td>
                         </tr>
                         <tr>
                             <th>Titre</th>
@@ -68,7 +66,7 @@
                             <td>{{ form_widget(phase.delai)}}</td>
                         </tr>
                         <tr>
-                            <th>Prix Phase <span style="font-size: 9px">id={{ phase.vars.name }}</span> {#{ dump(phase.vars) }#}</th>
+                            <th>Prix Phase</th>
                             <td><span class="prixPhase{{ phase.vars.name }}">//</span></td>
                         </tr>
                     </table>
@@ -78,9 +76,8 @@
 
     <br />
       {{ form_rest(form) }}
-    <div class="boutonAdd"></div>
 
-<p><br /><input type="submit" value="Ajouter une phase" name="add"/>
+<p><input type="submit" value="Ajouter une phase" name="add"/>
  - <input type="submit" value="Enregistrer les phases" /></p>
 
 </form>

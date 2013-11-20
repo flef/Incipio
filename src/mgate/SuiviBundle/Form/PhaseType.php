@@ -7,11 +7,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 use mgate\PersonneBundle\Form;
 use mgate\SuiviBundle\Entity\Phase;
+use mgate\SuiviBundle\Entity\GroupePhasesRepository as GroupePhasesRepository;
 
 class PhaseType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add('position', 'hidden', array('attr' => array('class' => 'position')))
+                ->add('groupe', 'genemu_jqueryselect2_entity', array(
+                'class' => 'mgate\SuiviBundle\Entity\GroupePhases',
+                'property' => 'titre',
+                'required' => false,
+                'query_builder' => function (GroupePhasesRepository $er) use ($options) {
+                    return $er->getGroupePhasesByEtude($options['etude']);
+                },
+                'label' => 'Groupe',
+                ))
                 ->add('titre', 'text')
                 ->add('objectif', 'textarea', array('label' => 'Objectif', 'required' => false))
                 ->add('methodo', 'textarea', array('label' => 'Méthodologie', 'required' => false))
@@ -31,6 +41,7 @@ class PhaseType extends AbstractType {
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Phase',
+            'etude' => null,
         ));
     }
 

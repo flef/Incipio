@@ -17,7 +17,7 @@
 {% block content_bundle %}
     <h2>Contact client</h2>
     <table class="table table-bordered">
-        <tr><td colspan="2"><h4><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': selectedContactClient.id}) }}"><i class="icon-pencil"></i> Modifier</a></h4></td></tr>
+        <tr><td colspan="2"><h4><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': selectedContactClient.id}) }}"><i class="glyphicon glyphicon-pencil"></i> Modifier</a></h4></td></tr>
         <tr>
             <th>Fait Par</th>
             <td>{{ selectedContactClient.faitPar.prenomNom }}</td>
@@ -30,11 +30,11 @@
             <th>Objet</th>
             <td>
             {% if selectedContactClient.moyenContact == 'telephone'%}
-                <i title="Par téléphone" class="icon-headphones"></i> 
+                <i title="Par téléphone" class="glyphicon glyphicon-headphones"></i> 
             {% elseif selectedContactClient.moyenContact == 'mail'%}
-                <i title="Par mail" class="icon-envelope"></i> 
+                <i title="Par mail" class="glyphicon glyphicon-envelope"></i> 
             {% else %}
-                <i title="Physique" class="icon-eye-open"></i> 
+                <i title="Physique" class="glyphicon glyphicon-eye-open"></i> 
             {% endif %}
                 {{ selectedContactClient.objet }}
             </td>
@@ -54,11 +54,11 @@
         </td>
         <td>
         {% if contact.moyenContact == 'telephone'%}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-headphones"></i> 
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
         {% elseif contact.moyenContact == 'mail'%}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-envelope"></i> 
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
         {% else %}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="icon-eye-open"></i> 
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
         {% endif %}
         </td>
         <td>
