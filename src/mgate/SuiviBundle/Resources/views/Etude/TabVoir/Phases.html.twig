@@ -87,8 +87,8 @@
 					<th>Phase n°{{phase.position+1}}</th>
 					<td>{{phase.titre | nl2br }}</td>
 					<td>{{phase.dateDebut|date("d/m/Y")}}</td>
-					<td>{{phase.delai}} jours</td>
-					<td>{{phase.dateDebut |date_modify("+" ~ phase.delai ~" day")|date("d/m/Y")}}</td>
+					<td>{{phase.delai|default(0)}} jours</td>
+					<td>{{phase.dateDebut |date_modify("+" ~ phase.delai |default(0) ~" day")|date("d/m/Y")}}</td>
 				 </tr>
 				{% endfor %}
 			</table>
@@ -118,7 +118,7 @@
                 <tr>
                     <td colspan="2"></td>
                     <td align="right">{{ nbJEH }} JEH</td>
-                    <td align="right">{{ (total / nbJEH) | number_format(2, ',', ' ')}} €</td>
+                    <td align="right">{%if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
                     <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
                 </tr>
 			</table>
