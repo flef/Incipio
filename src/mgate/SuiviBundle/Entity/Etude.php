@@ -194,6 +194,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OrderBy({"position" = "ASC"})
      */
     private $phases;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="GroupePhases", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"numero" = "ASC"})
+     */
+    private $groupes;
 
     /**
      * @ORM\OneToOne(targetEntity="Cc", mappedBy="etude", cascade={"persist", "remove"})
@@ -275,6 +281,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
         $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->procesVerbaux = new \Doctrine\Common\Collections\ArrayCollection();
@@ -951,6 +958,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getPhases() {
         return $this->phases;
     }
+    
 
     /**
      * Set cc
@@ -1062,7 +1070,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @return Etude
      */
     public function addPvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvi) {
-        $this->pvis[] = $pvi;
+        $this->procesVerbaux[] = $pvi;
         $pvi->setEtude($this);
         $pvi->setType('pvi');
 
@@ -1075,7 +1083,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @param \mgate\SuiviBundle\Entity\PvProcesVerbali $pvis
      */
     public function removePvi(\mgate\SuiviBundle\Entity\ProcesVerbal $pvis) {
-        $this->pvis->removeElement($pvis);
+        $this->procesVerbaux->removeElement($pvis);
     }
 
     /**
@@ -1411,6 +1419,37 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getConfidentiel() {
         return $this->confidentiel;
+    }
+    
+    
+    /**
+     * Add groupes
+     *
+     * @param \mgate\SuiviBundle\Entity\GroupePhases $groupes
+     * @return Etude
+     */
+    public function addGroupe(\mgate\SuiviBundle\Entity\GroupePhases $groupe) {
+        $this->groupes[] = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Remove groupes
+     *
+     * @param \mgate\SuiviBundle\Entity\GroupePhases $groupes
+     */
+    public function removeGroupe(\mgate\SuiviBundle\Entity\GroupePhases $groupe) {
+        $this->groupes->removeElement($groupe);
+    }
+
+    /**
+     * Get groupes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGroupes() {
+        return $this->groupes;
     }
 
 }
