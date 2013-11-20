@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * mgate\SuiviBundle\Entity\GroupePhases
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\GroupePhasesRepository")
  */
 class GroupePhases
 {

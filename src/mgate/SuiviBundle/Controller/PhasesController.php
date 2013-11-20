@@ -49,7 +49,7 @@ class PhasesController extends Controller
         }
         
 
-        $form = $this->createForm(new PhasesType, $etude);
+        $form = $this->createForm(new PhasesType, $etude, array('etude' => $etude));
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
