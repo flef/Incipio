@@ -577,8 +577,6 @@ class EtudeManager extends \Twig_Extension {
         {
             $ok =  $doc->getRedige()
                 && $doc->getRelu()
-                && $doc->getSpt1()
-                && $doc->getSpt2()
                 && $doc->getEnvoye()
                 && $doc->getReceptionne();
             

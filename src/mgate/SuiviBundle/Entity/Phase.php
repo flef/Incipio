@@ -25,18 +25,24 @@ class Phase
     private $id;
     
     /**
-     * Gedmo\SortablePosition
-     * @ORM\Column(name="position", type="integer", nullable=true)
-     * todo enlever le nullable=true
-     */
-    private $position;
-    
-    /**
      * Gedmo\SortableGroup
      * @ORM\ManyToOne(targetEntity="Etude", inversedBy="phases", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="GroupePhases", inversedBy="phases")
+     * @ORM\OrderBy({"numero" = "ASC"})
+     */
+    private $groupe;
+    
+    /**
+     * Gedmo\SortablePosition
+     * @ORM\Column(name="position", type="integer", nullable=true)
+     * todo enlever le nullable=true
+     */
+    private $position;
     
     /**
      * @var integer $nbrJEH
@@ -105,9 +111,8 @@ class Phase
     {
         $this->voteCount = 0;
         $this->createdAt = new \DateTime('now');
-        //$this->isEnabled = false;
         $this->prixJEH = 300;
-        $this->validation = 1;
+        $this->validation = 0;
         $this->avenantStatut = 0;
     }
 
@@ -142,6 +147,29 @@ class Phase
     public function getEtude()
     {
         return $this->etude;
+    }
+    
+    /**
+     * Set etude
+     *
+     * @param mgate\SuiviBundle\Entity\GroupePhases $groupe
+     * @return Phase
+     */
+    public function setGroupe($groupe = NULL)
+    {
+        $this->groupe = $groupe;
+    
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return mgate\SuiviBundle\Entity\GroupePhases 
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
     }
 
     /**

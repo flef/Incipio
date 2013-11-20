@@ -34,7 +34,7 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
             <td>{{ etude.nom }}</td>
             <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
             <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>
-            <td>{% if signe %}<span class="badge badge-success">Oui</span>{% else %}<span class="badge badge-important">Non</span>{% endif %}</td>
+            <td>{% if signe %}<span class="label label-success">Oui</span>{% else %}<span class="label label-important">Non</span>{% endif %}</td>
             <td>
                 {# Token pour confimer que le text éditer correspond à l'étude + textarea  #}
                 {{ form_widget(form[2*textAreaID]) }}{{ form_widget(form[2*textAreaID+1]) }}
