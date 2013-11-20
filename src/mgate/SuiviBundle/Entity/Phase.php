@@ -32,7 +32,7 @@ class Phase
     protected $etude;
     
     /**
-     * @ORM\OneToMany(targetEntity="GroupePhases", mappedBy="phases", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="GroupePhases", inversedBy="phases")
      * @ORM\OrderBy({"numero" = "ASC"})
      */
     private $groupe;
