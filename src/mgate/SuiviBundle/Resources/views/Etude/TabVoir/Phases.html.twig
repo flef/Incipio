@@ -49,8 +49,38 @@
 		</div>
 		<div class="tab-pane" id="methodo">
 			<h4><a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les Phases</a></h4>
-			<div class="row">
-		   {% for phase in etude.phases %}
+			
+            {% set groupedPhases = [] %}
+            {% for groupe in etude.groupes %}
+            <h2>{{groupe.titre | nl2br }}</h2>
+            <div class="row">
+            {% for phase in groupe.phases %}
+            {% set groupedPhases = groupedPhases | merge({ (phase.position) :  0}) %}
+			<div class="col-md-4">
+					<table class="table table-striped table-bordered egalize" >
+						<tr>
+							<th colspan="2">Phase n°{{phase.position+1}}</th>
+						</tr>
+						<tr>
+							<th>Titre</th>
+							<td>{{phase.titre | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Objectifs</th>
+							<td>{{phase.objectif | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Méthodologie</th>
+							<td>{{phase.methodo | nl2br }}</td>
+						</tr>
+					</table>
+				</div>
+           {% endfor %}
+            </div>
+           {% endfor %}
+            <h2>Phases non Groupées</h2>
+            <div class="row">
+		   {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
 				<div class="col-md-4">
 					<table class="table table-striped table-bordered egalize" >
 						<tr>
@@ -76,8 +106,7 @@
 		<div class="tab-pane" id="delai">
 			<table class="table table-striped table-bordered" >
 				<tr>
-					<th></th>
-					<th>Titre</th>
+                    <th colspan="2">Titre</th>
 					<th>Date de début</th>
 					<th>Durée</th>
 					<th>Date de fin</th>
@@ -95,31 +124,75 @@
 		</div>
 		<div class="tab-pane" id="budget">
             {% set nbJEH = 0 %}
-            {% set total = 0 %} 
-			<table class="table table-striped table-bordered" >
+            {% set total = 0 %}
+            {% set nbJEHGlobal = 0 %}
+            {% set totalGlobal = 0 %}
+            {% set groupedPhases = [] %}
+            <table class="table table-striped table-bordered" >
 				<tr>
-					<th></th>
-					<th>Titre</th>
+                    <th colspan="2">Phase</th>
 					<th>Nombre JEH</th>
 					<th>Prix JEH</th>
 					<th>Total</th>
 		 	   </tr>
-				{% for phase in etude.phases %}
-               {% set nbJEH = nbJEH + phase.nbrJEH %}
-               {% set total = total + phase.nbrJEH * phase.prixJEH %}
+            {% for groupe in etude.groupes %}
+            {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+            {% set totalGlobal = totalGlobal + total %}
+            {% set nbJEH = 0 %}
+            {% set total = 0 %}
+               <tr class="success">
+                 <th colspan="5">{{groupe.titre | nl2br }}</th>
+             </tr>
+             {% for phase in groupe.phases %}
+                 {% set groupedPhases = groupedPhases | merge({ (phase.position) :  0}) %}
+                 {% set nbJEH = nbJEH + phase.nbrJEH %}
+                 {% set total = total + phase.nbrJEH * phase.prixJEH %}
 				<tr>
-					<th>Phase n°{{phase.position+1}}</th>
+					<td>Phase n°{{phase.position+1}}</td>
 					<td>{{phase.titre | nl2br }}</td>
 					<td align="right">{{phase.nbrJEH}} JEH</td>
 					<td align="right">{{phase.prixJEH | number_format(2, ',', ' ')}} €</td>
 					<td align="right">{{(phase.nbrJEH * phase.prixJEH )| number_format(2, ',', ' ')}} €</td>
 				</tr>
 				{% endfor %}
-                <tr>
-                    <td colspan="2"></td>
+                <tr class="warning">
+                    <th colspan="2">SOUS-TOTAL</th>
                     <td align="right">{{ nbJEH }} JEH</td>
                     <td align="right">{%if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
                     <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
+                </tr>                
+            {% endfor %}
+            <tr class="success">
+                 <th colspan="5">Phases non groupées</th>
+             </tr>
+            {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+            {% set totalGlobal = totalGlobal + total %}
+            {% set nbJEH = 0 %}
+            {% set total = 0 %}
+            {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+               {% set nbJEH = nbJEH + phase.nbrJEH %}
+               {% set total = total + phase.nbrJEH * phase.prixJEH %}
+				<tr>
+					<td>Phase n°{{phase.position+1}}</td>
+					<td>{{phase.titre | nl2br }}</td>
+					<td align="right">{{phase.nbrJEH}} JEH</td>
+					<td align="right">{{phase.prixJEH | number_format(2, ',', ' ')}} €</td>
+					<td align="right">{{(phase.nbrJEH * phase.prixJEH )| number_format(2, ',', ' ')}} €</td>
+				</tr>
+				{% endfor %}
+                <tr class="warning">
+                    <th colspan="2">SOUS-TOTAL</th>
+                    <td align="right">{{ nbJEH }} JEH</td>
+                    <td align="right">{%if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
+                    <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
+                </tr>   
+                {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+                {% set totalGlobal = totalGlobal + total %}
+                <tr class="danger">
+                    <th colspan="2">TOTAL</th>
+                    <td align="right">{{ nbJEHGlobal }} JEH</td>
+                    <td align="right">{%if nbJEHGlobal > 0 %}{{ (totalGlobal / nbJEHGlobal ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
+                    <td align="right">{{ totalGlobal | number_format(2, ',', ' ')}} €</td>
                 </tr>
 			</table>
 		</div>
