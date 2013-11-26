@@ -45,7 +45,7 @@ Affichage d'un Membre - {{ parent() }}
             <td colspan="4"><h4>Postes occupés</h4></td>
         </tr>
     {% for mandat in membre.mandats %}
-        <tr class="mandats">
+        <tr class="mandats {{ "now"|date('Ymd')  > mandat.finMandat |date('Ymd') ? 'danger' : 'success'}}">
             <td colspan="2">{{ mandat.poste.intitule }}</td>
             <td>Du : {{ mandat.debutMandat | date("d/m/Y") }}</td>
             <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
