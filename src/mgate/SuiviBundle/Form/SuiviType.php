@@ -12,11 +12,12 @@ class SuiviType extends AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
 
 
-        $builder->add('stateID', 'choice', array('choices' => Etude::getStateIDChoice(), 'label' => 'Etat de l\'Étude', 'required' => true));
-        $builder->add('auditDate', 'genemu_jquerydate', array('label' => 'Audité le', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'));
-        $builder->add('auditType', 'choice', array('choices' => Etude::getAuditTypeChoice(), 'label' => 'Type d\'audit', 'required' => false));
-        $builder->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class' => 'mgate\SuiviBundle\Entity\Ap'));
-        $builder->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class' => 'mgate\SuiviBundle\Entity\Cc'));
+        $builder->add('stateID', 'choice', array('choices' => Etude::getStateIDChoice(), 'label' => 'Etat de l\'Étude', 'required' => true))
+                ->add('auditDate', 'genemu_jquerydate', array('label' => 'Audité le', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'))
+                ->add('auditType', 'choice', array('choices' => Etude::getAuditTypeChoice(), 'label' => 'Type d\'audit', 'required' => false))
+                ->add('stateDescription','textarea',array('label'=>'Problèmes', 'required' => false, 'attr'=>array('cols'=>'100%','rows'=>5),))
+                ->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class' => 'mgate\SuiviBundle\Entity\Ap'))
+                ->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class' => 'mgate\SuiviBundle\Entity\Cc'));
 
         $builder->add('factures', 'collection', array(
             'type' => new DocTypeSuiviType,

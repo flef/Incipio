@@ -1,8 +1,28 @@
- <form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
+<nav class="navbar" role="navigation">
+    <div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-suivi">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<span class="navbar-brand">Suivi de l'étude</span>
+		</div>
+		<div class="collapse navbar-collapse navbar-suivi">
+            <ul class="nav  navbar-nav">
+                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Ajouter un suivi</a></li>
+            </ul>
+            <ul class="nav  navbar-nav navbar-right">
+                <li><a href="{{ path('mgateSuivi_etude_homepage') }}"><span class="glyphicon glyphicon-th-list"></span> Retour à la liste</a></li>
+            </ul>
+    </div>
+</nav>
+
+<form id="myForm" method="post" action="{{path('mgateSuivi_etude_suivi_update', {'id': etude.id})}}" {{ form_enctype(formSuivi) }}>
                 
                 
                 
-                            <table class="table">
+                            <table class="table table-striped">
                                     <tr>
                                         <th>Etat de l'Étude</th>
                                         <th>Audité le</th>
@@ -13,6 +33,13 @@
                                         <td>{{ form_widget(formSuivi.auditDate) }}</td>
                                         <td>{{ form_widget(formSuivi.auditType) }}</td>
                                     </tr>
+                                        <th colspan="3">{{ form_label(formSuivi.stateDescription) }}</th>
+                                    <tr>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">{{ form_widget(formSuivi.stateDescription) }}</td>
+                                    </tr>
+                                        
                                 </table>
          
 
