@@ -42,7 +42,7 @@ class ClientContactType extends AbstractType
 
     public function getName()
     {
-        return 'alex_suivibundle_clientcontacttype';
+        return 'mgate_suivibundle_clientcontacttype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

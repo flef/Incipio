@@ -39,6 +39,17 @@
                                     <tr>
                                         <td colspan="3">{{ form_widget(formSuivi.stateDescription) }}</td>
                                     </tr>
+                                    {% if etude.suivis is not empty %}
+                                    {% set lastSuivi = etude.suivis |last %}
+                                    <tr>
+                                        <th colspan="2"><span class="label {{ date(lastSuivi.date) > date('-7days') ? 'label-success' : 'label-danger' }}">{{ lastSuivi.date | date("d/m/y") }}</span> Etat</th>
+                                        <th>TODO</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">{{lastSuivi.etat | nl2br}}</td>
+                                        <td>{{lastSuivi.todo | nl2br}}</td>
+                                    </tr>
+                                    {% endif %}
                                         
                                 </table>
          
