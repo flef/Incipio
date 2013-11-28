@@ -127,4 +127,27 @@ class Suivi
     {
         return $this->todo;
     }
+    
+    /**
+     * Set etude
+     *
+     * @param string $etude
+     * @return Suivi
+     */
+    public function setEtude($etude)
+    {
+        $this->etude = $etude;
+    
+        return $this;
+    }
+
+    /**
+     * Get etude
+     *
+     * @return string 
+     */
+    public function getEtude()
+    {
+        return $this->etude;
+    }
 }
