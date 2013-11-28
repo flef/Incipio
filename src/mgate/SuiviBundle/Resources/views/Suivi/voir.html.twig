@@ -1,0 +1,87 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage du contact client - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb no-margin">
+    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>
+    {% if etude is defined %}
+    <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a></li>
+    <li class="active">-</li>
+    {% endif %}
+</ul>
+{% endblock %}
+    
+{% block content_bundle %}
+    <h2>Contact client</h2>
+    <table class="table table-bordered">
+        <tr><td colspan="2"><h4><a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': selectedContactClient.id}) }}"><i class="glyphicon glyphicon-pencil"></i> Modifier</a></h4></td></tr>
+        <tr>
+            <th>Fait Par</th>
+            <td>{{ selectedContactClient.faitPar.prenomNom }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ selectedContactClient.date | date("\\L\\e d/m/Y \\à G:i") }}</td>
+        </tr>
+        <tr>
+            <th>Objet</th>
+            <td>
+            {% if selectedContactClient.moyenContact == 'telephone'%}
+                <i title="Par téléphone" class="glyphicon glyphicon-headphones"></i> 
+            {% elseif selectedContactClient.moyenContact == 'mail'%}
+                <i title="Par mail" class="glyphicon glyphicon-envelope"></i> 
+            {% else %}
+                <i title="Physique" class="glyphicon glyphicon-eye-open"></i> 
+            {% endif %}
+                {{ selectedContactClient.objet }}
+            </td>
+        </tr>
+        <tr>
+            <th>Résumé</th>
+            <td>{{ selectedContactClient.contenu | nl2br }}</td>
+        </tr>
+    </table>
+    
+    <h3>Résumé des autres contacts clients</h3>
+    <table class="table table-bordered table-striped">
+    {% for contact in contactsClient | reverse %}
+    <tr>
+        <td>
+            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">Contact n°{{contactsClient | length - loop.index}}</a>
+        </td>
+        <td>
+        {% if contact.moyenContact == 'telephone'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
+        {% elseif contact.moyenContact == 'mail'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
+        {% else %}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
+        {% endif %}
+        </td>
+        <td>
+            {{contact.date | date("d/m/Y") }}
+        </td>
+        <td>
+            {{ contact.faitPar.PrenomNom }}
+        </td>
+        <td>
+            {{ contact.objet }}
+        </td>
+        <td>
+            {{ contact.contenu }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_voir', {'id' : etude.id }) }}">Retour à l'étude</a><br>
+        <a href="{{ path('mgateSuivi_clientcontact_modifier', {'id': selectedContactClient.id}) }}">Modifier le contact client</a>
+	
+    </p>
+
+{% endblock %}
