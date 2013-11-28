@@ -13,7 +13,7 @@ use mgate\SuiviBundle\Entity\Suivi;
 use mgate\SuiviBundle\Form\SuiviType;
 
 
-class ClientContactController extends Controller
+class SuiviController extends Controller
 {
     /**
      * @Secure(roles="ROLE_CA")
@@ -22,7 +22,16 @@ class ClientContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('mgateSuiviBundle:Suivi')->findBy(array(), array('date' => 'DESC'));
+        
+        $entities = $em->getRepository('mgateSuiviBundle:Suivi')
+            ->createQueryBuilder('s')
+            ->innerJoin('s.etude', 'e')
+            ->where('e.stateID < 5')
+            ->groupBy('s.date')
+            ->orderBy('e.mandat','DESC')
+            ->addOrderBy('e.num', 'DESC')
+            ->addOrderBy('s.date', 'DESC')
+            ->getQuery()->getResult();
 
         return $this->render('mgateSuiviBundle:Suivi:index.html.twig', array(
             'suivis' => $entities,
