@@ -175,9 +175,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $auditType;
 
     /**
-     * @ORM\OneToMany(targetEntity="ClientContact", mappedBy="etude")
+     * @ORM\OneToMany(targetEntity="ClientContact", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $clientContacts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Suivi", mappedBy="etude", cascade={"persist", "remove"})
+     */
+    private $suivis;
 
     /**
      * @ORM\OneToMany(targetEntity="Candidature", mappedBy="etude")
@@ -279,6 +284,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function __construct() {
         $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
@@ -873,6 +879,36 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getClientContacts() {
         return $this->clientContacts;
+    }
+    
+    /**
+     * Add suivi
+     *
+     * @param \mgate\SuiviBundle\Entity\Suivi $suivi
+     * @return Etude
+     */
+    public function addSuivi(\mgate\SuiviBundle\Entity\Suivi $suivi) {
+        $this->suivis[] = $suivi;
+
+        return $this;
+    }
+
+    /**
+     * Remove suivi
+     *
+     * @param \mgate\SuiviBundle\Entity\Suivi $suivi
+     */
+    public function removeSuivi(\mgate\SuiviBundle\Entity\Suivi $suivi) {
+        $this->suivis->removeElement($suivi);
+    }
+
+    /**
+     * Get suivis
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSuivis() {
+        return $this->suivis;
     }
 
     /**

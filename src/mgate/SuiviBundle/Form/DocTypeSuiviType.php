@@ -22,7 +22,7 @@ class DocTypeSuiviType extends AbstractType
 
     public function getName()
     {
-        return 'alex_suivibundle_doctypetype';
+        return 'mgate_suivibundle_doctypetype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
