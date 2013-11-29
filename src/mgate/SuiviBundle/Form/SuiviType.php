@@ -16,7 +16,7 @@ class SuiviType extends AbstractType
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options)
     {
 	    $builder->add('date','date',array('label'=>'Date du suivi'))
-                ->add('etat','text',array('label'=>'Etat de l\'étude','attr'=>array('cols'=>'100%','rows'=>5)))
+                ->add('etat','textarea',array('label'=>'Etat de l\'étude','attr'=>array('cols'=>'100%','rows'=>5)))
                 ->add('todo','textarea',array('label'=>'Taches à faire', 'attr'=>array('cols'=>'100%','rows'=>5)));
     }
 
@@ -28,7 +28,7 @@ class SuiviType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
             $resolver->setDefaults(array(
-                'data_class' => 'mgate\SuiviBundle\Entity\ClientContact',
+                'data_class' => 'mgate\SuiviBundle\Entity\Suivi',
             ));
     }
 }
