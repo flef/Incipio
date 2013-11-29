@@ -10,7 +10,9 @@ Affichage d'une étude - {{ parent() }}
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif</a></li>
         <li><a href="#tab2" data-toggle="tab">Phases</a></li>
         <li><a href="#tab3" data-toggle="tab">Rédaction et Génération</a></li>
+        {% if is_granted('ROLE_CA') %}
         <li><a href="#tab4" data-toggle="tab">Suivi</a></li>
+        {%endif%}
     </ul>
     <div class="tab-content">
     <!-- ERRORS -->
@@ -31,9 +33,11 @@ Affichage d'une étude - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:TabVoir/Suivi.html.twig" with  {'etude':  etude} %}
         </div>
     <!-- SUIVI DOCUMENTS TYPES AUDIT -->
+    {% if is_granted('ROLE_CA') %}
         <div class="tab-pane" id="tab4">   
         {% include "mgateSuiviBundle:Etude:TabVoir/Redaction.html.twig" with  {'etude':  etude} %}
         </div>
+    {% endif %}
     </div>
 </div>
 
