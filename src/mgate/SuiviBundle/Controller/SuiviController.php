@@ -27,7 +27,7 @@ class SuiviController extends Controller
             ->createQueryBuilder('s')
             ->innerJoin('s.etude', 'e')
             ->where('e.stateID < 5')
-            ->groupBy('s.date')
+            //->groupBy('s.date')
             ->orderBy('e.mandat','DESC')
             ->addOrderBy('e.num', 'DESC')
             ->addOrderBy('s.date', 'DESC')
@@ -51,21 +51,30 @@ class SuiviController extends Controller
 
         
         
-        $clientcontact = new ClientContact;
-        $clientcontact->setEtude($etude);
-        $form        = $this->createForm(new ClientContactType, $clientcontact);
-        $formHandler = new ClientContactHandler($form, $this->get('request'), $em);
+        $suivi = new Suivi;
+        $suivi->setEtude($etude);
+        $suivi->setDate(new \DateTime("now"));
+        $form        = $this->createForm(new SuiviType, $suivi);
         
-        if($formHandler->process())
-            return $this->redirect( $this->generateUrl('mgateSuivi_clientcontact_voir', array('id' => $clientcontact->getId())) );
-
-        return $this->render('mgateSuiviBundle:ClientContact:ajouter.html.twig', array(
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bind($this->get('request'));
+               
+            if( $form->isValid() )
+            {
+                $em->persist($suivi);
+                $em->flush();
+                return $this->redirect( $this->generateUrl('mgateSuivi_suivi_voir', array('id' => $suivi->getId())) );
+            }
+                
+        }
+        return $this->render('mgateSuiviBundle:Suivi:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
         
     }
     
-    private function compareDate(ClientContact $a,ClientContact $b) {
+    private function compareDate(Suivi $a,Suivi $b) {
         if ($a->getDate() == $b->getDate())
             return 0;
         else
@@ -79,19 +88,19 @@ class SuiviController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $contactClient = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id);
+        $suivi = $em->getRepository('mgateSuiviBundle:Suivi')->find($id);
 
-        if (!$contactClient) {
-            throw $this->createNotFoundException('Unable to find ClientContact entity.');
+        if (!$suivi) {
+            throw $this->createNotFoundException('Unable to find Suivi entity.');
         }
 
-        $etude = $contactClient->getEtude();
-        $contactsClient = $etude->getClientContacts()->toArray();
-        usort($contactsClient, array($this, 'compareDate'));
+        $etude = $suivi->getEtude();
+        $suivis = $etude->getSuivis()->toArray();
+        usort($suivis, array($this, 'compareDate'));
 
-        return $this->render('mgateSuiviBundle:ClientContact:voir.html.twig', array(
-            'contactsClient'      => $contactsClient,
-            'selectedContactClient' => $contactClient,
+        return $this->render('mgateSuiviBundle:Suivi:voir.html.twig', array(
+            'suivis'      => $suivis,
+            'selectedSuivi' => $suivi,
             'etude' => $etude,
             ));
         
@@ -104,12 +113,12 @@ class SuiviController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        if( ! $clientcontact = $em->getRepository('mgate\SuiviBundle\Entity\ClientContact')->find($id) )
+        if( ! $suivi = $em->getRepository('mgate\SuiviBundle\Entity\Suivi')->find($id) )
         {
-            throw $this->createNotFoundException('ClientContact[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Suivi[id='.$id.'] inexistant');
         }
 
-        $form        = $this->createForm(new ClientContactType, $clientcontact);
+        $form        = $this->createForm(new SuiviType, $suivi);
         
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -118,14 +127,14 @@ class SuiviController extends Controller
             if( $form->isValid() )
             {
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_clientcontact_voir', array('id' => $clientcontact->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_suivi_voir', array('id' => $suivi->getId())) );
             }
                 
         }
 
-        return $this->render('mgateSuiviBundle:ClientContact:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:Suivi:modifier.html.twig', array(
             'form' => $form->createView(),
-            'clientcontact' => $clientcontact,
+            'clientcontact' => $suivi,
         ));
     }
 }
