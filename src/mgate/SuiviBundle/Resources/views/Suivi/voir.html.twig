@@ -1,0 +1,56 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage du suivi - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb no-margin">
+    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>
+    {% if etude is defined %}
+    <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }} - {{ etude.nom }}</a></li>
+    <li class="active">-</li>
+    {% endif %}
+</ul>
+{% endblock %}
+    
+{% block content_bundle %}
+    <h2>Suivi</h2>
+    <table class="table table-bordered">
+        <tr><td colspan="2"><h4><a href="{{ path('mgateSuivi_suivi_modifier', {'id': selectedSuivi.id}) }}"><i class="glyphicon glyphicon-pencil"></i> Modifier</a></h4></td></tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ selectedSuivi.date | date("\\L\\e d/m/Y") }}</td>
+        </tr>
+        <tr>
+            <th>Etat</th>
+            <td>{{ selectedSuivi.etat | nl2br }}</td>
+        </tr>
+        <tr>
+            <th>Todo</th>
+            <td>{{ selectedSuivi.todo | nl2br }}</td>
+        </tr>
+    </table>
+    
+    <h3>Historique</h3>
+    <table class="table table-bordered table-striped">
+    {% for suivi in suivis | reverse %}
+    <tr>
+        <td>
+            <a href="{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}">Suivi n°{{suivis | length - loop.index0}}</a>
+        </td>
+        <td>{{suivi.date | date("d/m/Y") }}</td>
+        <td>{{ suivi.etat | nl2br }}</td>
+        <td>{{ suivi.todo | nl2br }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+    <p>
+        <a href="{{ path('mgateSuivi_etude_voir', {'id' : etude.id }) }}">Retour à l'étude</a><br>
+        <a href="{{ path('mgateSuivi_suivi_modifier', {'id': selectedSuivi.id}) }}">Modifier le Suivi</a>
+	
+    </p>
+
+{% endblock %}
