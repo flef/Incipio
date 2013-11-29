@@ -1,0 +1,24 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Modifier un Suivi - {{ parent() }}
+{% endblock %}
+
+{% block javascript %}
+    {{ form_javascript(form) }}
+{% endblock %}
+        
+{% block content_bundle %}
+
+        
+    <h2>Modifier le Suivi</h2>
+
+    {% include "mgateSuiviBundle:Suivi:formulaire.html.twig" %} 
+
+
+    <p>
+        <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': clientcontact.id}) }}" >Retour</a>
+    </p>
+
+{% endblock %}
+
