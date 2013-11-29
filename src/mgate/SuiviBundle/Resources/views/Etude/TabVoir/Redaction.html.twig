@@ -10,7 +10,7 @@
 		</div>
 		<div class="collapse navbar-collapse navbar-suivi">
             <ul class="nav  navbar-nav">
-                <li><a href="#"><span class="glyphicon glyphicon-pencil"></span> Ajouter un suivi</a></li>
+                <li><a href="{{ path('mgateSuivi_suivi_ajouter', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Ajouter un suivi</a></li>
             </ul>
             <ul class="nav  navbar-nav navbar-right">
                 <li><a href="{{ path('mgateSuivi_etude_homepage') }}"><span class="glyphicon glyphicon-th-list"></span> Retour à la liste</a></li>
