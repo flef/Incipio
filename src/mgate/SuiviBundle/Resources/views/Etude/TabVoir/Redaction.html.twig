@@ -42,7 +42,7 @@
                                     {% if etude.suivis is not empty %}
                                     {% set lastSuivi = etude.suivis |last %}
                                     <tr>
-                                        <th colspan="2"><span class="label {{ date(lastSuivi.date) > date('-7days') ? 'label-success' : 'label-danger' }}">{{ lastSuivi.date | date("d/m/y") }}</span> Etat</th>
+                                        <th colspan="2"><a href="{{ path('mgateSuivi_suivi_voir', {'id' : lastSuivi.id}) }}"><span class="label {{ date(lastSuivi.date) > date('-7days') ? 'label-success' : 'label-danger' }}">{{ lastSuivi.date | date("d/m/y") }}</span> Etat</a></th>
                                         <th>TODO</th>
                                     </tr>
                                     <tr>
