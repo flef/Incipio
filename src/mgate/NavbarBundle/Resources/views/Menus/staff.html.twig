@@ -15,6 +15,7 @@
 
     
     <!-- RECRUTEMENT FORMATIONS PASSATION -->
+    {% if is_granted('ROLE_SUIVEUR') %}
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formations <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -27,7 +28,8 @@
             {% endif %}
         </ul>
     </li>
-
+    {% endif %}
+    
     {% if is_granted('ROLE_SUIVEUR') %}
     <!-- SUIVI D'ETUDES-->
     <li class="dropdown">
@@ -44,6 +46,7 @@
         {% endif %}
             {% if is_granted('ROLE_CA') %}
             <li class="dropdown-header">Administration</li>
+            <li><a href="{{ path('mgateSuivi_clientcontact_index') }}"><span class="glyphicon glyphicon-envelope"></span> Contacts Client</a></li>
             <li><a href="{{ path('mgateSuivi_vu_ca') }}"><span class="glyphicon glyphicon-eye-open"></span> Vu CA</a></li>
             <li><a href="{{ path('mgateSuivi_etude_suivi') }}"><span class="glyphicon glyphicon-calendar"></span> Récapitulatif</a></li>
             {% endif %}

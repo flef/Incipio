@@ -1,24 +1,55 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Accueil - {{ parent() }}
+	Affichage des contact client - {{ parent() }}
 {% endblock %}
 
+{% block breadcrumb %}
+<ul class="breadcrumb no-margin">
+    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>    
+</ul>
+{% endblock %}
+    
 {% block content_bundle %}
-
-    <h2>Liste des Suivis</h2>
-
-    <ul>
-
-        {% for etude in etudes %}
-            <li>
-                <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> etude numéro {{ etude.id }}</a>
-                , faite par le mandat {{ etude.mandat }} créée le {{ etude.dateCreation|date("d/m/Y") }}
-            </li>
+    {% set mounth = {'01' : 'janvier', '02' : 'février', '03' : 'mars', '04' : 'avril', '05' : 'mai', '06' : 'juin', '07' : 'juillet', '08' : 'août', '09' : 'septembre', '10' : 'octobre','11' : 'novembre', '12' : 'décembre'} %}
+    <h2>Contact client</h2>
+    
+    <table class="table table-bordered table-striped">
+    {% set mois = contactsClient[0].date | date("m") %}
+    {% for contact in contactsClient | reverse %}
+    {% if mois != contact.date | date("m") %}
+    {% set mois = contact.date | date("m") %}
+    </table>
+    <h3>Contacts du mois de {{ mounth[contact.date | date("m")] }}</h3>
+    <table class="table table-bordered table-striped">
+    {% endif %}
+    <tr>
+        <td>
+            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">Contact n°{{contactsClient | length - loop.index}}</a>
+        </td>
+        <td>
+        {% if contact.moyenContact == 'telephone'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
+        {% elseif contact.moyenContact == 'mail'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
         {% else %}
-            <li>Pas (encore !) d'études</li>
-        {% endfor %}
-
-    </ul>
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
+        {% endif %}
+        </td>
+        <td>
+            {{contact.date | date("d/m/Y") }}
+        </td>
+        <td>
+            {{ contact.faitPar.PrenomNom }}
+        </td>
+        <td><b>{{ contact.etude.nom }} : </b>
+            {{ contact.objet }}
+        </td>
+        <td>
+            {{ contact.contenu | nl2br }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}

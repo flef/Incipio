@@ -148,6 +148,10 @@ mgateSuivi_clientcontact_voir:
     requirements:
         id: \d+     
         
+mgateSuivi_clientcontact_index:
+    pattern: /clientcontact/
+    defaults: {_controller: mgateSuiviBundle:ClientContact:index}
+       
         
 mgateSuivi_suivi_ajouter:
     pattern: /suivi/ajouter/{id}

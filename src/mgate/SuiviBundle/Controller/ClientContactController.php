@@ -19,14 +19,14 @@ class ClientContactController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function indexAction($page)
+    public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+        $entities = $em->getRepository('mgateSuiviBundle:ClientContact')->findBy(array(), array('date' => 'ASC'));
 
-        return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
-            'etudes' => $entities,
+        return $this->render('mgateSuiviBundle:ClientContact:index.html.twig', array(
+            'contactsClient' => $entities,
         ));
          
     }  
