@@ -67,6 +67,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\JoinColumn(nullable=true)
      */
     protected $suiveur;
+    
+    /**
+     * @var string $competences
+     *
+     * @ORM\Column(name="competences", type="text", nullable=true)
+     */
+    private $competences;
 
     /**
      * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread", cascade={"persist"})
@@ -105,13 +112,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $num;
 
     /**
-     * @var boolean $dossierCree
-     *
-     * @ORM\Column(name="dossierCree", type="boolean", nullable=true)
-     */
-    private $dossierCree;
-
-    /**
      * @var string $nom
      *
      * @ORM\Column(name="nom", type="text", nullable=false, length=50)
@@ -125,40 +125,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $description;
 
-    /**
-     * @var string $competences
-     *
-     * @ORM\Column(name="competences", type="text", nullable=true)
-     */
-    private $competences;
-
-    /**
-     * @var boolean $mailEntretienEnvoye
-     *
-     * @ORM\Column(name="mailEntretienEnvoye", type="boolean", nullable=true)
-     */
-    private $mailEntretienEnvoye;
-
-    /**
-     * @var boolean $annonceSelectionne
-     *
-     * @ORM\Column(name="annonceSelectionne", type="boolean", nullable=true)
-     */
-    private $annonceSelectionne;
-
-    /**
-     * @var \DateTime $dateDebut
-     *
-     * @ORM\Column(name="dateDebut", type="datetime", nullable=true)
-     */
-    private $dateDebut;
-
-    /**
-     * @var \DateTime $dateFin
-     *
-     * @ORM\Column(name="dateFin", type="datetime", nullable=true)
-     */
-    private $dateFin;
 
     /**
      * @var \DateTime $auditDate
@@ -184,11 +150,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToMany(targetEntity="Suivi", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $suivis;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Candidature", mappedBy="etude")
-     */
-    private $candidatures;
 
     /**
      * @ORM\OneToOne(targetEntity="Ap", mappedBy="etude", cascade={"persist", "remove"})
@@ -286,7 +247,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function __construct() {
         $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->candidatures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -441,27 +401,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Set dossierCree
-     *
-     * @param boolean $dossierCree
-     * @return Etude
-     */
-    public function setDossierCree($dossierCree) {
-        $this->dossierCree = $dossierCree;
-
-        return $this;
-    }
-
-    /**
-     * Get dossierCree
-     *
-     * @return boolean 
-     */
-    public function getDossierCree() {
-        return $this->dossierCree;
-    }
-
-    /**
      * Set nom
      *
      * @param string $nom
@@ -524,89 +463,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->competences;
     }
 
-    /**
-     * Set mailEntretienEnvoye
-     *
-     * @param boolean $mailEntretienEnvoye
-     * @return Etude
-     */
-    public function setMailEntretienEnvoye($mailEntretienEnvoye) {
-        $this->mailEntretienEnvoye = $mailEntretienEnvoye;
-
-        return $this;
-    }
-
-    /**
-     * Get mailEntretienEnvoye
-     *
-     * @return boolean 
-     */
-    public function getMailEntretienEnvoye() {
-        return $this->mailEntretienEnvoye;
-    }
-
-    /**
-     * Set annonceSelectionne
-     *
-     * @param boolean $annonceSelectionne
-     * @return Etude
-     */
-    public function setAnnonceSelectionne($annonceSelectionne) {
-        $this->annonceSelectionne = $annonceSelectionne;
-
-        return $this;
-    }
-
-    /**
-     * Get annonceSelectionne
-     *
-     * @return boolean 
-     */
-    public function getAnnonceSelectionne() {
-        return $this->annonceSelectionne;
-    }
-
-    /**
-     * Set dateDebut
-     *
-     * @param \DateTime $dateDebut
-     * @return Etude
-     */
-    public function setDateDebut($dateDebut) {
-        $this->dateDebut = $dateDebut;
-
-        return $this;
-    }
-
-    /**
-     * Get dateDebut
-     *
-     * @return \DateTime 
-     */
-    public function getDateDebut() {
-        return $this->dateDebut;
-    }
-
-    /**
-     * Set dateFin
-     *
-     * @param \DateTime $dateFin
-     * @return Etude
-     */
-    public function setDateFin($dateFin) {
-        $this->dateFin = $dateFin;
-
-        return $this;
-    }
-
-    /**
-     * Get dateFin
-     *
-     * @return \DateTime 
-     */
-    public function getDateFin() {
-        return $this->dateFin;
-    }
 
     /**
      * Set auditDate
@@ -912,35 +768,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $this->suivis;
     }
 
-    /**
-     * Add candidatures
-     *
-     * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
-     * @return Etude
-     */
-    public function addCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures) {
-        $this->candidatures[] = $candidatures;
-
-        return $this;
-    }
-
-    /**
-     * Remove candidatures
-     *
-     * @param \mgate\SuiviBundle\Entity\Candidature $candidatures
-     */
-    public function removeCandidature(\mgate\SuiviBundle\Entity\Candidature $candidatures) {
-        $this->candidatures->removeElement($candidatures);
-    }
-
-    /**
-     * Get candidatures
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCandidatures() {
-        return $this->candidatures;
-    }
 
     /**
      * Set ap
@@ -1488,5 +1315,4 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getGroupes() {
         return $this->groupes;
     }
-
 }

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * mgate\SuiviBundle\Entity\Ap
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\ApRepository")
+ * @ORM\Entity
  */
 class Ap extends DocType
 {
