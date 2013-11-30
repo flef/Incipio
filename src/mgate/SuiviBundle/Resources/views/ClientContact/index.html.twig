@@ -44,13 +44,6 @@
     {% for contact in contactsClient | reverse %}
     <tr>
         <td>
-        {% if contact.moyenContact == 'telephone'%}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
-        {% elseif contact.moyenContact == 'mail'%}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
-        {% else %}
-            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
-        {% endif %}
             <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">n°{{contactsClient | length - loop.index}}</a>
         </td>
         <td>
@@ -63,6 +56,13 @@
             <b>{{ contact.etude.nom }}</b>
         </td>
         <td>
+        {% if contact.moyenContact == 'telephone'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
+        {% elseif contact.moyenContact == 'mail'%}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-envelope"></i> 
+        {% else %}
+            <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
+        {% endif %}
             {{ contact.objet }}
         </td>
         <td>
