@@ -245,20 +245,24 @@ class EtudeManager extends \Twig_Extension {
     }
 
     public function getDateLancement(Etude $etude) {
-        $dateDebut = array();
-        $phases = $etude->getPhases();
-        
-        foreach ($phases as $phase)
-            if ($phase->getDateDebut() != NULL)
-                array_push($dateDebut, $phase->getDateDebut());
+        if($etude->getCc())
+            return $etude->getCc()->getDateSignature();
+        else {
+            $dateDebut = array();
+            $phases = $etude->getPhases();
             
-        if (count($dateDebut) > 0)
-            return min($dateDebut);
-        else
-            return NULL;
+            foreach ($phases as $phase)
+                if ($phase->getDateDebut() != NULL)
+                    array_push($dateDebut, $phase->getDateDebut());
+                
+            if (count($dateDebut) > 0)
+                return min($dateDebut);
+            else
+                return NULL;
+        }
     }
 
-    public function getDateFin(Etude $etude) {
+    public function getDateFin(Etude $etude, $avecAvenant = false) {
         $dateFin = array();
         $phases = $etude->getPhases();
 
@@ -269,9 +273,15 @@ class EtudeManager extends \Twig_Extension {
                 unset($dateDebut);
             }
         }
-        
-        if (count($dateFin) > 0)
-            return max($dateFin);
+
+        if (count($dateFin) > 0){
+            $dateFin = max($dateFin);
+            
+            if($avecAvenant && $etude->getAvs() && $etude->getAvs()->last())
+                $dateFin->modify('+' . $etude->getAvs()->last()->getDifferentielDelai() . ' day');
+                
+            return $dateFin;            
+        }
         else
             return NULL;
  
@@ -296,9 +306,9 @@ class EtudeManager extends \Twig_Extension {
             return NULL;
     }
 
-    public function getDelaiEtude(Etude $etude) {
+    public function getDelaiEtude(Etude $etude, $avecAvenant = false) {
         if($this->getDateFin($etude))
-            return $this->getDateFin($etude)->diff($this->getDateLancement($etude));
+            return $this->getDateFin($etude, $avecAvenant)->diff($this->getDateLancement($etude));
     }
 
     public function getRepository() {
@@ -308,36 +318,52 @@ class EtudeManager extends \Twig_Extension {
     
     public function getErrors(Etude $etude) {
         $errors = array();
-
+        
+        /**************************************************
+         * Vérification de la cohérence des dateSignature *
+         **************************************************/
+         
+        // AP > CC
         if ($etude->getAp() && $etude->getCc()) {
             if ($etude->getCc()->getDateSignature() != NULL && $etude->getAp()->getDateSignature() > $etude->getCc()->getDateSignature()) {
-                $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure
-                  ou égale à la date de signature de la Convention Client.');
+                $error = array('titre' => 'AP, CC - Date de signature : ', 'message' => 'La date de signature de l\'Avant Projet doit être antérieure ou égale à la date de signature de la Convention Client.');
                 array_push($errors, $error);
             }
         }
-
+        
+        // CC > RM
         if ($etude->getCc()) {
             foreach ($etude->getMissions() as $mission) {
                 if ($mission->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $mission->getDateSignature()) {
-                    $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                    ou égale à la date de signature des récapitulatifs de mission.');
+                    $error = array('titre' => 'RM, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure ou égale à la date de signature des récapitulatifs de mission.');
                     array_push($errors, $error);
                     break;
                 }
             }
         }
-
+        
+        // CC > PVI
         if ($etude->getCc()) {
             foreach ($etude->getPvis() as $pvi) {
                 if ($pvi->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $pvi->getDateSignature()) {
-                    $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure
-                   à la date de signature des PVIS.');
+                    $error = array('titre' => 'PVIS, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des PVIS.');
                     array_push($errors, $error);
                     break;
                 }
             }
         }
+        
+        // CC > FI
+        if ($etude->getCc()) {
+            foreach ($etude->getFactures() as $facture) {
+                if ($facture->getDateSignature() != NULL && $etude->getCc()->getDateSignature() >= $facture->getDateSignature()) {
+                    $error = array('titre' => 'Factures, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des factures.');
+                    array_push($errors, $error);
+                    break;
+                }
+            }
+        }
+                
         //ordre PVI
         foreach ($etude->getPvis() as $pvi) {
             if (isset($pviAnterieur)) {
@@ -350,26 +376,16 @@ class EtudeManager extends \Twig_Extension {
             }
             $pviAnterieur = $pvi;
         }
-
-        foreach ($etude->getMissions() as $mission) {
-            foreach ($etude->getPvis() as $pvi) {
-                if ($pvi->getDateSignature() != NULL && $mission->getDateSignature() >= $pvi->getDateSignature()) {
-                    $error = array('titre' => 'PVIS, RM  - Date de signature : ', 'message' => 'La date de signature des Récapitulatifs de Missions doivent être antérieure
-               à la date de signature des PVIS.');
-                    array_push($errors, $error);
-                    break;
-                }
-            }
-        }
-
+        
+        // PVR < fin d'étude
         if ($etude->getPvr()) {
             if ($etude->getDateFin() != NULL && $etude->getPvr()->getDateSignature() >= $etude->getDateFin()) {
-                $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure
-                   à la date de fin de l\'étude. Consulter Convention Client ou Avenant à la Convention Client pour la fin l\'étude.');
+                $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure à la date de fin de l\'étude. Consulter la Convention Client ou l\'Avenant à la Convention Client pour la fin l\'étude.');
                 array_push($errors, $error);
             }
         }
-
+        
+        // Date de fin d'étude approche alors que le PVR n'est pas signé
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P10D');
         if ($this->getDateFin($etude)) {
@@ -388,12 +404,17 @@ class EtudeManager extends \Twig_Extension {
                 }
             }
         }
-
-        if (strlen($etude->getPresentationProjet()) < 300) {
+        
+        /*************************
+         * Contenu des documents *
+         *************************/
+         
+         // Description de l'AP suffisante
+         if (strlen($etude->getDescriptionPrestation()) < 300) {
             $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 300 caractères');
             array_push($errors, $error);
         }
-
+        
         return $errors;
     }
     
@@ -401,25 +422,25 @@ class EtudeManager extends \Twig_Extension {
     {
         $warnings = array();
         
-        $length = strlen($etude->getPresentationProjet());
+        // Description de l'AP insuffisante
+        $length = strlen($etude->getDescriptionPrestation());
         if( $length > 300 && $length  < 500  )
         {
             $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 500 caractères');  
             array_push($warnings, $error);
         }
         
-        
+        // Entité sociale absente
         if($etude->getProspect()->getEntite()==NULL)
         {
-            $warning = array('titre' => 'Entité sociale : ', 'message' => 'L\'entité sociale est absente. Vérifiez bien que le signataire dispose des autorisations de sa société pour signer les documents');  
+            $warning = array('titre' => 'Entité sociale : ', 'message' => 'L\'entité sociale est absente. Vérifiez bien que la société est bien enregistrée et toujours en activité.');  
             array_push($warnings, $warning);
         }
         
-      
+        // Etude se termine dans 20 jours
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P20D');
         $DateAvert1 = new \DateInterval('P10D');
-
         if($this->getDateFin($etude))
         {
             if($this->getDateFin($etude)->sub($DateAvert1) > $now &&  $this->getDateFin($etude)->sub($DateAvert0)<$now)
@@ -429,31 +450,6 @@ class EtudeManager extends \Twig_Extension {
             }
         }
         
-        $DateAvertSignatureRm=new \DateInterval('P5D');
-        if($etude->getCc()){
-            foreach($etude->getMissions() as $mission)
-            {
-                if($mission->getRedige())
-                {    
-                    if($mission->getDateSignature()){
-                        if($etude->getCc()->getDateSignature() != NULL && $mission->getDateSignature()->sub($DateAvertSignatureRm) > $etude->getCc()->getDateSignature())
-                        {
-                            $warning = array('titre' => 'Date de signature du Récapitulatif de Mission :', 'message' => 'La date de signature du RM ne devrait pas être autant éloignée de la date de la signature de la CC.');  
-                            array_push($warnings, $warning);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        
-        $DateAvertContactClient=new \DateInterval('P7D');
-        if($this->getDernierContact($etude) != NULL && $now->sub($DateAvertContactClient) > $this->getDernierContact($etude))
-        {
-            $warning = array('titre' => 'Contact client :', 'message' => 'recontacter le client');  
-            array_push($warnings, $warning);
-        }
-        
         return $warnings;
         
     }
@@ -461,17 +457,15 @@ class EtudeManager extends \Twig_Extension {
     public  function getInfos(Etude $etude)
     {
         $infos = array();
-        //AP
-        if($etude->getAp()==NULL)
+        // Recontacter client
+        $DateAvertContactClient=new \DateInterval('P15D');
+        if($this->getDernierContact($etude) != NULL && $now->sub($DateAvertContactClient) > $this->getDernierContact($etude))
         {
-            $info = array('titre' => 'Avant-Projet : ', 'message' => 'à rédiger');    
-            array_push($infos, $info);
+            $warning = array('titre' => 'Contact client :', 'message' => 'Recontacter le client');  
+            array_push($warnings, $warning);
         }
-        elseif(!$etude->getAp()->getRedige())
-        {
-            $info = array('titre' => 'Avant-Projet : ', 'message' => 'à rédiger');    
-            array_push($infos, $info);
-        }
+        
+      
         
         if($etude->getAp()!=NULL)
         {

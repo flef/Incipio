@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * mgate\SuiviBundle\Entity\Facture
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\FactureRepository")
+ * @ORM\Entity
  */
 class Facture extends DocType
 {
