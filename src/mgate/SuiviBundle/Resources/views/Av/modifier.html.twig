@@ -54,8 +54,9 @@ Modifier un Avant-Projet - {{ parent() }}
                 <td>{{  form_widget(form.differentielDelai) }}</td>
             </tr> 
         </table>
+        <span style="display:none;">
         <h3>Gestion des Répartions JEH (à venir)</h3>
-        <h3>Gestion des Phases</h3>
+        <h3>Gestion des Phases (à venir)</h3>
         <h5><i class="icon-plus"></i> Ajouter une phase (à venir)</h5>
         <div class="row">
         {% for phase in form.phases %}
@@ -101,7 +102,7 @@ Modifier un Avant-Projet - {{ parent() }}
                 </div>
         {% endfor %}
             </div>
-        
+        </span>
             {{ form_widget(form) }}
                 <input type="submit" value="Enregistrer l'Avenant"/>      
         </form>

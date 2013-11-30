@@ -311,14 +311,22 @@
 </div>
 
 
-<div class="navbar">
-    <div class="navbar-inner">
-        <span class="brand titre" data-toggle="collapse" data-target="#avs">Avenants</span>
-        <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}"><i class="icon-plus"></i>  Ajouter un Avenant</a></li>
+<nav class="navbar" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-avs">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <span class="navbar-brand titre" data-toggle="collapse" data-target="#avs"><span class="glyphicon glyphicon-hand-down"></span> Avenants</span>
+     </div>
+     <div class="collapse navbar-collapse navbar-avs">
+        <ul class="nav navbar-nav">
+             <li><a href="{{ path('mgateSuivi_av_ajouter', {'id': etude.id}) }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un Avenant</a></li>
         </ul>
     </div>
-</div>
+</nav>
 <div id="avs" class="collapse">
     <table class="table table-bordered table-striped">
         <tr>
