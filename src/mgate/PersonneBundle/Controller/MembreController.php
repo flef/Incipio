@@ -24,6 +24,27 @@ class MembreController extends Controller {
                     'membres' => $entities,
                 ));
     }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function statistiqueAction($page) {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('mgatePersonneBundle:Membre')->findAll();
+        
+            
+        $membresActifs = array();
+        foreach($entities as $membre){
+            foreach ($membre->getMandats() as $mandat){
+                if($mandat->getPoste()->getIntitule() == 'Membre' && $mandat->getDebutMandat() < new \DateTime("now") && $mandat->getFinMandat() > new \DateTime("now"))
+                    $membresActifs[] = $membre;
+            }                
+        }
+        return $this->render('mgatePersonneBundle:Membre:index.html.twig', array(
+                    'membres' => $membresActifs,
+                ));
+    }
 
     /**
      * @Secure(roles="ROLE_ELEVE")
