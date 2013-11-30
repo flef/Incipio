@@ -100,10 +100,10 @@ class ChartManager /*extends \Twig_Extension*/ {
             for($j=0;$j<count($cats);$j++)
                 $data[]=array();
             
-            if($this->etudeManager->getDateLancement($etude)&&$this->etudeManager->getDateFin($etude))
+            if($this->etudeManager->getDateLancement($etude)&&$this->etudeManager->getDateFin($etude, true))
             {
                 $debut = $this->etudeManager->getDateLancement($etude);
-                $fin = $this->etudeManager->getDateFin($etude);
+                $fin = $this->etudeManager->getDateFin($etude, true);
 
                 $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000, 'color'=>'#005CA4',
                         "titre"=>"Durée de déroulement des phases", "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y') );
