@@ -123,7 +123,7 @@ class AvController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function addAction($id) {
-        $this->modifierAction(null, $id);
+        return $this->modifierAction(null, $id);
     }
 
     /**
@@ -212,12 +212,14 @@ class AvController extends Controller {
         else if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id))
             throw $this->createNotFoundException('Unable to find Av entity.');
 
+        $phasesAv = array();
+        if($av->getPhases()){
+            $phasesAv = $av->getPhases()->toArray();
 
-        $phasesAv = $av->getPhases()->toArray();
-
-        foreach ($av->getPhases() as $phase) {
-            $av->removePhase($phase);
-            $em->remove($phase);
+            foreach ($av->getPhases() as $phase) {
+                $av->removePhase($phase);
+                $em->remove($phase);
+            }
         }
 
         $phasesChanges = array();
@@ -269,11 +271,16 @@ class AvController extends Controller {
                     else
                         $av->removePhase($phase);
                 }
-                $em->persist($av);
+                
+                if ($idEtude) // Si on ajoute un avenant
+                    $em->persist($etude);
+                else // Si on modifie un avenant
+                    $em->persist($av);
                 $em->flush();
                 return $this->redirect($this->generateUrl('mgateSuivi_av_voir', array('id' => $av->getId())));
             }
         }
+        
         return $this->render('mgateSuiviBundle:Av:modifier.html.twig', array(
                     'form' => $form->createView(),
                     'av' => $av,
