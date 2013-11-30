@@ -19,14 +19,14 @@ class ClientContactController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function indexAction($page)
+    public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+        $entities = $em->getRepository('mgateSuiviBundle:ClientContact')->findBy(array(), array('date' => 'ASC'));
 
-        return $this->render('mgateSuiviBundle:Etude:index.html.twig', array(
-            'etudes' => $entities,
+        return $this->render('mgateSuiviBundle:ClientContact:index.html.twig', array(
+            'contactsClient' => $entities,
         ));
          
     }  
@@ -38,11 +38,9 @@ class ClientContactController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        // On vérifie que l'article d'id $id existe bien, sinon, erreur 404.
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
-        }
+
         
         
         $clientcontact = new ClientContact;
@@ -51,11 +49,7 @@ class ClientContactController extends Controller
         $formHandler = new ClientContactHandler($form, $this->get('request'), $em);
         
         if($formHandler->process())
-        {
-           
             return $this->redirect( $this->generateUrl('mgateSuivi_clientcontact_voir', array('id' => $clientcontact->getId())) );
-            
-        }
 
         return $this->render('mgateSuiviBundle:ClientContact:ajouter.html.twig', array(
             'form' => $form->createView(),

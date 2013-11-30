@@ -5,12 +5,14 @@ Affichage d'une étude - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-<div class="tabs-container no-margin"><!-- verticaltabs-container-->
-    <ul class="nav nav-tabs no-margin" style="font-weight: bold;"><!-- margin: 40px 30px; -->
+<div class="tabs-container no-margin">
+    <ul class="nav nav-tabs no-margin" style="font-weight: bold;">
         <li class="active"><a href="#tab1" data-toggle="tab">Récapitulatif</a></li>
         <li><a href="#tab2" data-toggle="tab">Phases</a></li>
         <li><a href="#tab3" data-toggle="tab">Rédaction et Génération</a></li>
+        {% if is_granted('ROLE_CA') %}
         <li><a href="#tab4" data-toggle="tab">Suivi</a></li>
+        {%endif%}
     </ul>
     <div class="tab-content">
     <!-- ERRORS -->
@@ -31,9 +33,11 @@ Affichage d'une étude - {{ parent() }}
             {% include "mgateSuiviBundle:Etude:TabVoir/Suivi.html.twig" with  {'etude':  etude} %}
         </div>
     <!-- SUIVI DOCUMENTS TYPES AUDIT -->
+    {% if is_granted('ROLE_CA') %}
         <div class="tab-pane" id="tab4">   
         {% include "mgateSuiviBundle:Etude:TabVoir/Redaction.html.twig" with  {'etude':  etude} %}
         </div>
+    {% endif %}
     </div>
 </div>
 
@@ -59,10 +63,12 @@ function equalHeight(group) {
 
 $(window).load(function(){
     $("#tab2").addClass("active");
+    $("#methodo").addClass("active");
     var nombreDeLigneParPhase = $(".egalize tr").length / $(".egalize").length;
         for( var i = 1; i <= nombreDeLigneParPhase; i++){
             equalHeight($(".egalize tr:nth-child("+i+") th"));
         };
+    $("#methodo").removeClass("active");
     $("#tab2").removeClass("active");
 });
 </script>
@@ -80,23 +86,17 @@ $(window).load(function(){
     </script>
 
     <script>
-    function docStateChange()
-    {
+    function docStateChange(){
     $('.docTabRow').each(
-        function(i, e)
-        {
+        function(i, e){
             var ok = true;
-            console.log(e.children);
             $(e).children().children('input[type=checkbox]').each(
-                function(index, elem)
-                {
+                function(index, elem){
                     ok = ok && elem.checked;
                 }
             );
             if(!ok)
-            {
                 $(e).children(':nth-child(2)').html('<span class="label label-important">Incomplet</span>');
-            }
             else
                 $(e).children(':nth-child(2)').html('<span class="label label-success">Complet</span>');
             ok = true;

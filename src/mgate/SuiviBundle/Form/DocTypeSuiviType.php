@@ -15,8 +15,6 @@ class DocTypeSuiviType extends AbstractType
 	    $builder
             ->add('redige', 'checkbox', array('label'=>'Est-ce que le document est rédigé ?','required'=>false))
             ->add('relu', 'checkbox', array('label'=>'Est-ce que le document est relu ?','required'=>false))
-            ->add('spt1', 'checkbox', array('label'=>'Est-ce que le document est signé paraphé tamponné par M-GaTE ?','required'=>false))
-            ->add('spt2', 'checkbox', array('label'=>'Est-ce que le document est signé paraphé tamponné par le client ?','required'=>false))
             ->add('envoye', 'checkbox', array('label'=>'Est-ce que le document est envoyé ?','required'=>false))
             ->add('receptionne', 'checkbox', array('label'=>'Est-ce que le document est réceptionné ?','required'=>false));            
 
@@ -24,7 +22,7 @@ class DocTypeSuiviType extends AbstractType
 
     public function getName()
     {
-        return 'alex_suivibundle_doctypetype';
+        return 'mgate_suivibundle_doctypetype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

@@ -10,7 +10,8 @@ class PhasesType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add('phases', 'collection', array(
-            'type' => new PhaseType,
+            'type' => new PhaseType(),
+            'options' => array('etude' => $options['etude']),
             'allow_add' => true,
             'allow_delete' => true,
             'prototype' => true,
@@ -25,7 +26,8 @@ class PhasesType extends AbstractType {
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Etude',
-        ));
+            'etude' => null,
+            ));
     }
 
 }

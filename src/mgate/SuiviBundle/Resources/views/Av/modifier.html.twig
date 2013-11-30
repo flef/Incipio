@@ -60,7 +60,7 @@ Modifier un Avant-Projet - {{ parent() }}
         <div class="row">
         {% for phase in form.phases %}
         {% set change = changes[loop.index0] | default(0) %}
-                <div class="span6">
+                <div class="col-md-6">
                     <table class="table table-striped table-bordered">
                         <tr>
                             <th colspan="2"><div class="btn-group"></div>       <span class="titrePhase"></span> {{  form_widget(phase.position)}}</th>
