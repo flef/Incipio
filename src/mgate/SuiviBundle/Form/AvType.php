@@ -11,10 +11,10 @@ use mgate\SuiviBundle\Entity\Av;
 class AvType extends DocTypeType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        $builder->add('differentielDelai', 'integer', array('label' => 'Modification du Délai (+/- x jours)', 'required' => true, ))
+        $builder->add('differentielDelai', 'integer', array('label' => 'Modification du Délai (+/- x jours)', 'required' => false, ))
         ->add('objet', 'textarea',
         array('label' => 'Exposer les causes de l’Avenant. Ne pas hésiter à détailler l\'historique des relations avec le client et du travail sur l\'étude qui ont conduit à l\'Avenant.',
-        'required' => true, ))
+        'required' => false, ))
         ->add('clauses', 'choice', array('label' => 'Type d\'avenant', 'multiple' => true, 'choices' => Av::getClausesChoices()))
         ->add('phases', 'collection', array(
                 'type' => new PhaseType,

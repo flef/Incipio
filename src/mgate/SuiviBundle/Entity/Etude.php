@@ -228,7 +228,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $procesVerbaux;
 
     /**
-     * @ORM\OneToMany(targetEntity="Av", mappedBy="etude")
+     * @ORM\OneToMany(targetEntity="Av", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $avs;
 

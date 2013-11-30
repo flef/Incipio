@@ -48,18 +48,20 @@ class DocTypeType extends AbstractType
            )
         {
             $pro=$options['prospect'];
-            $builder->add('knownSignataire2', 'checkbox', array(
-                'required' => false,
-                'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
-                ))
-             ->add('signataire2', 'genemu_jqueryselect2_entity', array(
+            if($options['data_class']!='mgate\SuiviBundle\Entity\Av'){
+                $builder->add('knownSignataire2', 'checkbox', array(
+                    'required' => false,
+                    'label' => "Le signataire client existe-t-il déjà dans la base de donnée ?"
+                    ))             
+                ->add('newSignataire2', new EmployeType(), array('label' => 'Nouveau signataire '.$pro->getNom(), 'required' => false, 'signataire' => true, 'mini' => true) );   
+            }
+            $builder->add('signataire2', 'genemu_jqueryselect2_entity', array(
                 'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                 'property' => 'prenomNom',
                 'label' => 'Signataire '.$pro->getNom(),
                 'query_builder' => function(PersonneRepository $pr) use ($pro) { return $pr->getEmployeOnly($pro); },
                 'required' => false
-                ))
-            ->add('newSignataire2', new EmployeType(), array('label' => 'Nouveau signataire '.$pro->getNom(), 'required' => false, 'signataire' => true, 'mini' => true) );                               
+                ));
         }
 
                                
