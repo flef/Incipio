@@ -44,7 +44,7 @@
     {% for contact in contactsClient | reverse %}
     <tr>
         <td>
-            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">n°{{contactsClient | length - loop.index}}</a>
+            {{contactsClient | length - loop.index0}}
         </td>
         <td>
             {{contact.date | date("d/m/Y") }}
@@ -56,6 +56,7 @@
             <b>{{ contact.etude.nom }}</b>
         </td>
         <td>
+        <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">
         {% if contact.moyenContact == 'telephone'%}
             <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
         {% elseif contact.moyenContact == 'mail'%}
@@ -64,6 +65,7 @@
             <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
         {% endif %}
             {{ contact.objet }}
+        </a>
         </td>
         <td>
             {{ contact.contenu | nl2br }}
