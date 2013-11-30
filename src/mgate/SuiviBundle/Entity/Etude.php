@@ -176,6 +176,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
     /**
      * @ORM\OneToMany(targetEntity="ClientContact", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"date" = "DESC"})
      */
     private $clientContacts;
     
