@@ -12,3 +12,56 @@
     -o-transform-origin:  bottom left;
     filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
 }
+
+/* From Bootstrap 2.3.* removed in 3.* */
+.label-important,
+.badge-important {
+  background-color: #d2322d!important;
+}
+
+.label-important[href],
+.badge-important[href] {
+  background-color: #d43f3a!important;
+}
+
+.label-warning,
+.badge-warning {
+  background-color: #F0AD4E!important;
+}
+
+.label-warning[href],
+.badge-warning[href] {
+  background-color: #EEA236!important;
+}
+
+.label-success,
+.badge-success {
+  background-color: #5CB85C!important;
+}
+
+.label-success[href],
+.badge-success[href] {
+  background-color: #4CAE4C!important;
+}
+
+.label-info,
+.badge-info {
+  background-color: #3a87ad!important;
+}
+
+.label-info[href],
+.badge-info[href] {
+  background-color: #2d6987!important;
+}
+
+.label-inverse,
+.badge-inverse {
+  background-color: #333333!important;
+}
+
+.label-inverse[href],
+.badge-inverse[href] {
+  background-color: #1a1a1a!important;
+}
+
+

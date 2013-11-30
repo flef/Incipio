@@ -1,7 +1,7 @@
 <!-- alert-block -->
 
 {% for warning in getWarnings(etude) %}
-<div class="alert">
+<div class="alert alert-warning alert-dismissable">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   <h4>{{ warning.titre }}</h4>
   {{ warning.message }}

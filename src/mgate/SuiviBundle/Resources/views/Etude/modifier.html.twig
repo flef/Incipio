@@ -11,17 +11,65 @@
 <form method="post" {{ form_enctype(form) }}>
     
     {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+    <table class="table table-bordered table-striped standard">
+		<tr>
+            <th>{{ form_label(form.knownProspect) }}</th>
+            <td>{{ form_widget(form.knownProspect) }}</td>
+        </tr>
+        <tr>
+            <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">Nouveau prospect</th>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.nom) }}</th>
+            <td>{{ form_widget(form.newProspect.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.entite) }}</th>
+            <td>{{ form_widget(form.newProspect.entite) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.newProspect.adresse) }}</th>
+            <td>{{ form_widget(form.newProspect.adresse) }}</td>
+        </tr>
+        <tr>
+            <th id="{{ form.newProspect.vars.id }}_block" colspan="2" class="success">L'étude</th>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.prospect) }}</th>
+            <td>{{ form_widget(form.prospect) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.nom) }}</th>
+            <td>{{ form_widget(form.nom) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.description) }}</th>
+            <td>{{ form_widget(form.description) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.mandat) }}</th>
+            <td>{{ form_widget(form.mandat) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.num) }}</th>
+            <td>{{ form_widget(form.num) }}</td>
+        </tr>
+		<tr>
+            <th>{{ form_label(form.confidentiel) }}</th>
+            <td>{{ form_widget(form.confidentiel) }}</td>
+        </tr>
+		<tr>
+            <th>{{ form_label(form.suiveur) }}</th>
+            <td>{{ form_widget(form.suiveur) }}</td>
+        </tr>
+    </table>
     {{ form_widget(form) }}
     
-	
-	<input type="submit" value="Enregistrer l'étude"/>
-        <input type="submit" value="Enregistrer l'étude et passer à l'AP" name="ap" id="ap"/>
+	<br>
+	<input type="submit" value="Enregistrer l'étude" class="btn"/>
+        <input type="submit" value="Enregistrer l'étude et passer à l'AP" name="ap" id="ap" class="btn"/>
 </form>
-
-
-    <p>Modification d'une étude</p>
-
-
+	<br>
 
     <p>
         <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}" >Retour à l'article</a>
@@ -30,7 +78,7 @@
     
         <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-                <button>Supprimer l'étude</button>
+                <button class="btn">Supprimer l'étude</button>
         </form>
 
 {% endblock %}

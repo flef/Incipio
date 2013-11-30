@@ -9,17 +9,14 @@
 {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('css/mgate.css')}}"/>
         <link rel="stylesheet" href="{{ asset('css/jquery-ui-1.10.0.custom.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" type="text/css" />
-        <link rel="stylesheet" href="{{ asset('css/bootstrap-responsive.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/bootstrap-verticaltabs.css') }}">
+        <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" type="text/css" />
         <link rel="stylesheet" href="{{ asset('css/select2.css')}}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body {
+            #content {
                 width: 95%;
                 margin-left: auto;
                 margin-right: 40px;
-                padding-top: 40px;
             }
         </style>
 {% endblock %}
@@ -32,8 +29,7 @@
             
 {% block javascript_quick %}
             <script src="{{ asset('js/jquery-1.9.1.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('js/bootstrap.hover.dropdown.min.js') }}"></script>
+            <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
             <script src="{{ asset('js/jquery-ui-1.10.0.custom.min.js') }}"></script>
             <script src="{{ asset('js/jquery.tablesorter.js') }}"></script>
             <script src="{{ asset('js/bootboxjs.js')}}"></script>
@@ -52,25 +48,14 @@
     {% endblock %}
 
     {% block menu_main %}
-
-
             {% block menu %}
-                            <div class="navbar navbar-fixed-top">
-                                <div class="navbar-inner">
-                                    <a class="brand" href="{{ path('mgate_dashboard_homepage') }}">My M-GaTE</a>
-                                    
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-    {# L'utilisateur est connecté ! #}
-    {% render url('navbar_homepage', {'name' : 'salut'}) %}
-{% else %}
-    {# L'utilisateur n'est pas connecté ! #}
-
-{% endif %}
-                                </div>
-
-                            </div>
+				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+					{# L'utilisateur est connecté ! #}
+					{% render url('navbar_homepage') %}
+					{% else %}
+					{# L'utilisateur n'est pas connecté ! #}
+				{% endif %}
             {% endblock %}
-
     {% endblock %}
 
     {% block content_main %}            

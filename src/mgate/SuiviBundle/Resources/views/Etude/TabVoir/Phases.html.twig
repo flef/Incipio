@@ -1,68 +1,201 @@
-<div class="navbar">
-    <div class="navbar-inner">
-        <span class="brand">Phases</span>
-        <ul class="nav">
-            <li><a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}"><i class="icon-tasks"></i>  Modifier les Phases</a></li>
-        </ul>
-        <ul class="nav pull-right">
-            <li><a href="{{ path('mgateSuivi_etude_homepage') }}"><i class="icon-th-list"></i> Retour à la liste</a></li>
-        </ul>
-    </div>
-</div>
-<div class="row">
-                    {% for phase in etude.phases %}
-        <div class="span4">
-            <table class="table table-striped table-bordered egalize" >
-                <tr>
-                    <th colspan="2">Phase n°{{phase.position+1}}</th>
-                </tr>
-                <tr>
-                    <th>Titre</th>
-                    <td>{{phase.titre | nl2br }}</td>
-                </tr>
-                <tr>
-                    <th>Objectifs</th>
-                    <td>{{phase.objectif | nl2br }}</td>
-                </tr>
-                <tr>
-                    <th>Méthodologie</th>
-                    <td>{{phase.methodo | nl2br }}</td>
-                </tr>
-                <tr>
-                    <th>Validation</th>
-                    <td>
-                                    {% if phase.validation == 1 %}
-                            Validation orale lors d’un entretien avec le client.
-                                    {% elseif phase.validation == 2 %}
-                            Validation écrite qui prend la forme d’un PVI.
-                                    {% endif %}   
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Nombre JEH</th>
-                        <td>{{phase.nbrJEH}} JEH</td>
-                    </tr>
-                    <tr>
-                        <th>Prix JEH</th>
-                        <td>{{phase.prixJEH}} €</td>
-                    </tr>
-                    <tr>
-                        <th>Date de Debut</th>
-                        <td>{{phase.dateDebut|date("d/m/Y")}}</td>
-                    </tr>
-                    <tr>
-                        <th>Delai</th>
-                        <td>{{phase.delai}} jours</td>
-                    </tr>
-                    <tr>
-                        <th>Prix Phase</th>
-                        <td>{{phase.nbrJEH * phase.prixJEH}} €</td>
-                    </tr>
-                    <tr>
-                        <th>Avancement</th>
-                        <td></td>
-                    </tr>
-                </table>
+<div class="tabs-container no-margin">
+	<nav class="navbar" role="navigation">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-phase">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<span class="navbar-brand">Phases</span>
+		</div>
+		<div class="collapse navbar-collapse navbar-phase">
+			<ul class="nav  navbar-nav">
+				<li><a href="#groupes" data-toggle="tab"><span class="glyphicon glyphicon-list-alt"></span>  Groupes</a></li>
+				<li><a href="#methodo" data-toggle="tab"><span class="glyphicon glyphicon-text-height"></span>  Méthodologie</a></li>
+				<li><a href="#delai" data-toggle="tab"><span class="glyphicon glyphicon-dashboard"></span>  Délai</a></li>
+				<li><a href="#budget" data-toggle="tab"><span class="glyphicon glyphicon-euro"></span>  Budget</a></li>
+			</ul>
+			<ul class="nav  navbar-nav navbar-right">
+				<li><a href="{{ path('mgateSuivi_etude_homepage') }}"><span class="glyphicon glyphicon-th-list"></span> Retour à la liste</a></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="tab-content">
+		<div class="tab-pane active" id="groupes">
+			<h4><a href="{{ path('mgateSuivi_groupes_modifier', {'id': etude.id}) }}">Modifier les groupes</a></h4>
+            {% if etude.groupes | length == 0 %}
+            <h4>Il n'y a pas de Groupe de Phase pour cette étude...</h4>
+            {% endif %}
+		<div class="row">
+	   {% for groupe in etude.groupes %}
+			<div class="col-md-4">
+				<table class="table table-striped table-bordered" >
+					<tr>
+						<th colspan="2">Groupe n°{{groupe.numero+1}}</th>
+					</tr>
+					<tr>
+						<th>Titre</th>
+						<td>{{groupe.titre | nl2br }}</td>
+					</tr>
+					<tr>
+						<th>Description</th>
+						<td>{{groupe.description| nl2br }}</td>
+					</tr>
+				</table>
+			</div>
+		{% endfor %}
+		</div>
+		</div>
+		<div class="tab-pane" id="methodo">
+			<h4><a href="{{ path('mgateSuivi_phases_modifier', {'id': etude.id}) }}">Modifier les Phases</a></h4>
+			
+            {% set groupedPhases = [] %}
+            {% for groupe in etude.groupes %}
+            <h2>{{groupe.titre | nl2br }}</h2>
+            <div class="row">
+            {% for phase in groupe.phases %}
+            {% set groupedPhases = groupedPhases | merge({ (phase.position) :  0}) %}
+			<div class="col-md-4">
+					<table class="table table-striped table-bordered egalize" >
+						<tr>
+							<th colspan="2">Phase n°{{phase.position+1}}</th>
+						</tr>
+						<tr>
+							<th>Titre</th>
+							<td>{{phase.titre | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Objectifs</th>
+							<td>{{phase.objectif | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Méthodologie</th>
+							<td>{{phase.methodo | nl2br }}</td>
+						</tr>
+					</table>
+				</div>
+           {% endfor %}
             </div>
-                    {% endfor %}
-        </div>
+           {% endfor %}
+            <h2>Phases non Groupées</h2>
+            <div class="row">
+		   {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+				<div class="col-md-4">
+					<table class="table table-striped table-bordered egalize" >
+						<tr>
+							<th colspan="2">Phase n°{{phase.position+1}}</th>
+						</tr>
+						<tr>
+							<th>Titre</th>
+							<td>{{phase.titre | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Objectifs</th>
+							<td>{{phase.objectif | nl2br }}</td>
+						</tr>
+						<tr>
+							<th>Méthodologie</th>
+							<td>{{phase.methodo | nl2br }}</td>
+						</tr>
+					</table>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+		<div class="tab-pane" id="delai">
+			<table class="table table-striped table-bordered" >
+				<tr>
+                    <th colspan="2">Titre</th>
+					<th>Date de début</th>
+					<th>Durée</th>
+					<th>Date de fin</th>
+				</tr>
+				{% for phase in etude.phases %}
+				<tr>
+					<th>Phase n°{{phase.position+1}}</th>
+					<td>{{phase.titre | nl2br }}</td>
+					<td>{{phase.dateDebut|date("d/m/Y")}}</td>
+					<td>{{phase.delai|default(0)}} jours</td>
+					<td>{{phase.dateDebut |date_modify("+" ~ phase.delai |default(0) ~" day")|date("d/m/Y")}}</td>
+				 </tr>
+				{% endfor %}
+			</table>
+		</div>
+		<div class="tab-pane" id="budget">
+            {% set nbJEH = 0 %}
+            {% set total = 0 %}
+            {% set nbJEHGlobal = 0 %}
+            {% set totalGlobal = 0 %}
+            {% set groupedPhases = [] %}
+            <table class="table table-striped table-bordered" >
+				<tr>
+                    <th colspan="2">Phase</th>
+					<th>Nombre JEH</th>
+					<th>Prix JEH</th>
+					<th>Total</th>
+		 	   </tr>
+            {% for groupe in etude.groupes %}
+            {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+            {% set totalGlobal = totalGlobal + total %}
+            {% set nbJEH = 0 %}
+            {% set total = 0 %}
+               <tr class="success">
+                 <th colspan="5">{{groupe.titre | nl2br }}</th>
+             </tr>
+             {% for phase in groupe.phases %}
+                 {% set groupedPhases = groupedPhases | merge({ (phase.position) :  0}) %}
+                 {% set nbJEH = nbJEH + phase.nbrJEH %}
+                 {% set total = total + phase.nbrJEH * phase.prixJEH %}
+				<tr>
+					<td>Phase n°{{phase.position+1}}</td>
+					<td>{{phase.titre | nl2br }}</td>
+					<td align="right">{{phase.nbrJEH}} JEH</td>
+					<td align="right">{{phase.prixJEH | number_format(2, ',', ' ')}} €</td>
+					<td align="right">{{(phase.nbrJEH * phase.prixJEH )| number_format(2, ',', ' ')}} €</td>
+				</tr>
+				{% endfor %}
+                <tr class="warning">
+                    <th colspan="2">SOUS-TOTAL</th>
+                    <td align="right">{{ nbJEH }} JEH</td>
+                    <td align="right">{%if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
+                    <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
+                </tr>                
+            {% endfor %}
+            <tr class="success">
+                 <th colspan="5">Phases non groupées</th>
+             </tr>
+            {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+            {% set totalGlobal = totalGlobal + total %}
+            {% set nbJEH = 0 %}
+            {% set total = 0 %}
+            {% for phase in etude.phases if (attribute(groupedPhases, (phase.position)) | default(1) != 0) %}
+               {% set nbJEH = nbJEH + phase.nbrJEH %}
+               {% set total = total + phase.nbrJEH * phase.prixJEH %}
+				<tr>
+					<td>Phase n°{{phase.position+1}}</td>
+					<td>{{phase.titre | nl2br }}</td>
+					<td align="right">{{phase.nbrJEH}} JEH</td>
+					<td align="right">{{phase.prixJEH | number_format(2, ',', ' ')}} €</td>
+					<td align="right">{{(phase.nbrJEH * phase.prixJEH )| number_format(2, ',', ' ')}} €</td>
+				</tr>
+				{% endfor %}
+                <tr class="warning">
+                    <th colspan="2">SOUS-TOTAL</th>
+                    <td align="right">{{ nbJEH }} JEH</td>
+                    <td align="right">{%if nbJEH > 0 %}{{ (total / nbJEH ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
+                    <td align="right">{{ total | number_format(2, ',', ' ')}} €</td>
+                </tr>   
+                {% set nbJEHGlobal = nbJEHGlobal + nbJEH %}
+                {% set totalGlobal = totalGlobal + total %}
+                <tr class="danger">
+                    <th colspan="2">TOTAL</th>
+                    <td align="right">{{ nbJEHGlobal }} JEH</td>
+                    <td align="right">{%if nbJEHGlobal > 0 %}{{ (totalGlobal / nbJEHGlobal ) | number_format(2, ',', ' ')}}{%else%} - {%endif%} €</td>
+                    <td align="right">{{ totalGlobal | number_format(2, ',', ' ')}} €</td>
+                </tr>
+			</table>
+		</div>
+	</div>
+</div>
+
