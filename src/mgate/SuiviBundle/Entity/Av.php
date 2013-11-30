@@ -103,6 +103,7 @@ class Av extends DocType
     public function __construct()
     {
         $this->avenantsMissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

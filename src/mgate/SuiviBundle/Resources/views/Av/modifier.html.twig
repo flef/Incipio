@@ -77,10 +77,6 @@ Modifier un Avant-Projet - {{ parent() }}
                             <th>Méthodologie</th>
                             <td>{{ form_widget(phase.methodo)}}</td>
                         </tr>
-                        <tr class="{{ change and change.validation ? "warning" }}">
-                            <th>Validation</th>
-                            <td>{{ form_widget(phase.validation)}}</td>
-                        </tr>
                         <tr class="{{ change and change.nbrJEH ? "warning" }}">
                             <th>Nombre JEH</th>
                             <td>{{ form_widget(phase.nbrJEH)}}</td>
@@ -106,7 +102,7 @@ Modifier un Avant-Projet - {{ parent() }}
         {% endfor %}
             </div>
         
-            
+            {{ form_widget(form) }}
                 <input type="submit" value="Enregistrer l'Avenant"/>      
         </form>
 
