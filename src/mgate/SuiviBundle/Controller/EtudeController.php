@@ -8,7 +8,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 use mgate\SuiviBundle\Entity\Etude;
 use mgate\SuiviBundle\Form\EtudeType;
 use mgate\SuiviBundle\Form\DocTypeSuiviType;
-use mgate\SuiviBundle\Form\SuiviType;
+use mgate\SuiviBundle\Form\SuiviEtudeType;
 
 //use mgate\UserBundle\Entity\User;
 
@@ -178,7 +178,7 @@ class EtudeController extends Controller {
 
 
         //$deleteForm = $this->createDeleteForm($id);
-        $formSuivi = $this->createForm(new SuiviType, $etude);
+        $formSuivi = $this->createForm(new SuiviEtudeType, $etude);
         return $this->render('mgateSuiviBundle:Etude:voir.html.twig', array(
                     'etude' => $etude,
                     'formSuivi' => $formSuivi->createView(),
@@ -341,7 +341,7 @@ class EtudeController extends Controller {
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
 
-        $formSuivi = $this->createForm(new SuiviType, $etude);
+        $formSuivi = $this->createForm(new SuiviEtudeType, $etude);
         if ($this->get('request')->getMethod() == 'POST') {
             $formSuivi->bind($this->get('request'));
 

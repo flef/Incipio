@@ -1,0 +1,57 @@
+{# layout d'accueil pour les études  #}
+
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+Suivi des études - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "bPaginate": false,
+				"aaSorting": [[0,'desc']],
+            });
+        } );
+    </script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+{% block content_bundle %}
+<h2>Liste des Suivis</h2>
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Etude</th>
+			<th>Suiveur</th>
+            <th>Client</th>
+            <th>Etat</th>
+            <th>Todo</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for s in suivis %}
+            <tr>
+                <td>{{ s.date | date("d/m/y") }}</td>
+                <td>{{ s.etude.nom }}</td>
+                <td>{{ s.etude.suiveur.prenomNom}}</td>
+                <td>{{ s.etude.prospect.nom}}</td>
+                <td>{{ s.etat }}</td>
+                <td>{{ s.todo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+            
+{% block javascript %}
+{{ parent() }}
+{% endblock %}

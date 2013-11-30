@@ -15,7 +15,7 @@ use mgate\SuiviBundle\Form\CcType;
 use mgate\SuiviBundle\Entity\Mission;
 use mgate\SuiviBundle\Form\MissionType;
 use mgate\SuiviBundle\Entity\Suivi;
-use mgate\SuiviBundle\Form\SuiviType;
+use mgate\SuiviBundle\Form\SuiviEtudeType;
 use mgate\SuiviBundle\Form\SuiviHandler;
 use mgate\SuiviBundle\Entity\ClientContact;
 use mgate\SuiviBundle\Form\ClientContactType;

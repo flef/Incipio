@@ -28,7 +28,7 @@ class ClientContactType extends AbstractType
            ->add('date','datetime',array('label'=>'Date du contact'))
            //->add('date', 'genemu_jquerydate', array('label'=>'Date du contact', 'required'=>true, 'widget'=>'single_text'))
            ->add('objet','text',array('label'=>'Objet'))
-           ->add('contenu','textarea',array('label'=>'Résumé du contact'))
+           ->add('contenu','textarea',array('label'=>'Résumé du contact', 'attr'=>array('cols'=>'100%','rows'=>5)))
            ->add('moyenContact', new MoyenContactType(), array('label'=>'Contact effectué par'))
            ;
             
@@ -42,7 +42,7 @@ class ClientContactType extends AbstractType
 
     public function getName()
     {
-        return 'alex_suivibundle_clientcontacttype';
+        return 'mgate_suivibundle_clientcontacttype';
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
