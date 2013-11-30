@@ -51,11 +51,11 @@
 				</tr>
 				<tr>
 					<th>Création</th>
-					<td>Crée le {{ etude.dateCreation|date("d/m/Y") }}</td>
+					<td>{{ etude.dateCreation|date("d/m/Y") }}</td>
 				</tr>
 				<tr>
 					<th>Fin</th>
-					<td>Fin le {{ getDateFin(etude)|date("d/m/Y") }}</td>
+					<td>{% if etude.avs | length > 0 %}<s><b>{%endif%}{{ getDateFin(etude)|date("d/m/Y") }}{% if etude.avs | length > 0 %}</b></s><br />{{ getDateFin(etude, true)|date("d/m/Y") }}{%endif%}</td>
 				</tr>
 				<tr>
 					<th>JEH - Prix</th>
