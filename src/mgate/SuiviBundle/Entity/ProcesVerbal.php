@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * mgate\SuiviBundle\Entity\ProcesVerbal
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\ProcesVerbalRepository")
+ * @ORM\Entity
  */
 class ProcesVerbal extends DocType
 {

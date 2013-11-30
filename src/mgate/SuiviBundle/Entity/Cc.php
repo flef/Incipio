@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * mgate\SuiviBundle\Entity\Cc
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\CcRepository")
+ * @ORM\Entity
  */
 class Cc extends DocType
 {

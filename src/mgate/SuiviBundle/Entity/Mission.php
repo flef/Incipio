@@ -10,7 +10,7 @@ use mgate\PersonneBundle\Entity\Personne;
  * mgate\SuiviBundle\Entity\Mission
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\MissionRepository")
+ * @ORM\Entity
  */
 class Mission extends DocType {
 

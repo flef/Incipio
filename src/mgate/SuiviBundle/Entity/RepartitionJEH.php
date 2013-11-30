@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * RepartitionJEH
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\RepartitionJEHRepository")
+ * @ORM\Entity
  */
 class RepartitionJEH
 {

@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * mgate\SuiviBundle\Entity\Phase
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="mgate\SuiviBundle\Entity\PhaseRepository")
+ * @ORM\Entity
  */
 class Phase
 {
