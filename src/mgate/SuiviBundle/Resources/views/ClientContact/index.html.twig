@@ -9,24 +9,40 @@
     <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>    
 </ul>
 {% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                    $('#example').dataTable({
+                        "bPaginate": false,
+						"aaSorting": [[0,'desc']],
+                    });
+            } );
+    </script>
+	
+{% endblock %}
+
+
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
     
 {% block content_bundle %}
     {% set mounth = {'01' : 'janvier', '02' : 'février', '03' : 'mars', '04' : 'avril', '05' : 'mai', '06' : 'juin', '07' : 'juillet', '08' : 'août', '09' : 'septembre', '10' : 'octobre','11' : 'novembre', '12' : 'décembre'} %}
     <h2>Contact client</h2>
     
-    <table class="table table-bordered table-striped">
-    {% set mois = contactsClient[0].date | date("m") %}
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr><th>Contacts</th><th>Date</th><th>Fait Par</th><th>Etude</th><th>Objet</th><th>Contenu</th></tr>
+        </thead>
+        <tbody>
     {% for contact in contactsClient | reverse %}
-    {% if mois != contact.date | date("m") %}
-    {% set mois = contact.date | date("m") %}
-    </table>
-    <h3>Contacts du mois de {{ mounth[contact.date | date("m")] }}</h3>
-    <table class="table table-bordered table-striped">
-    {% endif %}
     <tr>
-        <td>
-            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">Contact n°{{contactsClient | length - loop.index}}</a>
-        </td>
         <td>
         {% if contact.moyenContact == 'telephone'%}
             <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-headphones"></i> 
@@ -35,6 +51,7 @@
         {% else %}
             <i title="{{ contact.date | date("d/m/Y - ") ~ contact.faitPar.PrenomNom}}" class="glyphicon glyphicon-eye-open"></i> 
         {% endif %}
+            <a href="{{ path('mgateSuivi_clientcontact_voir', {'id': contact.id}) }}">n°{{contactsClient | length - loop.index}}</a>
         </td>
         <td>
             {{contact.date | date("d/m/Y") }}
@@ -42,7 +59,10 @@
         <td>
             {{ contact.faitPar.PrenomNom }}
         </td>
-        <td><b>{{ contact.etude.nom }} : </b>
+        <td>
+            <b>{{ contact.etude.nom }}</b>
+        </td>
+        <td>
             {{ contact.objet }}
         </td>
         <td>
@@ -50,6 +70,7 @@
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}
