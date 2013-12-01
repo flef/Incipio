@@ -57,9 +57,27 @@ class MembreController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Membre entity.');
         }
+        
+        $path =  $entity->getPromotion() .'/' . 
+        preg_replace('# #', '_',urlencode(mb_strtolower($entity->getPersonne()->getNom(),'UTF-8'))) . '_'.preg_replace('# #', '_',urlencode(mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8'))) . '.jpg';
+        $promo = $entity->getPromotion();
+        
+        if(file_exists('images/photos/P'. $path))
+            $pictureURL = 'images/photos/P'. $path;
+        else{
+            $pictureURL = 'http://ismin.emse.fr/ismin/Photos/P' . $path;
+            if (!file_exists('images/photos') and !is_dir('images/photos'))
+                mkdir('images/photos');   
+            if (!file_exists('images/photos/P'.$promo) and !is_dir('images/photos/P'.$promo))
+                mkdir('images/photos/P'.$promo); 
+
+            @copy('http://ismin.emse.fr/ismin/Photos/P' . $path, 'images/photos/P'. $path);
+        }
+
 
         return $this->render('mgatePersonneBundle:Membre:voir.html.twig', array(
                     'membre' => $entity,
+                    'pictureURL' => $pictureURL,
         ));
     }
 
