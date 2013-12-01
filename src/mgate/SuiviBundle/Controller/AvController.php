@@ -137,6 +137,11 @@ class AvController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Cc entity.');
         }
+		
+		$etude = $em->getRepository('mgateSuiviBundle:Av')->find($id)->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -211,6 +216,12 @@ class AvController extends Controller {
         }
         else if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id))
             throw $this->createNotFoundException('Unable to find Av entity.');
+
+		
+		$etude = $av->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $phasesAv = array();
         if($av->getPhases()){

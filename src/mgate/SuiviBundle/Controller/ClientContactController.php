@@ -41,7 +41,8 @@ class ClientContactController extends Controller
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
 
-        
+        if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         $clientcontact = new ClientContact;
         $clientcontact->setEtude($etude);
@@ -76,6 +77,11 @@ class ClientContactController extends Controller
         if (!$contactClient) {
             throw $this->createNotFoundException('Unable to find ClientContact entity.');
         }
+		
+		$etude = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id)->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $etude = $contactClient->getEtude();
         $contactsClient = $etude->getClientContacts()->toArray();
@@ -100,6 +106,11 @@ class ClientContactController extends Controller
         {
             throw $this->createNotFoundException('ClientContact[id='.$id.'] inexistant');
         }
+		
+		$etude = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id)->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form        = $this->createForm(new ClientContactType, $clientcontact);
         
