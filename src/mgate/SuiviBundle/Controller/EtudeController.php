@@ -161,7 +161,7 @@ class EtudeController extends Controller {
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $chartManager = $this->get('mgate.chart_manager');
@@ -187,7 +187,7 @@ class EtudeController extends Controller {
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
 			
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new EtudeType, $etude);
@@ -225,7 +225,7 @@ class EtudeController extends Controller {
             if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
                 throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
 				
-			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 				throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
             /**
@@ -339,7 +339,7 @@ class EtudeController extends Controller {
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
 			
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $formSuivi = $this->createForm(new SuiviEtudeType, $etude);
