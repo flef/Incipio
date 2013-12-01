@@ -13,6 +13,7 @@ class MembreType extends AbstractType {
         $builder
                 ->add('personne', new PersonneType(), array('label' => ' ', 'user' => true))
                 ->add('identifiant', 'text', array('label' => 'Identifiant', 'required' => false, 'read_only' => true))
+                ->add('emailEMSE', 'text', array('label' => 'Email EMSE', 'required' => false))
                 ->add('promotion', 'integer', array('label' => 'Promotion', 'required' => false))
                 ->add('dateDeNaissance', 'date', array('label' => 'Date de naissance (jj/mm/aaaa)', 'widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'required' => false))
                 ->add('lieuDeNaissance', 'text', array('label' => 'Lieu de naissance', 'required' => false))

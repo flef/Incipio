@@ -27,6 +27,12 @@ class Membre {
      * @ORM\JoinColumn(nullable=true)
      */
     private $personne;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="mgate\SuiviBundle\Entity\Ce", inversedBy="membre", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $conventionEleve;
 
     /**
      * @var string $identifiant
@@ -34,6 +40,13 @@ class Membre {
      * @ORM\Column(name="identifiant", type="string", length=10, nullable=true, unique=true)
      */
     private $identifiant;
+    
+    /**
+     * @var string $emailEMSE
+     *
+     * @ORM\Column(name="emailEMSE", type="string", length=50, nullable=true)
+     */
+    private $emailEMSE;
 
     /**
      * @var int $promotion
@@ -333,5 +346,26 @@ class Membre {
     public function getNationalite()
     {
         return $this->nationalite;
+    }
+    
+    /**
+     * Set emailEMSE
+     *
+     * @param string $emailEMSE
+     * @return Membre
+     */
+    public function setEmailEMSE($emailEMSE) {
+        $this->emailEMSE = $emailEMSE;
+
+        return $this;
+    }
+
+    /**
+     * Get emailEMSE
+     *
+     * @return string 
+     */
+    public function getEmailEMSE() {
+        return $this->emailEMSE;
     }
 }

@@ -46,9 +46,6 @@
                    RP
               </th>
               <th>
-                   Payé
-              </th>
-              <th>
                    BV
               </th>
               <th>
@@ -69,7 +66,7 @@
     <td>
         {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
         <br/>
-        {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
+        {% if getDateFin(etude) != NULL %}<div>{% if etude.avs | length > 0 %}<s><b>{%endif%}{{ getDateFin(etude)|date("d/m/Y") }}{% if etude.avs | length > 0 %}</b></s><br />{{ getDateFin(etude, true)|date("d/m/Y") }}{%endif%}</div>{% endif %}
     </td>
     <td>
         {% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
@@ -90,30 +87,30 @@
             </td>
         <td>
         {% if getEtatDoc(etude.ap) == 1 %}
-                <img src="{{ enCours }}" />
+                <img src="{{ enCours }}" title="{{ etude.ap is not null ? etude.ap.dateSignature | date("d/m/y")}}" />
         {% elseif getEtatDoc(etude.ap) == 2 %}
-                <img src="{{ valide }}" />
+                <img src="{{ valide }}" title="{{ etude.ap is not null ? etude.ap.dateSignature | date("d/m/y")}}" />
         {% else %}
-                <img src="{{ nonValide }}" />
+                <img src="{{ nonValide }}" title="{{ etude.ap is not null ? etude.ap.dateSignature | date("d/m/y")}}" />
         {% endif %}
             </td>
        
             <td>
         {% if getEtatDoc(etude.cc) == 1 %}
-                <img src="{{ enCours }}" />
+                <img src="{{ enCours }}" title="{{ etude.cc is not null ? etude.cc.dateSignature | date("d/m/y")}}"/>
         {% elseif getEtatDoc(etude.cc) == 2 %}
-                <img src="{{ valide }}" />
+                <img src="{{ valide }}" title="{{ etude.cc is not null ? etude.cc.dateSignature | date("d/m/y")}}"/>
         {% else %}
-                <img src="{{ nonValide }}" />
+                <img src="{{ nonValide }}" title="{{ etude.cc is not null ? etude.cc.dateSignature | date("d/m/y")}}"/>
         {% endif %}
             </td>
             <td>
         {% if getEtatDoc(etude.fa) == 1 %}
-                <img src="{{ enCours }}" />
+                <img src="{{ enCours }}" title="{{ etude.fa is not null ? etude.fa.dateSignature | date("d/m/y")}}"/>
         {% elseif getEtatDoc(etude.fa) == 2 %}
-                <img src="{{ valide }}" />
+                <img src="{{ valide }}" title="{{ etude.fa is not null ? etude.fa.dateSignature | date("d/m/y")}}"/>
         {% else %}
-                <img src="{{ nonValide }}" />
+                <img src="{{ nonValide }}" title="{{ etude.fa is not null ? etude.fa.dateSignature | date("d/m/y")}}"/>
         {% endif %}
             </td>
             <td>
@@ -135,27 +132,24 @@
             </td>
             <td>
         {% if getEtatDoc(etude.pvr) == 1 %}
-                <img src="{{ enCours }}" />
+                <img src="{{ enCours }}" title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y")}}"/>
         {% elseif getEtatDoc(etude.pvr) == 2 %}
-                <img src="{{ valide }}" />
+                <img src="{{ valide }}" title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y")}}"/>
         {% else %}
-                <img src="{{ nonValide }}" />
+                <img src="{{ nonValide }}" title="{{ etude.pvr is not null ? etude.pvr.dateSignature | date("d/m/y")}}" />
         {% endif %}
             </td>
             <td>
         {% if getEtatDoc(etude.fs) == 1 %}
-                <img src="{{ enCours }}" />
+                <img src="{{ enCours }}" title="{{ etude.fs is not null ? etude.fs.dateSignature | date("d/m/y")}}"/>
         {% elseif getEtatDoc(etude.fs) == 2 %}
-                <img src="{{ valide }}" />
+                <img src="{{ valide }}" title="{{ etude.fs is not null ? etude.fs.dateSignature | date("d/m/y")}}"/>
         {% else %}
-                <img src="{{ nonValide }}" />
+                <img src="{{ nonValide }}" title="{{ etude.fs is not null ? etude.fs.dateSignature | date("d/m/y")}}"/>
         {% endif %}
             </td>
             <td>
 
-            </td>
-            <td>
-                
             </td>
             <td>
             </td>
