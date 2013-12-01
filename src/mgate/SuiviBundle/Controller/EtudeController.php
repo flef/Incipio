@@ -20,18 +20,6 @@ define("STATE_ID_AVORTEE", 5);
 
 class EtudeController extends Controller {
 
-    /*
-     * 
-     * 
-     *         //Confidentialité : Visibilité CA, Suiveur
-      $userToken = $this->container->get('security.context');
-      $user = $userToken->getToken()->getUser()->getPersonne();
-
-      if($etude->getConfidentiel() && !$userToken->isGranted('ROLE_CA') && $user->getId() != $etude->getSuiveur()->getId())
-      throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
-      ///
-     * 
-     */
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -172,6 +160,9 @@ class EtudeController extends Controller {
 
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $chartManager = $this->get('mgate.chart_manager');
         $ob = $chartManager->getGantt($etude, "suivi");
@@ -185,6 +176,7 @@ class EtudeController extends Controller {
                     'chart' => $ob,
                 /* 'delete_form' => $deleteForm->createView(),  */                ));
     }
+	
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -194,6 +186,9 @@ class EtudeController extends Controller {
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+			
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new EtudeType, $etude);
         $deleteForm = $this->createDeleteForm($id);
@@ -229,6 +224,9 @@ class EtudeController extends Controller {
 
             if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
                 throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+				
+			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+				throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
             /**
              * @todo Cascade remove
@@ -340,6 +338,9 @@ class EtudeController extends Controller {
 
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
+			
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $formSuivi = $this->createForm(new SuiviType, $etude);
         if ($this->get('request')->getMethod() == 'POST') {
