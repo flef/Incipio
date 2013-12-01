@@ -85,6 +85,9 @@ class MembreController extends Controller {
             $now->modify('- 20 year');
             $membre->setDateDeNaissance($now);
         }
+        
+        if(!$membre->getEmailEMSE())
+            $membre->setEmailEMSE($membre->getEmailEtu());
         /*
         if (!count($membre->getMandats()->toArray())) {
             $mandatNew = new Mandat;

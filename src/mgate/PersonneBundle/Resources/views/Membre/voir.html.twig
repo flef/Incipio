@@ -28,7 +28,11 @@ Affichage d'un Membre - {{ parent() }}
         </tr>
         <tr>
             <td><i class="glyphicon glyphicon-headphones"></i> {{ membre.personne.mobile }}</td>
-            <td colspan="3"><i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a></td>
+            <td colspan="3">
+                <i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a>
+                <br />
+                <i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ membre.emailEMSE }}">{{ membre.emailEMSE }}</a>
+            </td>
         </tr>
         <tr>
             <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
