@@ -40,6 +40,11 @@ class CcController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Cc entity.');
         }
+		
+		$etude = $entity->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -60,6 +65,9 @@ class CcController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         if(!$cc = $etude->getCc())
         {
@@ -100,6 +108,9 @@ class CcController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         $validation = $this->get('mgate.validation')->ValidationCc($etude);
         

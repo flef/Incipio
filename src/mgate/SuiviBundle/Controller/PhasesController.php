@@ -41,6 +41,9 @@ class PhasesController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         $originalPhases = array();
         // Create an array of the current Phase objects in the database

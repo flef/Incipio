@@ -46,6 +46,9 @@ class ApController extends Controller {
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Ap entity.');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -63,6 +66,9 @@ class ApController extends Controller {
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         if (!$ap = $etude->getAp()) {
             $ap = new Ap;
@@ -102,7 +108,8 @@ class ApController extends Controller {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
 
-
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $version = $etude->getAp()->getVersion();
         $dateSignature = $etude->getAp()->getDateSignature();
@@ -234,6 +241,10 @@ class ApController extends Controller {
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+			
         $ap = $etude->getAp();
         $form = $this->createForm(new DocTypeSuiviType, $ap); //transmettre etude pour ajouter champ de etude
 

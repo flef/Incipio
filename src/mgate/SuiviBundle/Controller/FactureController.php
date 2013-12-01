@@ -39,6 +39,11 @@ class FactureController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Facture entity.');
         }
+		
+		$etude = $entity->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -59,6 +64,9 @@ class FactureController extends Controller
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) ) {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         $facture = new Facture;
         $etude->addFi($facture);
@@ -118,6 +126,11 @@ class FactureController extends Controller
 
         if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id_facture) )
             throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
+			
+		$etude = $facture->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
         if( $this->get('request')->getMethod() == 'POST' )
@@ -178,6 +191,9 @@ class FactureController extends Controller
         {
             throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         if(!$facture = $etude->getDoc($type))
         {
@@ -268,6 +284,11 @@ class FactureController extends Controller
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
                 throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
+				
+			$etude = $entity->getEtude();
+		
+			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+				throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
             $em->remove($entity);
             $em->flush();
