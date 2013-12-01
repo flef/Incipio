@@ -41,7 +41,7 @@
  	 <tbody>
         
 
-        {% for etude in etudesEnNegociation %}
+        {% for etude in etudesEnNegociation if not confidentielRefus(etude, app.security)%}
     <tr>
         <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
         <td>
