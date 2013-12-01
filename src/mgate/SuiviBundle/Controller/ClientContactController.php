@@ -41,7 +41,7 @@ class ClientContactController extends Controller
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
 
-        if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+        if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         $clientcontact = new ClientContact;
@@ -78,9 +78,9 @@ class ClientContactController extends Controller
             throw $this->createNotFoundException('Unable to find ClientContact entity.');
         }
 		
-		$etude = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id)->getEtude();
+		$etude = $contactClient->getEtude();
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $etude = $contactClient->getEtude();
@@ -107,9 +107,9 @@ class ClientContactController extends Controller
             throw $this->createNotFoundException('ClientContact[id='.$id.'] inexistant');
         }
 		
-		$etude = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id)->getEtude();
+		$etude = $clientcontact->getEtude();
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form        = $this->createForm(new ClientContactType, $clientcontact);

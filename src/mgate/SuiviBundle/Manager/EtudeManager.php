@@ -59,11 +59,15 @@ class EtudeManager extends \Twig_Extension {
     }
 	
 	public function confidentielRefus(Etude $etude, $userToken) {
-		$user = $userToken->getToken()->getUser()->getPersonne();
+		try {$user = $userToken->getToken()->getUser()->getPersonne();
 		
-		if($etude->getConfidentiel() && !$userToken->isGranted('ROLE_CA')){
-			if($etude->getSuiveur() && $user->getId() != $etude->getSuiveur()->getId())
-				return 1;
+			if($etude->getConfidentiel() && !$userToken->isGranted('ROLE_CA')){
+				if($etude->getSuiveur() && $user->getId() != $etude->getSuiveur()->getId())
+					return true;
+			}
+		} 
+		catch(Exception $e) {
+			return true;
 		}
 	}
 	

@@ -47,7 +47,7 @@ class ApController extends Controller {
             throw $this->createNotFoundException('Unable to find Ap entity.');
         }
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
@@ -67,7 +67,7 @@ class ApController extends Controller {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         if (!$ap = $etude->getAp()) {
@@ -108,7 +108,7 @@ class ApController extends Controller {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
 
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $version = $etude->getAp()->getVersion();
@@ -242,7 +242,7 @@ class ApController extends Controller {
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
         }
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 			
         $ap = $etude->getAp();

@@ -62,7 +62,7 @@ class MissionController extends Controller {
 		
 		$etude = $mission->getEtude();
 		
-		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')) == 1)
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new MissionType, $mission);
