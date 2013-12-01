@@ -59,14 +59,19 @@ class MembreController extends Controller {
         }
         
         $path =  $entity->getPromotion() .'/' . 
-        preg_replace(
-        '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
-        '_',mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')) . '_'.
-        preg_replace(
-        '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
-        '_',mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')) . '.jpg';
+       		preg_replace(
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'_',
+			mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')
+		) . '_'.
+        	preg_replace(
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'_',
+			mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')
+		) . '.jpg';
         $promo = $entity->getPromotion();
         
+	
         if(file_exists('images/photos/P'. $path))
             $pictureURL = 'images/photos/P'. $path;
         else{
@@ -76,7 +81,7 @@ class MembreController extends Controller {
             if (!file_exists('images/photos/P'.$promo) and !is_dir('images/photos/P'.$promo))
                 mkdir('images/photos/P'.$promo); 
 
-            @copy('http://ismin.emse.fr/ismin/Photos/P' . $path, 'images/photos/P'. $path);
+            copy('http://ismin.emse.fr/ismin/Photos/P'.urlencode($path), 'images/photos/P'. $path);
         }
 
 
