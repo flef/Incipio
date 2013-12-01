@@ -59,7 +59,12 @@ class MembreController extends Controller {
         }
         
         $path =  $entity->getPromotion() .'/' . 
-        preg_replace('# #', '_',urlencode(mb_strtolower($entity->getPersonne()->getNom(),'UTF-8'))) . '_'.preg_replace('# #', '_',urlencode(mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8'))) . '.jpg';
+        preg_replace(
+        '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        '_',mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')) . '_'.
+        preg_replace(
+        '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        '_',mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')) . '.jpg';
         $promo = $entity->getPromotion();
         
         if(file_exists('images/photos/P'. $path))
