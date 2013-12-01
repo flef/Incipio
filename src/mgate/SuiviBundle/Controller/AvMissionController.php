@@ -39,6 +39,9 @@ class AvMissionController extends Controller
         {
             throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
         }
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         
         $avmission = new AvMission;
@@ -70,6 +73,11 @@ class AvMissionController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AvMission entity.');
         }
+		
+		$etude = $entity->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -90,6 +98,11 @@ class AvMissionController extends Controller
         {
             throw $this->createNotFoundException('AvMission[id='.$id.'] inexistant');
         }
+		
+		$etude = $avmission->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form        = $this->createForm(new AvMissionType, $avmission);
         

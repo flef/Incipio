@@ -40,6 +40,11 @@ class ProcesVerbalController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ProcesVerbal entity.');
         }
+		
+		$etude = $entity->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         //$deleteForm = $this->createDeleteForm($id);
 
@@ -59,7 +64,10 @@ class ProcesVerbalController extends Controller
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) ) {
             throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
         }
-        
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+		
         $proces = new ProcesVerbal;
         $etude->addPvi($proces);
         
@@ -91,6 +99,11 @@ class ProcesVerbalController extends Controller
 
         if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
             throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
+			
+		$etude = $procesverbal->getEtude();
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new ProcesVerbalSubType, $procesverbal, array('type' => $procesverbal->getType(), 'prospect' => $procesverbal->getEtude()->getProspect(), 'phases' => count($procesverbal->getEtude()->getPhases()->getValues())));   
         $deleteForm = $this->createDeleteForm($id_pv);
@@ -127,6 +140,9 @@ class ProcesVerbalController extends Controller
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
             throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         if(!$procesverbal = $etude->getDoc($type))
         {
@@ -177,6 +193,11 @@ class ProcesVerbalController extends Controller
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
                 throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
+				
+			$etude = $entity->getEtude();
+		
+			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
 
             $em->remove($entity);
