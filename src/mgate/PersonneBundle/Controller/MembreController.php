@@ -60,12 +60,12 @@ class MembreController extends Controller {
         
         $path =  $entity->getPromotion() .'/' . 
        		preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
         		'_',
 			mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')
 		) . '_'.
         	preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
         		'_',
 			mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')
 		) . '.jpg';
