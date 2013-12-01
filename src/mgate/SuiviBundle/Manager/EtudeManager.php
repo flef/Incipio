@@ -34,6 +34,7 @@ class EtudeManager extends \Twig_Extension {
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
             'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
             'typeFactureToString' => new \Twig_Function_Method($this, 'typeFactureToString'),
+            'confidentielRefus' => new \Twig_Function_Method($this, 'confidentielRefus'),
         );
     }
     
