@@ -33,6 +33,9 @@ class MissionsController extends Controller {
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
             throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+		
+		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $missionsToRemove = $etude->getMissions()->toArray();
 

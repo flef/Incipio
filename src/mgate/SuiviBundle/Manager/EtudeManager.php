@@ -34,6 +34,7 @@ class EtudeManager extends \Twig_Extension {
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
             'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
             'typeFactureToString' => new \Twig_Function_Method($this, 'typeFactureToString'),
+            'confidentielRefus' => new \Twig_Function_Method($this, 'confidentielRefus'),
         );
     }
     
@@ -57,6 +58,20 @@ class EtudeManager extends \Twig_Extension {
     public function nonBreakingSpace($string) {
         return preg_replace('#\s#', '&nbsp;', $string);    
     }
+	
+	public function confidentielRefus(Etude $etude, $userToken) {
+		try {$user = $userToken->getToken()->getUser()->getPersonne();
+		
+			if($etude->getConfidentiel() && !$userToken->isGranted('ROLE_CA')){
+				if($etude->getSuiveur() && $user->getId() != $etude->getSuiveur()->getId())
+					return true;
+			}
+		} 
+		catch(Exception $e) {
+			return true;
+		}
+	}
+	
     /**
      * Get montant total des JEH HT
      */
@@ -363,7 +378,7 @@ class EtudeManager extends \Twig_Extension {
                 }
             }
         }
-                
+
         //ordre PVI
         foreach ($etude->getPvis() as $pvi) {
             if (isset($pviAnterieur)) {
