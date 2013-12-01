@@ -115,7 +115,7 @@ class Membre {
         $now = new \DateTime("now");
         $now = (int) $now->format("Y");
 
-        if ($promo = $this->getPromotion()) {
+        if ($promo = $this->getPromotion() && $this->getPersonne()) {
             if ($promo < $now)
                 return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom(). '.' . $this->getPersonne()->getNom())) . "@emse-ismin.fr";
             if ($promo < 2014)
@@ -123,8 +123,9 @@ class Membre {
             else
             return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom() . '.' . $this->getPersonne()->getNom())) . "@etu.emse.fr";
         }
-        else
+        else if($this->getPersonne()){
             return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom() . '.' . $this->getPersonne()->getNom())) . "@etu.emse.fr";
+        } else return null;
     }
 
     /**

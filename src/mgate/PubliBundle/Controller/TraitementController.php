@@ -183,7 +183,7 @@ class TraitementController extends Controller {
     }
 
     private function nombreVersMois($m) {
-        $mois = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+        $mois = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
         return $mois[($m % 12) - 1];
     }
 
