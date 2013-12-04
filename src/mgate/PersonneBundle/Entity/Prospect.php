@@ -197,6 +197,7 @@ class Prospect
     
     public function getEntiteToString()
     {
+        if(!$this->entite) return "";
         $tab = $this->getEntiteChoice();
         return $tab[$this->entite];
     }
