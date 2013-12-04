@@ -17,8 +17,8 @@ class PersonneRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
           ->where('n.membre IS NOT NULL')
-          //->where( $qb->expr()->neq('n.membre', null ))
-          ;
+          ->orderBy('n.prenom','ASC')
+          ->addOrderBy('n.nom','ASC');
         return $query;
     }
     
