@@ -168,7 +168,6 @@ class IndicateursController extends Controller {
                 ->setMethode($get);
         return $this->render('mgateStatBundle:Indicateurs:debug.html.twig', 
                 array('indicateur' => $indicateur,
-                    'chart'=> $get(),
                 ));
     }
 
