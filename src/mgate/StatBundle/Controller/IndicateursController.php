@@ -116,11 +116,23 @@ class IndicateursController extends Controller {
         $ressourcesHumaines = new Indicateur();
         $ressourcesHumaines->setTitre('Evolution RH')
                 ->setMethode('getRh');
+				
+		//Chiffre d'affaires par mandat
+		$chiffreAffairesMandat = new Indicateur();
+        $chiffreAffairesMandat->setTitre('Evolution du Chiffre d\'Affaires par Mandat')
+                ->setMethode('getCAM');
+				
+		//Ration nbre JEH/nbre études
+		$ratioJEHetudes = new Indicateur();
+        $ratioJEHetudes->setTitre('Ratio nombre de JEH/nombre d\'études par Mandat')
+                ->setMethode('getRATIOJEH');
         
         
         $this->indicateursCollection
                 ->setIndicateurs($chiffreAffaires, 'Suivi')
-                ->setIndicateurs($ressourcesHumaines, 'Suivi');
+                //->setIndicateurs($ressourcesHumaines, 'Suivi')
+				->setIndicateurs($chiffreAffairesMandat, 'Suivi')
+				->setIndicateurs($ratioJEHetudes, 'Suivi');
         /************************************************
          * 			Indicateurs Gestion Asso			*
          ************************************************/
@@ -128,7 +140,7 @@ class IndicateursController extends Controller {
          * 				Indicateurs RFP					*
          ************************************************/
         /************************************************
-         * 			Indicateurs Trésorierie 			*
+         * 			Indicateurs Trésorerie 			*
          ************************************************/
         /************************************************
          * 		Indicateurs Prospection Commerciale		*
@@ -393,5 +405,184 @@ class IndicateursController extends Controller {
                     'chart' => $ob
                 ));
     }
+	
+	/**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getCAM() {
+        $etudeManager = $this->get('mgate.etude_manager');
+        $em = $this->getDoctrine()->getManager();
+        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
 
+        //$data = array();
+        $mandats = array();
+        $maxMandat = $etudeManager->getMaxMandatCc();
+
+        $cumuls = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $cumuls[$i] = 0;
+
+		$cumulsJEH = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $cumulsJEH[$i] = 0;
+			
+        foreach ($Ccs as $cc) {
+            $etude = $cc->getEtude();
+            $dateSignature = $cc->getDateSignature();
+            $signee = $etude->getStateID() == STATE_ID_EN_COURS_X
+                    || $etude->getStateID() == STATE_ID_TERMINEE_X;
+
+            if ($dateSignature && $signee) {
+                $idMandat = $etudeManager->dateToMandat($dateSignature);
+
+                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
+				$cumulsJEH[$idMandat] += $etudeManager->getNbrJEH($etude);
+
+                $mandats[$idMandat][]
+                        = array("x" => $idMandat,
+                    "y" => $cumuls[$idMandat], "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
+                    'prix' => $etudeManager->getTotalHT($etude),
+					'JEH' => $cumulsJEH[$idMandat]);
+            }
+        }
+
+
+
+        // Chart
+        $series = array();
+        foreach ($mandats as $idMandat => $data) {
+            //if($idMandat>=4)
+            $series[] = array("name" => "Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), "data" => $data);
+        }
+
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+
+        $ob = new Highchart();
+        $ob->global->useUTC(false);
+
+
+
+        //WARN :::
+
+        $ob->chart->renderTo('getCAM');  // The #id of the div where to render the chart
+        ///
+		$ob->chart->type("column");
+        $ob->xAxis->labels(array('style' => $style));
+		$ob->xAxis->allowDecimals(false);
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->title->text('Évolution du chiffre d\'affaire signé cumulé par mandat');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->yAxis->min(0);
+        $ob->yAxis->title(array('text' => "Chiffre d'Affaire signé cumulé", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.JEH} JEH<br />{point.y} €');
+        $ob->credits->enabled(false);
+        $ob->legend->floating(true);
+        $ob->legend->layout('vertical');
+        $ob->legend->y(40);
+        $ob->legend->x(160);
+        $ob->legend->verticalAlign('top');
+        $ob->legend->reversed(true);
+        $ob->legend->align('left');
+        $ob->legend->backgroundColor('#FFFFFF');
+        $ob->legend->itemStyle($style);
+        $ob->series($series);
+
+        //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                    'chart' => $ob
+                ));
+    }
+
+	/**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getRATIOJEH() {
+        $etudeManager = $this->get('mgate.etude_manager');
+        $em = $this->getDoctrine()->getManager();
+        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
+
+        //$data = array();
+        $mandats = array();
+        $maxMandat = $etudeManager->getMaxMandatCc();
+
+        $cumuls = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $cumuls[$i] = 0;
+
+		$cumulsJEH = array();
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $cumulsJEH[$i] = 0;
+			
+        foreach ($Ccs as $cc) {
+            $etude = $cc->getEtude();
+            $dateSignature = $cc->getDateSignature();
+            $signee = $etude->getStateID() == STATE_ID_EN_COURS_X
+                    || $etude->getStateID() == STATE_ID_TERMINEE_X;
+
+            if ($dateSignature && $signee) {
+                $idMandat = $etudeManager->dateToMandat($dateSignature);
+
+                $cumuls[$idMandat]++;
+				$cumulsJEH[$idMandat] += $etudeManager->getNbrJEH($etude);
+
+                $mandats[$idMandat][]
+                        = array("x" => $idMandat,
+                    "y" => $cumulsJEH[$idMandat] / $cumuls[$idMandat],
+                    'etudes' => $cumuls[$idMandat],
+					'JEH' => $cumulsJEH[$idMandat]);
+            }
+        }
+
+
+
+        // Chart
+        $series = array();
+        foreach ($mandats as $idMandat => $data) {
+            //if($idMandat>=4)
+            $series[] = array("name" => "Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), "data" => $data);
+        }
+
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+
+        $ob = new Highchart();
+        $ob->global->useUTC(false);
+
+
+
+        //WARN :::
+
+        $ob->chart->renderTo('getRATIOJEH');  // The #id of the div where to render the chart
+        ///
+		$ob->chart->type("column");
+        $ob->xAxis->labels(array('style' => $style));
+		$ob->xAxis->allowDecimals(false);
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->title->text('Ratio nombre JEH/nombre d\'études par mandat');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->yAxis->min(0);
+        $ob->yAxis->title(array('text' => "Ratio nombre JEH/nombre d'études", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.JEH} JEH<br />{point.etudes} études<br />ratio : {point.y}');
+        $ob->credits->enabled(false);
+        $ob->legend->floating(true);
+        $ob->legend->layout('vertical');
+        $ob->legend->y(40);
+        $ob->legend->x(160);
+        $ob->legend->verticalAlign('top');
+        $ob->legend->reversed(true);
+        $ob->legend->align('left');
+        $ob->legend->backgroundColor('#FFFFFF');
+        $ob->legend->itemStyle($style);
+        $ob->series($series);
+
+        //return $this->render('mgateStatBundle:Default:ca.html.twig', array(
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                    'chart' => $ob
+                ));
+    }
 }
