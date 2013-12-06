@@ -5,3 +5,7 @@ mgate_indicateurs_index:
 mgate_indicateurs_ajax_suivi:
     pattern:  /admin/indicateurs/etudes
     defaults: { _controller: mgateStatBundle:Indicateurs:ajax }
+    
+mgate_indicateurs_debug:
+    pattern:  /admin/indicateurs/{get}
+    defaults: { _controller: mgateStatBundle:Indicateurs:debug}
