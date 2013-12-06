@@ -146,6 +146,19 @@ class IndicateursController extends Controller {
                     'indicateursTreso' => $this->indicateursCollection->getIndicateurs('Treso'),
                 ));
     }
+    
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
+    public function debugAction($get){
+        $indicateur = new Indicateur();
+        $indicateur->setTitre($get)
+                ->setMethode($get);
+        return $this->render('mgateStatBundle:Indicateurs:debug.html.twig', 
+                array('indicateur' => $indicateur,
+                    'chart'=> $get(),
+                ));
+    }
 
     /**
      * @Secure(roles="ROLE_CA")
