@@ -23,8 +23,9 @@ Affichage d'un Membre - {{ parent() }}
             <td><i class="glyphicon glyphicon-barcode"></i> Identifiant : {{ membre.identifiant }}</td>
         </tr>
         <tr>
-            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span></td>
-            <td><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span>
+                <br /><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+            <td><span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
         </tr>
         <tr>
             <td><i class="glyphicon glyphicon-headphones"></i> {{ membre.personne.mobile }}</td>
