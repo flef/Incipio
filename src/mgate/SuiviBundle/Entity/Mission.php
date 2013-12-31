@@ -37,7 +37,7 @@ class Mission extends DocType {
 
     
     /**
-     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre")
+     * @ORM\ManyToOne(targetEntity="\mgate\PersonneBundle\Entity\Membre", inversedBy="missions", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $intervenant;
