@@ -50,11 +50,18 @@ class Facture extends DocType
     private $type;
 
     /**
-     * @var integer $montantHT
+     * @var float $montantHT
      *
      * @ORM\Column(name="montantHT", type="decimal", scale=2, nullable=true)
      */
     private $montantHT;
+    
+    /**
+     * @var float $tauxTVA
+     *
+     * @ORM\Column(name="tauxTVA", type="decimal", scale=3, nullable=true)
+     */
+    private $tauxTVA;
 
     /**
      * Get id
@@ -115,22 +122,55 @@ class Facture extends DocType
     /**
      * Get montantHT
      *
-     * @return integer 
+     * @return double
      */
     public function getMontantHT()
     {
         return $this->montantHT;
     }
+    
+    /**
+     * Get montantTTC
+     *
+     * @return double
+     */
+    public function getMontantTTC()
+    {
+        return $this->montantHT * (1 + $this->tauxTVA);
+    }
 
     /**
      * Set montantHT
      *
-     * @param string $montantHT
+     * @param double $montantHT
      * @return Facture
      */
     public function setMontantHT($montantHT)
     {
         $this->montantHT = $montantHT;
+    
+        return $this;
+    }
+    
+    /**
+     * Get tauxTVA
+     * @example / 0.196
+     * @return double
+     */
+    public function getTauxTVA()
+    {
+        return $this->montantHT;
+    }
+
+    /**
+     * Set tauxTVA
+     *
+     * @param taux $tauxTVA
+     * @return Facture
+     */
+    public function setTauxTVA($tauxTVA)
+    {
+        $this->montantHT = $tauxTVA;
     
         return $this;
     }

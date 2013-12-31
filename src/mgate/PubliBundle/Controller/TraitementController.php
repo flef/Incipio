@@ -200,6 +200,8 @@ class TraitementController extends Controller {
 
         //EtudeManager
         $Taux_TVA = (float) 19.6;
+        /// TODO
+        /// Faux depuis le changement de TVA
         $Montant_Total_JEH_HT = (float) $etudeManager->getTotalJEHHT($etude);
         $Montant_Total_Frais_HT = (float) $etude->getFraisDossier();
         $Montant_Total_Etude_HT = (float) $etudeManager->getTotalHT($etude);
