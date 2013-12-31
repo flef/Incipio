@@ -49,10 +49,10 @@
             <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a></td>
 			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a></td>
             <td>{{ membre.identifiant }}</td>
-            <td>REF : <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
+            <td>REF : <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "warning" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
             <td>
                     {% for mission in membre.missions %}
-                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve < getDateLancement(mission.etude) ? "success" : "error" ) : "error" }}">{{ getDateLancement(mission.etude) | date('d/m/Y')}} -> {{ getDateFin(mission.etude, true) | date('d/m/Y')}}</span>
+                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve < mission.debutOm ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
                     | <a href="{{path("mgateSuivi_etude_voir", {'id' : mission.etude.id})}}">{{ getRefEtude(mission.etude)}}-{{ mission.etude.nom }}</a><br/>
                     {% endfor %}          
             </td>
