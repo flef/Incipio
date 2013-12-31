@@ -15,13 +15,37 @@ class MembreController extends Controller {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function indexAction($page) {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('mgatePersonneBundle:Membre')->findAll();
 
         return $this->render('mgatePersonneBundle:Membre:index.html.twig', array(
                     'membres' => $entities,
+                ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function listIntervenantsAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        $entities = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+        
+        $intervenants = array();
+        
+        
+        foreach($entities as $etude){
+            foreach($etude->getMissions() as $mission){
+                $intervenant = $mission->getIntervenant();
+                if($intervenant != NULL)
+                    $intervenants[$intervenant->getPersonne()->getPrenomNom()] = $intervenant;          
+            }
+        }
+
+        return $this->render('mgatePersonneBundle:Membre:indexIntervenants.html.twig', array(
+                    'membres' => $intervenants,
                 ));
     }
     
@@ -60,12 +84,12 @@ class MembreController extends Controller {
         
         $path =  $entity->getPromotion() .'/' . 
        		preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
         		'_',
 			mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')
 		) . '_'.
         	preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç_]#',
+        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
         		'_',
 			mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')
 		) . '.jpg';
