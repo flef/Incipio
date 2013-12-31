@@ -21,6 +21,11 @@ class Membre {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\Mission", mappedBy="intervenant", cascade={"persist","remove"})
+     */
+    private $missions;
 
     /**
      * @ORM\OneToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", inversedBy="membre", cascade={"persist", "merge", "remove"})
@@ -29,10 +34,11 @@ class Membre {
     private $personne;
     
     /**
-     * @ORM\OneToOne(targetEntity="mgate\SuiviBundle\Entity\Ce", inversedBy="membre", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @var \Date $dateSignature
+     *
+     * @ORM\Column(name="dateCE", type="date",nullable=true)
      */
-    private $conventionEleve;
+    private $dateConventionEleve;
 
     /**
      * @var string $identifiant
@@ -207,6 +213,7 @@ class Membre {
      */
     public function __construct() {
         $this->mandats = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -368,5 +375,61 @@ class Membre {
      */
     public function getEmailEMSE() {
         return $this->emailEMSE;
+    }
+
+    /**
+     * Set dateConventionEleve
+     *
+     * @param \DateTime $dateConventionEleve
+     * @return Membre
+     */
+    public function setDateConventionEleve($dateConventionEleve)
+    {
+        $this->dateConventionEleve = $dateConventionEleve;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateConventionEleve
+     *
+     * @return \DateTime 
+     */
+    public function getDateConventionEleve()
+    {
+        return $this->dateConventionEleve;
+    }
+
+    /**
+     * Add missions
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $missions
+     * @return Membre
+     */
+    public function addMission(\mgate\SuiviBundle\Entity\Mission $missions)
+    {
+        $this->missions[] = $missions;
+    
+        return $this;
+    }
+
+    /**
+     * Remove missions
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $missions
+     */
+    public function removeMission(\mgate\SuiviBundle\Entity\Mission $missions)
+    {
+        $this->missions->removeElement($missions);
+    }
+
+    /**
+     * Get missions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMissions()
+    {
+        return $this->missions;
     }
 }

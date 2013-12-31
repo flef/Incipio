@@ -23,8 +23,9 @@ Affichage d'un Membre - {{ parent() }}
             <td><i class="glyphicon glyphicon-barcode"></i> Identifiant : {{ membre.identifiant }}</td>
         </tr>
         <tr>
-            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span></td>
-            <td><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span>
+                <br /><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
+            <td><span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
         </tr>
         <tr>
             <td><i class="glyphicon glyphicon-headphones"></i> {{ membre.personne.mobile }}</td>
@@ -53,6 +54,16 @@ Affichage d'un Membre - {{ parent() }}
             <td colspan="2">{{ mandat.poste.intitule }}</td>
             <td>Du : {{ mandat.debutMandat | date("d/m/Y") }}</td>
             <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <td colspan="4"><h4>Missions réalisées</h4></td>
+        </tr>
+    {% for mission in membre.missions %}
+        <tr class="mandats {{ "now"|date('Ymd')  > getDateFin(mission.etude) |date('Ymd') ? 'danger' : 'success'}}">
+            <td colspan="2"><a href="{{path("mgateSuivi_etude_voir", {'id' : mission.etude.id})}}" title="{{ mission.etude.nom }}">{{ getRefEtude(mission.etude) }}</a></td>
+            <td>Du : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
+            <td>Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</td>
         </tr>
     {% endfor %}
     </table>

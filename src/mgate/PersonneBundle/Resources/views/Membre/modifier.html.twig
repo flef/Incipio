@@ -10,7 +10,7 @@
 
     <table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
         <tr>
-            <th colspan="6">Informations</th>
+            <th colspan="6">Informations Membre</th>
         </tr>
         <tr>
             <td>{{ form_label(form.personne.sexe) }}</td>
@@ -51,6 +51,13 @@
             <td>{{ form_widget(form.appartement) }}</td>
             <td>{{ form_label(form.personne.adresse) }}</td>
             <td>{{ form_widget(form.personne.adresse) }}</td>
+        </tr>
+        <tr>
+            <th colspan="6">Informations Intervenant</th>
+        </tr>
+        <tr>
+            <td colspan="4">{{ form_label(form.dateConventionEleve) }}</td>
+            <td colspan="2">{{ form_widget(form.dateConventionEleve) }}</td>
         </tr>
         <tr>
             <td colspan="6"><button class="btn" type="submit" value="Ajouter mandat" name="add"><i class="glyphicon glyphicon-plus"></i></button> <h4 style="display: inline;">Postes occupés</h4></td>
