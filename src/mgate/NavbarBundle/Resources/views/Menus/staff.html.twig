@@ -7,6 +7,8 @@
         <ul class="dropdown-menu">
             <li class="dropdown-header">Membres</li>
             <li><a href="{{ path('mgatePersonne_membre_homepage') }}"><span class="glyphicon glyphicon-list"></span> Lister les membres</a></li>
+            <li><a href="{{ path('mgatePersonne_intervenants_homepage') }}"><span class="glyphicon glyphicon-usd"></span> Lister les intervenants</a></li>
+            <li class="divider"></li>
             <li><a href="{{ path('mgatePersonne_membre_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un membre</a></li>
         </ul>
     </li>
@@ -22,6 +24,7 @@
             <li class="dropdown-header">Formations</li>
             <li><a href="{{ path('mgate_formations_lister') }}"><span class="glyphicon glyphicon-briefcase"></span> Voir les formations</a></li>
             {% if is_granted('ROLE_CA') %}
+            <li class="divider"></li>
             <li class="dropdown-header">Administration</li>
             <li><a href="{{ path('mgate_formations_index_admin') }}"><span class="glyphicon glyphicon-list"></span> Gérer les formations</a></li>
             <li><a href="{{ path('mgate_formation_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter une formation</a></li>
@@ -45,6 +48,7 @@
             {% endfor%}
         {% endif %}
             {% if is_granted('ROLE_CA') %}
+            <li class="divider"></li>
             <li class="dropdown-header">Administration</li>
             <li><a href="{{ path('mgateSuivi_clientcontact_index') }}"><span class="glyphicon glyphicon-envelope"></span> Contacts Client</a></li>
             <li><a href="{{ path('mgateSuivi_vu_ca') }}"><span class="glyphicon glyphicon-eye-open"></span> Vu CA</a></li>
@@ -73,6 +77,7 @@
             <li><a href="{{ path('mgatePersonne_prospect_homepage') }}"><span class="glyphicon glyphicon-list"></span> Voir les prospects</a></li>
             <li><a href="{{ path('mgatePersonne_prospect_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un prospect</a></li>
         {% if is_granted('ROLE_CA') %}
+            <li class="divider"></li>
             <li class="dropdown-header">Annuaire</li>
             <li><a href="{{ path('mgatePersonne_annuaire') }}"><span class="glyphicon glyphicon-book"></span> Annuaire global</a></li>
             <li><a href="{{ path('mgatePersonne_listeDiffusion') }}"><span class="glyphicon glyphicon-envelope"></span> Liste de diffusion</a></li>
@@ -97,9 +102,11 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration<b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li><a href="{{ path('mgate_publi_documenttype_index') }}"><span class="glyphicon glyphicon-wrench"></span> Gestion des Doctypes</a></li>
+            <li class="divider"></li>
             <li class="dropdown-header">Postes</li>
             <li><a href="{{ path('mgatePersonne_poste_homepage') }}"><span class="glyphicon glyphicon-list"></span> Lister les postes</a></li>
             <li><a href="{{ path('mgatePersonne_poste_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un poste</a></li>
+            <li class="divider"></li>
             <li class="dropdown-header">Compte d'Utilisateur:</li>
             <li><a href="{{ path('mgate_user_lister') }}"><span class="glyphicon glyphicon-pencil"></span> Lister / Modifier</a></li>
         </ul>

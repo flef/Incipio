@@ -1,0 +1,67 @@
+{# layout d'accueil pour les Users  #}
+
+{% extends "mgatePersonneBundle::layout.html.twig" %}
+
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                    $('#example').dataTable({
+                        "bPaginate": false,
+						"aaSorting": [[0,'desc']],
+                    });
+            } );
+    </script>
+	
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+{% block title %}Accueil - {{ parent() }}{% endblock %}
+
+{% block content_bundle %}
+
+    <h2>Liste des Intervenants en activité</h2>
+    <span>
+    Attention, cette liste présente moins d'informations sur les ontervenants que la liste des membres.
+    </span>
+
+    <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
+        <thead>
+          <tr>
+            <th>Promotion</th>
+            <th>Prénom</th>
+			<th>Nom</th>
+            <th>Identifiant</th>
+            <th>CE</th>
+            <th>Etude</th>
+          </tr>
+        </thead>
+        <tbody>
+                {% for membre in membres %}
+          <tr>
+            <td>{{ membre.promotion ? "P" ~ membre.promotion }}</td>
+            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a></td>
+			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a></td>
+            <td>{{ membre.identifiant }}</td>
+            <td>REF : <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
+            <td>
+                    {% for mission in membre.missions %}
+                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve < getDateLancement(mission.etude) ? "success" : "error" ) : "error" }}">{{ getDateLancement(mission.etude) | date('d/m/Y')}} -> {{ getDateFin(mission.etude, true) | date('d/m/Y')}}</span>
+                    | <a href="{{path("mgateSuivi_etude_voir", {'id' : mission.etude.id})}}">{{ getRefEtude(mission.etude)}}-{{ mission.etude.nom }}</a><br/>
+                    {% endfor %}          
+            </td>
+          </tr>
+                {% else %}
+                    <li>Pas (encore !) de Membre</li>
+                {% endfor %}
+        </tbody>
+    </table>
+    
+
+{% endblock %}
