@@ -424,20 +424,19 @@ class IndicateursController extends Controller {
     private function getCAM() {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
-        $etude = new \mgate\SuiviBundle\Entity\Etude;
+        
         $Ccs = $this->getDoctrine()->getManager()->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
 
-        //$data = array();
+        /* Initialisation */
         $mandats = array();
-        $maxMandat = $etudeManager->getMaxMandatCc();
-
         $cumuls = array();
-        for ($i = 0; $i <= $maxMandat; $i++)
-            $cumuls[$i] = 0;
-
-		$cumulsJEH = array();
-        for ($i = 0; $i <= $maxMandat; $i++)
-            $cumulsJEH[$i] = 0;
+        $cumulsJEH = array();
+        
+        $maxMandat = $etudeManager->getMaxMandatCc();
+        
+        for ($i = 0; $i <= $maxMandat; $i++) $cumuls[$i] = 0;
+        for ($i = 0; $i <= $maxMandat; $i++) $cumulsJEH[$i] = 0;
+        /******************/
 			
         foreach ($Ccs as $cc) {
             $etude = $cc->getEtude();
@@ -450,23 +449,33 @@ class IndicateursController extends Controller {
 
                 $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
 				$cumulsJEH[$idMandat] += $etudeManager->getNbrJEH($etude);
-
-                $mandats[$idMandat][]
-                        = array("x" => $idMandat,
+                
+                $mandats[$idMandat] = array("x" => $idMandat,
                     "y" => $cumuls[$idMandat], "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
                     'prix' => $etudeManager->getTotalHT($etude),
 					'JEH' => $cumulsJEH[$idMandat]);
             }
         }
+        
+        
 
 
 
         // Chart
-        $series = array();
+
+        $datas = array();
         foreach ($mandats as $idMandat => $data) {
-            //if($idMandat>=4)
-            $series[] = array("name" => "Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), "data" => $data);
+            $datas[] = array("Mandat " . $idMandat . " - " . $etudeManager->mandatToString($idMandat), end($data));
         }
+        
+        var_dump($datas);
+        $series = array(
+            array(
+                'name' => 'Chiffre d\'Affaires Cummulé',
+                'type' => 'column',
+                'data' => $datas,
+            ),
+        );
 
         $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
 
