@@ -52,7 +52,7 @@
             <td>REF : <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "warning" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
             <td>
                     {% for mission in membre.missions %}
-                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve < mission.debutOm ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
+                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve <= mission.debutOm ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
                     | <a href="{{path("mgateSuivi_etude_voir", {'id' : mission.etude.id})}}">{{ getRefEtude(mission.etude)}}-{{ mission.etude.nom }}</a><br/>
                     {% endfor %}          
             </td>
