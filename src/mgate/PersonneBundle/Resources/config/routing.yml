@@ -68,12 +68,14 @@ mgatePersonne_employe_modifier:
     defaults: {_controller: mgatePersonneBundle:Employe:modifier}
     requirements:
         id: \d+
-        
+
+mgatePersonne_intervenants_homepage:
+    pattern:  /intervenants
+    defaults: { _controller: mgatePersonneBundle:Membre:listIntervenants }
+    
 mgatePersonne_membre_homepage:
     pattern:  /membre
-    defaults: { _controller: mgatePersonneBundle:Membre:index , page: 1 }
-    requirements:
-      page : \d*
+    defaults: { _controller: mgatePersonneBundle:Membre:index }
     
 mgatePersonne_membre_ajouter:
     pattern: /membre/add
