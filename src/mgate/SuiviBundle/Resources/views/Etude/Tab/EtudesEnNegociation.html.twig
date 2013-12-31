@@ -43,7 +43,7 @@
 
         {% for etude in etudesEnNegociation if not confidentielRefus(etude, app.security)%}
     <tr>
-        <td><div>{{ etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> {{ getRefEtude(etude) }}</a></div></td>
+        <td><div>{{ etude.nom }}</div><div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}<a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}">{{ getRefEtude(etude) }}</a></div></td>
         <td>
             {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
             <br/>
@@ -97,8 +97,8 @@
             {% endif %}
                 </td>
                 <td>
-                    <div>{{ getTotalHT(etude)|default('') }} €</div>
-                    <div>{{ getNbrJEH(etude)|default('') }} JEH</div>
+                    <div>{{ etude.confidentiel ? '*' : getTotalHT(etude)|default('') }} €</div>
+                    <div>{{ etude.confidentiel ? '*' : getNbrJEH(etude)|default('') }} JEH</div>
                 </td>
             </tr>
         {% endfor %}
