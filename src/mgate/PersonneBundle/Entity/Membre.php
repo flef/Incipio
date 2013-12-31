@@ -29,10 +29,11 @@ class Membre {
     private $personne;
     
     /**
-     * @ORM\OneToOne(targetEntity="mgate\SuiviBundle\Entity\Ce", inversedBy="membre", cascade={"persist", "merge", "remove"})
-     * @ORM\JoinColumn(nullable=true)
+     * @var \Date $dateSignature
+     *
+     * @ORM\Column(name="dateCE", type="date",nullable=true)
      */
-    private $conventionEleve;
+    private $dateConventionEleve;
 
     /**
      * @var string $identifiant
@@ -368,5 +369,28 @@ class Membre {
      */
     public function getEmailEMSE() {
         return $this->emailEMSE;
+    }
+
+    /**
+     * Set dateConventionEleve
+     *
+     * @param \DateTime $dateConventionEleve
+     * @return Membre
+     */
+    public function setDateConventionEleve($dateConventionEleve)
+    {
+        $this->dateConventionEleve = $dateConventionEleve;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateConventionEleve
+     *
+     * @return \DateTime 
+     */
+    public function getDateConventionEleve()
+    {
+        return $this->dateConventionEleve;
     }
 }
