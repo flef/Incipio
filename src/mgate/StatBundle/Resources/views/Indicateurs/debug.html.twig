@@ -1,0 +1,28 @@
+{% extends "mgateStatBundle::layout.html.twig" %}
+
+{% block content_bundle %} 
+<div>
+<div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+</div>
+
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+
+<script src="{{ asset('js/highcharts.js') }}"></script>
+<script src="{{ asset('js/highcharts-fr.js') }}"></script>
+<span id="jsChart"></span>
+<script>
+function getChartAsync(sender, chart){
+     $.get(
+        '{{path('mgate_indicateurs_ajax_suivi')}}',
+        { chartMethode: chart})
+        .done(function(data) {
+          $('#jsChart').append(data);
+        });
+};
+
+getChartAsync('{{indicateur.methode}}','{{indicateur.methode}}');
+
+</script>
+{% endblock %}
