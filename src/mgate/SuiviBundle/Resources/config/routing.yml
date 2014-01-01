@@ -15,6 +15,10 @@ mgateSuivi_etude_ajax:
 mgateSuivi_etude_suivi:
     pattern: /etudes/suivi
     defaults: {_controller: mgateSuiviBundle:Etude:suivi}
+    
+mgateSuivi_etude_suiviQualite:
+    pattern: /etudes/suiviQualite
+    defaults: {_controller: mgateSuiviBundle:Etude:suiviQualite}
         
 mgateSuivi_etude_ajouter:
     pattern: /etude/ajouter
