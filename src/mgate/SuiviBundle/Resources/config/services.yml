@@ -3,8 +3,8 @@ parameters:
     mgate.doctype_manager.class: mgate\SuiviBundle\Manager\DocTypeManager
     mgate.chart_manager.class: mgate\SuiviBundle\Manager\ChartManager
     mgate.validation.class: mgate\SuiviBundle\Validation\Validation
-    tva: 0.196
-
+    tva: 0.20
+    
 services:
     mgate.etude_manager:
         class: "%mgate.etude_manager.class%"
