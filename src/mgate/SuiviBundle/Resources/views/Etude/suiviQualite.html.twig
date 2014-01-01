@@ -22,7 +22,6 @@ Suivi Qualité des études - {{ parent() }}
 <div id="ganttChart" style="width: 100%; display:none;"></div>
 
 {% set typeEtude = {"Etude en cours" : etudesEnCours, "Etudes Terminees" : etudesTerminees } %}
-
 {%for label,etudes in typeEtude %}
 <table id="content-{{loop.index}}" class="table table-bordered table-striped">
     <tr>
@@ -30,7 +29,7 @@ Suivi Qualité des études - {{ parent() }}
         <th>Client</th>
         <th>Intervenants</th>
     </tr>
-    {% for etude in etudesEnCours %}
+    {% for etude in etudes %}
     <tr>
         <th><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ getRefEtude(etude) }} {{ etude.nom }}</a></th>
         <td></td>
