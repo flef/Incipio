@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class MembreRepository extends EntityRepository
 {
+    public function getIntervenantsParPromo()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('m')->from('mgatePersonneBundle:Membre', 'm')
+          ->innerJoin('m.missions', 'mi')
+          ->orderBy('m.promotion', 'ASC');
+        return $query->getQuery()->getResult();
+    }
+    
+    
 }
