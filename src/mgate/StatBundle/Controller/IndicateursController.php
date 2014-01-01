@@ -221,7 +221,7 @@ class IndicateursController extends Controller {
         foreach ($repartitions as $type => $nombre) {
             if ($type == NULL)
                 $type = "Autre";
-            $data[] = [$type, round($nombre / $nombreClient * 100, 2)];
+            $data[] = array($type, round($nombre / $nombreClient * 100, 2));
         }
 
         $series = array(array('type' => 'pie', 'name' => 'Répartition des Clients', 'data' => $data, 'nombreClient' => $nombreClient));
@@ -278,7 +278,7 @@ class IndicateursController extends Controller {
         $mandats = $em->getRepository('mgatePersonneBundle:Mandat')->getCotisantMandats();
 
 
-        $promos = [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016];
+        $promos = array(2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016);
         $cumuls = array();
         $dates = array();
         foreach ($mandats as $mandat) {
