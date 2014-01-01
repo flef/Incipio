@@ -91,7 +91,6 @@ class PhasesController extends Controller
                 //Necessaire pour refraichir l ordre
                 $em->refresh($etude);
                 $form = $this->createForm(new PhasesType(), $etude, array('etude' => $etude));
-                //return $this->redirect( $this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())) );
 
             }
         }

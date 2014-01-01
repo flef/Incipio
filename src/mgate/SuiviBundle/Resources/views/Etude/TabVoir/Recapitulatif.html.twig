@@ -10,7 +10,7 @@
 	</div>
 	<div class="collapse navbar-collapse navbar-recap">
 		<ul class="nav  navbar-nav">
-			<li><a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Modifier</a></a></li>
+			<li><a href="{{ path('mgateSuivi_etude_modifier', {'numero': etude.numero}) }}"><span class="glyphicon glyphicon-pencil"></span> Modifier</a></a></li>
 			<li><a href="{{ path('mgateSuivi_clientcontact_ajouter', {'id': etude.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Ajouter Contact Client</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">

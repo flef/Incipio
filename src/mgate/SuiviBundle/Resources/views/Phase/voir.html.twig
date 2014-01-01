@@ -23,16 +23,8 @@
 
     <p>
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste</a>
-        <a href="{{ path('mgateSuivi_etude_modifier', {'id': etude.id}) }}">Modifier l'étude</a>
+        <a href="{{ path('mgateSuivi_etude_modifier', {'numero': etude.numero}) }}">Modifier l'étude</a>
     
- {#  
-        <li>
-            <form action="{{ path('mgateSuivi_etude_supprimer', { 'id': etude.id }) }}" method="post">
-                {{ form_widget(delete_form) }}
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-#}	
     </p>
 
 {% endblock %}

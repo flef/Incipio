@@ -12,6 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class EtudeRepository extends EntityRepository
 {
+    public function findByNumero($numero)
+    {
+        $mandat = (int) ($numero / 100);
+        $num = $numero % 100;
+
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('e')
+                    ->from('mgateSuiviBundle:Etude', 'e')
+                    ->where("e.mandat = $mandat")
+                    ->andWhere("e.num = $num");
+                   
+        return $query->getQuery()->getOneOrNullResult();
+    }
+    
     
     public function getEtudesCa()
     {

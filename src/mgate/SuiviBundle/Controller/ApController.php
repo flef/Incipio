@@ -88,7 +88,7 @@ class ApController extends Controller {
                 if($this->get('request')->get('phases'))
                     return $this->redirect($this->generateUrl('mgateSuivi_phases_modifier', array('id' => $etude->getId())));
                 else
-                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $etude->getNumero())));
             }
         }
 
@@ -253,7 +253,7 @@ class ApController extends Controller {
 
             if ($form->isValid()) {
                 $em->flush();
-                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $etude->getNumero())));
             }
         }
 
