@@ -211,7 +211,7 @@ class EtudeController extends Controller {
     }
 
     /**
-     * @Secure(roles="ROLE_SUIVEUR")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function deleteAction($id) {
         $form = $this->createDeleteForm($id);
