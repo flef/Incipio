@@ -284,8 +284,8 @@ class IndicateursController extends Controller {
         foreach ($mandats as $mandat) {
             if ($membre = $mandat->getMembre()) {
                 $p = $membre->getPromotion();
-                $dates[] = ['date' => $mandat->getDebutMandat(), 'type' => '1', 'promo' => $p];
-                $dates[] = ['date' => $mandat->getFinMandat(), 'type' => '-1', 'promo' => $p];
+                $dates[] = array('date' => $mandat->getDebutMandat(), 'type' => '1', 'promo' => $p);
+                $dates[] = array('date' => $mandat->getFinMandat(), 'type' => '-1', 'promo' => $p);
             }
         }
 
@@ -307,7 +307,7 @@ class IndicateursController extends Controller {
         $series = array();
         $categories = array_keys($cumuls[2009]);
         foreach (array_reverse($promos) as $promo) {
-            $series[] = ['name' => 'P' . $promo, 'data' => array_values($cumuls[$promo])];
+            $series[] = array('name' => 'P' . $promo, 'data' => array_values($cumuls[$promo]));
         }
 
 
