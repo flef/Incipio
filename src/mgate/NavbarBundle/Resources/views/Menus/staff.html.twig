@@ -33,6 +33,7 @@
     </li>
     {% endif %}
     
+    
     {% if is_granted('ROLE_SUIVEUR') %}
     <!-- SUIVI D'ETUDES-->
     <li class="dropdown">
@@ -47,6 +48,9 @@
             <li><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"><span class="glyphicon glyphicon-thumbs-up"></span> {{ getRefEtude(etude) }}</a></li>
             {% endfor%}
         {% endif %}
+            <li class="divider"></li>
+            <li class="dropdown-header">Qualité</li>
+            <li><a href="{{ path('mgateSuivi_etude_suiviQualite') }}"><span class="glyphicon glyphicon-warning-sign"></span> Suivi des problèmes</a></li>
             {% if is_granted('ROLE_CA') %}
             <li class="divider"></li>
             <li class="dropdown-header">Administration</li>

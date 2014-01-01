@@ -154,8 +154,6 @@ class EtudeController extends Controller {
      */
     public function voirAction($numero) {
         $em = $this->getDoctrine()->getManager();
-
-        $etude = new \mgate\SuiviBundle\Entity\Etude;
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($numero);
 
         if (!$etude)
@@ -331,6 +329,31 @@ class EtudeController extends Controller {
         return $this->render('mgateSuiviBundle:Etude:suiviEtudes.html.twig', array(
                     'etudesParMandat' => $etudesParMandat,
                     'form' => $form->createView(),
+                    'chart' => $ob,
+                ));
+    }
+    
+    
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function suiviQualiteAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        $etudesEnCours = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_EN_COURS), array('mandat' => 'DESC', 'num' => 'DESC'));
+        $etudesTerminees = $em->getRepository('mgateSuiviBundle:Etude')->findBy(array('stateID' => STATE_ID_TERMINEE), array('mandat' => 'DESC', 'num' => 'DESC'));
+        $etudes = array_merge($etudesEnCours, $etudesTerminees);
+
+        
+        
+        
+        
+        $chartManager = $this->get('mgate.chart_manager');
+        $ob = $chartManager->getGanttSuivi($etudes);
+
+        return $this->render('mgateSuiviBundle:Etude:suiviQualite.html.twig', array(
+                    'etudesEnCours' => $etudesEnCours,
+                    'etudesTerminees' => $etudesTerminees,
                     'chart' => $ob,
                 ));
     }

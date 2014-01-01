@@ -1,0 +1,87 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+Suivi Qualité des études - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+<table id="control" class="table table-bordered">
+    <tr>
+        <th>Panneau de controle</th>
+        <td><label for="checkbox-gantt">Gantt</label>                   <input id="checkbox-gantt" type="checkbox" onchange="$('#ganttChart').toggle();" /></td>
+        <td><label for="checkbox-encou">Etudes en cours</label>         <input id="checkbox-encou" type="checkbox" checked="checked" onchange="$('#content-1').toggle();" /></td>
+        <td><label for="checkbox-termi">Etudes terminees</label>        <input id="checkbox-termi" type="checkbox" checked="checked" onchange="$('#content-2').toggle();" /></td>
+        <td><label for="checkbox-infos">Informations Qualités</label>   <input id="checkbox-infos" type="checkbox" checked="checked" onchange="$('.rawInfos').toggle();" /></td>
+        <td><label for="checkbox-warns">Warnings</label>                <input id="checkbox-warns" type="checkbox" checked="checked" onchange="$('.rawWarns').toggle();" /></td>
+        <td><label for="checkbox-error">Errors</label>                  <input id="checkbox-error" type="checkbox" checked="checked" onchange="$('.rawError').toggle();" /></td>
+    </tr>
+</table>
+
+
+<div id="ganttChart" style="width: 100%; display:none;"></div>
+
+{% set typeEtude = {"Etude en cours" : etudesEnCours, "Etudes Terminees" : etudesTerminees } %}
+
+{%for label,etudes in typeEtude %}
+<table id="content-{{loop.index}}" class="table table-bordered table-striped">
+    <tr>
+        <th>{{ label }}</th>
+        <th>Client</th>
+        <th>Intervenants</th>
+    </tr>
+    {% for etude in etudesEnCours %}
+    <tr>
+        <th><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ getRefEtude(etude) }} {{ etude.nom }}</a></th>
+        <td></td>
+        <td></td>
+    </tr>
+    {% if etude.stateDescription %}
+    <tr class="rawInfos">
+        <td colspan="3">
+            <div class="alert alert-block alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <h4>Contrôle qualité :</h4>
+				{{ etude.stateDescription | nl2br }}
+            </div>
+        </td>
+    </tr>
+    {% endif %}
+    <tr class="rawError">
+        <td colspan="3">{% include "mgateSuiviBundle:Etude:Infos/error.html.twig" with  {'etude':  etude} %}</td>
+    </tr>
+    <tr class="rawWarns">
+        <td colspan="3">{% include "mgateSuiviBundle:Etude:Infos/warning.html.twig" with  {'etude':  etude} %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+    <script src="{{ asset('js/highcharts.js') }}"></script>
+    <script src="{{ asset('js/highcharts-fr.js') }}"></script>
+    <script src="{{ asset('js/exporting.js') }}"></script>
+    
+    <script type="text/javascript">
+        {{ chart(chart) }}
+    </script>
+{% endblock %}

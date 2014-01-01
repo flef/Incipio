@@ -281,10 +281,8 @@ class ChartManager /*extends \Twig_Extension*/ {
 
         
         $style=array('color'=>'#000000', 'fontSize'=>'11px', 'fontFamily'=>'Calibri (Corps)');
-
         $ob = new Highchart();
         $ob->chart->renderTo('ganttChart');  // The #id of the div where to render the chart 
-        $ob->chart->height(100+count($etude->getPhases())*25);
         $ob->title->text('');
         $ob->xAxis->title(array('text'  => ""));
         $ob->xAxis->categories($cats);
