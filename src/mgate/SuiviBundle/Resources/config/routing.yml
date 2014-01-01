@@ -19,38 +19,27 @@ mgateSuivi_etude_suivi:
 mgateSuivi_etude_ajouter:
     pattern: /etude/ajouter
     defaults: {_controller: mgateSuiviBundle:Etude:add}
-    requirements:
-        id: \d+
 
 mgateSuivi_etude_voir:
-    pattern:   /etude/{id}
+    pattern:   /etude/{numero}
     defaults: {_controller: mgateSuiviBundle:Etude:voir}
     requirements:
-        id:  \d+
+        numero:  \d+
 
 mgateSuivi_etude_modifier:
-    pattern: /etude/modifier/{id}
+    pattern: /etude/modifier/{numero}
     defaults: {_controller: mgateSuiviBundle:Etude:modifier}
     requirements:
-        id: \d+
+        numero:  \d+
         
-mgateSuivi_etude_panel:
-    pattern:  /panel/test
-    defaults: {_controller: mgateSuiviBundle:Panel:test , page: 1}
-    requirements:
-      page : \d* 
+
        
 mgateSuivi_etude_supprimer:
-    pattern: /etude/supprimer/{id}
+    pattern: /etude/supprimer/{numero}
     defaults: {_controller: mgateSuiviBundle:Etude:delete}
     requirements:
-        id: \d+
+        numero: \d+
         
-#mgateSuivi_ap_generer:
-#    pattern: /ap/generer/{id}
-#    defaults: {_controller: mgateSuiviBundle:Ap:generer}
-#    requirements:
-#        id: \d+  
         
 mgateSuivi_ap_voir:
     pattern: /ap/voir/{id}

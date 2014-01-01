@@ -44,7 +44,7 @@
 			<li class="divider"></li>
             <li class="dropdown-header">Mes Etudes:</li>
             {% for etude in etudesSuiveur %}
-            <li><a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"><span class="glyphicon glyphicon-thumbs-up"></span> {{ getRefEtude(etude) }}</a></li>
+            <li><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"><span class="glyphicon glyphicon-thumbs-up"></span> {{ getRefEtude(etude) }}</a></li>
             {% endfor%}
         {% endif %}
             {% if is_granted('ROLE_CA') %}

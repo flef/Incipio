@@ -12,7 +12,7 @@
 
         {% for etude in etudes %}
             <li>
-                <a href="{{ path('mgateSuivi_etude_voir', {'id': etude.id}) }}"> etude numéro {{ etude.id }}</a>
+                <a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> etude numéro {{ etude.id }}</a>
                 , faite par le mandat {{ etude.mandat }} créée le {{ etude.dateCreation|date("d/m/Y") }}
             </li>
         {% else %}

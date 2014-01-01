@@ -261,6 +261,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
 /// rajout à la main
+    
+    public function getNumero(){
+        return $this->mandat * 100 + $this->num;
+    }
     public function isKnownProspect() {
         return $this->knownProspect;
     }

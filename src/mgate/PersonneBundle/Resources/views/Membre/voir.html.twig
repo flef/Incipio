@@ -61,7 +61,7 @@ Affichage d'un Membre - {{ parent() }}
         </tr>
     {% for mission in membre.missions %}
         <tr class="mandats {{ "now"|date('Ymd')  > getDateFin(mission.etude) |date('Ymd') ? 'danger' : 'success'}}">
-            <td colspan="2"><a href="{{path("mgateSuivi_etude_voir", {'id' : mission.etude.id})}}" title="{{ mission.etude.nom }}">{{ getRefEtude(mission.etude) }}</a></td>
+            <td colspan="2"><a href="{{path("mgateSuivi_etude_voir", {'numero' : mission.etude.numero})}}" title="{{ mission.etude.nom }}">{{ getRefEtude(mission.etude) }}</a></td>
             <td>Du : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
             <td>Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</td>
         </tr>

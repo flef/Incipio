@@ -139,7 +139,7 @@ class EtudeController extends Controller {
                 if ($this->get('request')->get('ap')) {
                     return $this->redirect($this->generateUrl('mgateSuivi_ap_rediger', array('id' => $etude->getId())));
                 } else {
-                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                    return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $etude->getNumero())));
                 }
             }
         }
@@ -152,11 +152,11 @@ class EtudeController extends Controller {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function voirAction($id) {
+    public function voirAction($numero) {
         $em = $this->getDoctrine()->getManager();
 
         $etude = new \mgate\SuiviBundle\Entity\Etude;
-        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($numero);
 
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');
@@ -181,17 +181,18 @@ class EtudeController extends Controller {
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function modifierAction($id) {
+    public function modifierAction($numero) {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
-            throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
+            throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
 			
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
         $form = $this->createForm(new EtudeType, $etude);
-        $deleteForm = $this->createDeleteForm($id);
+
+        $deleteForm = $this->createDeleteForm($numero);
         if ($this->get('request')->getMethod() == 'POST') {
             $form->bind($this->get('request'));
 
@@ -199,7 +200,7 @@ class EtudeController extends Controller {
                 $em->persist($etude);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $etude->getId())));
+                return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $etude->getNumero())));
             }
         }
 
@@ -213,8 +214,8 @@ class EtudeController extends Controller {
     /**
      * @Secure(roles="ROLE_ADMIN")
      */
-    public function deleteAction($id) {
-        $form = $this->createDeleteForm($id);
+    public function deleteAction($numero) {
+        $form = $this->createDeleteForm($numero);
         $request = $this->getRequest();
 
         $form->bind($request);
@@ -222,10 +223,10 @@ class EtudeController extends Controller {
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
-                throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+            if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
+                throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
 				
-			if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
+			if($this->get('mgate.etude_manager')->confidentielRefus($entity, $this->container->get('security.context')))
 				throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
             /**
@@ -242,7 +243,12 @@ class EtudeController extends Controller {
         return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage'));
     }
 
-    private function createDeleteForm($id) {
+    private function createDeleteForm($numero) {
+        $em = $this->getDoctrine()->getManager();
+         if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
+                throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
+         else
+             $id = $entity->getId();
         return $this->createFormBuilder(array('id' => $id))
                         ->add('id', 'hidden')
                         ->getForm()
