@@ -1,0 +1,13 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des notes de frais - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+    <ul>
+        {% for nf in nfs %}
+        <li>nfs.objet</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
