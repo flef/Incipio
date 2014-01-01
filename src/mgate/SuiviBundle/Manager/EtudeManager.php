@@ -382,7 +382,7 @@ class EtudeManager extends \Twig_Extension {
         //ordre PVI
         foreach ($etude->getPvis() as $pvi) {
             if (isset($pviAnterieur)) {
-                if ($pvi->getDateSignature() != NULL && $pvi->getDateSignature() <= $pviAnterieur->getDateSignature()) {
+                if ($pvi->getDateSignature() != NULL && $pvi->getDateSignature() < $pviAnterieur->getDateSignature()) {
                     $error = array('titre' => 'PVIS - Date de signature : ', 'message' => 'La date de signature du PVI1 doit être antérieure à celle du PVI2 et ainsi de suite.
            ');
                     array_push($errors, $error);
@@ -394,9 +394,34 @@ class EtudeManager extends \Twig_Extension {
         
         // PVR < fin d'étude
         if ($etude->getPvr()) {
-            if ($this->getDateFin($etude, true) != NULL && $etude->getPvr()->getDateSignature() >= $this->getDateFin($etude, true)) {
+            if ($this->getDateFin($etude, true) != NULL && $etude->getPvr()->getDateSignature() > $this->getDateFin($etude, true)) {
                 $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure à la date de fin de l\'étude. Consulter la Convention Client ou l\'Avenant à la Convention Client pour la fin l\'étude.');
                 array_push($errors, $error);
+            }
+        }
+        if ($etude->getPvr()) {
+            if ($this->getDateFin($etude, true) != NULL && $etude->getPvr()->getDateSignature() > $this->getDateFin($etude, true)) {
+                $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure à la date de fin de l\'étude. Consulter la Convention Client ou l\'Avenant à la Convention Client pour la fin l\'étude.');
+                array_push($errors, $error);
+            }
+        }
+        
+        // CE + 1w < RM
+        foreach ($etude->getMissions() as $mission) {
+                if($intervenant = $mission->getIntervenant()){
+                $dateSignature = $dateDebutOm = NULL;
+                if($mission->getDateSignature() != NULL) $dateSignature = clone $mission->getDateSignature();
+                if($mission->getDebutOm() != NULL ) $dateDebutOm = clone $mission->getDebutOm();
+                if ($dateSignature == NULL || $dateDebutOm == NULL ) continue;
+                    
+                $error = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La date de signature de la Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' doit être antérieure d\'au moins une semaine à la date de signature du récapitulatifs de mission.');
+                    
+                if ((   $intervenant->getDateConventionEleve() == NULL ||
+                        $intervenant->getDateConventionEleve() > $dateSignature->modify('-7 day')) || 
+                    (   $intervenant->getDateConventionEleve() == NULL ||
+                        $intervenant->getDateConventionEleve() > $dateDebutOm->modify('-7 day'))){
+                    array_push($errors, $error);                        
+                }
             }
         }
         
@@ -426,7 +451,7 @@ class EtudeManager extends \Twig_Extension {
          
          // Description de l'AP suffisante
          if (strlen($etude->getDescriptionPrestation()) < 300) {
-            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 300 caractères');
+            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude dans l\'AP fait moins de 300 caractères');
             array_push($errors, $error);
         }
         
@@ -441,12 +466,12 @@ class EtudeManager extends \Twig_Extension {
         $length = strlen($etude->getDescriptionPrestation());
         if( $length > 300 && $length  < 500  )
         {
-            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude fait moins de 500 caractères');  
+            $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude dans l\'AP fait moins de 500 caractères');  
             array_push($warnings, $error);
         }
         
         // Entité sociale absente
-        if($etude->getProspect()->getEntite()==NULL)
+        if($etude->getProspect()->getEntite()===NULL)
         {
             $warning = array('titre' => 'Entité sociale : ', 'message' => 'L\'entité sociale est absente. Vérifiez bien que la société est bien enregistrée et toujours en activité.');  
             array_push($warnings, $warning);
@@ -462,6 +487,20 @@ class EtudeManager extends \Twig_Extension {
             {
                 $warning = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de vingt jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
                 array_push($warnings, $warning);
+            }
+        }
+        
+        // Date RM Mal renseignée
+                // CE + 1w < RM
+        foreach ($etude->getMissions() as $mission) {
+            if($intervenant = $mission->getIntervenant()){
+                $dateSignature = $dateDebutOm = NULL;
+                if($mission->getDateSignature() != NULL) $dateSignature = clone $mission->getDateSignature();
+                if($mission->getDebutOm() != NULL ) $dateDebutOm = clone $mission->getDebutOm();
+                if ($dateSignature == NULL || $dateDebutOm == NULL ){
+                    $warning = array('titre' => 'Dates sur le RM de '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'Le RM de '.$intervenant->getPersonne()->getPrenomNom().' est mal rédigé. Vérifiez les dates de signature et de début de mission.');
+                    array_push($warnings, $warning);
+                }
             }
         }
         
