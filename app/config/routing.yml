@@ -2,9 +2,9 @@ mgate_formation:
     resource: "@mgateFormationBundle/Resources/config/routing.yml"
     prefix:   /
 
-mgate_treso:
+mgateTresoBundle:
     resource: "@mgateTresoBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /Tresorerie
 
 navbar:
     resource: "@NavbarBundle/Resources/config/routing.yml"
