@@ -204,7 +204,7 @@ class ProcesVerbalController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('id' => $entity->getEtude()->getId())));
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $entity->getNumero())));
     }
 
     private function createDeleteForm($id_pv)

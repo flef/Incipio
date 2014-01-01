@@ -27,7 +27,7 @@ class ThreadListener
         }
         elseif ($entity instanceof Etude)
         {
-            $this->container->get('mgate_comment.thread')->creerThread("etude_", $this->container->get('router')->generate('mgateSuivi_etude_voir', array('id' => $entity->getId())), $entity);
+            $this->container->get('mgate_comment.thread')->creerThread("etude_", $this->container->get('router')->generate('mgateSuivi_etude_voir', array('numero' => $entity->getNumero())), $entity);
         }
     }
 }
