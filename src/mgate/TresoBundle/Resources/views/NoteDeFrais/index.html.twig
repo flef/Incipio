@@ -4,10 +4,50 @@
 	Gestion des notes de frais - {{ parent() }}
 {% endblock %}
 
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": false,
+			"aaSorting": [[0,'desc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+    
 {% block content_bundle %}
-    <ul>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Référence</th>
+            <th>Demandeur</th>
+            <th>Objet</th>
+            <th>Montant HT</th>
+            <th>Montant TVA</th>
+        </tr>
+        </thead>        
         {% for nf in nfs %}
-        <li>nfs.objet</li>
+        <tr>
+            <td>{{ nf.mandat }}-NF{{ nf.numero}}-{{ nf.demandeur.membre.identifiant }}</td>
+            <td>{{ nf.demandeur.prenomNom }}</td>
+            <td>{{ nf.objet | nl2br }}</td>
+            <td>{{ nf.montantHT }}</td>
+            <td>{{ nf.montantTVA }}</td>
+        </tr>
         {% endfor %}
-    </ul>
+    </table>
+
+{% endblock %}
+    
+    
+{% block javascript %}
+    {{ parent() }}
 {% endblock %}

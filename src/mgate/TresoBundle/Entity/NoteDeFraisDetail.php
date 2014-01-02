@@ -23,6 +23,7 @@ class NoteDeFraisDetail
     
     /**
      * @ORM\ManyToOne(targetEntity="NoteDeFrais", inversedBy="details", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $noteDeFrais;
 
@@ -70,6 +71,14 @@ class NoteDeFraisDetail
 
     
     //categorie à ajouter via ManytoMany compteComptable
+    
+    // Perso
+    public static function getTypeChoices(){
+        return array(1 => 'Classique',
+            2 => 'Kilométrique',);
+    } 
+    
+    // Getter Setter Auto Generated
 
     /**
      * Get id

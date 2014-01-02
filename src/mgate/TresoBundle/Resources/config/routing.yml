@@ -7,21 +7,23 @@ mgateTreso_NoteDeFrais_index:
     defaults: { _controller: mgateTresoBundle:NoteDeFrais:index }
     
 mgateTreso_NoteDeFrais_voir:
-    pattern:  /NoteDeFrais/[id}
+    pattern:  /NoteDeFrais/{id}
     defaults: { _controller: mgateTresoBundle:NoteDeFrais:voir }
+    requirements:
+        id: \d+
     
 mgateTreso_NoteDeFrais_ajouter:
     pattern:  /NoteDeFrais/Ajouter
     defaults: { _controller: mgateTresoBundle:NoteDeFrais:modifier,  id:-1  }
     
 mgateTreso_NoteDeFrais_modifier:
-    pattern:  /NoteDeFrais/Modifier/[id}
+    pattern:  /NoteDeFrais/Modifier/{id}
     defaults: { _controller: mgateTresoBundle:NoteDeFrais:modifier }
     requirements:
         id: \d+
     
 mgateTreso_NoteDeFrais_supprimer:
-    pattern:  /NoteDeFrais/Supprimer/[id}
+    pattern:  /NoteDeFrais/Supprimer/{id}
     defaults: { _controller: mgateTresoBundle:NoteDeFrais:supprimer }
     requirements:
         id: \d+
