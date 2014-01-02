@@ -37,14 +37,14 @@ class NoteDeFraisDetail
     /**
      * @var float
      *
-     * @ORM\Column(name="prixHT", type="decimal", nullable=true)
+     * @ORM\Column(name="prixHT", type="decimal", precision=6, scale=2, nullable=true)
      */
     private $prixHT;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="tauxTVA", type="decimal", nullable=true)
+     * @ORM\Column(name="tauxTVA", type="decimal", precision=6, scale=2, nullable=true)
      */
     private $tauxTVA;
 
