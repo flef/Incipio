@@ -47,7 +47,7 @@ class NoteDeFraisController extends Controller
         if (!$nf= $em->getRepository('mgateTresoBundle:NoteDeFrais')->find($id)) {
             $nf = new NoteDeFrais;
             $now = new \DateTime("now");
-            $nf->setDateSignature($now);           
+            $nf->setDate($now);           
         }
 
         $form = $this->createForm(new NoteDeFraisType, $nf);
