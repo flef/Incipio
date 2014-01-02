@@ -32,6 +32,7 @@
             <th>Objet</th>
             <th>Montant HT</th>
             <th>Montant TVA</th>
+            <th>Montant TTC</th>
         </tr>
         </thead>        
         {% for nf in nfs %}
@@ -41,6 +42,7 @@
             <td>{{ nf.objet | nl2br }}</td>
             <td>{{ nf.montantHT |number_format(2, ',', ' ')}}</td>
             <td>{{ nf.montantTVA |number_format(2, ',', ' ')}}</td>
+            <td>{{ (nf.montantHT + nf.montantTVA) |number_format(2, ',', ' ')}}</td>
         </tr>
         {% endfor %}
     </table>
