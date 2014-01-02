@@ -77,7 +77,7 @@ class NoteDeFrais
         $TVA = 0;
         foreach ($this->details as $detail){
            if($detail->getType() == 1)
-               $TVA += $detail->getPrixHT() * $detail->getTauxTVA();
+               $TVA += $detail->getPrixHT() * $detail->getTauxTVA() / 100;
        }
        return $TVA;
     }

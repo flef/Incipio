@@ -40,9 +40,9 @@
             <td><a href="{{ path('mgateTreso_NoteDeFrais_voir', {'id': nf.id})}}">{{ nf.mandat }}-NF{{ nf.numero}}-{{ nf.demandeur.membre.identifiant }}</a></td>
             <td>{{ nf.demandeur.prenomNom }}</td>
             <td>{{ nf.objet | nl2br }}</td>
-            <td>{{ nf.montantHT |number_format(2, ',', ' ')}}</td>
-            <td>{{ nf.montantTVA |number_format(2, ',', ' ')}}</td>
-            <td>{{ (nf.montantHT + nf.montantTVA) |number_format(2, ',', ' ')}}</td>
+            <td style="text-align: right;">{{ nf.montantHT |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ nf.montantTVA |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ (nf.montantHT + nf.montantTVA) |number_format(2, ',', ' ')}} €</td>
         </tr>
         {% endfor %}
     </table>
