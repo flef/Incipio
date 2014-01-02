@@ -41,9 +41,9 @@
         {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA) %}
         {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA))%}
         <tr>
-            <td>[Code Compte]{{ detail.description }}</td>
+            <td>{{ detail.description }}[Code Compte]</td>
             <td>{{ detail.prixHT |number_format(2, ',', ' ')}} €</td>
-            <td>{{ detail.tauxTVA |number_format(2, ',', ' ')}} %</td>
+            <td>{{ (detail.tauxTVA * 100) |number_format(2, ',', ' ')}} %</td>
             <td>{{ (detail.prixHT * detail.tauxTVA) |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.prixHT * ( 1 + detail.tauxTVA )) |number_format(2, ',', ' ')}} €</td>
         </tr>
@@ -61,7 +61,7 @@
         {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
         {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
         <tr>
-            <td>[Code Compte]{{ detail.description }}</td>
+            <td>{{ detail.description }}[Code Compte]</td>
             <td>{{ detail.kilometrage }} km</td>
             <td colspan="2">{{ (detail.tauxKm / 100) |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ')}} €</td>
