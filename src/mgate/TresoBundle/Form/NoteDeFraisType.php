@@ -6,6 +6,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\TresoBundle\Form\NoteDeFraisDetailType;
+use mgate\PersonneBundle\Entity\PersonneRepository;
 
 class NoteDeFraisType extends AbstractType {
 
@@ -26,7 +27,15 @@ class NoteDeFraisType extends AbstractType {
                     'allow_delete' => true,
                     'prototype' => true,
                     'by_reference' => false,
-                ));
+                ))
+                ->add('demandeur','genemu_jqueryselect2_entity',array (
+                      'label' => 'Demandeur',
+                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                       'property' => 'prenomNom',
+                       'query_builder' => function(PersonneRepository $pr) {
+                            return $pr->getMembreOnly();
+                        },
+                       'required' => true));
     }
 
     public function getName() {

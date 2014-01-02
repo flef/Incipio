@@ -5,5 +5,105 @@
 {% endblock %}
 
 {% block content_bundle %}
-    <input name="save" type="submit" value="Enregistrer" class="btn" />
+<h2>Formulaires</h2>
+<form method="post" {{ form_enctype(form) }}>
+    <input name="save" type="submit" value="Enregistrer la Note de Frais" class="btn" />
+    <br/><br/>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.mandat) }}</th>
+            <td>{{ form_widget(form.mandat) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.numero) }}</th>
+            <td>{{ form_widget(form.numero) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.demandeur) }}</th>
+            <td>{{ form_widget(form.demandeur) }}</td>
+        </tr>  
+        <tr>
+            <th>{{ form_label(form.objet) }}</th>
+            <td>{{ form_widget(form.objet) }}</td>
+        </tr>      
+    </table>
+    <table class="table table-bordered table-striped" id="details" data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
+        <tr>
+            <th colspan="2"><a href="#" id="addDetail">+</a> Détails</th>
+        </tr>
+        {% for detail in form.details %}
+        <tr id="detail">
+            <td></td>
+            <td>{{ form_widget(detail) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+   
+	{{ form_widget(form) }}  
+</form>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+<script type="text/javascript">
+// Récupère le div qui contient la collection de tags
+var collectionHolderDetails = $('#details');
+var $addDetailButton = $("#addDetail");
+
+jQuery(document).ready(function() {
+    var i = 0;
+    var j = 0;
+    $("tr#detail").each(function(){
+        addDeleteButton(this);
+    });
+   
+    
+    $addDetailButton.on('click', function(e) {
+        // empêche le lien de créer un « # » dans l'URL
+        e.preventDefault();
+
+        // ajoute un nouveau formulaire detail (voir le prochain bloc de code)
+        addTagForm(collectionHolderDetails, i, 'detail');
+        i++;
+    });
+    
+});
+
+
+function addTagForm(collectionHolder, i, type) {
+    // Récupère l'élément ayant l'attribut data-prototype comme expliqué plus tôt
+    var prototype = collectionHolder.attr('data-prototype');
+
+    // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+    // la longueur de la collection courante
+    var newForm = prototype.replace(/__name__/g, collectionHolderDetails.children().first().children().length);
+    newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
+    
+    // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+    var $newForm = collectionHolder.append(newForm); 
+    addDeleteButton($('#'+type+i));
+    
+}   
+
+      
+function addDeleteButton($tag) {
+    var $delete = $('<button class="btn" id="myButtonDelete" class="btn">X</button>');
+    $($tag).children().first().append($delete);
+      
+    $delete.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        //CONFIRM confirmation suppression
+        var message = "Êtes vous sûr de vouloir supprimer cette ligne ?";
+        bootbox.confirm(message, function(result) {
+            if (result) {
+                $tag.remove();
+            }
+        });
+   });
+    
+}  
+        </script>
 {% endblock %}

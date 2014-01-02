@@ -8,7 +8,7 @@ use mgate\SuiviBundle\Entity\DocType as DocType;
 /**
  * NoteDeFrais
  *
- * @ORM\Table()
+ @ @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
  * @ORM\Entity
  */
 class NoteDeFrais extends DocType
@@ -32,7 +32,7 @@ class NoteDeFrais extends DocType
     /**
      * @var integer $num
      *
-     * @ORM\Column(name="num", type="integer", nullable=false)
+     * @ORM\Column(name="numero", type="integer", nullable=false)
      */
     private $numero;
     
@@ -43,16 +43,41 @@ class NoteDeFrais extends DocType
     private $objet;
     
     /**
-     * @ORM\OneToMany(targetEntity="NoteDeFraisDetail", mappedBy="noteDeFrais", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="NoteDeFraisDetail", mappedBy="noteDeFrais", cascade={"persist", "merge", "refresh", "remove"})
      */
     private $details;
     
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $demandeur;
 
 
+    // Perso
+    public function getMontantHT(){
+       $montantHT = 0;
+       foreach ($this->details as $detail){
+           if($detail->getType() == 1)
+               $montantHT += $detail->getPrixHT();
+           else
+               $montantHT += $detail->getKilometrage() * $detail->getTauxKm() / 100;           
+       }
+       return $montantHT;
+    }
+    
+    public function getMontantTVA(){
+        $TVA = 0;
+        foreach ($this->details as $detail){
+           if($detail->getType() == 1)
+               $TVA += $detail->getPrixHT() * $detail->getTauxTVA() / 100;
+       }
+       return $TVA;
+    }
+
+
+    
+    
     /**
      * Get id
      *
