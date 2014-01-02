@@ -67,6 +67,7 @@
             <td colspan="2">{{ (detail.tauxKm / 100) |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ')}} €</td>
         </tr>
+        {% endfor %}
         <tr>
             <th colspan="5" class="danger">Total</th>               
         </tr>
@@ -75,8 +76,6 @@
             <td colspan="2">{{ totalTVA |number_format(2, ',', ' ')}} € de TVA</td>
             <td>{{ totalTTC |number_format(2, ',', ' ')}} € TTC</td>
         </tr>
-        
-        {% endfor %}
     </table>
     <table class="table">
         <tr>
