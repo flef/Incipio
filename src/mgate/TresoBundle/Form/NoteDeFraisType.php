@@ -35,7 +35,8 @@ class NoteDeFraisType extends AbstractType {
                        'query_builder' => function(PersonneRepository $pr) {
                             return $pr->getMembreOnly();
                         },
-                       'required' => true));
+                       'required' => true))
+                ->add('date', 'genemu_jquerydate', array('label'=>'Date', 'required'=>true, 'widget'=>'single_text'));
     }
 
     public function getName() {

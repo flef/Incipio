@@ -20,8 +20,8 @@ class NoteDeFraisDetailType extends AbstractType {
                             'rows'=>5)
                         )
                     )
-                ->add('prixHT', 'number', array('label'=>'Prix H.T.', 'required' => false))
-                ->add('tauxTVA', 'number', array('label'=>'Taux TVA', 'required' => false))
+                ->add('prixHT', 'money', array('label'=>'Prix H.T.', 'required' => false))
+                ->add('tauxTVA', 'percent', array('label'=>'Taux TVA', 'required' => false))
                 ->add('kilometrage', 'integer', array('label'=>'Nombre de Kilomètre', 'required' => false))
                 ->add('tauxKm', 'integer', array('label'=>'Prix au kilomètre (en cts)', 'required' => false))
                 ->add('type', 'choice', array('choices' => NoteDeFraisDetail::getTypeChoices(), 'required' => true));
