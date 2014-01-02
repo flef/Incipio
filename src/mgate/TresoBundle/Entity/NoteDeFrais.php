@@ -23,7 +23,7 @@ class NoteDeFrais
     private $id;
     
      /**
-     * @var \DateTime $dateSignature
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="date",nullable=false)
      */
