@@ -11,7 +11,7 @@ use mgate\SuiviBundle\Entity\DocType as DocType;
  @ @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
  * @ORM\Entity
  */
-class NoteDeFrais extends DocType
+class NoteDeFrais
 {
     /**
      * @var integer
@@ -21,6 +21,13 @@ class NoteDeFrais extends DocType
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+     /**
+     * @var \DateTime $dateSignature
+     *
+     * @ORM\Column(name="date", type="date",nullable=false)
+     */
+    private $date;
     
     /**
      * @var integer $mandat
@@ -70,7 +77,7 @@ class NoteDeFrais extends DocType
         $TVA = 0;
         foreach ($this->details as $detail){
            if($detail->getType() == 1)
-               $TVA += $detail->getPrixHT() * $detail->getTauxTVA() / 100;
+               $TVA += $detail->getPrixHT() * $detail->getTauxTVA();
        }
        return $TVA;
     }
@@ -218,5 +225,28 @@ class NoteDeFrais extends DocType
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return NoteDeFrais
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
     }
 }
