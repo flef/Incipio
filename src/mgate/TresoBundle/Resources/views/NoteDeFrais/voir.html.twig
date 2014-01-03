@@ -39,8 +39,8 @@
         
         {% for detail in nf.details if detail.type == 1 %}
         {% set totalHT = totalHT + detail.prixHT %}
-        {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100)|number_format(2, ',', ' ') %}
-        {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100))|number_format(2, ',', ' ')%}
+        {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100) %}
+        {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100))%}
         <tr>
             <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
             <td>{{ detail.prixHT |number_format(2, ',', ' ')}} €</td>
@@ -59,8 +59,8 @@
             <th>Prix Total</th>
         </tr>
         {% for detail in nf.details if detail.type == 2 %}
-        {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100)|number_format(2, ',', ' ') %}
-        {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100)|number_format(2, ',', ' ') %}
+        {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
+        {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
         <tr>
             <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
             <td>{{ detail.kilometrage }} km</td>

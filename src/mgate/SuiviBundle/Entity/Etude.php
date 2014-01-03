@@ -240,7 +240,25 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      *
      */
     private $typePrestation;
-
+    
+    /**
+     * @var integer $domaineDeCompetence
+     *
+     * @ORM\Column(name="domainedecompetence", type="integer", nullable=true)
+     */
+    private $domaineDeCompetence;
+    
+    
+    /**
+     * @var integer $sourceDeProspection
+     *
+     * @ORM\Column(name="sourceDeProspection", type="integer", nullable=true)
+     */
+    private $sourceDeProspection;
+    
+    
+    
+    
     /**
      * Constructor
      */
@@ -1244,7 +1262,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
 
     public function getStateIDToString() {
         $tab = $this->getStateIDChoice();
-        return $tab[$this->stateID];
+        return $this->stateID ? $tab[$this->stateID] : "";
     }
 
     /**
@@ -1318,5 +1336,123 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     public function getGroupes() {
         return $this->groupes;
+    }
+
+    /**
+     * Set domaineDeCompetence
+     *
+     * @param integer $domaineDeCompetence
+     * @return Etude
+     */
+    public function setDomaineDeCompetence($domaineDeCompetence)
+    {
+        $this->domaineDeCompetence = $domaineDeCompetence;
+    
+        return $this;
+    }
+
+    /**
+     * Get domaineDeCompetence
+     *
+     * @return integer 
+     */
+    public function getDomaineDeCompetence()
+    {
+        return $this->domaineDeCompetence;
+    }
+    
+    /**
+     * Get domaineDeCompetenceChoice
+     *
+     * @return array
+     */
+    public static function getDomaineDeCompetenceChoice()
+    {
+        return array(   
+            1 => 'Conception de systèmes informatiques intégrant : des bases de données, de la programmation orientée objet, des réseaux informatiques ou des éléments temps réel.',
+            2 => 'Conception d’applications informatiques intégrant de la 3D, des images de synthèse, de l’animation, des jeux vidéo ou de l’infographie.',
+            3 => 'Conception de systèmes à dispositifs mobiles (cartes à puce, RFID, téléphonie) et communiquant avec un système distant (serveur, base de données).',
+            4 => 'Conception de systèmes de contrôle ou de commande électronique ou informatique.',
+            5 => 'Conception de circuits numériques et analogiques.',
+            6 => 'Conception de microsystèmes ou de nanosystèmes.',
+            7 => "Conception de systèmes utilisant les biotechnologies.",
+            8 => "Conseil en stratégie et organisation des applications technologiques.",
+            9 => 'Traduction de documents techniques.',
+            10 => 'Gestion de production et Logistique.',
+            );
+    }
+    
+    public function getDomaineDeCompetenceToString() {
+        $tab = $this->getDomaineDeCompetenceChoice();
+        return $this->domaineDeCompetence ? $tab[$this->domaineDeCompetence] : "";
+    }
+
+    /**
+     * Set sourceDeProspection
+     *
+     * @param integer $sourceDeProspection
+     * @return Etude
+     */
+    public function setSourceDeProspection($sourceDeProspection)
+    {
+        $this->sourceDeProspection = $sourceDeProspection;
+    
+        return $this;
+    }
+
+    /**
+     * Get sourceDeProspection
+     *
+     * @return integer 
+     */
+    public function getSourceDeProspection()
+    {
+        return $this->sourceDeProspection;
+    }
+    
+    /**
+     * Get sourceDeProspectionChoice
+     *
+     * @return array
+     */
+    public static function getSourceDeProspectionChoice()
+    {
+        return array(   
+            1 => 'Kiwi',
+            2 => 'Etude avec l\'Ecole',
+            3 => 'Relation école (EPRD, Incubateur, Direction...)',
+            4 => 'Participation aux évènements',
+            5 => 'Réseaux des Anciens',
+            6 => 'Réseaux des élèves',
+            7 => 'Autre',
+            );
+    }
+    
+    public function getSourceDeProspectionToString() {
+        $tab = $this->getSourceDeProspectionChoice();
+        return $this->sourceDeProspection ? $tab[$this->sourceDeProspection] : "";
+    }
+
+    /**
+     * Add procesVerbaux
+     *
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $procesVerbaux
+     * @return Etude
+     */
+    public function addProcesVerbaux(\mgate\SuiviBundle\Entity\ProcesVerbal $procesVerbaux)
+    {
+        $this->procesVerbaux[] = $procesVerbaux;
+    
+        return $this;
+    }
+
+    /**
+     * Remove procesVerbaux
+     *
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $procesVerbaux
+     */
+    public function removeProcesVerbaux(\mgate\SuiviBundle\Entity\ProcesVerbal $procesVerbaux)
+    {
+        $this->procesVerbaux->removeElement($procesVerbaux);
     }
 }

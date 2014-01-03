@@ -7,10 +7,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Form;
-use mgate\PersonneBundle\Entity\Prospect as Prospect;
-use mgate\PersonneBundle\Entity\Personne as Personne;
-use mgate\PersonneBundle\Entity\PersonneRepository as PersonneRepository;
-use mgate\PersonneBundle\Form\ProspectType as ProspectType;
+use mgate\PersonneBundle\Entity\Personne;
+use mgate\PersonneBundle\Entity\PersonneRepository;
+use mgate\PersonneBundle\Entity\Prospect;
+use mgate\PersonneBundle\Form\ProspectType;
+use mgate\SuiviBundle\Entity\Etude;
 
 class EtudeType extends AbstractType
 {
@@ -39,8 +40,10 @@ class EtudeType extends AbstractType
                        'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                        'property' => 'prenomNom',
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
-                       'required' => false));        
-              }
+                       'required' => false))
+              ->add('domaineDeCompetence', 'choice', array('choices' => Etude::getDomaineDeCompetenceChoice(), 'required' => false))
+              ->add('sourceDeProspection', 'choice', array('choices' => Etude::getSourceDeProspectionChoice(), 'required' => false));        
+    }
 
     public function getName()
     {
