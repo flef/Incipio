@@ -1,0 +1,44 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des comptes - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": false,
+			"aaSorting": [[0,'asc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_Compte_ajouter')}}';">Ajouter un compte</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Libellé</th>
+        </tr>
+        </thead>        
+        {% for compte in comptes %}
+        <tr>
+            <td><a href="{{ path('mgateTreso_Compte_modifier', {'id': compte.id})}}">{{ compte.numero |number_format(0, '', ' ')}}</a></td>
+            <td>{{ compte.libelle }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
