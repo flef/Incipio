@@ -26,9 +26,9 @@
 
 {% block content_bundle %}
 
-    <h2>Liste des Intervenants en activité</h2>
+    <h2>Liste des Intervenants</h2>
     <span>
-    Attention, cette liste présente moins d'informations sur les ontervenants que la liste des membres.
+    Liste des membres ayant déjà réalisé une mission.
     </span>
 
     <table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -52,7 +52,7 @@
             <td>REF : <span class="badge badge-{{ membre.dateConventionEleve ? "success" : "warning" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
             <td>
                     {% for mission in membre.missions %}
-                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve <= mission.debutOm ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
+                    <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve <= mission.debutOm |date_modify("-7 day") ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
                     | <a href="{{path("mgateSuivi_etude_voir", {'numero' : mission.etude.numero})}}">{{ getRefEtude(mission.etude)}}-{{ mission.etude.nom }}</a><br/>
                     {% endfor %}          
             </td>
