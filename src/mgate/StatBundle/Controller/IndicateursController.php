@@ -147,10 +147,15 @@ class IndicateursController extends Controller {
         /*         * **********************************************
          * 		Indicateurs Prospection Commerciale		*
          * ********************************************** */
-        // Nombre d'intervenants potentiel par promo (i.e. à CE signée)
+        // Provenance des études (tous mandats) par type de client
         $repartitionClient = new Indicateur();
-        $repartitionClient->setTitre('Répartition des Clients par Type')
-            ->setMethode('getRepartitionClient');
+        $repartitionClient->setTitre('Provenance de nos études par type de Client (tous mandats)')
+            ->setMethode('getRepartitionClientParNombreDEtude');
+        
+        // Provenance du chiffre d'Affaires (tous mandats) par type de client
+        $repartitionCAClient = new Indicateur();
+        $repartitionCAClient->setTitre('Provenance du chiffre d\'Affaires par type de Client (tous mandats)')
+            ->setMethode('getRepartitionClientSelonChiffreAffaire');
 
         $this->indicateursCollection
             ->setIndicateurs($chiffreAffaires, 'Suivi')
@@ -158,7 +163,8 @@ class IndicateursController extends Controller {
             ->setIndicateurs($ressourcesHumaines, 'Gestion')
             ->setIndicateurs($membresParPromo, 'Gestion')
             ->setIndicateurs($membres, 'Gestion')
-            ->setIndicateurs($repartitionClient, 'Com');
+            ->setIndicateurs($repartitionClient, 'Com')
+            ->setIndicateurs($repartitionCAClient, 'Com');
 
         //Enregistrement Cross Requete des Méthodes tolérées
         $_SESSION['autorizedMethods'] = $this->indicateursCollection->getAutorizedMethods();
@@ -196,35 +202,38 @@ class IndicateursController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
     }
 
+    
     /**
      * @Secure(roles="ROLE_CA")
      */
-    private function getRepartitionClient() {
+    private function getRepartitionClientSelonChiffreAffaire() {
         $em = $this->getDoctrine()->getManager();
         $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
 
 
-        $nombreClient = 0;
+        $chiffreDAffairesTotal = 0;
+        
         $repartitions = array();
 
         foreach ($etudes as $etude) {
-            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {
-                $nombreClient++;
+            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {                
                 $type = $etude->getProspect()->getEntiteToString();
-                array_key_exists($type, $repartitions) ? $repartitions[$type]++ : $repartitions[$type] = 1;
+                $CA = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                $chiffreDAffairesTotal += $CA;
+                array_key_exists($type, $repartitions) ? $repartitions[$type] += $CA : $repartitions[$type] = $CA;
             }
         }
 
 
         $data = array();
         $categories = array();
-        foreach ($repartitions as $type => $nombre) {
+        foreach ($repartitions as $type => $CA) {
             if ($type == NULL)
                 $type = "Autre";
-            $data[] = array($type, round($nombre / $nombreClient * 100, 2));
+            $data[] = array($type, round($CA / $chiffreDAffairesTotal * 100, 2));
         }
 
-        $series = array(array('type' => 'pie', 'name' => 'Répartition des Clients', 'data' => $data, 'nombreClient' => $nombreClient));
+        $series = array(array('type' => 'pie', 'name' => 'Provenance de nos études par type de Client (tous mandats)', 'data' => $data, 'CA Total' => $chiffreDAffairesTotal));
 
 
         /*         * ***********************
@@ -251,7 +260,75 @@ class IndicateursController extends Controller {
         /*         * ***********************
          * TEXTS AND LABELS
          */
-        $ob->title->text("Répartition des Types de Client ($nombreClient Clients)");
+        $ob->title->text("Répartition du CA selon le type de Client ($chiffreDAffairesTotal € CA)");
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %');
+
+        /*
+         *
+         * *********************** */
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
+    }
+    
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getRepartitionClientParNombreDEtude() {
+        $em = $this->getDoctrine()->getManager();
+        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+
+
+        $nombreClient = 0;
+        $repartitions = array();
+
+        foreach ($etudes as $etude) {
+            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {
+                $nombreClient++;
+                $type = $etude->getProspect()->getEntiteToString();
+                array_key_exists($type, $repartitions) ? $repartitions[$type]++ : $repartitions[$type] = 1;
+            }
+        }
+
+
+        $data = array();
+        $categories = array();
+        foreach ($repartitions as $type => $nombre) {
+            if ($type == NULL)
+                $type = "Autre";
+            $data[] = array($type, round($nombre / $nombreClient * 100, 2));
+        }
+
+        $series = array(array('type' => 'pie', 'name' => 'Provenance des études par type de Client (tous mandats)', 'data' => $data, 'nombreClient' => $nombreClient));
+
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // Plot Options
+        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer', 'showInLegend' => true, 'dataLabels' => array('enabled' => false)));
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->credits->enabled(false);
+
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text("Provenance des études par type de Client ($nombreClient Etudes)");
         $ob->tooltip->pointFormat('{point.percentage:.1f} %');
 
         /*
