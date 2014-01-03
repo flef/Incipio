@@ -106,21 +106,20 @@ class IndicateursController extends Controller {
             ->addCategorieIndicateurs('Treso')
             ->addCategorieIndicateurs('Gestion');
 
-        /*         * **********************************************
+        /************************************************
          * 			Indicateurs Suivi d'études			*
          * ********************************************** */
-        //Chiffre d'affaires en fonction du temps sur les Mandats
-        $chiffreAffaires = new Indicateur();
-        $chiffreAffaires->setTitre('Evolution du Chiffre d\'Affaires')
-            ->setMethode('getCA');
+        
+        // Taux d'avenant par mandat = Rate EtudeAvecAvenant/NombreEtude
+        $tauxAvenant = new Indicateur();
+        $tauxAvenant->setTitre('Taux d\'avenant par mandat')
+            ->setMethode('getTauxDAvenantsParMandat');
+        
+        // Cammember étude selon domaine de compétence 
+        // TODO : Selectionner un mandat default getMaxMandat
 
-        //Chiffre d'affaires par mandat
-        $chiffreAffairesMandat = new Indicateur();
-        $chiffreAffairesMandat->setTitre('Evolution du Chiffre d\'Affaires par Mandat')
-            ->setMethode('getCAM');
 
-
-        /*         * **********************************************
+        /************************************************
          * 			Indicateurs Gestion Asso			*
          * ********************************************** */
         // Nombre d'intervenants par promo 
@@ -138,33 +137,46 @@ class IndicateursController extends Controller {
         $membres->setTitre('Nombre de Membres')
             ->setMethode('getNombreMembres');
 
-        /*         * **********************************************
+        /************************************************
          * 				Indicateurs RFP					*
          * ********************************************** */
-        /*         * **********************************************
+        /************************************************
          * 			Indicateurs Trésorerie 			*
-         * ********************************************** */
-        /*         * **********************************************
+         * ********************************************** */      
+        //Chiffre d'affaires en fonction du temps sur les Mandats
+        $chiffreAffaires = new Indicateur();
+        $chiffreAffaires->setTitre('Evolution du Chiffre d\'Affaires')
+            ->setMethode('getCA');
+
+        //Chiffre d'affaires par mandat
+        $chiffreAffairesMandat = new Indicateur();
+        $chiffreAffairesMandat->setTitre('Evolution du Chiffre d\'Affaires par Mandat')
+            ->setMethode('getCAM');
+        
+        /************************************************
          * 		Indicateurs Prospection Commerciale		*
          * ********************************************** */
         // Provenance des études (tous mandats) par type de client
+        // TODO : selectionner un mandat default getMaxMandat -1 = tous les mandats
         $repartitionClient = new Indicateur();
         $repartitionClient->setTitre('Provenance de nos études par type de Client (tous mandats)')
             ->setMethode('getRepartitionClientParNombreDEtude');
         
         // Provenance du chiffre d'Affaires (tous mandats) par type de client
+        // TODO : selectionner un mandat default getMaxMandat -1 = tous les mandats
         $repartitionCAClient = new Indicateur();
         $repartitionCAClient->setTitre('Provenance du chiffre d\'Affaires par type de Client (tous mandats)')
             ->setMethode('getRepartitionClientSelonChiffreAffaire');
 
         $this->indicateursCollection
-            ->setIndicateurs($chiffreAffaires, 'Suivi')
-            ->setIndicateurs($chiffreAffairesMandat, 'Suivi')
+            ->setIndicateurs($chiffreAffaires, 'Treso')
+            ->setIndicateurs($chiffreAffairesMandat, 'Treso')
             ->setIndicateurs($ressourcesHumaines, 'Gestion')
             ->setIndicateurs($membresParPromo, 'Gestion')
             ->setIndicateurs($membres, 'Gestion')
             ->setIndicateurs($repartitionClient, 'Com')
-            ->setIndicateurs($repartitionCAClient, 'Com');
+            ->setIndicateurs($repartitionCAClient, 'Com')
+            ->setIndicateurs($tauxAvenant, 'Suivi');
 
         //Enregistrement Cross Requete des Méthodes tolérées
         $_SESSION['autorizedMethods'] = $this->indicateursCollection->getAutorizedMethods();
@@ -202,6 +214,99 @@ class IndicateursController extends Controller {
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
     }
 
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    // NB On se base pas sur les numéro mais les dates de signature CC !
+    private function getTauxDAvenantsParMandat() {
+        $etudeManager = $this->get('mgate.etude_manager');
+        $em = $this->getDoctrine()->getManager();
+
+        $Ccs = $em->getRepository('mgateSuiviBundle:Cc')->findBy(array(), array('dateSignature' => 'asc'));
+
+        /* Initialisation */
+        $nombreEtudesParMandat = array();
+        $nombreEtudesAvecAvenantParMandat = array();
+
+        $maxMandat = $etudeManager->getMaxMandatCc();
+
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $nombreEtudesParMandat[$i] = 0;
+        for ($i = 0; $i <= $maxMandat; $i++)
+            $nombreEtudesAvecAvenantParMandat[$i] = 0;
+        /*         * *************** */
+
+        foreach ($Ccs as $cc) {
+            $etude = $cc->getEtude();
+            $dateSignature = $cc->getDateSignature();
+            $signee = $etude->getStateID() == STATE_ID_EN_COURS_X
+                || $etude->getStateID() == STATE_ID_TERMINEE_X;
+
+            if ($dateSignature && $signee) {
+                $idMandat = $etudeManager->dateToMandat($dateSignature);
+
+                $nombreEtudesParMandat[$idMandat] ++;
+                if(count($etude->getAvs()->toArray()))
+                    $nombreEtudesAvecAvenantParMandat[$idMandat] ++;
+            }
+        }
+
+        $data = array();
+        $categories = array();
+        foreach ($nombreEtudesParMandat as $idMandat => $datas) {
+            if ($datas > 0) {
+                $categories[] = $idMandat;
+                $data[] = array('y' => 100 * $nombreEtudesAvecAvenantParMandat[$idMandat] / $datas, 'nombreEtudes' => $datas, 'nombreEtudesAvecAv' => $nombreEtudesAvecAvenantParMandat[$idMandat]);
+            }
+        }
+        $series = array(array("name" => "Taux d'avenant par Mandat", "colorByPoint" => true, "data" => $data));
+
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // OTHERS
+        $ob->chart->type('column');
+
+        /*         * ***********************
+         * DATAS
+         */
+        $series = array(array("name" => "Taux d'avenant", "colorByPoint" => true, "data" => $data));
+        $ob->series($series);
+        $ob->xAxis->categories($categories);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $ob->yAxis->min(0);
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->credits->enabled(false);
+        $ob->legend->enabled(false);
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text('Taux d\'avenant par Mandat');
+        $ob->yAxis->title(array('text' => "Taux (%)", 'style' => $style));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y:.2f} %<br/>avec {point.nombreEtudesAvecAv} sur {point.nombreEtudes} études');
+
+        /*
+         *
+         * *********************** */
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
+    }
+    
     
     /**
      * @Secure(roles="ROLE_CA")
