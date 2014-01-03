@@ -179,15 +179,15 @@ class Prospect
     
     public static function getEntiteChoice()
     {
-        return array(   0 => "Autre Type d'Entreprise",
+        return array(   
             1 => 'Particulier',
             2 => 'Association',
-            3 => 'Start-Up',
-            4 => 'Micro-Entreprises (moins de 10 salariés)',
-            5 => 'Très Petites Entreprises (moins de 20 salariés)',
-            6 => 'Petites et les Moyennes Entreprises (moins de 250 salariés)',
-            7 => 'Entreprises de Taille Intermédiaire (moins de 5000 salariés)',
-            8 => 'Grandes Entreprises (plus de 5000 salariés)',
+            3 => 'TPE (moins de 20 salariés)',
+            4 => 'PME / ETI (plus de 20 salariés)',
+            5 => 'Grand Groupe',
+            6 => 'Ecole',
+            7 => "Administration",
+            8 => "Junior-Entreprise",
             );
     }
     public static function getEntiteChoiceAssert()

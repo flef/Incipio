@@ -35,7 +35,7 @@
         </thead>        
         {% for compte in comptes %}
         <tr>
-            <td><a href="{{ path('mgateTreso_Compte_modifier', {'id': compte.id})}}">{{ compte.numero |number_format(0, '', ' ')}}</a></td>
+            <td><a href="{{ path('mgateTreso_Compte_modifier', {'id': compte.id})}}">{{ compte.numero }}</a></td>
             <td>{{ compte.libelle }}</td>
         </tr>
         {% endfor %}
