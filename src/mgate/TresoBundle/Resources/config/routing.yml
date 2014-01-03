@@ -1,6 +1,26 @@
 mgate_treso_urssaf:
     pattern:  /urssaf
     defaults: { _controller: mgateTresoBundle:Urssaf:index }
+    
+mgateTreso_Compte_index:
+    pattern:  /Compte
+    defaults: { _controller: mgateTresoBundle:Compte:index }
+        
+mgateTreso_Compte_ajouter:
+    pattern:  /Compte/Ajouter
+    defaults: { _controller: mgateTresoBundle:Compte:modifier,  id:-1  }
+    
+mgateTreso_Compte_modifier:
+    pattern:  /Compte/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:Compte:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_Compte_supprimer:
+    pattern:  /Compte/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:Compte:supprimer }
+    requirements:
+        id: \d+    
 
 mgateTreso_NoteDeFrais_index:
     pattern:  /NoteDeFrais

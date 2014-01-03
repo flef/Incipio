@@ -24,7 +24,14 @@ class NoteDeFraisDetailType extends AbstractType {
                 ->add('tauxTVA', 'number', array('label'=>'Taux TVA (%)', 'required' => false))
                 ->add('kilometrage', 'integer', array('label'=>'Nombre de Kilomètre', 'required' => false))
                 ->add('tauxKm', 'integer', array('label'=>'Prix au kilomètre (en cts)', 'required' => false))
-                ->add('type', 'choice', array('choices' => NoteDeFraisDetail::getTypeChoices(), 'required' => true));
+                ->add('type', 'choice', array('choices' => NoteDeFraisDetail::getTypeChoices(), 'required' => true))
+                ->add('compte', 'genemu_jqueryselect2_entity', array(
+                        'class' => 'mgate\TresoBundle\Entity\Compte',
+                        'property' => 'libelle',
+                        'required' => false,
+                        'label' => 'Catégorie',
+                        'configs' => array('placeholder' => 'Sélectionnez une catégorie', 'allowClear' => true),
+                        ));
     }
 
     public function getName() {

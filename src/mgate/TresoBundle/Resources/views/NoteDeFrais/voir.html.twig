@@ -39,10 +39,10 @@
         
         {% for detail in nf.details if detail.type == 1 %}
         {% set totalHT = totalHT + detail.prixHT %}
-        {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100) %}
-        {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100))%}
+        {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100)|number_format(2, ',', ' ') %}
+        {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100))|number_format(2, ',', ' ')%}
         <tr>
-            <td>{{ detail.description }}[Code Compte]</td>
+            <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero | number_format(0, '', ' ') }}</span>{% endif%}</td>
             <td>{{ detail.prixHT |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ')}} %</td>
             <td>{{ (detail.prixHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
@@ -59,10 +59,10 @@
             <th>Prix Total</th>
         </tr>
         {% for detail in nf.details if detail.type == 2 %}
-        {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
-        {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
+        {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100)|number_format(2, ',', ' ') %}
+        {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100)|number_format(2, ',', ' ') %}
         <tr>
-            <td>{{ detail.description }}[Code Compte]</td>
+            <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero | number_format(0, '', ' ')}}</span>{% endif%}</td>
             <td>{{ detail.kilometrage }} km</td>
             <td colspan="2">{{ (detail.tauxKm / 100) |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ')}} €</td>

@@ -68,6 +68,12 @@ class NoteDeFraisDetail
      * @ORM\Column(name="tauxKm", type="integer", nullable=true)
      */
     private $tauxKm;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Compte")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $compte;
 
     
     //categorie à ajouter via ManytoMany compteComptable
@@ -272,5 +278,28 @@ class NoteDeFraisDetail
     public function getNoteDeFrais()
     {
         return $this->noteDeFrais;
+    }
+
+    /**
+     * Set compte
+     *
+     * @param \mgate\TresoBundle\Entity\Compte $compte
+     * @return NoteDeFraisDetail
+     */
+    public function setCompte(\mgate\TresoBundle\Entity\Compte $compte = null)
+    {
+        $this->compte = $compte;
+    
+        return $this;
+    }
+
+    /**
+     * Get compte
+     *
+     * @return \mgate\TresoBundle\Entity\Compte 
+     */
+    public function getCompte()
+    {
+        return $this->compte;
     }
 }

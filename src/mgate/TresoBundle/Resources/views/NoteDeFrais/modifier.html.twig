@@ -42,7 +42,9 @@
                 <table class="table">
                     <tr>
                         <th>{{ form_label(detail.type) }}</th>
-                        <td colspan="3">{{ form_widget(detail.type) }}</td>
+                        <td>{{ form_widget(detail.type) }}</td>
+                        <th>{{ form_label(detail.compte) }}</th>
+                        <td>{{ form_widget(detail.compte) }}</td>
                     </tr>
                     <tr>
                         <th>{{ form_label(detail.description) }}</th>
@@ -136,14 +138,14 @@ function addDeleteButton($tag) {
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
-    $('select[id^="mgate_tresobundle_notedefraistype_details_"]').each(
+    $('select[id$="_type"]').each(
         function(){
             if($(this).val() == 1) $(this).closest('.table').find('#km').toggle();
             else $(this).closest('.table').find('#prix').toggle();
         }
     );
     
-    $('select[id^="mgate_tresobundle_notedefraistype_details_"]').change(
+    $('select[id$="_type"]').change(
         function(){
            $(this).closest('.table').find('#km').toggle();
            $(this).closest('.table').find('#prix').toggle();

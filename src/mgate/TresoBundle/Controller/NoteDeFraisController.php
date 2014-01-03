@@ -39,7 +39,7 @@ class NoteDeFraisController extends Controller
     
     
     /**
-     * @Secure(roles="ROLE_SUIVEUR")
+     * @Secure(roles="ROLE_CA")
      */
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getManager();
@@ -73,7 +73,7 @@ class NoteDeFraisController extends Controller
     }
     
     /**
-     * @Secure(roles="ROLE_CA")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function supprimerAction($id) {
         $em = $this->getDoctrine()->getManager();
