@@ -11,6 +11,10 @@
     <form method="post" {{ form_enctype(form) }}>
     <table class="table table-bordered table-striped standard">
         <tr>
+            <th>{{ form_label(form.categorie) }}</th>
+            <td>{{ form_widget(form.categorie) }}</td>
+        </tr>
+        <tr>
             <th>{{ form_label(form.numero) }}</th>
             <td>{{ form_widget(form.numero) }}</td>
         </tr>
