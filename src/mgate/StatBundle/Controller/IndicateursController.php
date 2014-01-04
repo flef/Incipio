@@ -17,6 +17,7 @@ class Indicateur {
 
     private $titre;
     private $methode;
+    private $options;
 
     public function getTitre() {
         return $this->titre;
@@ -24,6 +25,10 @@ class Indicateur {
 
     public function getMethode() {
         return $this->methode;
+    }
+    
+    public function hasOptions(){
+        return $this->options;
     }
 
     public function setTitre($x) {
@@ -34,8 +39,12 @@ class Indicateur {
     public function setMethode($x) {
         $this->methode = $x;
         return $this;
+    }    
+    
+    public function setOptions($x){
+        $this->options = $x;
+        return $this;
     }
-
 }
 
 class IndicateursCollection {
@@ -282,6 +291,7 @@ class IndicateursController extends Controller {
          * STYLE
          */
         $ob->yAxis->min(0);
+        $ob->yAxis->max(100);
         $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
         $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
         $ob->xAxis->labels(array('style' => $style));

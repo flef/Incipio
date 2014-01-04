@@ -34,9 +34,9 @@
         </tr>
         </thead>        
         {% for compte in comptes %}
-        <tr>
-            <td><a href="{{ path('mgateTreso_Compte_modifier', {'id': compte.id})}}">{{ compte.numero }}</a></td>
-            <td>{{ compte.libelle }}</td>
+        <tr {% if compte.categorie %}class="success"{% endif %}>
+            <td>{{ compte.numero }}</td>
+            <td><a href="{{ path('mgateTreso_Compte_modifier', {'id': compte.id})}}">{{ compte.libelle }}</a></td>
         </tr>
         {% endfor %}
     </table>
