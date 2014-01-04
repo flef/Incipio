@@ -34,9 +34,15 @@ class Compte
      * @ORM\Column(name="numero", type="integer", unique=true)
      */
     private $numero;
-
-
+    
     /**
+     * @var boolean
+     * 
+     * @ORM\Column(name="categorie", type="boolean")
+     */
+    private $categorie;
+
+        /**
      * Get id
      *
      * @return integer 
@@ -90,5 +96,28 @@ class Compte
     public function getNumero()
     {
         return $this->numero;
+    }
+    
+    /**
+     * Set categorie
+     *
+     * @param boolean $categorie
+     * @return Compte
+     */
+    public function setCategorie($categorie)
+    {
+        $this->categorie = $categorie;
+    
+        return $this;
+    }
+
+    /**
+     * Get categorie
+     *
+     * @return boolean
+     */
+    public function isCategorie()
+    {
+        return $this->categorie;
     }
 }
