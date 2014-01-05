@@ -63,9 +63,11 @@
 </form>
 {% endblock %}
 
+
 {% block javascript %}
     {{ parent() }}
     {{ form_javascript(form) }}
+
 <script type="text/javascript">
 // Récupère le div qui contient la collection de tags
 var collectionHolderFormateurs = $('#formateurs');
@@ -73,6 +75,18 @@ var $addFormateurButton = $("#addFormateur");
 
 var collectionHolderMembres = $('#membres');
 var $addMembreButton = $("#addMembres");
+
+function triggerJavascript(type,id)
+{
+    if(type == 'formateur'){
+        $field = $('select#{{form.formateurs.vars.id}}_'+ id);
+        {{ form_javascript(form.formateurs.vars.prototype, true) }}
+    }
+    else{
+        $field = $('select#{{form.membresPresents.vars.id}}_'+ id);
+        {{ form_javascript(form.membresPresents.vars.prototype, true) }}
+    }
+}
 
 jQuery(document).ready(function() {
     var i = 0;
@@ -111,18 +125,22 @@ function addTagForm(collectionHolder, i, type) {
 
     // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
     // la longueur de la collection courante
+    var id = 0;
     if(type == 'formateur'){
-        var newForm = prototype.replace(/__name__/g, collectionHolderFormateurs.children().first().children().length);
+        id = collectionHolderFormateurs.children().first().children().length;
+        var newForm = prototype.replace(/__name__/g, id);
         newForm = '<tr id="'+type+i+'"><td></td><td>'+newForm+'</td></tr>';
     }
     else{
-        var newForm = prototype.replace(/__name__/g, collectionHolderMembres.children().length);
+        id = collectionHolderMembres.children().length;
+        var newForm = prototype.replace(/__name__/g, id);
         newForm= '<div class="col-md-4" id="'+type+i+'"><span></span> '+newForm+'</div>';
     }
     
     // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
     var $newForm = collectionHolder.append(newForm); 
     addDeleteButton($('#'+type+i));
+    triggerJavascript(type, id);
     
 }   
 
