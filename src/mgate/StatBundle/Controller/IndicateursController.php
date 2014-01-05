@@ -294,11 +294,11 @@ class IndicateursController extends Controller {
         /*         * ***********************
          * TEXTS AND LABELS
          */
-        $ob->title->text('Nombre de formations théorique par mandat');
+        $ob->title->text('Nombre de présents aux formations');
         $ob->yAxis->title(array('text' => "Nombre de formations", 'style' => $style));
-        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->xAxis->title(array('text' => "Date", 'style' => $style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
-        $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name}');
+        $ob->tooltip->pointFormat('{point.y} présent le {point.date}<br />{point.name}');
         $ob->legend->layout('vertical');
         $ob->legend->y(40);
         $ob->legend->x(90);
@@ -333,7 +333,7 @@ class IndicateursController extends Controller {
         ksort($formationsParMandat); // Tire selon les promos
         foreach ($formationsParMandat as $mandat => $formations) {
             $data[] = count($formations);
-            $categories[] = 'Mandat' . $mandat;
+            $categories[] = 'Mandat ' . $mandat;
         }
         $series = array(array("name" => "Nombre de formations", "colorByPoint" => true, "data" => $data));
 

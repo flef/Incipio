@@ -26,7 +26,7 @@ class FormationType extends AbstractType {
                         'query_builder' => function(PersonneRepository $pr) {
                             return $pr->getMembreOnly();
                         },
-                        'required' => false),
+                    'required' => false),
                     'allow_add' => true,
                     'allow_delete' => true,
                     'by_reference' => false,
