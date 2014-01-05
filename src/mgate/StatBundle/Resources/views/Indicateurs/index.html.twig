@@ -6,7 +6,7 @@ Accueil - {{ parent() }}
 
 {% block content_bundle %} 
     <ul id="indicateursLink" class="nav nav-tabs">
-        <li class="active"><a href="#gestion" data-toggle="tab" data-loaded="false">Gestion Associative</a></li>
+        <li class="active"><a href="#gestion" data-toggle="tab" data-loaded="true">Gestion Associative</a></li>
         <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">Recrutement Formation</a></li>
         <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">Gestion d'études</a></li>
         <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">Trésorerie</a></li>
@@ -17,7 +17,11 @@ Accueil - {{ parent() }}
             {% for indicateur in indicateursGestion %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
-                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                            <h3>{{ indicateur.titre }}</h3>
+                            <br/>
+                            <img src="{{ asset('img/loading.gif')}}"/>
+                        </div>                        
                     </div>
                 </div>
                 {% endfor %}
@@ -26,7 +30,11 @@ Accueil - {{ parent() }}
            {% for indicateur in indicateursRfp %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
-                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                            <h3>{{ indicateur.titre }}</h3>
+                            <br/>
+                            <img src="{{ asset('img/loading.gif')}}"/>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -35,7 +43,11 @@ Accueil - {{ parent() }}
                 {% for indicateur in indicateursSuivi %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
-                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                            <h3>{{ indicateur.titre }}</h3>
+                            <br/>
+                            <img src="{{ asset('img/loading.gif')}}"/>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -44,7 +56,11 @@ Accueil - {{ parent() }}
                 {% for indicateur in indicateursTreso %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
-                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                            <h3>{{ indicateur.titre }}</h3>
+                            <br/>
+                            <img src="{{ asset('img/loading.gif')}}"/>
+                        </div>
                     </div>
                 </div>
                 {% endfor %} 
@@ -53,7 +69,11 @@ Accueil - {{ parent() }}
                 {% for indicateur in indicateursCom %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
-                        <div id="{{indicateur.methode}}" style="min-width: 400px; height: 500px; margin: 0 auto">{{ indicateur.titre }}</div>
+                        <div id="{{indicateur.methode}}" style="min-width: 400px; margin: 0 auto; text-align: center;">
+                            <h3>{{ indicateur.titre }}</h3>
+                            <br/>
+                            <img src="{{ asset('img/loading.gif')}}"/>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -79,6 +99,15 @@ function getChartAsync(sender, chart){
           $('#jsChart').append(data);
         });
 };
+
+$(document).ready(
+function(){
+    $($($('.active').children().first().attr('href'))).children().each(
+    function(){
+        getChartAsync($(this).attr('id'),$(this).attr('id'));
+    });
+    $(this).children().first().attr('data-loaded',true)
+});
 
 
 $('#indicateursLink').children().each(
