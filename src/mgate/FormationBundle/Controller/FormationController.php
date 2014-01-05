@@ -29,10 +29,10 @@ class FormationController extends Controller
     public function listerAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('mgateFormationBundle:Formation')->findAll();
-      
+        $formationsParMandat = $em->getRepository('mgateFormationBundle:Formation')->findAllByMandat();
+              
         return $this->render('mgateFormationBundle:Formations:lister.html.twig', array(
-            'formations' => $entities,
+            'formationsParMandat' => $formationsParMandat,
         ));
     }
     
@@ -42,10 +42,11 @@ class FormationController extends Controller
     public function voirAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('mgateFormationBundle:Formation')->find($id);
+        if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
+            throw $this->createNotFoundException('La formation n\'existe pas !');
       
         return $this->render('mgateFormationBundle:Formations:voir.html.twig', array(
-            'formation' => $entities,
+            'formation' => $formation,
         ));
     }
     
@@ -57,9 +58,8 @@ class FormationController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
-        {
             $formation = new Formation;
-        }
+
       
         $form = $this->createForm(new FormationType, $formation);
         
@@ -80,5 +80,20 @@ class FormationController extends Controller
             'form' => $form->createView(),
             'formation' => $formation,
         ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
+    public function supprimerAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
+            throw $this->createNotFoundException('La formation n\'existe pas !');
+
+        $em->remove($formation);                
+        $em->flush();
+        return $this->redirect($this->generateUrl('mgate_formations_lister', array()));
+      
     }
 }

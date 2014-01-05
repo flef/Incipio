@@ -12,4 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class FormationRepository extends EntityRepository
 {
+    /**
+     * 
+     * @return array
+     */
+    public function findAllByMandat() {        
+        $entities = $this->findBy(array(), array('mandat' => 'desc'));
+        $formationsParMandat = array();
+        foreach($entities as $formation){
+            $mandat = $formation->getMandat();
+            if(array_key_exists($mandat, $formationsParMandat))
+                $formationsParMandat[$mandat][] = $formation;
+            else
+                $formationsParMandat[$mandat] = array($formation);
+        }        
+        return $formationsParMandat;
+    }
 }
