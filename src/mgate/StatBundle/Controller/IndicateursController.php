@@ -153,6 +153,11 @@ class IndicateursController extends Controller {
         $nombreDeFormationsParMandat->setTitre('Nombre de formations théorique par mandat')
             ->setMethode('getNombreFormationsParMandat');
         
+        
+        $presenceAuxFormationsTimed = new Indicateur();
+        $presenceAuxFormationsTimed->setTitre('Nombre de présents aux formations')
+            ->setMethode('getNombreDePresentFormationsTimed');
+        
         /************************************************
          * 			Indicateurs Trésorerie 			*
          * ********************************************** */      
@@ -190,7 +195,8 @@ class IndicateursController extends Controller {
             ->setIndicateurs($repartitionClient, 'Com')
             ->setIndicateurs($repartitionCAClient, 'Com')
             ->setIndicateurs($tauxAvenant, 'Suivi')
-            ->setIndicateurs($nombreDeFormationsParMandat, 'Rfp');
+            ->setIndicateurs($nombreDeFormationsParMandat, 'Rfp')
+            ->setIndicateurs($presenceAuxFormationsTimed, 'Rfp');
 
         //Enregistrement Cross Requete des Méthodes tolérées
         $_SESSION['autorizedMethods'] = $this->indicateursCollection->getAutorizedMethods();
@@ -227,6 +233,91 @@ class IndicateursController extends Controller {
         }
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
     }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getNombreDePresentFormationsTimed() {
+        $em = $this->getDoctrine()->getManager();
+        $formationsParMandat = $em->getRepository('mgateFormationBundle:Formation')->findAllByMandat();
+
+        $maxMandat = max(array_keys($formationsParMandat));
+        $mandats = array();
+
+        foreach ($formationsParMandat as $mandat => $formations) {
+            foreach($formations as $formation){
+                if($formation->getDateDebut()){
+                    $interval = new \DateInterval('P' . ($maxMandat - $mandat) . 'Y');
+                    $dateDecale = clone $formation->getDateDebut();
+                    $dateDecale->add($interval);
+                    $mandats[$mandat][] = array(
+                        "x" => $dateDecale->getTimestamp() * 1000,
+                        "y" => count($formation->getMembresPresents()), "name" => $formation->getTitre(),
+                        'date' => $dateDecale->format('d/m/Y'),
+                    );   
+                }
+            }
+        }
+        
+        $series = array();
+        foreach ($mandats as $mandat => $data) {
+            $series[] = array("name" => "Mandat " . $mandat, "data" => $data);
+        }
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // OTHERS
+        $ob->global->useUTC(false);
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+        $ob->xAxis->type('datetime');
+        $ob->xAxis->dateTimeLabelFormats(array('month' => "%b"));
+
+        /*         * ***********************
+         * STYLE
+         */
+        $ob->yAxis->min(0);
+        $ob->yAxis->allowDecimals(false);
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->credits->enabled(false);
+        $ob->legend->enabled(false);
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text('Nombre de formations théorique par mandat');
+        $ob->yAxis->title(array('text' => "Nombre de formations", 'style' => $style));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y} le {point.date}<br />{point.name}');
+        $ob->legend->layout('vertical');
+        $ob->legend->y(40);
+        $ob->legend->x(90);
+        $ob->legend->verticalAlign('top');
+        $ob->legend->reversed(true);
+        $ob->legend->align('left');
+        $ob->legend->backgroundColor('#FFFFFF');
+        $ob->legend->itemStyle($style);
+        $ob->plotOptions->series(array('lineWidth' => 5, 'marker' => array('radius' => 8)));
+
+        /*
+         *
+         * *********************** */
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
+    }
+    
     
     /**
      * @Secure(roles="ROLE_CA")
