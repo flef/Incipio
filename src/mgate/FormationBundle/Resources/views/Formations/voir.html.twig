@@ -11,5 +11,18 @@
         <td>{{ (formation.dateFin | date("u") - formation.dateDebut | date("u")) / 3600}} minutes</td>
     </tr>
 </table>
-<button class="btn">Télécharger les documents</button>
+<br />
+<table class="table">
+    <tr>
+        {% if is_granted('ROLE_CA') %}
+        <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgate_formation_modifier', {'id': formation.id})}}';">Modifier la Formation</button></td>
+        {% endif %}
+        <td style="text-align: center;"><button class="btn btn-success">Télécharger les documents</button></td>
+        {% if is_granted('ROLE_ADMIN') %}
+        <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgate_formation_supprimer', {'id': formation.id})}}';">Supprimer la Formation</button></td>
+        {% endif %}
+    </tr>
+</table>
+
+
 {% endblock %}

@@ -149,6 +149,10 @@ class IndicateursController extends Controller {
         /************************************************
          * 				Indicateurs RFP					*
          * ********************************************** */
+        $nombreDeFormationsParMandat = new Indicateur();
+        $nombreDeFormationsParMandat->setTitre('Nombre de formations théorique par mandat')
+            ->setMethode('getNombreFormationsParMandat');
+        
         /************************************************
          * 			Indicateurs Trésorerie 			*
          * ********************************************** */      
@@ -185,7 +189,8 @@ class IndicateursController extends Controller {
             ->setIndicateurs($membres, 'Gestion')
             ->setIndicateurs($repartitionClient, 'Com')
             ->setIndicateurs($repartitionCAClient, 'Com')
-            ->setIndicateurs($tauxAvenant, 'Suivi');
+            ->setIndicateurs($tauxAvenant, 'Suivi')
+            ->setIndicateurs($nombreDeFormationsParMandat, 'Rfp');
 
         //Enregistrement Cross Requete des Méthodes tolérées
         $_SESSION['autorizedMethods'] = $this->indicateursCollection->getAutorizedMethods();
@@ -221,6 +226,68 @@ class IndicateursController extends Controller {
                 return $this->$chartMethode();
         }
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getNombreFormationsParMandat() {
+        $em = $this->getDoctrine()->getManager();
+        
+        $formationsParMandat = $em->getRepository('mgateFormationBundle:Formation')->findAllByMandat();
+
+        $data = array();
+        $categories = array();
+
+        ksort($formationsParMandat); // Tire selon les promos
+        foreach ($formationsParMandat as $mandat => $formations) {
+            $data[] = count($formations);
+            $categories[] = 'Mandat' . $mandat;
+        }
+        $series = array(array("name" => "Nombre de formations", "colorByPoint" => true, "data" => $data));
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // OTHERS
+        $ob->chart->type('column');
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+        $ob->xAxis->categories($categories);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $ob->yAxis->min(0);
+        $ob->yAxis->allowDecimals(false);
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->credits->enabled(false);
+        $ob->legend->enabled(false);
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text('Nombre de formations théorique par mandat');
+        $ob->yAxis->title(array('text' => "Nombre de formations", 'style' => $style));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y}');
+
+        /*
+         *
+         * *********************** */
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
     }
 
     
@@ -470,17 +537,18 @@ class IndicateursController extends Controller {
         $mandats = $em->getRepository('mgatePersonneBundle:Mandat')->getCotisantMandats();
 
 
-        $promos = array(2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016);
+        $promos = array();
         $cumuls = array();
         $dates = array();
         foreach ($mandats as $mandat) {
             if ($membre = $mandat->getMembre()) {
                 $p = $membre->getPromotion();
+                if(!in_array($p, $promos)) $promos[] = $p;
                 $dates[] = array('date' => $mandat->getDebutMandat(), 'type' => '1', 'promo' => $p);
                 $dates[] = array('date' => $mandat->getFinMandat(), 'type' => '-1', 'promo' => $p);
             }
         }
-
+        sort($promos);
         usort($dates, array($this, 'cmp'));
 
         foreach ($dates as $date) {
@@ -488,7 +556,6 @@ class IndicateursController extends Controller {
             $p = $date['promo'];
             $t = $date['type'];
             foreach ($promos as $promo) {
-
                 if (!array_key_exists($promo, $cumuls))
                     $cumuls[$promo] = array();
                 $cumuls[$promo][$d] = (array_key_exists($d, $cumuls[$promo]) ? $cumuls[$promo][$d] : (end($cumuls[$promo]) ? end($cumuls[$promo]) : 0));
@@ -497,7 +564,7 @@ class IndicateursController extends Controller {
         }
 
         $series = array();
-        $categories = array_keys($cumuls[2009]);
+        $categories = array_keys($cumuls[$promos[0]]);
         foreach (array_reverse($promos) as $promo) {
             $series[] = array('name' => 'P' . $promo, 'data' => array_values($cumuls[$promo]));
         }
@@ -523,6 +590,7 @@ class IndicateursController extends Controller {
          * STYLE
          */
         $ob->yAxis->min(0);
+        $ob->yAxis->allowDecimals(false);
         $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
         $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
         $ob->xAxis->labels(array('style' => $style, 'rotation' => -45));

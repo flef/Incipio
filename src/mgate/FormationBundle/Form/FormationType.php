@@ -17,6 +17,7 @@ class FormationType extends AbstractType {
                 ->add('categorie', 'choice', array('multiple' => true, 'choices' => Formation::getCategoriesChoice(), 'label' => 'Catégorie', 'required' => false))
                 ->add('dateDebut', 'datetime', array('label' => 'Date de debut (d/MM/y - HH:mm:ss)', 'format' => 'd/MM/y - HH:mm:ss', 'required' => false, 'widget' => 'single_text'))
                 ->add('dateFin', 'datetime', array('label' => 'Date de fin (d/MM/y - HH:mm:ss)', 'format' => 'd/MM/y - HH:mm:ss', 'required' => false, 'widget' => 'single_text'))
+                ->add('mandat', 'integer' )
                 ->add('formateurs', 'collection', array(
                     'type' => 'genemu_jqueryselect2_entity',
                     'options' => array('label' => 'Suiveur de projet',
