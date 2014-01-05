@@ -21,5 +21,24 @@ class MembreRepository extends EntityRepository
         return $query->getQuery()->getResult();
     }
     
+    /**
+     * 
+     * @return array
+     */
+    
+    public function getMembresParPromo()
+    {
+        $entities = $this->findBy(array(), array('promotion' => 'desc'));
+        $membresParMandat = array();
+        foreach($entities as $membre){
+            $promo = $membre->getPromotion();
+            if(array_key_exists($promo, $membresParMandat))
+                $membresParMandat[$promo][] = $membre;
+            else
+                $membresParMandat[$promo] = array($membre);
+        }        
+        return $membresParMandat;
+    }
+    
     
 }

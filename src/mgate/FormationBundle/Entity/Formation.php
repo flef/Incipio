@@ -20,9 +20,16 @@ class Formation {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
      * @var integer
+     *
+     * @ORM\Column(name="mandat", type="integer")
+     */
+    private $mandat;
+
+    /**
+     * @var array
      *
      * @ORM\Column(name="categorie", type="array")
      */
@@ -326,4 +333,27 @@ class Formation {
         $this->membresPresents->removeElement($membresPresents);
     }
 
+
+    /**
+     * Set mandat
+     *
+     * @param \interger $mandat
+     * @return Formation
+     */
+    public function setMandat($mandat)
+    {
+        $this->mandat = $mandat;
+    
+        return $this;
+    }
+
+    /**
+     * Get mandat
+     *
+     * @return \interger 
+     */
+    public function getMandat()
+    {
+        return $this->mandat;
+    }
 }

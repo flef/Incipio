@@ -1,13 +1,4 @@
-mgate_formation_modifier:
-    pattern:  /admin/formations/modifier/{id}
-    defaults: { _controller: mgateFormationBundle:Formation:modifier }
-    requirements:
-        id: \d+
-    
-mgate_formation_ajouter:
-    pattern:  /admin/formations/ajouter
-    defaults: { _controller: mgateFormationBundle:Formation:modifier, id : -1}
-    
+
 mgate_formations_index_admin:
     pattern:  /admin/formations
     defaults: { _controller: mgateFormationBundle:Formation:index}
@@ -21,4 +12,19 @@ mgate_formation_voir:
     defaults: { _controller: mgateFormationBundle:Formation:voir }
     requirements:
         id: \d+
+        
+mgate_formation_ajouter:
+    pattern:  /admin/formations/ajouter
+    defaults: { _controller: mgateFormationBundle:Formation:modifier, id : -1}
     
+mgate_formation_modifier:
+    pattern:  /admin/formations/modifier/{id}
+    defaults: { _controller: mgateFormationBundle:Formation:modifier }
+    requirements:
+        id: \d+
+        
+mgate_formation_supprimer:
+    pattern:  /admin/formations/supprimer/{id}
+    defaults: { _controller: mgateFormationBundle:Formation:supprimer }
+    requirements:
+        id: \d+
