@@ -17,7 +17,7 @@ class FormationRepository extends EntityRepository
      * @return array
      */
     public function findAllByMandat() {        
-        $entities = $this->findBy(array(), array('mandat' => 'desc'));
+        $entities = $this->findBy(array(), array('mandat' => 'desc', 'dateDebut' => 'asc'));
         $formationsParMandat = array();
         foreach($entities as $formation){
             $mandat = $formation->getMandat();
