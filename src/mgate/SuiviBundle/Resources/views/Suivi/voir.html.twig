@@ -39,7 +39,7 @@
         <td>
             <a href="{{ path('mgateSuivi_suivi_voir', {'id': suivi.id}) }}">Suivi n°{{suivis | length - loop.index0}}</a>
         </td>
-        <td>{{suivi.date | date("d/m/Y") }}</td>
+        <td>{{ suivi.date | date("d/m/Y") }}</td>
         <td>{{ suivi.etat | nl2br }}</td>
         <td>{{ suivi.todo | nl2br }}</td>
     </tr>
@@ -48,7 +48,7 @@
 
 
     <p>
-        <a href="{{ path('mgateSuivi_etude_voir', {'id' : etude.id }) }}">Retour à l'étude</a><br>
+        <a href="{{ path('mgateSuivi_etude_voir', {'numero' : etude.numero }) }}">Retour à l'étude</a><br>
         <a href="{{ path('mgateSuivi_suivi_modifier', {'id': selectedSuivi.id}) }}">Modifier le Suivi</a>
 	
     </p>
