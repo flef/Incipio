@@ -10,7 +10,7 @@
             $(document).ready(function() {
                     $('#example').dataTable({
                         "bPaginate": false,
-						"aaSorting": [[0,'asc']],
+						"aaSorting": [[0,'desc']],
                     });
             } );
     </script>
@@ -32,44 +32,29 @@
         <thead>
           <tr>
             <th>Promotion</th>
+            <th>Identifiant</th>
             <th>Prénom</th>
 			<th>Nom</th>
             <th>Poste</th>
-            <th>Identifiant</th>
             <th>Email</th>
             <th>Mobile</th>
             <th>Appartement</th>
-            <th>Adresse</th>
-            {% if is_granted('ROLE_CA') %}
-            <th>Date de naissance</th>
-            <th>Lieu de naissance</th>
-			<th>Nationalité</th>
-            {% endif %}
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
                 {% for membre in membres %}
-          <tr>
-            <td>{{ membre.promotion ? "P" ~ membre.promotion }}</td>
+              <td style="text-align: center;"><h4><span class="label label-default">{{ membre.promotion ? "P" ~ membre.promotion}}</span></td>
+            <td style="text-align: center;"><h4><span class="label label-info">{{ membre.identifiant }}</span></h4></td>
             <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a></td>
 			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a></td>
             <td>
                 {% for mandat in membre.mandats %}
-                    {{ "Du " ~ mandat.debutMandat | date("d/m/Y") ~ " au " ~mandat.finMandat | date("d/m/Y") ~ " - " ~ mandat.poste.intitule }}<br />
+                    <span class="label label-{{"now"|date('Ymd')  > mandat.finMandat |date('Ymd') ? 'default' : 'success' }}">{{ mandat.debutMandat | date("d/m/Y") }} <span class="glyphicon glyphicon-arrow-right"></span> {{ mandat.finMandat | date("d/m/Y") }}</span> {{ mandat.poste.intitule }}<br />
                 {% endfor %}
-            </td>
-            <td>{{ membre.identifiant }}</td>
+            </td>            
             <td>{{ membre.personne.email }}</td>
             <td>{{ membre.personne.mobile }}</td>
             <td>{{ membre.appartement }}</td>
-            <td>{{ membre.personne.adresse }}</td>
-            {% if is_granted('ROLE_CA') %}
-            <td>{{ membre.dateDeNaissance ? membre.dateDeNaissance | date('d/m/Y') }}</td>
-            <td>{{ membre.lieuDeNaissance }}</td>
-			<td>{{ membre.nationalite }}</td>
-            {% endif %}
-            <td><a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">modifier</a></td>
           </tr>
                 {% else %}
                     <li>Pas (encore !) de Membre</li>
