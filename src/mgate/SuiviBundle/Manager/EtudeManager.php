@@ -417,9 +417,9 @@ class EtudeManager extends \Twig_Extension {
                 $error = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La date de signature de la Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' doit être antérieure d\'au moins une semaine à la date de signature du récapitulatifs de mission.');
                     
                 if ((   $intervenant->getDateConventionEleve() == NULL ||
-                        $intervenant->getDateConventionEleve() > $dateSignature->modify('-7 day')) || 
+                        $intervenant->getDateConventionEleve() >= $dateSignature->modify('-7 day')) || 
                     (   $intervenant->getDateConventionEleve() == NULL ||
-                        $intervenant->getDateConventionEleve() > $dateDebutOm->modify('-7 day'))){
+                        $intervenant->getDateConventionEleve() >= $dateDebutOm->modify('-7 day'))){
                     array_push($errors, $error);                        
                 }
             }

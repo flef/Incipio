@@ -185,6 +185,11 @@ class IndicateursController extends Controller {
         $repartitionCAClient = new Indicateur();
         $repartitionCAClient->setTitre('Provenance du chiffre d\'Affaires par type de Client (tous mandats)')
             ->setMethode('getRepartitionClientSelonChiffreAffaire');
+        
+        $clientFidel = new Indicateur();
+        $clientFidel->setTitre('Taux de fidélisation')
+            ->setMethode('getPartClientFidel');
+        
 
         $this->indicateursCollection
             ->setIndicateurs($chiffreAffaires, 'Treso')
@@ -194,6 +199,7 @@ class IndicateursController extends Controller {
             ->setIndicateurs($membres, 'Gestion')
             ->setIndicateurs($repartitionClient, 'Com')
             ->setIndicateurs($repartitionCAClient, 'Com')
+            ->setIndicateurs($clientFidel, 'Com')
             ->setIndicateurs($tauxAvenant, 'Suivi')
             ->setIndicateurs($nombreDeFormationsParMandat, 'Rfp')
             ->setIndicateurs($presenceAuxFormationsTimed, 'Rfp');
@@ -232,6 +238,79 @@ class IndicateursController extends Controller {
                 return $this->$chartMethode();
         }
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getPartClientFidel() {
+        $etudeManager = $this->get('mgate.etude_manager');
+        $em = $this->getDoctrine()->getManager();
+        $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
+
+        
+
+        $dejaClient = array();
+        $ancienClients = 0;
+        $nouveauClients = 0;
+        foreach ($etudes as $etude) {
+            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {                
+                if($etude->getProspect() && in_array($etude->getProspect()->getNom(), $dejaClient)){
+                    $ancienClients++;
+                    $nouveauClients--;
+                }else{
+                    $nouveauClients++;
+                    $dejaClient[] = $etude->getProspect()->getNom();
+                }
+                
+            }
+        }
+        
+        /* Initialisation */
+        $data = array();
+        $data[] = array('Anciens Clients', 100 * $ancienClients / ($nouveauClients +  $ancienClients));
+        $data[] = array('Nouveaux Clients', 100 * $nouveauClients / ($nouveauClients +  $ancienClients));
+        
+        $series = array(array('type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data, 'Nombre d\'études' => $ancienClients + $nouveauClients));
+
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // Plot Options
+        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer', 'showInLegend' => true, 'dataLabels' => array('enabled' => false)));
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->credits->enabled(false);
+
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text("Taux de fidélisation (% de clients ayant demandé plusieurs études)");
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %');
+
+        /*
+         *
+         * *********************** */
+
+        
+        
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
     }
     
     /**
