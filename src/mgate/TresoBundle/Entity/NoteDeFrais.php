@@ -9,7 +9,7 @@ use mgate\SuiviBundle\Entity\DocType as DocType;
  * NoteDeFrais
  *
  @ @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mgate\TresoBundle\Entity\NoteDeFraisRepository")
  */
 class NoteDeFrais
 {
@@ -65,10 +65,7 @@ class NoteDeFrais
     public function getMontantHT(){
        $montantHT = 0;
        foreach ($this->details as $detail){
-           if($detail->getType() == 1)
-               $montantHT += $detail->getPrixHT();
-           else
-               $montantHT += $detail->getKilometrage() * $detail->getTauxKm() / 100;           
+            $montantHT += $detail->getMontantHT();           
        }
        return $montantHT;
     }
