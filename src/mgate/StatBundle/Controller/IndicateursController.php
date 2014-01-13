@@ -552,7 +552,7 @@ class IndicateursController extends Controller {
          * TEXTS AND LABELS
          */
         $ob->title->text('Nombre de présents aux formations');
-        $ob->yAxis->title(array('text' => "Nombre de formations", 'style' => $style));
+        $ob->yAxis->title(array('text' => "Nombre de présents", 'style' => $style));
         $ob->xAxis->title(array('text' => "Date", 'style' => $style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
         $ob->tooltip->pointFormat('{point.y} présent le {point.date}<br />{point.name}');

@@ -16,7 +16,7 @@ class FormationController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('mgateFormationBundle:Formation')->findAll();
+        $entities = $em->getRepository('mgateFormationBundle:Formation')->findBy(array(), array('dateDebut' => 'DESC'));
       
         return $this->render('mgateFormationBundle:Gestion:index.html.twig', array(
             'formations' => $entities,
