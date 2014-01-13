@@ -171,6 +171,16 @@ class IndicateursController extends Controller {
         $chiffreAffairesMandat->setTitre('Evolution du Chiffre d\'Affaires par Mandat')
             ->setMethode('getCAM');
         
+        //Dépense HT par mandat
+        $sortieNFFA = new Indicateur();
+        $sortieNFFA->setTitre('Evolution des dépenses par mandats')
+            ->setMethode('getSortie');
+        
+        //Répartition des dépenses sur le mandat
+        $repartitionSortieNFFA = new Indicateur();
+        $repartitionSortieNFFA->setTitre('Répartition des dépenses sur le mandat')
+            ->setMethode('getRepartitionSorties');
+        
         /************************************************
          * 		Indicateurs Prospection Commerciale		*
          * ********************************************** */
@@ -186,6 +196,7 @@ class IndicateursController extends Controller {
         $repartitionCAClient->setTitre('Provenance du chiffre d\'Affaires par type de Client (tous mandats)')
             ->setMethode('getRepartitionClientSelonChiffreAffaire');
         
+        // Taux de fidélisation
         $clientFidel = new Indicateur();
         $clientFidel->setTitre('Taux de fidélisation')
             ->setMethode('getPartClientFidel');
@@ -194,6 +205,8 @@ class IndicateursController extends Controller {
         $this->indicateursCollection
             ->setIndicateurs($chiffreAffaires, 'Treso')
             ->setIndicateurs($chiffreAffairesMandat, 'Treso')
+            ->setIndicateurs($sortieNFFA, 'Treso')
+            ->setIndicateurs($repartitionSortieNFFA, 'Treso')
             ->setIndicateurs($ressourcesHumaines, 'Gestion')
             ->setIndicateurs($membresParPromo, 'Gestion')
             ->setIndicateurs($membres, 'Gestion')
@@ -238,6 +251,171 @@ class IndicateursController extends Controller {
                 return $this->$chartMethode();
         }
         return new \Symfony\Component\HttpFoundation\Response('<!-- Chart ' . $chartMethode . ' does not exist. -->');
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getRepartitionSorties() {
+        $em = $this->getDoctrine()->getManager();
+        $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAll();
+        
+        /* Initialisation */
+        $nfParComptes = array();
+        $montantTotal = 0;
+        foreach ($nfs as $nf){
+            foreach ($nf->getDetails() as $detail){
+                $compte = $detail->getCompte();
+                if($compte != NULL){
+                    $compte = $detail->getCompte()->getLibelle();
+                    $montantTotal += $detail->getMontantHT();
+                    if(array_key_exists($compte, $nfParComptes))
+                        $nfParComptes[$compte] += $detail->getMontantHT();
+                    else
+                        $nfParComptes[$compte] = $detail->getMontantHT();
+                }
+            }
+        }
+        
+        ksort($nfParComptes);
+        $data = array();
+        foreach ($nfParComptes as $compte => $montantHT){
+            $data[] = array($compte, 100 * $montantHT / $montantTotal);
+        }
+        
+        $series = array(array('type' => 'pie', 'name' => 'Répartition des dépenses', 'data' => $data, 'Dépenses totale' => $montantTotal));
+
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // Plot Options
+        $ob->plotOptions->pie(array('allowPointSelect' => true, 'cursor' => 'pointer', 'showInLegend' => true, 'dataLabels' => array('enabled' => false)));
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->credits->enabled(false);
+
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text("Répartition des dépenses selon les comptes comptables (Mandat en cours)");
+        $ob->tooltip->pointFormat('{point.percentage:.1f} %');
+
+        /*
+         *
+         * *********************** */
+        
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    private function getSortie() {
+        $em = $this->getDoctrine()->getManager();
+        
+        $sortiesParMandat = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMandat();
+
+        $data = array();
+        $categories = array();
+
+        $comptes = array();
+        $mandats = array();
+        ksort($sortiesParMandat); // Trie selon les mandats
+        foreach ($sortiesParMandat as $mandat => $nfs) { // Pour chaque Mandat
+            $mandats[] = $mandat;
+            foreach ($nfs as $nf){ // Pour chaque NF d'un mandat
+                foreach ($nf->getDetails() as $detail){ // Pour chaque détail d'une NF
+                    $compte = $detail->getCompte();
+                    if($compte != NULL){
+                        $compte = $detail->getCompte()->getLibelle();
+                        if(array_key_exists($compte, $comptes)){
+                            if(array_key_exists($mandat, $comptes[$compte]))
+                                $comptes[$compte][$mandat] += $detail->getMontantHT();
+                            else
+                                $comptes[$compte][$mandat] = $detail->getMontantHT();
+                        }
+                        else
+                            $comptes[$compte] = array($mandat => $detail->getMontantHT());                            
+                    }
+                }
+            }
+        }
+        $series = array();
+        ksort($mandats);
+        ksort($comptes);
+        foreach ($comptes as $libelle => $compte){
+            $data = array();
+            foreach ($mandats as $mandat){
+                if(array_key_exists($mandat, $compte))
+                    $data[] = (float) $compte[$mandat];
+                else
+                    $data[] = 0;
+            }    
+            $series[] = array('name' => $libelle, "data" => $data);
+        }
+        
+        foreach ($mandats as $mandat)
+             $categories[] = 'Mandat ' . $mandat; 
+
+        /*         * ***********************
+         * CHART
+         */
+        $ob = new Highchart();
+        $ob->chart->renderTo(__FUNCTION__);
+        // OTHERS
+        $ob->chart->type('column');
+        $ob->plotOptions->column(array('stacking' => 'normal'));
+
+        /*         * ***********************
+         * DATAS
+         */
+        $ob->series($series);
+        $ob->xAxis->categories($categories);
+
+        /*         * ***********************
+         * STYLE
+         */
+        $ob->yAxis->min(0);
+        $ob->yAxis->allowDecimals(false);
+        $style = array('color' => '#000000', 'fontWeight' => 'bold', 'fontSize' => '16px');
+        $ob->title->style(array('fontWeight' => 'bold', 'fontSize' => '20px'));
+        $ob->xAxis->labels(array('style' => $style));
+        $ob->yAxis->labels(array('style' => $style));
+        $ob->credits->enabled(false);
+        $ob->legend->enabled(true);
+
+        /*         * ***********************
+         * TEXTS AND LABELS
+         */
+        $ob->title->text('Montant HT des dépenses');
+        $ob->yAxis->title(array('text' => "Montant (€)", 'style' => $style));
+        $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
+        $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
+        $ob->tooltip->pointFormat('{point.y} € HT');
+
+        /*
+         *
+         * *********************** */
+
+        return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
+                'chart' => $ob
+            ));
     }
     
     /**
