@@ -84,6 +84,25 @@ class NoteDeFraisDetail
             2 => 'Kilométrique',);
     } 
     
+    
+    public function getMontantHT(){        
+        if($this->type == 1)
+            return $this->prixHT;
+        else
+            return $this->kilometrage * $this->tauxKm / 100;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     // Getter Setter Auto Generated
 
     /**
