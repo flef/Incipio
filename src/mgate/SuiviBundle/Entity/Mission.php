@@ -65,7 +65,7 @@ class Mission extends DocType {
 
     /**
      * @var RepartitionJEH $repartitionsJEH
-     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="mission", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\RepartitionJEH", mappedBy="mission", cascade={"persist", "merge", "remove"})
      */
     private $repartitionsJEH;
 
