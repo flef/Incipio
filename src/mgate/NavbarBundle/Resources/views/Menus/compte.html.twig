@@ -2,6 +2,9 @@
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-cog"></span> <b class="caret"></b></a>
         <ul class="dropdown-menu">
+        	<li class="dropdown-header">Manuel d'utilisation</li>
+       	    <li class="divider"></li>
+       	    <li><a href="{{ asset('documents/guide.pdf') }}"><span class="glyphicon glyphicon-tags"></span> Guide utilisateur</a></li>
             <li class="dropdown-header">{{ app.user.username }}</li>
             <li><a href="{{ path('fos_user_profile_edit') }}"><span class="glyphicon glyphicon-pencil"></span> Modifier mon pseudo</a></li>
             <li><a href="{{ path('fos_user_change_password') }}"><span class="glyphicon glyphicon-pencil"></span> Modifier mon mot de passe</a></li>
