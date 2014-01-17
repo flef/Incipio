@@ -73,12 +73,23 @@ class ProspectController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
-
-        //$deleteForm = $this->createDeleteForm($id); // cf TestBundle
+        
+        $mailing ="";
+        $employes = array();
+        foreach ($entity->getEmployes() as $employe){
+            if($employe->getPersonne()->getEmailEstValide() && $employe->getPersonne()->getEstAbonneNewsletter() ){
+                $nom = $employe->getPersonne()->getNom();
+                $mail = $employe->getPersonne()->getEmail();
+                $employes[$nom] = $mail;
+            }
+        }
+        ksort($employes);
+        foreach($employes as $nom => $mail)
+            $mailing .= "$nom <$mail>; ";
 
         return $this->render('mgatePersonneBundle:Prospect:voir.html.twig', array(
-            'prospect'      => $entity,
-            /*'delete_form' => $deleteForm->createView(),*/ ));
+            'prospect' => $entity,
+            'mailing' => $mailing ));
         
     }
     
@@ -90,9 +101,8 @@ class ProspectController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
-        {
             throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
-        }
+
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new ProspectType, $prospect);
@@ -118,7 +128,8 @@ class ProspectController extends Controller
         ));
     }
     
- 
+    
+    // Je ne sais pas ce que c'est ...
     /**
      * @Route("/ajax_prospect", name="ajax_prospect")
      * @Secure(roles="ROLE_SUIVEUR")

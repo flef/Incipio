@@ -32,7 +32,7 @@ mgatePersonne_prospect_voir:
     defaults:  { _controller: mgatePersonneBundle:Prospect:voir}
     requirements:
         id:  \d+
-
+        
 mgatePersonne_prospect_modifier:
     pattern: /prospect/modifier/{id}
     defaults: {_controller: mgatePersonneBundle:Prospect:modifier}
