@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BV
  *
  * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mgate\TresoBundle\Entity\BVRepository")
  */
 class BV
 {
@@ -123,15 +123,18 @@ class BV
     
     //GETTER ADITION
     public function getPartJunior(){
-        return $this->nombreJEH  * ($this->baseURSSAF * $this->tauxJuniorAssietteDeCotisation 
-            + $this->tauxJuniorRemunerationBrute * $this->remunerationBruteParJEH);
+        return round($this->nombreJEH  * ($this->baseURSSAF * $this->tauxJuniorAssietteDeCotisation 
+            + $this->tauxJuniorRemunerationBrute * $this->remunerationBruteParJEH),2);
     }
     public function getPartEtudiant(){
-        return $this->nombreJEH  * ($this->baseURSSAF * $this->tauxEtudiantAssietteDeCotisation
-            + $this->tauxEtudiantRemunerationBrute * $this->remunerationBruteParJEH);
+        return round($this->nombreJEH  * ($this->baseURSSAF * $this->tauxEtudiantAssietteDeCotisation
+            + $this->tauxEtudiantRemunerationBrute * $this->remunerationBruteParJEH),2);
     }
     public function getReference(){
-        return $this->mandat.'-BV-'.$this->numero;
+        return $this->mandat.'-BV-'.sprintf('%1$02d',$this->numero);
+    }
+    public function getRemunerationBrute(){
+        return $this->getRemunerationBruteParJEH() * $this->nombreJEH;
     }
     
     ///////
