@@ -6,14 +6,20 @@ Accueil - {{ parent() }}
 
 {% block content_bundle %} 
     <ul id="indicateursLink" class="nav nav-tabs">
-        <li class="active"><a href="#gestion" data-toggle="tab" data-loaded="true">Gestion Associative</a></li>
+        <li class="active"><a href="#infos" data-toggle="tab" data-loaded="true">Données brutes</a></li>
+        <li class=""><a href="#gestion" data-toggle="tab" data-loaded="false">Gestion Associative</a></li>
         <li class=""><a href="#rfp" data-toggle="tab" data-loaded="false">Recrutement Formation</a></li>
         <li class=""><a href="#suivi" data-toggle="tab" data-loaded="false">Gestion d'études</a></li>
         <li class=""><a href="#treso" data-toggle="tab" data-loaded="false">Trésorerie</a></li>
         <li class=""><a href="#com" data-toggle="tab" data-loaded="false">Développement Commercial</a></li>
     </ul>
     <div id="myTabContent" class="tab-content">
-        <div class="tab-pane fade active in row" id="gestion">
+        <div class="tab-pane active in fade row" id="infos">
+            {% for title, stat in stats %}
+                {{ title }} : {{ stat }} <br>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade row" id="gestion">
             {% for indicateur in indicateursGestion %}
                 <div class="indicateur col-md-6" id="{{indicateur.methode}}">
                     <div>
@@ -99,15 +105,6 @@ function getChartAsync(sender, chart){
           $('#jsChart').append(data);
         });
 };
-
-$(document).ready(
-function(){
-    $($($('.active').children().first().attr('href'))).children().each(
-    function(){
-        getChartAsync($(this).attr('id'),$(this).attr('id'));
-    });
-    $(this).children().first().attr('data-loaded',true)
-});
 
 
 $('#indicateursLink').children().each(
