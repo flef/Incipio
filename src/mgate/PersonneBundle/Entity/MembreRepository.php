@@ -40,5 +40,15 @@ class MembreRepository extends EntityRepository
         return $membresParMandat;
     }
     
-    
+    public function getCotisants()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('m')->from('mgatePersonneBundle:Membre', 'm')
+          ->innerJoin('m.mandats', 'ma')
+          ->innerJoin('ma.poste', 'p')
+          ->where('p.intitule LIKE :membre')
+          ->andWhere('ma.finMandat > CURRENT_DATE()')
+          ->setParameter('membre', 'Membre');
+        return $query->getQuery()->getResult();
+    }
 }

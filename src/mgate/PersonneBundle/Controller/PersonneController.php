@@ -32,9 +32,39 @@ class PersonneController extends Controller {
 
         $entities = $em->getRepository('mgatePersonneBundle:Personne')->findAll();
         
+        $membres = $em->getRepository('mgatePersonneBundle:Membre')->getCotisants();
+        
+        $cotisants = array();
+        $cotisantsEtu = array();
+        foreach ($membres as $cotisant){
+            $nom = $cotisant->getPersonne()->getNom() . ' ' . $cotisant->getPersonne()->getPrenom();
+            
+            $mailEtu = $cotisant->getEmailEMSE();
+            $mail = $cotisant->getPersonne()->getEmail();
+            if($mail != null) $cotisants[$nom] = $mail;
+            if($mailEtu != null) $cotisantsEtu[$nom] = $mailEtu;
+        }
+        ksort($cotisants);
+        ksort($cotisantsEtu);
+        
+        $nbrCotisants = count($cotisants);
+        $nbrCotisantsEtu = count($cotisantsEtu);
+
+        $listCotisants = "";
+        $listCotisantsEtu = "";
+        foreach ($cotisants as $nom => $mail)
+            $listCotisants .= "$nom <$mail>; ";
+        foreach ($cotisantsEtu as $nom => $mail)
+            $listCotisantsEtu .= "$nom <$mail>; ";
+        
+        
         
         return $this->render('mgatePersonneBundle:Personne:listeDiffusion.html.twig', array(
-                    'personnes' => $entities,
+                'personnes' => $entities,
+                'cotisants' => $listCotisants,
+                'cotisantsEtu' => $listCotisantsEtu,
+                'nbrCotisants' => $nbrCotisants,
+                'nbrCotisantsEtu' => $nbrCotisantsEtu,
                     
                 ));
     }
