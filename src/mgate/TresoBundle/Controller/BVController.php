@@ -47,8 +47,6 @@ class BVController extends Controller
             {
                 $em->persist($bv);                
                 $em->flush();
-                
-                var_dump($bv);
                 return $this->redirect($this->generateUrl('mgateTreso_BV_index', array()));
             }
         }
