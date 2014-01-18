@@ -1,7 +1,7 @@
 {% extends "mgateTresoBundle::layout.html.twig" %}
 
 {% block title %}
-	Gestion des comptes - {{ parent() }}
+	Gestion des BV - {{ parent() }}
 {% endblock %}
 
 {% block javascript_quick %}
@@ -12,7 +12,7 @@
     $(document).ready(function() {
         $('#example').dataTable({
             "bPaginate": false,
-			"aaSorting": [[0,'asc']],
+			"aaSorting": [[1,'desc']],
         });
     });
 </script>
@@ -29,16 +29,24 @@
     <table class="display dataTable table table-bordered table-striped" id="example">
         <thead>
           <tr>
+            <th>Référence</th>
             <th>Date de Versement</th>
             <th>Bénéficiaire</th>
+            <th>Mission</th>
             <th>Rémunération Brute</th>
+            <th>Part Junior</th>
+            <th>Part Etudiant</th>
         </tr>
         </thead>        
         {% for bv in bvs %}
         <tr>
-            <td>{{ bv.dateVersement | date('d/m/Y') }}</td>
-            <td>{{ bv.etudiant.NomPrenom }}</td>
-            <td>{{ bv.nombreJEH * bv.remunerationBruteParJEH }}</td>
+            <td><a href="{{ path('mgateTreso_BV_modifier', {'id' : bv.id })}}">{{ bv.reference }}</a></td>
+            <td>{{ bv.dateDeVersement | date('d/m/Y') }}</td>
+            <td>{{ bv.etudiant.prenomNom}}</td>
+            <td>{{ bv.mission.reference }}</td>
+            <td style="text-align: right;">{{ (bv.nombreJEH * bv.remunerationBruteParJEH) | number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ bv.partJunior | number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ bv.partEtudiant | number_format(2, ',', ' ')}} €</td>
         </tr>
         {% endfor %}
     </table>

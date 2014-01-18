@@ -33,7 +33,9 @@ class BVController extends Controller
                 ->setTauxJuniorRemunerationBrute(0.043)
                 ->setTauxEtudiantAssietteDeCotisation(0.158)
                 ->setTauxEtudiantRemunerationBrute(0.024)
-                ->setDateDeVersement(new \DateTime('now'));
+                ->setTypeDeTravail('Réalisateur')
+                ->setDateDeVersement(new \DateTime('now'))
+                ->setDateDemission(new \DateTime('now'));
         }
 
         $form = $this->createForm(new BVType, $bv);
