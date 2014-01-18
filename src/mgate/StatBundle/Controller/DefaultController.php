@@ -140,8 +140,6 @@ class DefaultController extends Controller
             $series[] = array("name" => "Mandat ".$idMandat." - ".$etudeManager->mandatToString($idMandat), "data" => $data_final);
             array_push($categories,"Mandat ".$data['mandat']);
         }
-        //var_dump($categories);
-        var_dump($series);
    
         $style=array('color'=>'#000000', 'fontWeight'=>'bold', 'fontSize'=>'16px');
 
