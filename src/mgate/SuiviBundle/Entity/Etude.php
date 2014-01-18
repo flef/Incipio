@@ -257,6 +257,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $sourceDeProspection;
     
     
+    /**ADITIONAL GETTERS**/
+    public function getReference(){
+        return "[M-GaTE]" . (string) ($this->getMandat() * 100 + $this->getNum());
+    }
     
     
     /**

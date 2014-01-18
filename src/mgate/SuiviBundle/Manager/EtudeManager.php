@@ -133,7 +133,7 @@ class EtudeManager extends \Twig_Extension {
      * Get référence de l'etude
      */
     public function getRefEtude(Etude $etude) {
-        return "[M-GaTE]" . (string) ($etude->getMandat() * 100 + $etude->getNum());
+        return $etude->getReference();
     }
 
     /*
