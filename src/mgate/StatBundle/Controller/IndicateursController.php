@@ -210,6 +210,8 @@ class IndicateursController extends Controller {
         $clientFidel->setTitre('Taux de fidélisation')
             ->setMethode('getPartClientFidel');
         
+        $stats = $this->getStatistiques();
+        
 
         $this->indicateursCollection
             ->setIndicateurs($chiffreAffaires, 'Treso')
@@ -236,6 +238,7 @@ class IndicateursController extends Controller {
                 'indicateursGestion' => $this->indicateursCollection->getIndicateurs('Gestion'),
                 'indicateursCom' => $this->indicateursCollection->getIndicateurs('Com'),
                 'indicateursTreso' => $this->indicateursCollection->getIndicateurs('Treso'),
+                'stats' => $stats,
             ));
     }
 
@@ -1652,6 +1655,18 @@ class IndicateursController extends Controller {
         return $this->render('mgateStatBundle:Indicateurs:Indicateur.html.twig', array(
                 'chart' => $ob
             ));
+    }
+    
+    private function getStatistiques(){
+        $etudeManager = $this->get('mgate.etude_manager');
+        $em = $this->getDoctrine()->getManager();
+        
+        
+        
+
+        
+        
+        return array('Pas de données' => 'A venir');
     }
 
 }
