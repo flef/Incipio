@@ -451,10 +451,15 @@ class IndicateursController extends Controller {
      */
     private function getRepartitionSorties() {
         $em = $this->getDoctrine()->getManager();
-        $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAll();
+        $mandat = $etudeManager = $this->get('mgate.etude_manager')->getMaxMandatCc();
+        
+        $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findBy(array('mandat' => $mandat));
+        $bvs = $em->getRepository('mgateTresoBundle:BV')->findBy(array('mandat' => $mandat));
+        
         
         /* Initialisation */
-        $nfParComptes = array();
+        $comptes = array();
+        $comptes['Honoraires BV'] = 0;
         $montantTotal = 0;
         foreach ($nfs as $nf){
             foreach ($nf->getDetails() as $detail){
@@ -462,17 +467,22 @@ class IndicateursController extends Controller {
                 if($compte != NULL){
                     $compte = $detail->getCompte()->getLibelle();
                     $montantTotal += $detail->getMontantHT();
-                    if(array_key_exists($compte, $nfParComptes))
-                        $nfParComptes[$compte] += $detail->getMontantHT();
+                    if(array_key_exists($compte, $comptes))
+                        $comptes[$compte] += $detail->getMontantHT();
                     else
-                        $nfParComptes[$compte] = $detail->getMontantHT();
+                        $comptes[$compte] = $detail->getMontantHT();
                 }
             }
         }
         
-        ksort($nfParComptes);
+        foreach ($bvs as $bv){
+            $comptes['Honoraires BV'] += $bv->getRemunerationBrute();
+            $montantTotal += $bv->getRemunerationBrute();
+        }
+        
+        ksort($comptes);
         $data = array();
-        foreach ($nfParComptes as $compte => $montantHT){
+        foreach ($comptes as $compte => $montantHT){
             $data[] = array($compte, 100 * $montantHT / $montantTotal);
         }
         
@@ -523,11 +533,15 @@ class IndicateursController extends Controller {
         $em = $this->getDoctrine()->getManager();
         
         $sortiesParMandat = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMandat();
-
+        $bvsParMandat = $em->getRepository('mgateTresoBundle:BV')->findAllByMandat();
+        
+        
         $data = array();
         $categories = array();
 
         $comptes = array();
+        $comptes['Honoraires BV'] = array();
+        $comptes['URSSAF'] = array();
         $mandats = array();
         ksort($sortiesParMandat); // Trie selon les mandats
         foreach ($sortiesParMandat as $mandat => $nfs) { // Pour chaque Mandat
@@ -549,6 +563,16 @@ class IndicateursController extends Controller {
                 }
             }
         }
+        foreach ($bvsParMandat as $mandat => $bvs) { // Pour chaque Mandat
+            if(!in_array($mandat,$mandats)) $mandats[] = $mandat;
+            $comptes['Honoraires BV'][$mandat] = 0;
+            $comptes['URSSAF'][$mandat] = 0;
+            foreach ($bvs as $bv){// Pour chaque BV d'un mandat
+                $comptes['Honoraires BV'][$mandat] += $bv->getRemunerationBrute();
+                $comptes['URSSAF'][$mandat] += $bv->getPartJunior();
+            }
+        }
+                
         $series = array();
         ksort($mandats);
         ksort($comptes);
@@ -1323,6 +1347,7 @@ class IndicateursController extends Controller {
                 || $etude->getStateID() == STATE_ID_TERMINEE_X;
 
             if ($dateSignature && $signee) {
+        
                 $idMandat = $etudeManager->dateToMandat($dateSignature);
 
                 $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
@@ -1661,9 +1686,6 @@ class IndicateursController extends Controller {
         $etudeManager = $this->get('mgate.etude_manager');
         $em = $this->getDoctrine()->getManager();
         
-        
-        
-
         
         
         return array('Pas de données' => 'A venir');
