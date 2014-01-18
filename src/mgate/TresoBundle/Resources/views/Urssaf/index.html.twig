@@ -23,9 +23,6 @@
       <thead>
           <tr>
               <th>
-                  Status
-              </th>
-              <th>
                   <div>Nom de l'étude</div>
                   <div>Référence</div>
               </th>
@@ -51,9 +48,8 @@
  	 <tbody>
 
         {% for rm in RMs %}
-<tr>
-    <td><i id="commentaire" class="glyphicon glyphicon-search" data-title="{{ rm.id }}" data-content="0"></i></td>
-    <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'id': rm.etude.id}) }}"> {{ getRefEtude(rm.etude) }}</a></div></td>
+    <tr>
+    <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'numero': rm.etude.numero}) }}"> {{ getRefEtude(rm.etude) }}</a></div></td>
     <td>{{ rm.etude.prospect.nom }}
         <br /><br />
      {{rm.etude.suiveur.prenomNom| default("Pas de suiveur!")}}</td>
