@@ -1,0 +1,46 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des comptes - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": false,
+			"aaSorting": [[0,'asc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_BV_ajouter')}}';">Ajouter un BV</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Date de Versement</th>
+            <th>Bénéficiaire</th>
+            <th>Rémunération Brute</th>
+        </tr>
+        </thead>        
+        {% for bv in bvs %}
+        <tr>
+            <td>{{ bv.dateVersement | date('d/m/Y') }}</td>
+            <td>{{ bv.etudiant.NomPrenom }}</td>
+            <td>{{ bv.nombreJEH * bv.remunerationBruteParJEH }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

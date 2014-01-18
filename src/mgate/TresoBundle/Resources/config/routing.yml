@@ -48,4 +48,31 @@ mgateTreso_NoteDeFrais_supprimer:
     requirements:
         id: \d+
 
-
+################################################################################
+#                                                                              #
+#                           BULLETIN DE VERSEMENT                              #
+#                                                                              #
+################################################################################
+mgateTreso_BV_index:
+    pattern:  /BV
+    defaults: { _controller: mgateTresoBundle:BV:index }
+        
+mgateTreso_BV_ajouter:
+    pattern:  /BV/Ajouter
+    defaults: { _controller: mgateTresoBundle:BV:modifier,  id:-1  }
+    
+mgateTreso_BV_modifier:
+    pattern:  /BV/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:BV:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_BV_supprimer:
+    pattern:  /BV/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:BV:supprimer }
+    requirements:
+        id: \d+    
+        
+################################################################################
+################################################################################
+################################################################################
