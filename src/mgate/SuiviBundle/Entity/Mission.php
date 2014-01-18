@@ -98,6 +98,12 @@ class Mission extends DocType {
     private $remunere;
 
 //Ajout fonction rapide
+    public function getReference(){
+        if($this->getIntervenant())
+            return $this->getEtude()->getReference().'-'.$this->getIntervenant()->getIdentifiant().'-'.$this->getVersion();
+        else
+            return $this->getEtude()->getReference().'-XYn-'.$this->getVersion();
+    }
     
     /**
      * 
