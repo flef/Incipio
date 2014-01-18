@@ -50,7 +50,6 @@ class EtudeManager extends \Twig_Extension {
     }
     
     public function toString($int){
-        var_dump((string) $int);
         return (string) $int;
     }
 
@@ -708,12 +707,10 @@ class EtudeManager extends \Twig_Extension {
         {
              
                         $mandat=$etude->getMandat();
-                        //var_dump($mandat);
                         if($etude->getAp()!=NULL)
                         {
                             if($etude->getAp()->getSpt2())
                             {
-                                //var_dump(isset($tauxConversion[$etude->getMandat()]));
                                 if(isset($tauxConversion[$mandat]))
                                 {
                                 $ApRedige=$tauxConversion[$mandat]['ap_redige'];

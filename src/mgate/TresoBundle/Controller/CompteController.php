@@ -36,8 +36,6 @@ class CompteController extends Controller
             {
                 $em->persist($compte);                
                 $em->flush();
-                
-                var_dump($compte);
                 return $this->redirect($this->generateUrl('mgateTreso_Compte_index', array()));
             }
         }
