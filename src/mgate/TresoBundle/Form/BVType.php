@@ -6,7 +6,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\FormBuilder;
 
 use mgate\PersonneBundle\Entity\PersonneRepository;
-use mgate\SuiviBundle\Entity\EtudeRepository;
 
 class BVType extends AbstractType {
 
@@ -25,13 +24,18 @@ class BVType extends AbstractType {
             ->add('nombreJEH', 'integer')
             ->add('remunerationBruteParJEH', 'money')
             ->add('dateDeVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
+            ->add('dateDemission', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
             ->add('typeDeTravail', 'text')
             ->add('etude','genemu_jqueryselect2_entity',array (
                       'label' => 'Etudiant',
                        'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
                        'property' => 'reference',                      
                        'required' => true))
-            //->add('mission')
+            ->add('mission','genemu_jqueryselect2_entity',array (
+                      'label' => 'Mission',
+                       'class' => 'mgate\\SuiviBundle\\Entity\\Mission',
+                       'property' => 'reference',                      
+                       'required' => true))
             ->add('baseURSSAF', 'money')
             ->add('numeroVirement', 'text')
             ->add('tauxJuniorAssietteDeCotisation', 'percent', array('precision' => 2))

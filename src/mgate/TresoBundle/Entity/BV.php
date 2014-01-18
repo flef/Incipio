@@ -63,6 +63,13 @@ class BV
      * @ORM\Column(name="dateDeVersement", type="date")
      */
     private $dateDeVersement;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateDemission", type="date")
+     */
+    private $dateDemission;
 
     /**
      * @var string
@@ -125,7 +132,20 @@ class BV
      */
     private $numeroVirement;
     
-
+    //GETTER ADITION
+    public function getPartJunior(){
+        return $this->nombreJEH  * ($this->baseURSSAF * $this->tauxJuniorAssietteDeCotisation 
+            + $this->tauxJuniorRemunerationBrute * $this->remunerationBruteParJEH);
+    }
+    public function getPartEtudiant(){
+        return $this->nombreJEH  * ($this->baseURSSAF * $this->tauxEtudiantAssietteDeCotisation
+            + $this->tauxEtudiantRemunerationBrute * $this->remunerationBruteParJEH);
+    }
+    public function getReference(){
+        return $this->mandat.'-BV-'.$this->numero;
+    }
+    
+    ///////
 
     /**
      * Get id
@@ -480,5 +500,28 @@ class BV
     public function getMission()
     {
         return $this->mission;
+    }
+
+    /**
+     * Set dateDemission
+     *
+     * @param \DateTime $dateDemission
+     * @return BV
+     */
+    public function setDateDemission($dateDemission)
+    {
+        $this->dateDemission = $dateDemission;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateDemission
+     *
+     * @return \DateTime 
+     */
+    public function getDateDemission()
+    {
+        return $this->dateDemission;
     }
 }

@@ -31,15 +31,21 @@
         <tr>
             <th>{{ form_label(form.etude) }}</th>
             <td>{{ form_widget(form.etude) }}</td>
+            <th>{{ form_label(form.typeDeTravail) }}</th>
+            <td>{{ form_widget(form.typeDeTravail) }}</td>
+        </tr>
+        <tr>
             <th>{{ form_label(form.etudiant) }}</th>
             <td>{{ form_widget(form.etudiant) }}</td>
+            <th>{{ form_label(form.mission) }}</th>
+            <td>{{ form_widget(form.mission) }}</td>
         </tr>
         <tr>
             <th colspan="4">Taux</th>
         </tr>
         <tr>
-            <th>{{ form_label(form.typeDeTravail) }}</th>
-            <td>{{ form_widget(form.typeDeTravail) }}</td>
+            <th>{{ form_label(form.dateDemission) }}</th>
+            <td>{{ form_widget(form.dateDemission) }}</td>
             <th>{{ form_label(form.baseURSSAF) }}</th>
             <td>{{ form_widget(form.baseURSSAF) }}</td>
         </tr>
