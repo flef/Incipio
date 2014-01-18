@@ -13,24 +13,11 @@ class BVType extends AbstractType {
         $builder
             ->add('mandat', 'integer')
             ->add('numero', 'integer')
-            ->add('etudiant','genemu_jqueryselect2_entity',array (
-                      'label' => 'Etudiant',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'query_builder' => function(PersonneRepository $pr) {
-                            return $pr->getMembreOnly();
-                        },
-                       'required' => true))
             ->add('nombreJEH', 'integer')
             ->add('remunerationBruteParJEH', 'money')
             ->add('dateDeVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
             ->add('dateDemission', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
-            ->add('typeDeTravail', 'text')
-            ->add('etude','genemu_jqueryselect2_entity',array (
-                      'label' => 'Etudiant',
-                       'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
-                       'property' => 'reference',                      
-                       'required' => true))
+            ->add('typeDeTravail', 'text')            
             ->add('mission','genemu_jqueryselect2_entity',array (
                       'label' => 'Mission',
                        'class' => 'mgate\\SuiviBundle\\Entity\\Mission',

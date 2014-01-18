@@ -38,12 +38,6 @@ class BV
     private $numero;
         
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $etudiant;
-        
-    /**
      * @var integer
      *
      * @ORM\Column(name="nombreJEH", type="smallint")
@@ -78,11 +72,6 @@ class BV
      */
     private $typeDeTravail;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude")
-     */
-    private $etude;
-
     /**
      * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
      */
