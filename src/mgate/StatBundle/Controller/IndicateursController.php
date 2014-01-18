@@ -460,6 +460,7 @@ class IndicateursController extends Controller {
         /* Initialisation */
         $comptes = array();
         $comptes['Honoraires BV'] = 0;
+        $comptes['URSSAF'] = 0;
         $montantTotal = 0;
         foreach ($nfs as $nf){
             foreach ($nf->getDetails() as $detail){
@@ -477,7 +478,8 @@ class IndicateursController extends Controller {
         
         foreach ($bvs as $bv){
             $comptes['Honoraires BV'] += $bv->getRemunerationBrute();
-            $montantTotal += $bv->getRemunerationBrute();
+            $comptes['URSSAF'] += $bv->getPartJunior();
+            $montantTotal += $bv->getRemunerationBrute() + $bv->getPartJunior();
         }
         
         ksort($comptes);
