@@ -1,0 +1,75 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des BV - {{ parent() }}
+{% endblock %}
+
+
+    
+{% block content_bundle %}
+    <h3>{{ bv.numero ? "Ajout d'un" :  "Modification du" }} BV : {{ bv.mandat }}-BV-{{ bv.numero  }} </h3>
+    <form method="post" {{ form_enctype(form) }}>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.mandat) }}</th>
+            <td>{{ form_widget(form.mandat) }}</td>
+            <th>{{ form_label(form.numero) }}</th>
+            <td>{{ form_widget(form.numero) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.nombreJEH) }}</th>
+            <td>{{ form_widget(form.nombreJEH) }}</td>
+            <th>{{ form_label(form.remunerationBruteParJEH) }}</th>
+            <td>{{ form_widget(form.remunerationBruteParJEH) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.numeroVirement) }}</th>
+            <td>{{ form_widget(form.numeroVirement) }}</td>
+            <th>{{ form_label(form.dateDeVersement) }}</th>
+            <td>{{ form_widget(form.dateDeVersement) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.etude) }}</th>
+            <td>{{ form_widget(form.etude) }}</td>
+            <th>{{ form_label(form.etudiant) }}</th>
+            <td>{{ form_widget(form.etudiant) }}</td>
+        </tr>
+        <tr>
+            <th colspan="4">Taux</th>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.typeDeTravail) }}</th>
+            <td>{{ form_widget(form.typeDeTravail) }}</td>
+            <th>{{ form_label(form.baseURSSAF) }}</th>
+            <td>{{ form_widget(form.baseURSSAF) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.tauxJuniorAssietteDeCotisation) }}</th>
+            <td>{{ form_widget(form.tauxJuniorAssietteDeCotisation) }}</td>
+            <th>{{ form_label(form.tauxJuniorRemunerationBrute) }}</th>
+            <td>{{ form_widget(form.tauxJuniorRemunerationBrute) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.tauxEtudiantAssietteDeCotisation) }}</th>
+            <td>{{ form_widget(form.tauxEtudiantAssietteDeCotisation) }}</td>
+            <th>{{ form_label(form.tauxEtudiantRemunerationBrute) }}</th>
+            <td>{{ form_widget(form.tauxEtudiantRemunerationBrute) }}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Enregistrer" />
+    {{ form_rest(form) }} 
+    </form>
+    {% if bv.numero %}
+    <table class="table">
+        <tr>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_BV_supprimer', {'id': bv.id})}}';">Supprimer le Compte (ADMIN)</button></td>
+        </tr>
+    </table>
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}     
+{% endblock %}

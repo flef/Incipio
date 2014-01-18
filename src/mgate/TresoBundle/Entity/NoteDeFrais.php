@@ -8,7 +8,7 @@ use mgate\SuiviBundle\Entity\DocType as DocType;
 /**
  * NoteDeFrais
  *
- @ @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"mandat", "numero"})})
  * @ORM\Entity(repositoryClass="mgate\TresoBundle\Entity\NoteDeFraisRepository")
  */
 class NoteDeFrais
