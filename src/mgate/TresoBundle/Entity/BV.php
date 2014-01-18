@@ -170,29 +170,6 @@ class BV
     }
 
     /**
-     * Set etudiant
-     *
-     * @param string $etudiant
-     * @return BV
-     */
-    public function setEtudiant($etudiant)
-    {
-        $this->etudiant = $etudiant;
-    
-        return $this;
-    }
-
-    /**
-     * Get etudiant
-     *
-     * @return string 
-     */
-    public function getEtudiant()
-    {
-        return $this->etudiant;
-    }
-
-    /**
      * Set typeDeTravail
      *
      * @param string $typeDeTravail
@@ -443,29 +420,6 @@ class BV
     public function getRemunerationBruteParJEH()
     {
         return $this->remunerationBruteParJEH;
-    }
-
-    /**
-     * Set etude
-     *
-     * @param \mgate\SuiviBundle\Entity\Etude $etude
-     * @return BV
-     */
-    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude = null)
-    {
-        $this->etude = $etude;
-    
-        return $this;
-    }
-
-    /**
-     * Get etude
-     *
-     * @return \mgate\SuiviBundle\Entity\Etude 
-     */
-    public function getEtude()
-    {
-        return $this->etude;
     }
 
     /**
