@@ -409,6 +409,7 @@ class IndicateursController extends Controller {
         $ob->chart->renderTo(__FUNCTION__);
         // OTHERS
         $ob->chart->type('column');
+        $ob->yAxis->allowDecimals(false);
 
         /*         * ***********************
          * DATAS
@@ -431,7 +432,7 @@ class IndicateursController extends Controller {
         /*         * ***********************
          * TEXTS AND LABELS
          */
-        $ob->title->text('Nombre d\'étude par mandat');
+        $ob->title->text('Nombre d\'études par mandat');
         $ob->yAxis->title(array('text' => "Nombre", 'style' => $style));
         $ob->xAxis->title(array('text' => "Mandat", 'style' => $style));
         $ob->tooltip->headerFormat('<b>{series.name}</b><br />');
