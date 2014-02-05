@@ -20,6 +20,28 @@ class PhaseChange {
     private $dateDebut = false;
     private $validation = false;
     private $delai = false;
+    private $etatSurAvenant = false;
+
+
+    private $oldPosition;
+    private $oldNbrJEH;
+    private $oldPrixJEH;
+    private $oldTitre;
+    private $oldObjectif;
+    private $oldMethodo;
+    private $oldDateDebut;
+    private $oldValidation;
+    private $oldDelai;
+    private $oldEtatSurAvenant;
+
+    public function getEtatSurAvenant(){
+        return $this->etatSurAvenant;
+    }
+    
+    public function setEtatSurAvenant($x){
+        $this->etatSurAvenant = $x;
+        return $this;
+    }
 
     public function getPosition() {
         return $this->position;
@@ -101,7 +123,96 @@ class PhaseChange {
         $this->delai = $x;
         return $this;
     }
+    
+    public function getOldPosition(){
+		return $this->oldPosition;
+	}
 
+	public function setOldPosition($oldPosition){
+		$this->oldPosition = $oldPosition;
+        return $this;
+	}
+
+	public function getOldNbrJEH(){
+		return $this->oldNbrJEH;
+	}
+
+	public function setOldNbrJEH($oldNbrJEH){
+		$this->oldNbrJEH = $oldNbrJEH;
+        return $this;
+	}
+
+	public function getOldPrixJEH(){
+		return $this->oldPrixJEH;
+	}
+
+	public function setOldPrixJEH($oldPrixJEH){
+		$this->oldPrixJEH = $oldPrixJEH;
+        return $this;
+	}
+
+	public function getOldTitre(){
+		return $this->oldTitre;
+	}
+
+	public function setOldTitre($oldTitre){
+		$this->oldTitre = $oldTitre;
+        return $this;
+	}
+
+	public function getOldObjectif(){
+		return $this->oldObjectif;
+	}
+
+	public function setOldObjectif($oldObjectif){
+		$this->oldObjectif = $oldObjectif;
+        return $this;
+	}
+
+	public function getOldMethodo(){
+		return $this->oldMethodo;
+	}
+
+	public function setOldMethodo($oldMethodo){
+		$this->oldMethodo = $oldMethodo;
+        return $this;
+	}
+
+	public function getOldDateDebut(){
+		return $this->oldDateDebut;
+	}
+
+	public function setOldDateDebut($oldDateDebut){
+		$this->oldDateDebut = $oldDateDebut;
+        return $this;
+	}
+
+	public function getOldValidation(){
+		return $this->oldValidation;
+	}
+
+	public function setOldValidation($oldValidation){
+		$this->oldValidation = $oldValidation;
+        return $this;
+	}
+
+	public function getOldDelai(){
+		return $this->oldDelai;
+	}
+
+	public function setOldDelai($oldDelai){
+		$this->oldDelai = $oldDelai;
+        return $this;
+	}
+    
+    public function getOldEtatSurAvenant(){
+        return $this->oldEtatSurAvenant;
+    }
+
+    public function setOldEtatSurAvenant($oldEtatSurAvenant){
+        $this->oldEtatSurAvenant = $oldEtatSurAvenant;
+        return $this;        
+    }
 }
 
 class AvController extends Controller {
@@ -143,11 +254,10 @@ class AvController extends Controller {
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
-        //$deleteForm = $this->createDeleteForm($id);
 
         return $this->render('mgateSuiviBundle:Av:voir.html.twig', array(
                     'av' => $entity,
-                /* 'delete_form' => $deleteForm->createView(),  */                ));
+            ));
     }
 
     private function getPhaseByPosition($position, $array) {
@@ -158,14 +268,24 @@ class AvController extends Controller {
         return NULL;
     }
 
-    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Validation', 'Delai', 'Position');
+    static $phaseMethodes = array('NbrJEH', 'PrixJEH', 'Titre', 'Objectif', 'Methodo', 'DateDebut', 'Delai', 'Position', 'EtatSurAvenant');
 
+    /**
+     * @abstract copie tous les champs non null de $phaseToMerge dans Phase receptor
+     * phaseRecptor est la Phase original, Phase to merge contient les champs modifiés par l'AV
+     * 
+     * @param Phase $phaseReceptor
+     * @param Phase $phaseToMerge
+     * @param PhaseChange $changes
+     */
     private function mergePhaseIfNotNull($phaseReceptor, $phaseToMerge, $changes) {
         foreach (AvController::$phaseMethodes as $methode) {
             $getMethode = 'get' . $methode;
             $setMethode = 'set' . $methode;
+            $setOldValue = 'setOld' . $methode;
             if ($phaseToMerge->$getMethode() != NULL) {
                 $changes->$setMethode(true);
+                $changes->$setOldValue($phaseReceptor->$getMethode());
                 $phaseReceptor->$setMethode($phaseToMerge->$getMethode());
             }
         }
@@ -235,7 +355,7 @@ class AvController extends Controller {
 
         $phasesChanges = array();
 
-        $phasesEtude = $av->getEtude()->getPhases()->toArray();
+        $phasesEtude = $etude->getPhases()->toArray();
         foreach ($phasesEtude as $phase) {
 
             $changes = new PhaseChange();
@@ -249,7 +369,9 @@ class AvController extends Controller {
             $phaseAV->setEtude()->setAvenant($av);
             $av->addPhase($phaseAV);
             $phasesChanges[] = $changes;
+
         }
+
 
         $form = $this->createForm(new AvType, $av, array('prospect' => $av->getEtude()->getProspect()));
 

@@ -28,7 +28,6 @@ Modifier un Avant-Projet - {{ parent() }}
 
 
     <h2>Modifier un Avenant</h2>
-
     <form method="post" {{ form_enctype(form) }}>
         <input type="submit" value="Enregistrer l'Avenant"/>
 
@@ -54,7 +53,6 @@ Modifier un Avant-Projet - {{ parent() }}
                 <td>{{  form_widget(form.differentielDelai) }}</td>
             </tr> 
         </table>
-        <span style="display:none;">
         <h3>Gestion des Répartions JEH (à venir)</h3>
         <h3>Gestion des Phases (à venir)</h3>
         <h5><i class="icon-plus"></i> Ajouter une phase (à venir)</h5>
@@ -76,7 +74,10 @@ Modifier un Avant-Projet - {{ parent() }}
                         </tr>
                         <tr class="{{ change and change.methodo ? "warning" }}">
                             <th>Méthodologie</th>
-                            <td>{{ form_widget(phase.methodo)}}</td>
+                            <td>
+                                <i>{{ change and change.methodo? '«'~change.oldMethodo~'» est remplacé par :' }}</i><br />
+                                {{ form_widget(phase.methodo)}}
+                            </td>
                         </tr>
                         <tr class="{{ change and change.nbrJEH ? "warning" }}">
                             <th>Nombre JEH</th>
@@ -102,7 +103,6 @@ Modifier un Avant-Projet - {{ parent() }}
                 </div>
         {% endfor %}
             </div>
-        </span>
             {{ form_widget(form) }}
                 <input type="submit" value="Enregistrer l'Avenant"/>      
         </form>
