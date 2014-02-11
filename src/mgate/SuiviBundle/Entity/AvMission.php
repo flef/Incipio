@@ -51,10 +51,6 @@ class AvMission extends DocType
      */
     private $differentielDelai;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Av", inversedBy="avenantsMissions")
-     */
-    private $avenant;
 
     /**
      * Get id

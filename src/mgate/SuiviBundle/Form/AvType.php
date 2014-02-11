@@ -18,7 +18,7 @@ class AvType extends DocTypeType {
         ->add('clauses', 'choice', array('label' => 'Type d\'avenant', 'multiple' => true, 'choices' => Av::getClausesChoices()))
         ->add('phases', 'collection', array(
                 'type' => new PhaseType,
-                'options' => array('isAvenant' => true),
+                'options' => array('isAvenant' => true, 'etude' => $options['etude']),
                 'allow_add' => true,
                 'allow_delete' => true,
                 'prototype' => true,
@@ -42,7 +42,8 @@ class AvType extends DocTypeType {
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
         $resolver->setDefaults(array(
             'data_class' => 'mgate\SuiviBundle\Entity\Av',
-            'prospect' => '',
+            'etude' => null,
+            'prospect' => ''
         ));
     }
 

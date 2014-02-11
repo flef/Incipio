@@ -23,7 +23,7 @@ class PhaseType extends AbstractType {
                 ->add('prixJEH', 'integer', array('label' => 'Prix du JEH HT', 'required' => false, 'attr' => array('class' => 'prixJEH')))
                 ->add('dateDebut', 'genemu_jquerydate', array('label' => 'Date de début', 'format' => 'd/MM/y', 'required' => false, 'widget' => 'single_text'))
                 ->add('delai', 'integer', array('label' => 'Durée en nombre de jours', 'required' => false));
-        if($options['etude'])     
+        if($options['etude'])   
         $builder->add('groupe', 'genemu_jqueryselect2_entity', array(
                 'class' => 'mgate\SuiviBundle\Entity\GroupePhases',
                 'property' => 'titre',

@@ -373,7 +373,7 @@ class AvController extends Controller {
         }
 
 
-        $form = $this->createForm(new AvType, $av, array('prospect' => $av->getEtude()->getProspect()));
+        $form = $this->createForm(new AvType, $av, array('prospect' => $etude->getProspect(), /*'etude' => $etude*/));
 
         if ($this->get('request')->getMethod() == 'POST') {
             $form->bind($this->get('request'));
