@@ -6,9 +6,11 @@ parameters:
 services:
     mgate.conversionlettre:
         class: "%mgate.conversionlettre.class%"
-#        arguments:
-#          - "@doctrine.orm.entity_manager"
-#          - "%tva%"
+    twig.stringloader:
+        class: Twig_Loader_String
+        tags:
+            - { name: twig.loader }
+
 
 
 #services:

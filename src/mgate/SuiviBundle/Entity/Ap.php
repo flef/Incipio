@@ -58,6 +58,11 @@ class Ap extends DocType
         return $this->id;
     }
     
+    public function getReference()
+    {
+        return $this->etude->getReference().'-AP-'.$this->getVersion();
+    }
+        
     /**
      * Set etude
      *
