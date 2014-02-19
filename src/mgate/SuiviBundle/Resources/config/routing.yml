@@ -207,33 +207,33 @@ mgateSuivi_avmission_modifier:
     requirements:
         id: \d+
 
-mgateSuivi_facture_ajouter:
-    pattern: /facture/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:add}
+mgateSuivi_FactureVente_ajouter:
+    pattern: /FactureVente/ajouter/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureVente:add}
     requirements:
         id: \d+
         
-mgateSuivi_facture_modifier:
-    pattern: /facture/modifier/{id_facture}
-    defaults: {_controller: mgateSuiviBundle:Facture:modifier}
+mgateSuivi_FactureVente_modifier:
+    pattern: /FactureVente/modifier/{id_FactureVente}
+    defaults: {_controller: mgateSuiviBundle:FactureVente:modifier}
     requirements:
         id: \d+
         
-mgateSuivi_facture_rediger:
-    pattern: /facture/rediger/{id_etude}/{type}
-    defaults: {_controller: mgateSuiviBundle:Facture:rediger}
+mgateSuivi_FactureVente_rediger:
+    pattern: /FactureVente/rediger/{id_etude}/{type}
+    defaults: {_controller: mgateSuiviBundle:FactureVente:rediger}
     requirements:
         id: \d+
  
-mgateSuivi_facture_voir:
-    pattern: /facture/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:voir}
+mgateSuivi_FactureVente_voir:
+    pattern: /FactureVente/voir/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureVente:voir}
     requirements:
         id: \d+
         
-mgateSuivi_facture_supprimer:
-    pattern: /facture/supprimer/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:delete}
+mgateSuivi_FactureVente_supprimer:
+    pattern: /FactureVente/supprimer/{id}
+    defaults: {_controller: mgateSuiviBundle:FactureVente:delete}
     requirements:
         id: \d+
          

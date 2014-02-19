@@ -1,22 +1,22 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Affichage d'une Facture - {{ parent() }}
+	Affichage d'une FactureVente - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    <h2>Facture {% if facture.type=="fs" %}de Solde{%elseif facture.type=="fa"%}d'Acompte{%endif%} (id:{{ facture.id }})</h2>
+    <h2>FactureVente {% if FactureVente.type=="fs" %}de Solde{%elseif FactureVente.type=="fa"%}d'Acompte{%endif%} (id:{{ FactureVente.id }})</h2>
     
-    <i>Version {{facture.version}}</i>
+    <i>Version {{FactureVente.version}}</i>
 
     <div>
-        <p>Montant HT: {{facture.montantHT}}</p>
+        <p>Montant HT: {{FactureVente.montantHT}}</p>
     </div>
 
     <p>
         <a href="{{ path('mgateSuivi_etude_homepage') }}">Retour à la liste des études</a><br />
-        <a href="{{ path('mgateSuivi_facture_modifier', {'id_facture': facture.id}) }}">Rédiger la Facture</a>
+        <a href="{{ path('mgateSuivi_FactureVente_modifier', {'id_FactureVente': FactureVente.id}) }}">Rédiger la FactureVente</a>
 	
     </p>
 

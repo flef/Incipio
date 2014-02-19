@@ -1,0 +1,58 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des notes de frais - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": false,
+			"aaSorting": [[1,'desc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_NoteDeFrais_ajouter')}}';">Ajouter une Note de Frais</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Référence</th>
+            <th>Demandeur</th>
+            <th>Objet</th>
+            <th>Montant HT</th>
+            <th>Montant TVA</th>
+            <th>Montant TTC</th>
+        </tr>
+        </thead>        
+        {% for nf in nfs %}
+        <tr>
+            <td>{{ nf.date | date('d/m/Y')}}</td>
+            <td><a href="{{ path('mgateTreso_NoteDeFrais_voir', {'id': nf.id})}}">{{ nf.mandat }}-NF{{ "%2d" | format(nf.numero)}}-{{ nf.demandeur.membre.identifiant }}</a></td>
+            <td>{{ nf.demandeur.prenomNom }}</td>
+            <td>{{ nf.objet | nl2br }}</td>
+            <td style="text-align: right;">{{ nf.montantHT |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ nf.montantTVA |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ (nf.montantHT + nf.montantTVA) |number_format(2, ',', ' ')}} €</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+    
+    
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}
