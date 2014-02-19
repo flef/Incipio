@@ -1,0 +1,58 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des factures - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": false,
+			"aaSorting": [[1,'desc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_Facture_ajouter')}}';">Ajouter une Facture</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Date d'émission</th>
+            <th>Référence</th>
+            <th>Objet</th>
+            <th>Montant HT</th>
+            <th>Montant TVA</th>
+            <th>Montant TTC</th>
+            <th>Statut</th>
+        </tr>
+        </thead>        
+        {% for facture in factures %}
+        <tr>
+            <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
+            <td><a href="{{ path('mgateTreso_Facture_voir', {'id': facture.id})}}">{{ facture.reference}}</a></td>
+            <td>{{ facture.objet }}</td>
+            <td style="text-align: right;">{{ facture.montantHT |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ facture.montantTVA |number_format(2, ',', ' ')}} €</td>
+            <td style="text-align: right;">{{ facture.montantTTC |number_format(2, ',', ' ')}} €</td>
+            <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+    
+    
+{% block javascript %}
+    {{ parent() }}
+{% endblock %}

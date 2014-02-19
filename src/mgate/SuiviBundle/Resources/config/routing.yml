@@ -206,38 +206,7 @@ mgateSuivi_avmission_modifier:
     defaults: {_controller: mgateSuiviBundle:AvMission:modifier}
     requirements:
         id: \d+
-
-mgateSuivi_facture_ajouter:
-    pattern: /facture/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:add}
-    requirements:
-        id: \d+
-        
-mgateSuivi_facture_modifier:
-    pattern: /facture/modifier/{id_facture}
-    defaults: {_controller: mgateSuiviBundle:Facture:modifier}
-    requirements:
-        id: \d+
-        
-mgateSuivi_facture_rediger:
-    pattern: /facture/rediger/{id_etude}/{type}
-    defaults: {_controller: mgateSuiviBundle:Facture:rediger}
-    requirements:
-        id: \d+
- 
-mgateSuivi_facture_voir:
-    pattern: /facture/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:voir}
-    requirements:
-        id: \d+
-        
-mgateSuivi_facture_supprimer:
-    pattern: /facture/supprimer/{id}
-    defaults: {_controller: mgateSuiviBundle:Facture:delete}
-    requirements:
-        id: \d+
-         
-                
+          
 mgateSuivi_phases_modifier:
     pattern: /phases/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Phases:modifier}

@@ -61,7 +61,10 @@ class NoteDeFrais
     protected $demandeur;
 
 
-    // Perso
+    /**
+     * 
+     * ADDITIONAL GETTERS
+     */
     public function getMontantHT(){
        $montantHT = 0;
        foreach ($this->details as $detail){
@@ -80,6 +83,9 @@ class NoteDeFrais
     }
 
 
+    /*
+     * STANDARDS GETTERS/SETTERS
+     */
     
     
     /**
