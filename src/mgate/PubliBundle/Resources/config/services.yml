@@ -1,6 +1,7 @@
 parameters:
 #    mgate_publi.example.class: mgate\PubliBundle\Example
     mgate.conversionlettre.class: mgate\PubliBundle\Controller\ConversionLettreController
+    mgate.twigextentionmanager.class: mgate\PubliBundle\Manager\TwigExtensionManager
 
 
 services:
@@ -10,6 +11,10 @@ services:
         class: Twig_Loader_String
         tags:
             - { name: twig.loader }
+    mgate.twig_extension:
+        class: "%mgate.twigextentionmanager.class%"
+        tags:
+            - { name: twig.extension }
 
 
 
