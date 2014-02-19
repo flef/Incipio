@@ -10,8 +10,14 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class FactureVente
+class Facture
 {
+    public static $TYPE_ACHAT = 1;
+    public static $TYPE_VENTE = 2;
+    public static $TYPE_VENTE_ACCOMPTE = 3;
+    public static $TYPE_VENTE_INTERMEDIAIRE = 4;
+    public static $TYPE_VENTE_SOLDE = 5;
+    
     /**
      * @var integer
      *
@@ -20,7 +26,7 @@ class FactureVente
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+    
     /**
      * @var integer
      *
@@ -37,8 +43,9 @@ class FactureVente
 
     /**
      * @var integer
+     * @abstract 1 is Achat, > 2 is vente
      *
-     * @ORM\Column(name="type", type="smallint")
+     * @ORM\Column(name="type", type="smallint", nullable=false)
      */
     private $type;
     
@@ -50,10 +57,66 @@ class FactureVente
     private $date;
     
     /**
-     * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="factureVente", cascade={"persist", "merge", "refresh", "remove"})
+     * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="facture", cascade={"persist", "merge", "refresh", "remove"})
      */
-    private $detailsDeVente;
+    private $details;
     
+    /**
+     * @ORM\Column(name="objet", type="text", nullable=false)
+     * @var string
+     */
+    private $objet;
+    
+    /**
+     * ADDITIONNAL
+     */
+    public function getReference(){
+        return '[M-GaTE]'.$this->exercice.'-'.($this->type > 1 ? 'FV' : 'FA').'-'. sprintf('%1$02d', $this->numero);
+    }
+    
+    public function getMontantHT(){
+       $montantHT = 0;
+       foreach ($this->details as $detail)
+            $montantHT += $detail->getMontantHT();           
+       return $montantHT;
+    }
+    
+    public function getMontantTVA(){
+        $TVA = 0;
+        foreach ($this->details as $detail)
+            $TVA += $detail->getMontantHT() * $detail->getTauxTVA() / 100;
+       return $TVA;
+    }
+    
+    public function getMontantTTC(){
+        return $this->getMontantHT() + $this->getMontantTVA();
+    }
+    
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getTypeToString()
+    {
+        $type = $this->getTypeChoices();
+        return $type[$this->type];
+    }
+    
+    public static function getTypeChoices(){
+        return array(
+            self::$TYPE_ACHAT => 'FA - Facture d\'achat',
+            self::$TYPE_VENTE => 'FV - Facture de vente',
+            self::$TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'accomtpe',
+            self::$TYPE_VENTE_INTERMEDIAIRE => 'FV - Facture intermédiaire',
+            self::$TYPE_VENTE_SOLDE => 'FV - Facture de solde',
+            );
+    } 
+    
+    
+    /**
+     * STANDARDS GETTER / SETTER
+     */
 
     /**
      * Get id
@@ -71,14 +134,14 @@ class FactureVente
      */
     public function __construct()
     {
-        $this->detailsDeVente = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->details = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
      * Set exercice
      *
      * @param integer $exercice
-     * @return FactureVente
+     * @return Facture
      */
     public function setExercice($exercice)
     {
@@ -101,7 +164,7 @@ class FactureVente
      * Set numero
      *
      * @param integer $numero
-     * @return FactureVente
+     * @return Facture
      */
     public function setNumero($numero)
     {
@@ -124,7 +187,7 @@ class FactureVente
      * Set type
      *
      * @param integer $type
-     * @return FactureVente
+     * @return Facture
      */
     public function setType($type)
     {
@@ -142,12 +205,14 @@ class FactureVente
     {
         return $this->type;
     }
+    
+
 
     /**
      * Set date
      *
      * @param \DateTime $date
-     * @return FactureVente
+     * @return Facture
      */
     public function setDate($date)
     {
@@ -167,35 +232,58 @@ class FactureVente
     }
 
     /**
-     * Add detailsDeVente
+     * Add details
      *
-     * @param \mgate\TresoBundle\Entity\FactureDetail $detailsDeVente
-     * @return FactureVente
+     * @param \mgate\TresoBundle\Entity\FactureDetail $details
+     * @return Facture
      */
-    public function addDetailsDeVente(\mgate\TresoBundle\Entity\FactureDetail $detailsDeVente)
+    public function addDetail(\mgate\TresoBundle\Entity\FactureDetail $details)
     {
-        $this->detailsDeVente[] = $detailsDeVente;
+        $this->details[] = $details;
     
         return $this;
     }
 
     /**
-     * Remove detailsDeVente
+     * Remove details
      *
-     * @param \mgate\TresoBundle\Entity\FactureDetail $detailsDeVente
+     * @param \mgate\TresoBundle\Entity\FactureDetail $details
      */
-    public function removeDetailsDeVente(\mgate\TresoBundle\Entity\FactureDetail $detailsDeVente)
+    public function removeDetail(\mgate\TresoBundle\Entity\FactureDetail $details)
     {
-        $this->detailsDeVente->removeElement($detailsDeVente);
+        $this->details->removeElement($details);
     }
 
     /**
-     * Get detailsDeVente
+     * Get details
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getDetailsDeVente()
+    public function getDetails()
     {
-        return $this->detailsDeVente;
+        return $this->details;
+    }
+    
+    /**
+     * Set objet
+     *
+     * @param string $objet
+     * @return NoteDeFrais
+     */
+    public function setObjet($objet)
+    {
+        $this->objet = $objet;
+    
+        return $this;
+    }
+
+    /**
+     * Get objet
+     *
+     * @return string 
+     */
+    public function getObjet()
+    {
+        return $this->objet;
     }
 }
