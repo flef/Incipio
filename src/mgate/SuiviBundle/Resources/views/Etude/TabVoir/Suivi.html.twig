@@ -182,7 +182,7 @@
         {% for facture in etude.factures %}
         <tr>
             <td>{% if is_granted('ROLE_CA') %}
-                <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id, 'etude_id' : etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
                 &nbsp;&nbsp;&nbsp;

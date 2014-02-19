@@ -16,7 +16,7 @@ class FactureType extends AbstractType {
                 ->add('type', 'choice', array('choices' => \mgate\TresoBundle\Entity\Facture::getTypeChoices(), 'required' => true))
                 ->add('objet', 'textarea', 
                     array('label' => 'Objet de la Facture',
-                        'required' => false, 
+                        'required' => true, 
                         'attr'=>array(
                             'cols'=>'100%', 
                             'rows'=>5)

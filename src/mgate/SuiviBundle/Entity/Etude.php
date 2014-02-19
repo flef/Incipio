@@ -262,6 +262,13 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return "[M-GaTE]" . (string) ($this->getMandat() * 100 + $this->getNum());
     }
     
+    public function getMontantHT(){
+        $total = $this->fraisDossier;
+        foreach ($this->phases as $phase)
+            $total += $phase->getNbrJEH() * $phase->getPrixJEH();
+        return $total;
+    }
+    
     
     /**
      * Constructor
@@ -907,10 +914,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Add Facture
      *
-     * @param \mgate\SuiviBundle\Entity\Facture $facture
+     * @param \mgate\TresoBundle\Entity\Facture $facture
      * @return Etude
      */
-    public function addFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+    public function addFacture(\mgate\TresoBundle\Entity\Facture $facture) {
         $this->factures[] = $facture;
 
         return $this;
@@ -919,9 +926,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Remove Facture
      *
-     * @param \mgate\SuiviBundle\Entity\Facture $facture
+     * @param \mgate\TresoBundle\Entity\Facture $facture
      */
-    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+    public function removeFacture(\mgate\TresoBundle\Entity\Facture $facture) {
         $this->factures->removeElement($facture);
     }
 
@@ -1095,121 +1102,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         }
     }
 
-    /**
-     * Add fi
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $fi
-     * @return Etude
-     */
-    public function addFi(\mgate\SuiviBundle\Entity\Facture $fi) {
-        $this->fis[] = $fi;
-        $fi->setEtude($this);
-        $fi->setType('fi');
 
-        return $this;
-    }
 
-    /**
-     * Remove fis
-     *
-     * @param \mgate\SuiviBundle\Entity\Facture $fi
-     */
-    public function removeFi(\mgate\SuiviBundle\Entity\Facture $fi) {
-        $this->fis->removeElement($fi);
-    }
 
-    function trieDateSignature($a, $b) {
-        if ($a->getDateSignature() == $b->getDateSignature())
-            return 0;
-        else
-            return ($a->getDateSignature() < $b->getDateSignature()) ? -1 : 1;
-    }
-
-    /**
-     * Get fis
-     *
-     * @return mixed(array, Facture)
-     */
-    public function getFis($key = -1) {
-        $fis = array();
-
-        foreach ($this->factures as $value) {
-            if ($value->getType() == "fi") {
-                $fis[] = $value;
-            }
-        }
-
-        if ($key >= 0) {
-            if ($key < count($fis))
-                return $fis[$key];
-            else
-                return NULL;
-        }
-        
-        usort($fis, array($this, 'trieDateSignature'));
-        return $fis;
-    }
-
-    /**
-     * Get fa
-     *
-     * @return \mgate\SuiviBundle\Entity\Facture
-     */
-    public function getFa() {
-        foreach ($this->factures as $facture) {
-            if ($facture->getType() == "fa")
-                return $facture;
-        }
-    }
-
-    /**
-     * Set fa
-     *
-     * @return \mgate\SuiviBundle\Entity\Facture
-     */
-    public function setFa(\mgate\SuiviBundle\Entity\Facture $fa) {
-        $fa->setEtude($this);
-        $fa->setType('fa');
-
-        foreach ($this->factures as $facture) {
-            if ($facture->getType() == "fa") {
-                $facture = $fa;
-                return;
-            }
-        }
-        $this->factures[] = $fa;
-    }
-
-    /**
-     * Get fs
-     *
-     * @return \mgate\SuiviBundle\Entity\Facture
-     */
-    public function getFs() {
-        foreach ($this->factures as $facture) {
-            if ($facture->getType() == "fs")
-                return $facture;
-        }
-    }
-
-    /**
-     * Set fs
-     *
-     * @return \mgate\SuiviBundle\Entity\Facture
-     */
-    public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
-        $fs->setEtude($this);
-        $fs->setType('fs');
-
-        foreach ($this->factures as $facture) {
-            if ($facture->getType() == "fs") {
-                $facture = $fs;
-                return;
-            }
-        }
-        $this->factures[] = $fs;
-    }
-
+   
     /**
      * Set thread
      *
@@ -1458,5 +1354,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function removeProcesVerbaux(\mgate\SuiviBundle\Entity\ProcesVerbal $procesVerbaux)
     {
         $this->procesVerbaux->removeElement($procesVerbaux);
+    }
+    
+     private function trieDateSignature($a, $b) {
+        if ($a->getDateSignature() == $b->getDateSignature())
+            return 0;
+        else
+            return ($a->getDateSignature() < $b->getDateSignature()) ? -1 : 1;
     }
 }

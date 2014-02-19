@@ -80,6 +80,7 @@ class Facture
      */
     private $objet;
     
+   
     /**
      * ADDITIONNAL
      */
@@ -345,4 +346,5 @@ class Facture
     {
         return $this->etude;
     }
+
 }
