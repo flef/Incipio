@@ -25,14 +25,7 @@ class TraitementController extends Controller {
         return $allmatches;
     }
 
-    public function commenceParUneVoyelle($mot) {
-        return preg_match('#^[aeiouy]#', $mot);
-    }
 
-    private function nombreVersMois($m) {
-        $mois = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
-        return $mois[($m % 12) - 1];
-    }
 
     private function array_push_assoc(&$array, $key, $value) {
         $array[$key] = $value;
@@ -81,7 +74,7 @@ class TraitementController extends Controller {
     }
 
     private function traiterTemplates($templateFullPath, $rootName, $rootObject) {
-        $templatesXML = $this->getDocxContent($templateFullPath); //rÃ©cup contenu XML
+        $templatesXML = $this->getDocxContent($templateFullPath); //récup contenu XML
         $templatesXMLTraite = array();
 
         foreach ($templatesXML as $templateName => $templateXML) {
@@ -133,7 +126,6 @@ class TraitementController extends Controller {
         
         $templatesXMLtraite = $this->traiterTemplates($chemin, 'etude', $etude);
         $champsBrut = $this->verifierTemplates($templatesXMLtraite);
-
         $repertoire = 'tmp';
 
         //SI DM on prend la ref de RM et ont remplace RM par DM
@@ -155,6 +147,10 @@ class TraitementController extends Controller {
         $zip = new \ZipArchive();
         $zip->open($repertoire . '/' . $idDocx);
 
+        
+        /*
+         * TRAITEMENT INSERT IMAGE
+         */
         $images = array();
         //Gantt
         if ($doc == 'AP' || (isset($isDM) && $isDM)) {
@@ -176,6 +172,7 @@ class TraitementController extends Controller {
             $zip->deleteName('word/media/' . $image[2]);
             $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
         }
+        /*****/
 
         foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
             $zip->deleteName('word/' . $templateXMLName);
@@ -214,14 +211,12 @@ class TraitementController extends Controller {
             $champsBrut = $this->publiposterMultipleEtude($id_etude, $doc);
         else
             $champsBrut = $this->publipostageEtude($id_etude, $doc, $key);
-         
-        if (count($champsBrut[0])) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0])));
-        } else {
-
-            return $this->telechargerAction($doc);
-        }       
         
+        // TODO REACTIVER LES ERREURS
+        if (false)//count($champsBrut[0])) {
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0])));
+        else
+            return $this->telechargerAction($doc);
     }
 
     /** A nettoyer !!
@@ -229,12 +224,9 @@ class TraitementController extends Controller {
      */
     public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
         $this->purge();
-        //TODO idDocx.$doc
         if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
             $refDocx = $_SESSION['refDocx'];
-
-
 
             if ($addZip) {
                 $idZip = $_SESSION['idZip'];
@@ -285,7 +277,34 @@ class TraitementController extends Controller {
         }
     }
 
-    //Formate un nombre à la francaise ex 1 234,56 avec deux décimals 
+   
+
+    /* Publipostage documents élèves
+     *  
+     */
+
+    /** publication du doc
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function publiposterEleveAction($id_eleve, $doc, $key) {
+        $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
+
+        // TODO REACTIVER ERREUR
+        if (false)//count($champsBrut[0]))
+            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0], SORT_STRING), 'aides' => $champsBrut[1]));
+        else 
+            return $this->telechargerAction($doc);
+    }
+    
+    
+    /***
+     * 
+     * OLD 
+     * A CONVERTIR EN FILTRE
+     * 
+     * 
+     */
+     //Formate un nombre à la francaise ex 1 234,56 avec deux décimals 
     //SEE_ALSO moneyformat LC_MONETARY fr_FR
     private function formaterNombre($number) {
         if (is_int($number)) // Si entier
@@ -310,23 +329,41 @@ class TraitementController extends Controller {
             $jourVersSemaine .= ($semaine > 0 ? " et " : "" ) . $jour_str . " jour" . ($jour > 1 ? "s" : "");
         return $jourVersSemaine;
     }
-
-    /* Publipostage documents élèves
-     *  
-     */
-
-    /** publication du doc
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function publiposterEleveAction($id_eleve, $doc, $key) {
-        $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
-
-        if (count($champsBrut[0])) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0], SORT_STRING), 'aides' => $champsBrut[1]));
-        } else {
-
-            return $this->telechargerAction($doc);
-        }
+    
+    public function commenceParUneVoyelle($mot) {
+        return preg_match('#^[aeiouy]#', $mot);
     }
+
+    private function nombreVersMois($m) {
+        $mois = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
+        return $mois[($m % 12) - 1];
+    }
+    /**
+       //Remplissage des %champs%
+      private function remplirChamps(&$templateXML, $fieldValues) {
+          $SFD = $this->SFD;
+ -
+          $EFD = $this->EFD;
+ +        
+ +        $date = new \DateTime('now');
+ +        $date = $date->format('Y-m-d\TH:i:sZ');
+ +        
+ +        $EID = '</w:t></w:ins>';
+ +        
+  
+          foreach ($fieldValues as $field => $values) {//Remplacement des champs
+ +            $SID = '<w:ins w:id="0" w:author="'.$field.'" w:date="'.$date.'"><w:t xml:space="preserve">';
+              //WARNING : ($values != NULL) remplacer par ($values !== NULL), les valeurs NULL de type non NULL sont permises !!!!!!!
+              //TODO : Verification type NULL sur champs vide 
+              if ($values !== NULL) {
+                  if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
+                      $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', preg_replace("# #", " ", $this->formaterNombre($values)), $templateXML);
+                  else
+ -                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->nl2wbr(htmlspecialchars($values)), $templateXML);
+ +                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', ' '.$SID.$this->nl2wbr(htmlspecialchars($values)).$EID, $templateXML);
+              }
+          }
+     * 
+     */
 
 }
