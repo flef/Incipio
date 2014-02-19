@@ -47,23 +47,33 @@ class FactureController extends Controller
             $facture = new Facture;
             $now = new \DateTime("now");
             $facture->setDateEmission($now);  
-            if( $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($etude_id)){
+            
+            if( $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($etude_id)){
                 $facture->setEtude($etude);
-                if(!count($etude->getFactures()))
+                if(!count($etude->getFactures())){
                     $facture->setType(Facture::$TYPE_VENTE_ACCOMPTE);
-                else
-                    $facture->setType(Facture::$TYPE_VENTE_INTERMEDIAIRE);
-                foreach ($etude->getPhases() as $phase){
                     $detail = new FactureDetail;
                     $detail->setCompte();
                     $detail->setFacture($facture);
                     $facture->addDetail($detail);
-                    $detail->setDescription('Phase '.$phase->getPosition(). ' : '.$phase->getTitre());                    
-                    $detail->setMontantHT($phase->getPrixJEH() * $phase->getNbrJEH());
+                    $detail->setDescription('Acompte sur l\'étude '.$etude->getReference());                    
+                    $detail->setMontantHT($etude->getPourcentageAcompte() * $etude->getMontantHT());
                     // TODO CONST EXTERN
                     $detail->setTauxTVA(20.0);
                 }
-            
+                else{
+                    $facture->setType(Facture::$TYPE_VENTE_INTERMEDIAIRE);
+                    foreach ($etude->getPhases() as $phase){
+                        $detail = new FactureDetail;
+                        $detail->setCompte();
+                        $detail->setFacture($facture);
+                        $facture->addDetail($detail);
+                        $detail->setDescription('Phase '.$phase->getPosition(). ' : '.$phase->getTitre());                    
+                        $detail->setMontantHT($phase->getPrixJEH() * $phase->getNbrJEH());
+                        // TODO CONST EXTERN
+                        $detail->setTauxTVA(20.0);
+                    }
+                }            
             }
         }
 

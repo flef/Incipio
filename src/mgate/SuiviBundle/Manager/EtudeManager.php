@@ -33,7 +33,6 @@ class EtudeManager extends \Twig_Extension {
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
             'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
-            'typeFactureVenteToString' => new \Twig_Function_Method($this, 'typeFactureVenteToString'),
             'confidentielRefus' => new \Twig_Function_Method($this, 'confidentielRefus'),
         );
     }
@@ -370,7 +369,7 @@ class EtudeManager extends \Twig_Extension {
         // CC > FI
         if ($etude->getCc()) {
             foreach ($etude->getFactures() as $FactureVente) {
-                if ($FactureVente->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $FactureVente->getDateSignature()) {
+                if ($FactureVente->getDateEmission() != NULL && $etude->getCc()->getDateSignature() > $FactureVente->getDateEmission()) {
                     $error = array('titre' => 'Factures, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des Factures.');
                     array_push($errors, $error);
                     break;
@@ -751,18 +750,5 @@ class EtudeManager extends \Twig_Extension {
                 
         return $tauxConversion;
     }
-    
-        /**
-     * Taux de conversion
-     */
-    public function typeFactureVenteToString($type)
-    {
-        if($type=="fa")
-            return "FactureVente d'Acompte";
-        if($type=="fi")
-            return "FactureVente Intermédiaire";
-        if($type=="fs")
-            return "FactureVente de Solde";
-        
-    }
+
 }

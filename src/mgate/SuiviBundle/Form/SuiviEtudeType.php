@@ -19,14 +19,6 @@ class SuiviEtudeType extends AbstractType {
                 ->add('ap', new DocTypeSuiviType(), array('label' => 'Avant-Projet', 'data_class' => 'mgate\SuiviBundle\Entity\Ap'))
                 ->add('cc', new DocTypeSuiviType(), array('label' => 'Convention Client', 'data_class' => 'mgate\SuiviBundle\Entity\Cc'));
 
-        $builder->add('factures', 'collection', array(
-            'type' => new DocTypeSuiviType,
-            'allow_add' => true,
-            'allow_delete' => true,
-            'prototype' => true,
-            'by_reference' => false, //indispensable cf doc
-        ));
-
         $builder->add('missions', 'collection', array(
             'type' => new DocTypeSuiviType,
             'allow_add' => true,
