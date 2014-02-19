@@ -41,7 +41,7 @@ class FactureController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function modifierAction($id, $etude_id) {
+    public function modifierAction($id) {
         $em = $this->getDoctrine()->getManager();
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
             $facture = new Facture;

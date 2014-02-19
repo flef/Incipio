@@ -13,27 +13,25 @@
         <tr>
             <th>{{ form_label(form.exercice) }}</th>
             <td>{{ form_widget(form.exercice) }}</td>
-        </tr>
-        <tr>
             <th>{{ form_label(form.numero) }}</th>
             <td>{{ form_widget(form.numero) }}</td>
         </tr>
         <tr>
             <th>{{ form_label(form.dateEmission) }}</th>
             <td>{{ form_widget(form.dateEmission) }}</td>
-        </tr>
-        <tr>
             <th>{{ form_label(form.dateVersement) }}</th>
             <td>{{ form_widget(form.dateVersement) }}</td>
         </tr>
         <tr>
             <th>{{ form_label(form.type) }}</th>
             <td>{{ form_widget(form.type) }}</td>
+            <th>{{ form_label(form.montantADeduireHT) }}</th>
+            <td>{{ form_widget(form.montantADeduireHT) }}</td>            
         </tr>
         
         <tr>
             <th>{{ form_label(form.objet) }}</th>
-            <td>{{ form_widget(form.objet) }}</td>
+            <td colspan="3">{{ form_widget(form.objet) }}</td>
         </tr>      
     </table>
     <table class="table table-bordered table-striped" id="details" data-prototype="{{ form_widget(form.details.vars.prototype) | e }}">
