@@ -28,7 +28,8 @@ class FactureType extends AbstractType {
                     'allow_delete' => true,
                     'prototype' => true,
                     'by_reference' => false,
-                ))                
+                ))
+                ->add('montantADeduireHT', 'money', array('label'=>'Montant à déduire', 'required' => true))
                 ->add('dateEmission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
                 ->add('dateVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>false, 'widget'=>'single_text'));
     }
