@@ -28,6 +28,12 @@ class Facture
     private $id;
     
     /**
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", inversedBy="factures",  cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $etude;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="exercice", type="smallint")
@@ -114,7 +120,7 @@ class Facture
         return array(
             self::$TYPE_ACHAT => 'FA - Facture d\'achat',
             self::$TYPE_VENTE => 'FV - Facture de vente',
-            self::$TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'accomtpe',
+            self::$TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'acompte',
             self::$TYPE_VENTE_INTERMEDIAIRE => 'FV - Facture intermédiaire',
             self::$TYPE_VENTE_SOLDE => 'FV - Facture de solde',
             );
@@ -315,5 +321,28 @@ class Facture
     public function getObjet()
     {
         return $this->objet;
+    }
+    
+    /**
+     * Set etude
+     *
+     * @param \mgate\SuiviBundle\Entity\Etude $etude
+     * @return BV
+     */
+    public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude = null)
+    {
+        $this->etude = $etude;
+    
+        return $this;
+    }
+
+    /**
+     * Get etude
+     *
+     * @return \mgate\SuiviBundle\Entity\Etude 
+     */
+    public function getEtude()
+    {
+        return $this->etude;
     }
 }

@@ -162,16 +162,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <span class="navbar-brand titre" data-toggle="collapse" data-target="#fa"><span class="glyphicon glyphicon-hand-down"></span> FactureVentes</span>
+        <span class="navbar-brand titre" data-toggle="collapse" data-target="#fa"><span class="glyphicon glyphicon-hand-down"></span> factures</span>
      </div>
      <div class="collapse navbar-collapse navbar-fs">
         <ul class="nav navbar-nav">
-            <li><a href="{{ path('mgateSuivi_FactureVente_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><span class="glyphicon glyphicon-pencil"></span> Rédiger la FA</a></li>
-                    {% if etude.fa|default('0') %}
-            <li><a href="{{ path('mgateSuivi_FactureVente_ajouter', {'id': etude.id}) }}"><span class="glyphicon glyphicon-plus"></span> Ajouter une FactureVente intermédiaire</a></li>
-            <li><a href="{{ path('mgateSuivi_FactureVente_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><span class="glyphicon glyphicon-pencil"></span> Rédiger la FS</a></li>
-                    {% endif %}
-        </ul>
+            <li><a href="{{ path('mgateTreso_Facture_ajouter', {'etude_id': etude.id }) }}"><span class="glyphicon glyphicon-pencil"></span> Ajouter une facture</a></li>
+         </ul>
     </div>
 </nav>
 
@@ -179,14 +175,31 @@
     {% set montantRestant = getTotalHT(etude) %}
     <table class="table table-bordered table-striped">
         <tr>
-            <th colspan="2">FactureVente</th>
+            <th colspan="2">Factures</th>
             <th>Date de signature</th>
             <th>Montant H.T.</th>            
         </tr>
+        {% for facture in etude.factures %}
+        <tr>
+            <td>{% if is_granted('ROLE_CA') %}
+                <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id, 'etude_id' : etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                &nbsp;&nbsp;&nbsp;
+                <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': facture.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                {% endif %}
+            </td>
+            <td><a href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id}) }}">Facture {{ facture.reference}}</a></td>
+            <td></td>
+            <td>{{ facture.montantHT | default(0) }} €</td>
+        </tr>
+        {% set montantRestant =  montantRestant - facture.montantHT | default(0) %}        
+        {% endfor %}
+        {# 
         <tr>
             <th colspan="4">FactureVente d'Acompte</th>
         </tr>
-        <tr>
+       <tr>
             <td style="width: 100px;">
                 <a title="Modifier" href="{{ path('mgateSuivi_FactureVente_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
@@ -199,19 +212,19 @@
         {% set montantRestant =  montantRestant - etude.fa.montantHT | default(0) %}
         {% if etude.fis %}
         <tr>
-            <th colspan="4">FactureVentes Intermédiaires</th>
+            <th colspan="4">factures Intermédiaires</th>
         </tr>
         {% endif %}
         {% for fi in etude.fis %}
         <tr>
             <td>
-                <a title="Modifier" href="{{ path('mgateSuivi_FactureVente_modifier', {'id_FactureVente': fi.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
+                <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': fi.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Supprimer" href="{{ path('mgateSuivi_FactureVente_supprimer', { 'id': fi.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': fi.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
             </td>
-            <td><a href="{{ path('mgateSuivi_FactureVente_modifier', {'id_FactureVente': fi.id}) }}">FactureVente intermédiaire n° {{ loop.index }}</a></td>
+            <td><a href="{{ path('mgateTreso_Facture_modifier', {'id': fi.id}) }}">FactureVente intermédiaire n° {{ loop.index }}</a></td>
             <td>{{ ( fi and fi.dateSignature ) ? fi.dateSignature | date("d/m/Y") : "Non signé" }}</td>
             <td>{{ fi.montantHT | default(0) }} €</td>
         </tr>
@@ -227,7 +240,7 @@
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 {% if etude.fs.id | default(0) %}
-                <a title="Supprimer" href="{{ path('mgateSuivi_FactureVente_supprimer', { 'id': etude.fs.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
+                <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': etude.fs.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                 {% endif %}
             </td>
             <td>FactureVente solde</td>
@@ -235,7 +248,7 @@
             <td>{{ etude.fs.montantHT | default(0) }} €</td>
         </tr>
         {% set montantRestant =  montantRestant - etude.fs.montantHT | default(0)  %}
-        
+        #}
     </table>
     <table class="table table-bordered">
         <tr>

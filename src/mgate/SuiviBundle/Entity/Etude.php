@@ -179,9 +179,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     private $missions;
 
     /**
-     * @ORM\OneToMany(targetEntity="FactureVente", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="mgate\TresoBundle\Entity\Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
-    private $FactureVentes;
+    private $factures;
 
     /**
      * @ORM\OneToMany(targetEntity="ProcesVerbal", mappedBy="etude", cascade={"persist", "remove"})
@@ -272,7 +272,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groupes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->FactureVentes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
         $this->procesVerbaux = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->avMissions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -905,47 +905,47 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     }
 
     /**
-     * Add FactureVente
+     * Add Facture
      *
-     * @param \mgate\SuiviBundle\Entity\FactureVente $FactureVente
+     * @param \mgate\SuiviBundle\Entity\Facture $facture
      * @return Etude
      */
-    public function addFactureVente(\mgate\SuiviBundle\Entity\FactureVente $FactureVente) {
-        $this->FactureVentes[] = $FactureVente;
+    public function addFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+        $this->factures[] = $facture;
 
         return $this;
     }
 
     /**
-     * Remove FactureVente
+     * Remove Facture
      *
-     * @param \mgate\SuiviBundle\Entity\FactureVente $FactureVente
+     * @param \mgate\SuiviBundle\Entity\Facture $facture
      */
-    public function removeFactureVente(\mgate\SuiviBundle\Entity\FactureVente $FactureVente) {
-        $this->FactureVentes->removeElement($FactureVente);
+    public function removeFacture(\mgate\SuiviBundle\Entity\Facture $facture) {
+        $this->factures->removeElement($facture);
     }
 
     /**
-     * Get FactureVentes
+     * Get factures
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getFactureVentes() {
-        return $this->FactureVentes;
+    public function getFactures() {
+        return $this->factures;
     }
 
     
     /**
      * Remove procesVerbal
      *
-     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $FactureVente
+     * @param \mgate\SuiviBundle\Entity\ProcesVerbal $facture
      */
     public function removeProcesVerbal(\mgate\SuiviBundle\Entity\ProcesVerbal $pv) {
         $this->procesVerbaux->removeElement($pv);
     }
 
     /**
-     * Get FactureVentes
+     * Get factures
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
@@ -1098,10 +1098,10 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Add fi
      *
-     * @param \mgate\SuiviBundle\Entity\FactureVente $fi
+     * @param \mgate\SuiviBundle\Entity\Facture $fi
      * @return Etude
      */
-    public function addFi(\mgate\SuiviBundle\Entity\FactureVente $fi) {
+    public function addFi(\mgate\SuiviBundle\Entity\Facture $fi) {
         $this->fis[] = $fi;
         $fi->setEtude($this);
         $fi->setType('fi');
@@ -1112,9 +1112,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Remove fis
      *
-     * @param \mgate\SuiviBundle\Entity\FactureVente $fi
+     * @param \mgate\SuiviBundle\Entity\Facture $fi
      */
-    public function removeFi(\mgate\SuiviBundle\Entity\FactureVente $fi) {
+    public function removeFi(\mgate\SuiviBundle\Entity\Facture $fi) {
         $this->fis->removeElement($fi);
     }
 
@@ -1128,12 +1128,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get fis
      *
-     * @return mixed(array, FactureVente)
+     * @return mixed(array, Facture)
      */
     public function getFis($key = -1) {
         $fis = array();
 
-        foreach ($this->FactureVentes as $value) {
+        foreach ($this->factures as $value) {
             if ($value->getType() == "fi") {
                 $fis[] = $value;
             }
@@ -1153,61 +1153,61 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     /**
      * Get fa
      *
-     * @return \mgate\SuiviBundle\Entity\FactureVente
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFa() {
-        foreach ($this->FactureVentes as $FactureVente) {
-            if ($FactureVente->getType() == "fa")
-                return $FactureVente;
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fa")
+                return $facture;
         }
     }
 
     /**
      * Set fa
      *
-     * @return \mgate\SuiviBundle\Entity\FactureVente
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
-    public function setFa(\mgate\SuiviBundle\Entity\FactureVente $fa) {
+    public function setFa(\mgate\SuiviBundle\Entity\Facture $fa) {
         $fa->setEtude($this);
         $fa->setType('fa');
 
-        foreach ($this->FactureVentes as $FactureVente) {
-            if ($FactureVente->getType() == "fa") {
-                $FactureVente = $fa;
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fa") {
+                $facture = $fa;
                 return;
             }
         }
-        $this->FactureVentes[] = $fa;
+        $this->factures[] = $fa;
     }
 
     /**
      * Get fs
      *
-     * @return \mgate\SuiviBundle\Entity\FactureVente
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
     public function getFs() {
-        foreach ($this->FactureVentes as $FactureVente) {
-            if ($FactureVente->getType() == "fs")
-                return $FactureVente;
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fs")
+                return $facture;
         }
     }
 
     /**
      * Set fs
      *
-     * @return \mgate\SuiviBundle\Entity\FactureVente
+     * @return \mgate\SuiviBundle\Entity\Facture
      */
-    public function setFs(\mgate\SuiviBundle\Entity\FactureVente $fs) {
+    public function setFs(\mgate\SuiviBundle\Entity\Facture $fs) {
         $fs->setEtude($this);
         $fs->setType('fs');
 
-        foreach ($this->FactureVentes as $FactureVente) {
-            if ($FactureVente->getType() == "fs") {
-                $FactureVente = $fs;
+        foreach ($this->factures as $facture) {
+            if ($facture->getType() == "fs") {
+                $facture = $fs;
                 return;
             }
         }
-        $this->FactureVentes[] = $fs;
+        $this->factures[] = $fs;
     }
 
     /**
