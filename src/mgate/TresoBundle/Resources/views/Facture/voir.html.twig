@@ -8,8 +8,12 @@
     <h3>Facture {{ facture.reference }}</h3>
     <table class="table table-bordered table-striped">
         <tr>
-            <th>Date</th>
-            <td>{{ facture.date |date('d/m/Y')}}</td>
+            <th>Date d'émission</th>
+            <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
+        </tr>
+        <tr>
+            <th>Réglée le : </th>
+            <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
         </tr>
         <tr>
             <th>Objet</th>

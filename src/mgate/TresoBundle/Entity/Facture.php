@@ -50,11 +50,18 @@ class Facture
     private $type;
     
     /**
-     * @var \DateTime $date
+     * @var \DateTime $dateEmission
      *
-     * @ORM\Column(name="date", type="date", nullable=false)
+     * @ORM\Column(name="dateEmission", type="date", nullable=false)
      */
-    private $date;
+    private $dateEmission;
+    
+    /**
+     * @var \DateTime $dateVersement
+     *
+     * @ORM\Column(name="dateVersement", type="date", nullable=true)
+     */
+    private $dateVersement;
     
     /**
      * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="facture", cascade={"persist", "merge", "refresh", "remove"})
@@ -209,26 +216,49 @@ class Facture
 
 
     /**
-     * Set date
+     * Set dateEmission
      *
-     * @param \DateTime $date
+     * @param \DateTime $dateEmission
      * @return Facture
      */
-    public function setDate($date)
+    public function setDateEmission($dateEmission)
     {
-        $this->date = $date;
+        $this->dateEmission = $dateEmission;
     
         return $this;
     }
 
     /**
-     * Get date
+     * Get dateEmission
      *
      * @return \DateTime 
      */
-    public function getDate()
+    public function getDateEmission()
     {
-        return $this->date;
+        return $this->dateEmission;
+    }
+    
+    /**
+     * Set dateVersement
+     *
+     * @param \DateTime $dateVersement
+     * @return Facture
+     */
+    public function setDateVersement($dateVersement)
+    {
+        $this->dateVersement = $dateVersement;
+    
+        return $this;
+    }
+
+    /**
+     * Get dateVersement
+     *
+     * @return \DateTime 
+     */
+    public function getDateVersement()
+    {
+        return $this->dateVersement;
     }
 
     /**

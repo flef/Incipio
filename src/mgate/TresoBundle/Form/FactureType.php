@@ -11,11 +11,11 @@ use mgate\PersonneBundle\Entity\PersonneRepository;
 class FactureType extends AbstractType {
 
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
-        $builder->add('exercice', 'integer', array('label'=>'Mandat', 'required' => true))
-                ->add('numero', 'integer', array('label'=>'Numéro de la Note de Frais', 'required' => true))
+        $builder->add('exercice', 'integer', array('label'=>'Exercice Comptable', 'required' => true))
+                ->add('numero', 'integer', array('label'=>'Numéro de la Facutre', 'required' => true))
                 ->add('type', 'choice', array('choices' => \mgate\TresoBundle\Entity\Facture::getTypeChoices(), 'required' => true))
                 ->add('objet', 'textarea', 
-                    array('label' => 'Objet de la Note de Frais',
+                    array('label' => 'Objet de la Facture',
                         'required' => false, 
                         'attr'=>array(
                             'cols'=>'100%', 
@@ -37,7 +37,8 @@ class FactureType extends AbstractType {
                             return $pr->getMembreOnly();
                         },
                        'required' => true))*/
-                ->add('date', 'genemu_jquerydate', array('label'=>'Date', 'required'=>true, 'widget'=>'single_text'));
+                ->add('dateEmission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
+                ->add('dateVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>false, 'widget'=>'single_text'));
     }
 
     public function getName() {

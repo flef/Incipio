@@ -28,22 +28,24 @@
     <table class="display dataTable table table-bordered table-striped" id="example">
         <thead>
           <tr>
-            <th>Date</th>
+            <th>Date d'émission</th>
             <th>Référence</th>
             <th>Objet</th>
             <th>Montant HT</th>
             <th>Montant TVA</th>
             <th>Montant TTC</th>
+            <th>Statut</th>
         </tr>
         </thead>        
         {% for facture in factures %}
         <tr>
-            <td>{{ facture.date | date('d/m/Y')}}</td>
+            <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
             <td><a href="{{ path('mgateTreso_Facture_voir', {'id': facture.id})}}">{{ facture.reference}}</a></td>
             <td>{{ facture.objet }}</td>
             <td style="text-align: right;">{{ facture.montantHT |number_format(2, ',', ' ')}} €</td>
             <td style="text-align: right;">{{ facture.montantTVA |number_format(2, ',', ' ')}} €</td>
             <td style="text-align: right;">{{ facture.montantTTC |number_format(2, ',', ' ')}} €</td>
+            <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
         </tr>
         {% endfor %}
     </table>

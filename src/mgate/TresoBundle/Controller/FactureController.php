@@ -47,7 +47,7 @@ class FactureController extends Controller
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
             $facture = new Facture;
             $now = new \DateTime("now");
-            $facture->setDate($now);           
+            $facture->setDateEmission($now);           
         }
 
         $form = $this->createForm(new FactureType, $facture);
