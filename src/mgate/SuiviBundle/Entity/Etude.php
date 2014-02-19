@@ -269,6 +269,14 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return $total;
     }
     
+    public function getFa(){
+        foreach ($this->factures as $facture){
+            if($facture->getType() == \mgate\TresoBundle\Entity\Facture::$TYPE_VENTE_ACCOMPTE)
+                return $facture;
+        }
+        return null;
+    }
+    
     
     /**
      * Constructor

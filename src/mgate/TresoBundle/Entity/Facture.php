@@ -80,6 +80,13 @@ class Facture
      */
     private $objet;
     
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="montantADeduireHT", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $montantADeduireHT;
+    
    
     /**
      * ADDITIONNAL
@@ -91,7 +98,8 @@ class Facture
     public function getMontantHT(){
        $montantHT = 0;
        foreach ($this->details as $detail)
-            $montantHT += $detail->getMontantHT();           
+            $montantHT += $detail->getMontantHT();
+       $montantHT -= $this->montantADeduireHT;
        return $montantHT;
     }
     
@@ -149,6 +157,7 @@ class Facture
     public function __construct()
     {
         $this->details = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->montantADeduireHT = 0;
     }
     
     /**
@@ -347,4 +356,27 @@ class Facture
         return $this->etude;
     }
 
+
+    /**
+     * Set montantADeduireHT
+     *
+     * @param float $montantADeduireHT
+     * @return Facture
+     */
+    public function setMontantADeduireHT($montantADeduireHT)
+    {
+        $this->montantADeduireHT = $montantADeduireHT;
+    
+        return $this;
+    }
+
+    /**
+     * Get montantADeduireHT
+     *
+     * @return float 
+     */
+    public function getMontantADeduireHT()
+    {
+        return $this->montantADeduireHT;
+    }
 }
