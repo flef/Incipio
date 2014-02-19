@@ -7,12 +7,12 @@
 {% block content_bundle %}
 <h2>Formulaires</h2>
 <form method="post" {{ form_enctype(form) }}>
-    <input name="save" type="submit" value="Enregistrer la Note de Frais" class="btn" />
+    <input name="save" type="submit" value="Enregistrer la Facture" class="btn" />
     <br/><br/>
     <table class="table table-bordered table-striped standard">
         <tr>
-            <th>{{ form_label(form.mandat) }}</th>
-            <td>{{ form_widget(form.mandat) }}</td>
+            <th>{{ form_label(form.exercice) }}</th>
+            <td>{{ form_widget(form.exercice) }}</td>
         </tr>
         <tr>
             <th>{{ form_label(form.numero) }}</th>
@@ -23,9 +23,10 @@
             <td>{{ form_widget(form.date) }}</td>
         </tr>
         <tr>
-            <th>{{ form_label(form.demandeur) }}</th>
-            <td>{{ form_widget(form.demandeur) }}</td>
-        </tr>  
+            <th>{{ form_label(form.type) }}</th>
+            <td>{{ form_widget(form.type) }}</td>
+        </tr>
+        
         <tr>
             <th>{{ form_label(form.objet) }}</th>
             <td>{{ form_widget(form.objet) }}</td>
@@ -41,8 +42,7 @@
             <td>
                 <table class="table">
                     <tr>
-                        <th>{{ form_label(detail.type) }}</th>
-                        <td>{{ form_widget(detail.type) }}</td>
+                        
                         <th>{{ form_label(detail.compte) }}</th>
                         <td>{{ form_widget(detail.compte) }}</td>
                     </tr>
@@ -50,17 +50,11 @@
                         <th>{{ form_label(detail.description) }}</th>
                         <td colspan="3">{{ form_widget(detail.description) }}</td>
                     </tr>                    
-                    <tr id="prix">
-                        <th>{{ form_label(detail.prixHT) }}</th>
-                        <td>{{ form_widget(detail.prixHT) }}</td>
+                    <tr>
+                        <th>{{ form_label(detail.montantHT) }}</th>
+                        <td>{{ form_widget(detail.montantHT) }}</td>
                         <th>{{ form_label(detail.tauxTVA) }}</th>
                         <td>{{ form_widget(detail.tauxTVA) }}</td>
-                    </tr>
-                    <tr id="km">
-                        <th>{{ form_label(detail.kilometrage) }}</th>
-                        <td>{{ form_widget(detail.kilometrage) }}</td>
-                        <th>{{ form_label(detail.tauxKm) }}</th>
-                        <td>{{ form_widget(detail.tauxKm) }}</td>
                     </tr>
                 </table>
             </td>
@@ -134,22 +128,5 @@ function addDeleteButton($tag) {
    });
     
 }  
-</script>
-
-<script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
-    $('select[id$="_type"]').each(
-        function(){
-            if($(this).val() == 1) $(this).closest('.table').find('#km').toggle();
-            else $(this).closest('.table').find('#prix').toggle();
-        }
-    );
-    
-    $('select[id$="_type"]').change(
-        function(){
-           $(this).closest('.table').find('#km').toggle();
-           $(this).closest('.table').find('#prix').toggle();
-    });
-});
 </script>
 {% endblock %}

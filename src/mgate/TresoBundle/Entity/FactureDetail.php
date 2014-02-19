@@ -22,10 +22,10 @@ class FactureDetail
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="FactureVente", inversedBy="details", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Facture", inversedBy="details", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $factureVente;
+    private $facture;
 
     /**
      * @var string
@@ -160,25 +160,25 @@ class FactureDetail
     }
 
     /**
-     * Set factureVente
+     * Set facture
      *
-     * @param \mgate\TresoBundle\Entity\FactureVente $factureVente
+     * @param \mgate\TresoBundle\Entity\Facture $facture
      * @return FactureDetail
      */
-    public function setFactureVente(\mgate\TresoBundle\Entity\FactureVente $factureVente)
+    public function setFacture(\mgate\TresoBundle\Entity\Facture $facture)
     {
-        $this->factureVente = $factureVente;
+        $this->facture = $facture;
     
         return $this;
     }
 
     /**
-     * Get factureVente
+     * Get facture
      *
-     * @return \mgate\TresoBundle\Entity\FactureVente 
+     * @return \mgate\TresoBundle\Entity\Facture
      */
-    public function getFactureVente()
+    public function getFacture()
     {
-        return $this->factureVente;
+        return $this->facture;
     }
 }

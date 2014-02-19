@@ -7,11 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
-use \mgate\TresoBundle\Entity\FactureVente as FactureVente;
-use \mgate\TresoBundle\Entity\FactureVenteDetail as FactureVenteDetail;
-use mgate\TresoBundle\Form\FactureVenteType as FactureVenteType;
+use \mgate\TresoBundle\Entity\Facture as Facture;
+use \mgate\TresoBundle\Entity\FactureDetail as FactureDetail;
+use mgate\TresoBundle\Form\FactureType as FactureType;
 
-class FactureVenteController extends Controller
+class FactureController extends Controller
 {
     
     /**
@@ -20,9 +20,9 @@ class FactureVenteController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $fvs = $em->getRepository('mgateTresoBundle:FactureVente')->findAll();
+        $factures = $em->getRepository('mgateTresoBundle:Facture')->findAll();
         
-        return $this->render('mgateTresoBundle:FactureVente:index.html.twig', array('fvs' => $fvs));
+        return $this->render('mgateTresoBundle:Facture:index.html.twig', array('factures' => $factures));
     }
     
     
@@ -31,10 +31,10 @@ class FactureVenteController extends Controller
      */
     public function voirAction($id) {
         $em = $this->getDoctrine()->getManager();
-        if(!$fv = $em->getRepository('mgateTresoBundle:FactureVente')->find($id))
+        if(!$facture = $em->getRepository('mgateTresoBundle:Facture')->find($id))
             throw $this->createNotFoundException('La Facture n\'existe pas !');
         
-        return $this->render('mgateTresoBundle:FactureVente:voir.html.twig', array('fv' => $fv));
+        return $this->render('mgateTresoBundle:Facture:voir.html.twig', array('facture' => $facture));
     }
     
     
@@ -44,13 +44,13 @@ class FactureVenteController extends Controller
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$fv= $em->getRepository('mgateTresoBundle:FactureVente')->find($id)) {
-            $fv = new FactureVente;
+        if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
+            $facture = new Facture;
             $now = new \DateTime("now");
-            $fv->setDate($now);           
+            $facture->setDate($now);           
         }
 
-        $form = $this->createForm(new FactureVenteType, $fv);
+        $form = $this->createForm(new FactureType, $facture);
        
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -58,16 +58,16 @@ class FactureVenteController extends Controller
                
             if( $form->isValid() )
             {
-                foreach($fv->getDetailsDeVente() as $fvd){
-                    $fvd->setFactureVente($fv);
+                foreach($facture->getDetails() as $factured){
+                    $factured->setFacture($facture);
                 }
-                $em->persist($fv);                
+                $em->persist($facture);                
                 $em->flush();
-                return $this->redirect($this->generateUrl('mgateTreso_FactureVente_voir', array('id' => $fv->getId())));
+                return $this->redirect($this->generateUrl('mgateTreso_Facture_voir', array('id' => $facture->getId())));
             }
         }
 
-        return $this->render('mgateTresoBundle:FactureVente:modifier.html.twig', array(
+        return $this->render('mgateTresoBundle:Facture:modifier.html.twig', array(
                     'form' => $form->createView(),
                 ));
     }
@@ -78,12 +78,12 @@ class FactureVenteController extends Controller
     public function supprimerAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        if (!$fv= $em->getRepository('mgateTresoBundle:FactureVente')->find($id))
+        if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id))
             throw $this->createNotFoundException('La Facture n\'existe pas !');
 
-        $em->remove($fv);                
+        $em->remove($facture);                
         $em->flush();
-        return $this->redirect($this->generateUrl('mgateTreso_FactureVente_index', array()));
+        return $this->redirect($this->generateUrl('mgateTreso_Facture_index', array()));
 
 
     }

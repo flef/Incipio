@@ -1,23 +1,19 @@
 {% extends "mgateTresoBundle::layout.html.twig" %}
 
 {% block title %}
-	Note de Frais [M-GaTE]{{ nf.mandat }}-NF{{ nf.numero}}-{{ nf.demandeur.membre.identifiant }}- {{ parent() }}
+	Facture {{ facture.reference }} - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-    <h3>Note de Frais [M-GaTE]{{ nf.mandat }}-NF{{ nf.numero}}-{{ nf.demandeur.membre.identifiant }}</h3>
+    <h3>Facture {{ facture.reference }}</h3>
     <table class="table table-bordered table-striped">
         <tr>
             <th>Date</th>
-            <td>{{ nf.date |date('d/m/Y')}}</td>
-        </tr>
-        <tr>
-            <th>Demandeur</th>
-            <td>{{ nf.demandeur.prenomNom }}</td>
+            <td>{{ facture.date |date('d/m/Y')}}</td>
         </tr>
         <tr>
             <th>Objet</th>
-            <td>{{ nf.objet | nl2br}}</td>
+            <td>{{ facture.objet | nl2br}}</td>
         </tr>
     </table>
 
@@ -37,37 +33,18 @@
         {% set totalTVA = 0 %}
         {% set totalTTC = 0 %}
         
-        {% for detail in nf.details if detail.type == 1 %}
-        {% set totalHT = totalHT + detail.prixHT %}
-        {% set totalTVA = totalTVA + (detail.prixHT * detail.tauxTVA / 100) %}
-        {% set totalTTC = totalTTC + (detail.prixHT * ( 1 + detail.tauxTVA / 100))%}
+        {% for detail in facture.details %}
+        {% set totalHT = totalHT + detail.montantHT %}
+        {% set totalTVA = totalTVA + (detail.montantHT * detail.tauxTVA / 100) %}
+        {% set totalTTC = totalTTC + (detail.montantHT * ( 1 + detail.tauxTVA / 100))%}
         <tr>
             <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
-            <td>{{ detail.prixHT |number_format(2, ',', ' ')}} €</td>
+            <td>{{ detail.montantHT |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ')}} %</td>
-            <td>{{ (detail.prixHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
-            <td>{{ (detail.prixHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
+            <td>{{ (detail.montantHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
+            <td>{{ (detail.montantHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
         </tr>
-        {% endfor %}
-        <tr>
-            <th colspan="5" class="success">Détails des frais kilométrique</th>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <th>Nombre de kilomètre</th>
-            <th colspan="2">Prix par km</th>
-            <th>Prix Total</th>
-        </tr>
-        {% for detail in nf.details if detail.type == 2 %}
-        {% set totalHT = totalHT + (detail.kilometrage * detail.tauxKm / 100) %}
-        {% set totalTTC = totalTTC + (detail.kilometrage * detail.tauxKm / 100) %}
-        <tr>
-            <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
-            <td>{{ detail.kilometrage }} km</td>
-            <td colspan="2">{{ (detail.tauxKm / 100) |number_format(2, ',', ' ')}} €</td>
-            <td>{{ (detail.kilometrage * detail.tauxKm / 100)  |number_format(2, ',', ' ')}} €</td>
-        </tr>
-        {% endfor %}
+        {% endfor %}        
         <tr>
             <th colspan="5" class="danger">Total</th>               
         </tr>
@@ -79,9 +56,9 @@
     </table>
     <table class="table">
         <tr>
-            <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_NoteDeFrais_modifier', {'id': nf.id})}}';">Modifier la Note de Frais</button></td>
+            <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_Facture_modifier', {'id': facture.id})}}';">Modifier la Facture</button></td>
             <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Note de Frais</button></td>
-            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_NoteDeFrais_supprimer', {'id': nf.id})}}';">Supprimer la Note de Frais</button></td>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_Facture_supprimer', {'id': facture.id})}}';">Supprimer la Facture</button></td>
         </tr>
     </table>
 {% endblock %}

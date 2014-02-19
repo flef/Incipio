@@ -2,8 +2,45 @@ mgate_treso_urssaf:
     pattern:  /urssaf
     defaults: { _controller: mgateTresoBundle:Urssaf:index }
     
+################################################################################
+#                                                                              #
+#                                  FACTURES                                    #
+#                                                                              #
+################################################################################
+
+mgateTreso_Facture_index:
+    pattern:  /Factures
+    defaults: { _controller: mgateTresoBundle:Facture:index }
+    
+mgateTreso_Facture_voir:
+    pattern:  /Facture/{id}
+    defaults: { _controller: mgateTresoBundle:Facture:voir }
+    requirements:
+        id: \d+
+    
+mgateTreso_Facture_ajouter:
+    pattern:  /Facture/Ajouter
+    defaults: { _controller: mgateTresoBundle:Facture:modifier,  id:-1  }
+    
+mgateTreso_Facture_modifier:
+    pattern:  /Facture/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:Facture:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_Facture_supprimer:
+    pattern:  /Facture/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:Facture:supprimer }
+    requirements:
+        id: \d+
+################################################################################
+#                                                                              #
+#                               COMPTES COMPTA                                 #
+#                                                                              #
+################################################################################
+    
 mgateTreso_Compte_index:
-    pattern:  /Compte
+    pattern:  /Comptes
     defaults: { _controller: mgateTresoBundle:Compte:index }
         
 mgateTreso_Compte_ajouter:
@@ -21,6 +58,11 @@ mgateTreso_Compte_supprimer:
     defaults: { _controller: mgateTresoBundle:Compte:supprimer }
     requirements:
         id: \d+    
+################################################################################
+#                                                                              #
+#                                NOTE DE FRAIS                                 #
+#                                                                              #
+################################################################################
 
 mgateTreso_NoteDeFrais_index:
     pattern:  /NoteDeFrais
