@@ -82,18 +82,18 @@
                                         <td>{{ form_widget(formSuivi.cc.envoye) }}</td>
                                         <td>{{ form_widget(formSuivi.cc.receptionne) }}</td>
                                     </tr>
-                                    <!--FACTURES-->
+                                    <!--FactureVenteS-->
                                     <tr>
-                                        <th colspan="8">Factures</th>
+                                        <th colspan="8">FactureVentes</th>
                                     </tr>
-                                    {% for facture in formSuivi.factures %}
+                                    {% for FactureVente in formSuivi.FactureVentes %}
                                     <tr class="docTabRow">
-                                        <th>Facture n° {{ loop.index }} {{typeFactureToString(facture.vars.value.type) }}</th>
+                                        <th>FactureVente n° {{ loop.index }} {{typeFactureVenteToString(FactureVente.vars.value.type) }}</th>
                                         <td class="state">Incomplet</td>
-                                        <td>{{ form_widget(facture.redige) }}</td>
-                                        <td>{{ form_widget(facture.relu) }}</td>
-                                        <td>{{ form_widget(facture.envoye) }}</td>
-                                        <td>{{ form_widget(facture.receptionne) }}</td>
+                                        <td>{{ form_widget(FactureVente.redige) }}</td>
+                                        <td>{{ form_widget(FactureVente.relu) }}</td>
+                                        <td>{{ form_widget(FactureVente.envoye) }}</td>
+                                        <td>{{ form_widget(FactureVente.receptionne) }}</td>
                                     </tr>
                         {% endfor %}
                         <!--RECAPITULATIFS DE MISSION-->

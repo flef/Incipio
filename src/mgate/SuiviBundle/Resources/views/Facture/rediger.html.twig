@@ -1,13 +1,13 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Rédiger la Facture - {{ parent() }}
+	Rédiger la FactureVente - {{ parent() }}
 {% endblock %}
 
         
 {% block content_bundle %}
         
-    <h2>Rédiger la Facture {% if type=="fs" %}de Solde{%elseif type=="fa"%}d'Acompte{%else%}Intermédiaire{%endif%}</h2>
+    <h2>Rédiger la FactureVente {% if type=="fs" %}de Solde{%elseif type=="fa"%}d'Acompte{%else%}Intermédiaire{%endif%}</h2>
 
     <form method="post" {{ form_enctype(form) }}>
 
@@ -19,7 +19,7 @@
 {% if type == 'fa' %}   
 <div id="dialog" title="Aide au calcul de l'acompte">
     <p>Pourcentage de l'acompte dans l'AP auparavant: <b>{{form.vars.value.pourcentageAcompte *100 }} %</b></p>
-    <p>La Facture d'Acompte était auparavant: <b>{{form.vars.value.fa.montantHT }} € HT</b></p>
+    <p>La FactureVente d'Acompte était auparavant: <b>{{form.vars.value.fa.montantHT }} € HT</b></p>
     <p>Prix total de l'étude : <b>{{ getTotalHT(etude)|default('') }} € HT</b></p>
     <p>
         <label for="montantHelp">Aide au cacul:<br /></label>

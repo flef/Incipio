@@ -21,8 +21,8 @@ class DocTypeType extends AbstractType
         // Version du document
         $builder->add('version', 'integer', array('label'=>'Version du document'));
         
-        // Si le document n'est pas une facture
-        if($options['data_class']!='mgate\SuiviBundle\Entity\Facture')
+        // Si le document n'est pas une FactureVente
+        if($options['data_class']!='mgate\SuiviBundle\Entity\FactureVente')
         {
              $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
                 array ('label' => 'Signataire M-GaTE',
@@ -42,9 +42,9 @@ class DocTypeType extends AbstractType
         }
         
         
-        // Si le document n'est ni une facture ni un RM
+        // Si le document n'est ni une FactureVente ni un RM
         if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' // le signataire2 c'est l'intervenant
-           && $options['data_class']!='mgate\SuiviBundle\Entity\Facture' // pas de signataire2
+           && $options['data_class']!='mgate\SuiviBundle\Entity\FactureVente' // pas de signataire2
            )
         {
             $pro=$options['prospect'];

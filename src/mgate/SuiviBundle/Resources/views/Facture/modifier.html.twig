@@ -1,7 +1,7 @@
 {% extends "mgateSuiviBundle::layout.html.twig" %}
 
 {% block title %}
-	Modifier une Facture d'Acompte - {{ parent() }}
+	Modifier une FactureVente d'Acompte - {{ parent() }}
 {% endblock %}
 
 {% block javascript %}
@@ -10,18 +10,18 @@
         
 {% block content_bundle %}   
         
-    <h2>Modifier une Facture d'Acompte</h2>
+    <h2>Modifier une FactureVente d'Acompte</h2>
 
-    {% include "mgateSuiviBundle:Facture:formulaire.html.twig" %} 
+    {% include "mgateSuiviBundle:FactureVente:formulaire.html.twig" %} 
 
 
     <p>
-        <a href="{{ path('mgateSuivi_facture_voir', {'id': facture.id}) }}" >Retour</a>
+        <a href="{{ path('mgateSuivi_FactureVente_voir', {'id': FactureVente.id}) }}" >Retour</a>
     </p>
 
 
 
-    <button type="submit" onclick="self.location.href='{{ path('mgateSuivi_facture_supprimer', { 'id': facture.id }) }}'">Delete</button>
+    <button type="submit" onclick="self.location.href='{{ path('mgateSuivi_FactureVente_supprimer', { 'id': FactureVente.id }) }}'">Delete</button>
 
     
 {% endblock %}

@@ -5,12 +5,12 @@ namespace mgate\SuiviBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * mgate\SuiviBundle\Entity\Facture
+ * mgate\SuiviBundle\Entity\FactureVente
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Facture extends DocType
+class FactureVente extends DocType
 {
     /**
      * @var integer $id
@@ -37,7 +37,7 @@ class Facture extends DocType
     
     
     /**
-     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="factures", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Etude", inversedBy="FactureVentes", cascade={"persist"})
      * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
@@ -77,7 +77,7 @@ class Facture extends DocType
      * Set etude
      *
      * @param mgate\SuiviBundle\Entity\Etude $etude
-     * @return Facture
+     * @return FactureVente
      */
     public function setEtude(\mgate\SuiviBundle\Entity\Etude $etude)
     {
@@ -100,7 +100,7 @@ class Facture extends DocType
      * Set type
      *
      * @param string $type
-     * @return Facture
+     * @return FactureVente
      */
     public function setType($type)
     {
@@ -143,7 +143,7 @@ class Facture extends DocType
      * Set montantHT
      *
      * @param double $montantHT
-     * @return Facture
+     * @return FactureVente
      */
     public function setMontantHT($montantHT)
     {
@@ -166,7 +166,7 @@ class Facture extends DocType
      * Set tauxTVA
      *
      * @param taux $tauxTVA
-     * @return Facture
+     * @return FactureVente
      */
     public function setTauxTVA($tauxTVA)
     {
@@ -179,7 +179,7 @@ class Facture extends DocType
      * Set num
      *
      * @param integer $num
-     * @return Facture
+     * @return FactureVente
      */
     public function setNum($num)
     {
@@ -202,7 +202,7 @@ class Facture extends DocType
      * Set exercice
      *
      * @param integer $exercice
-     * @return Facture
+     * @return FactureVente
      */
     public function setExercice($exercice)
     {

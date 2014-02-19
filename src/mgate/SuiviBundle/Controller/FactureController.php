@@ -5,12 +5,12 @@ namespace mgate\SuiviBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-use mgate\SuiviBundle\Entity\Facture;
-use mgate\SuiviBundle\Form\FactureType;
-use mgate\SuiviBundle\Form\FactureSubType;
+use mgate\SuiviBundle\Entity\FactureVente;
+use mgate\SuiviBundle\Form\FactureVenteType;
+use mgate\SuiviBundle\Form\FactureVenteSubType;
 
 
-class FactureController extends Controller
+class FactureVenteController extends Controller
 {    
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -34,10 +34,10 @@ class FactureController extends Controller
     {
        $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Facture')->find($id); // Ligne qui posse problÃ¨me
+        $entity = $em->getRepository('mgateSuiviBundle:FactureVente')->find($id); // Ligne qui posse problÃ¨me
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Facture entity.');
+            throw $this->createNotFoundException('Unable to find FactureVente entity.');
         }
 		
 		$etude = $entity->getEtude();
@@ -47,8 +47,8 @@ class FactureController extends Controller
 
         //$deleteForm = $this->createDeleteForm($id);
 
-        return $this->render('mgateSuiviBundle:Facture:voir.html.twig', array(
-            'facture'      => $entity,
+        return $this->render('mgateSuiviBundle:FactureVente:voir.html.twig', array(
+            'FactureVente'      => $entity,
             'etude'      => $entity->getEtude(),
             /*'delete_form' => $deleteForm->createView(),  */      ));
         
@@ -68,22 +68,22 @@ class FactureController extends Controller
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
-        $facture = new Facture;
-        $etude->addFi($facture);
-        $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
+        $FactureVente = new FactureVente;
+        $etude->addFi($FactureVente);
+        $FactureVente->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFactureVente());
         
         $time = time();
         $now = new \DateTime("@$time");
-        $facture->setDateSignature($now);
+        $FactureVente->setDateSignature($now);
         
-        $form = $this->createForm(new FactureSubType, $facture, array('type' => 'fi'));   
+        $form = $this->createForm(new FactureVenteSubType, $FactureVente, array('type' => 'fi'));   
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bind($this->get('request'));
        
             if( $form->isValid() )
             {
-                //Vérification du montant de la facture
+                //Vérification du montant de la FactureVente
                     $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                     
                     if($etude->getFa())
@@ -101,18 +101,18 @@ class FactureController extends Controller
                     }
                     
                     //Exercice comptable
-                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
-                $facture->setExercice($exercice);
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($FactureVente);
+                $FactureVente->setExercice($exercice);
                     
-                $em->persist($facture);
+                $em->persist($FactureVente);
                 $em->flush();
                 
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_FactureVente_voir', array('id' => $FactureVente->getId())) );
             }
             
         }
 
-        return $this->render('mgateSuiviBundle:Facture:ajouter.html.twig', array(
+        return $this->render('mgateSuiviBundle:FactureVente:ajouter.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -120,27 +120,27 @@ class FactureController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function modifierAction($id_facture)
+    public function modifierAction($id_FactureVente)
     {
         $em = $this->getDoctrine()->getManager();
 
-        if( ! $facture = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id_facture) )
-            throw $this->createNotFoundException('Facture[id='.$id_facture.'] inexistant');
+        if( ! $FactureVente = $em->getRepository('mgate\SuiviBundle\Entity\FactureVente')->find($id_FactureVente) )
+            throw $this->createNotFoundException('FactureVente[id='.$id_FactureVente.'] inexistant');
 			
-		$etude = $facture->getEtude();
+		$etude = $FactureVente->getEtude();
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
-        $form = $this->createForm(new FactureSubType, $facture, array('type' => $facture->getType()));
+        $form = $this->createForm(new FactureVenteSubType, $FactureVente, array('type' => $FactureVente->getType()));
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bind($this->get('request'));
             
             if( $form->isValid() )
             {
-                //vérification montant facture
-                    $etude = $facture->getEtude();
+                //vérification montant FactureVente
+                    $etude = $FactureVente->getEtude();
                     $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                     
                     if($etude->getFa())
@@ -150,7 +150,7 @@ class FactureController extends Controller
                     if($etude->getFs())
                         $montantHT -= $etude->getFs()->getMontantHT();
                                         
-                    $montantHT += $facture->getMontantHT();
+                    $montantHT += $FactureVente->getMontantHT();
                     $montantHT -= $form->get('montantHT')->getData();
                     
                     if($montantHT < 0)
@@ -161,21 +161,21 @@ class FactureController extends Controller
                     ///
                     
                     //Exercice comptable
-                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
-                $facture->setExercice($exercice);
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($FactureVente);
+                $FactureVente->setExercice($exercice);
                     
-                $em->persist($facture);
+                $em->persist($FactureVente);
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_FactureVente_voir', array('id' => $FactureVente->getId())) );
             }
                 
         }
 
-        return $this->render('mgateSuiviBundle:Facture:modifier.html.twig', array(
+        return $this->render('mgateSuiviBundle:FactureVente:modifier.html.twig', array(
             'form' => $form->createView(),
-            'etude' => $facture->getEtude(),
-            'type' => $facture->getType(),
-            'facture' => $facture,
+            'etude' => $FactureVente->getEtude(),
+            'type' => $FactureVente->getType(),
+            'FactureVente' => $FactureVente,
         ));
     }   
         
@@ -195,29 +195,29 @@ class FactureController extends Controller
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
 
-        if(!$facture = $etude->getDoc($type))
+        if(!$FactureVente = $etude->getDoc($type))
         {
-            $facture = new Facture;
+            $FactureVente = new FactureVente;
             
             $time = time();
             $now = new \DateTime("@$time");
-            $facture->setDateSignature($now);
+            $FactureVente->setDateSignature($now);
         
         
             if(strtoupper($type)=="FA")
             {
-                $etude->setFa($facture);
+                $etude->setFa($FactureVente);
                 $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
             }
             elseif(strtoupper($type)=="FS"){
-                $etude->setFs($facture);
+                $etude->setFs($FactureVente);
             }  
-            $facture->setType($type);
-            $facture->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFacture());
+            $FactureVente->setType($type);
+            $FactureVente->setNum($this->get('mgate.etude_manager')->getNouveauNumeroFactureVente());
         }
         
         if(strtoupper($type)=="FS"){
-                $etude->setFs($facture);
+                $etude->setFs($FactureVente);
                 
                 $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                 if($etude->getFa())
@@ -226,13 +226,13 @@ class FactureController extends Controller
                     $montantHT -= $fi->getMontantHT();
                 
                 if($montantHT < 0)
-                    throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
+                    throw new \Exception('Montant impossible, vérifier les FactureVentes intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
 
                 
                 $etude->getFs()->setMontantHT($montantHT);
             }  
 
-        $form = $this->createForm(new FactureType, $etude, array('type' => $type));
+        $form = $this->createForm(new FactureVenteType, $etude, array('type' => $type));
         if( $this->get('request')->getMethod() == 'POST' )
         {
             $form->bind($this->get('request'));
@@ -242,7 +242,7 @@ class FactureController extends Controller
                 if(strtoupper($type)=="FA")
                     $etude->getFa()->setMontantHT($this->get('mgate.etude_manager')->getTotalHT($etude)*$etude->getPourcentageAcompte());
                 elseif(strtoupper($type)=="FS"){ 
-                    $etude->setFs($facture);
+                    $etude->setFs($FactureVente);
 
                     $montantHT = $this->get('mgate.etude_manager')->getTotalHT($etude);
                     if($etude->getFa())
@@ -251,23 +251,23 @@ class FactureController extends Controller
                         $montantHT -= $fi->getMontantHT();
 
                     if($montantHT < 0)
-                        throw new \Exception('Montant impossible, vérifier les factures intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
+                        throw new \Exception('Montant impossible, vérifier les FactureVentes intermédiaires, le client doit encore : ' . ($montantHT + $form->get('montantHT')->getData() . ' €'));
 
                     $etude->getFs()->setMontantHT($montantHT);
                 } 
                                 
                 //Exercice comptable
-                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($facture);
-                $facture->setExercice($exercice);
+                $exercice = $this->get('mgate.etude_manager')->getExerciceComptable($FactureVente);
+                $FactureVente->setExercice($exercice);
                                         
                 $em->persist($etude);
                 $em->flush();
-                return $this->redirect( $this->generateUrl('mgateSuivi_facture_voir', array('id' => $facture->getId())) );
+                return $this->redirect( $this->generateUrl('mgateSuivi_FactureVente_voir', array('id' => $FactureVente->getId())) );
             }
                 
         }
 
-        return $this->render('mgateSuiviBundle:Facture:rediger.html.twig', array(
+        return $this->render('mgateSuiviBundle:FactureVente:rediger.html.twig', array(
             'form' => $form->createView(),
             'etude' => $etude,
             'type' => $type,
@@ -282,8 +282,8 @@ class FactureController extends Controller
     {
             $em = $this->getDoctrine()->getManager();
    
-            if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\Facture')->find($id) )
-                throw $this->createNotFoundException('Facture[id='.$id.'] inexistant');
+            if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\FactureVente')->find($id) )
+                throw $this->createNotFoundException('FactureVente[id='.$id.'] inexistant');
 				
 			$etude = $entity->getEtude();
 		
