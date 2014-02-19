@@ -1,0 +1,70 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Facture {{ facture.reference }} - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+    <h3>Facture {{ facture.reference }}</h3>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Date d'émission</th>
+            <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
+        </tr>
+        <tr>
+            <th>Réglée le : </th>
+            <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
+        </tr>
+        <tr>
+            <th>Objet</th>
+            <td>{{ facture.objet | nl2br}}</td>
+        </tr>
+    </table>
+
+    
+    <table class="table table-bordered table-striped" style="text-align: right;">
+        <tr>
+            <th colspan="5" class="success">Détails des dépenses</th>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <th>Prix HT</th>
+            <th>Taux TVA</th>
+            <th>TVA</th>
+            <th>Prix TTC</th>
+        </tr>
+        {% set totalHT = 0 %}
+        {% set totalTVA = 0 %}
+        {% set totalTTC = 0 %}
+        
+        {% for detail in facture.details %}
+        {% set totalHT = totalHT + detail.montantHT %}
+        {% set totalTVA = totalTVA + (detail.montantHT * detail.tauxTVA / 100) %}
+        {% set totalTTC = totalTTC + (detail.montantHT * ( 1 + detail.tauxTVA / 100))%}
+        <tr>
+            <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
+            <td>{{ detail.montantHT |number_format(2, ',', ' ')}} €</td>
+            <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ')}} %</td>
+            <td>{{ (detail.montantHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
+            <td>{{ (detail.montantHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
+        </tr>
+        {% endfor %}        
+        <tr>
+            <th colspan="5" class="danger">Total</th>               
+        </tr>
+        <tr>
+            <td colspan="2">{{ totalHT |number_format(2, ',', ' ') }} € HT</td>
+            <td colspan="2">{{ totalTVA |number_format(2, ',', ' ')}} € de TVA</td>
+            <td>{{ totalTTC |number_format(2, ',', ' ')}} € TTC</td>
+        </tr>
+    </table>
+    <table class="table">
+        <tr>
+            <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_Facture_modifier', {'id': facture.id})}}';">Modifier la Facture</button></td>
+            <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Note de Frais</button></td>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_Facture_supprimer', {'id': facture.id})}}';">Supprimer la Facture</button></td>
+        </tr>
+    </table>
+{% endblock %}
+    
+    

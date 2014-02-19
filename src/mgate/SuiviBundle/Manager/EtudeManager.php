@@ -33,7 +33,6 @@ class EtudeManager extends \Twig_Extension {
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
             'getEtatDoc' => new \Twig_Function_Method($this, 'getEtatDoc'),
-            'typeFactureToString' => new \Twig_Function_Method($this, 'typeFactureToString'),
             'confidentielRefus' => new \Twig_Function_Method($this, 'confidentielRefus'),
         );
     }
@@ -227,9 +226,9 @@ class EtudeManager extends \Twig_Extension {
     
     
     /**
-     * Get nouveau numéro pour facture (auto incrémentation)
+     * Get nouveau numéro pour FactureVente (auto incrémentation)
      */
-    public function getNouveauNumeroFacture() {
+    public function getNouveauNumeroFactureVente() {
         $qb = $this->em->createQueryBuilder();
         
         $mandat = 2007 + $this->getMaxMandat();
@@ -237,7 +236,7 @@ class EtudeManager extends \Twig_Extension {
         $mandatComptable = \DateTime::createFromFormat("d/m/Y",'31/03/'.$mandat);
 
         $query = $qb->select('e.num')
-                ->from('mgateSuiviBundle:Facture', 'e')
+                ->from('mgateSuiviBundle:FactureVente', 'e')
                 ->andWhere('e.dateSignature > :mandatComptable')
                 ->setParameter('mandatComptable', $mandatComptable)
                 ->orderBy('e.num', 'DESC');
@@ -249,10 +248,10 @@ class EtudeManager extends \Twig_Extension {
             return 1;
     }
     
-    public function getExerciceComptable($facture){
-        if($facture){
-            $dateAn = (int)$facture->getDateSignature()->format("y");
-            $exercice = ((int)$facture->getDateSignature()->format("m") < 4 ? $dateAn - 8 : $dateAn - 7);
+    public function getExerciceComptable($FactureVente){
+        if($FactureVente){
+            $dateAn = (int)$FactureVente->getDateSignature()->format("y");
+            $exercice = ((int)$FactureVente->getDateSignature()->format("m") < 4 ? $dateAn - 8 : $dateAn - 7);
             return $exercice;
         }
         else return 0;
@@ -369,9 +368,9 @@ class EtudeManager extends \Twig_Extension {
         
         // CC > FI
         if ($etude->getCc()) {
-            foreach ($etude->getFactures() as $facture) {
-                if ($facture->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $facture->getDateSignature()) {
-                    $error = array('titre' => 'Factures, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des factures.');
+            foreach ($etude->getFactures() as $FactureVente) {
+                if ($FactureVente->getDateEmission() != NULL && $etude->getCc()->getDateSignature() > $FactureVente->getDateEmission()) {
+                    $error = array('titre' => 'Factures, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des Factures.');
                     array_push($errors, $error);
                     break;
                 }
@@ -751,18 +750,5 @@ class EtudeManager extends \Twig_Extension {
                 
         return $tauxConversion;
     }
-    
-        /**
-     * Taux de conversion
-     */
-    public function typeFactureToString($type)
-    {
-        if($type=="fa")
-            return "Facture d'Acompte";
-        if($type=="fi")
-            return "Facture Intermédiaire";
-        if($type=="fs")
-            return "Facture de Solde";
-        
-    }
+
 }
