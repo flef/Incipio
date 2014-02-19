@@ -41,12 +41,12 @@ class FactureController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function modifierAction($id) {
+    public function modifierAction($id, $etude_id) {
         $em = $this->getDoctrine()->getManager();
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
             $facture = new Facture;
             $now = new \DateTime("now");
-            $facture->setDateEmission($now);  
+            $facture->setDateEmission($now);
             
             if( $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($etude_id)){
                 $facture->setEtude($etude);

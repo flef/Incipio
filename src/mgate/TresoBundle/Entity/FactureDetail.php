@@ -23,7 +23,7 @@ class FactureDetail
     
     /**
      * @ORM\ManyToOne(targetEntity="Facture", inversedBy="details", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $facture;
 
