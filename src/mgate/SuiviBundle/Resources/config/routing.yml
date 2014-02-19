@@ -206,38 +206,7 @@ mgateSuivi_avmission_modifier:
     defaults: {_controller: mgateSuiviBundle:AvMission:modifier}
     requirements:
         id: \d+
-
-mgateSuivi_FactureVente_ajouter:
-    pattern: /FactureVente/ajouter/{id}
-    defaults: {_controller: mgateSuiviBundle:FactureVente:add}
-    requirements:
-        id: \d+
-        
-mgateSuivi_FactureVente_modifier:
-    pattern: /FactureVente/modifier/{id_FactureVente}
-    defaults: {_controller: mgateSuiviBundle:FactureVente:modifier}
-    requirements:
-        id: \d+
-        
-mgateSuivi_FactureVente_rediger:
-    pattern: /FactureVente/rediger/{id_etude}/{type}
-    defaults: {_controller: mgateSuiviBundle:FactureVente:rediger}
-    requirements:
-        id: \d+
- 
-mgateSuivi_FactureVente_voir:
-    pattern: /FactureVente/voir/{id}
-    defaults: {_controller: mgateSuiviBundle:FactureVente:voir}
-    requirements:
-        id: \d+
-        
-mgateSuivi_FactureVente_supprimer:
-    pattern: /FactureVente/supprimer/{id}
-    defaults: {_controller: mgateSuiviBundle:FactureVente:delete}
-    requirements:
-        id: \d+
-         
-                
+          
 mgateSuivi_phases_modifier:
     pattern: /phases/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Phases:modifier}

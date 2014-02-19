@@ -41,13 +41,30 @@ class FactureController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function modifierAction($id) {
+    public function modifierAction($id, $etude_id) {
         $em = $this->getDoctrine()->getManager();
-
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
             $facture = new Facture;
             $now = new \DateTime("now");
-            $facture->setDateEmission($now);           
+            $facture->setDateEmission($now);  
+            if( $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($etude_id)){
+                $facture->setEtude($etude);
+                if(!count($etude->getFactures()))
+                    $facture->setType(Facture::$TYPE_VENTE_ACCOMPTE);
+                else
+                    $facture->setType(Facture::$TYPE_VENTE_INTERMEDIAIRE);
+                foreach ($etude->getPhases() as $phase){
+                    $detail = new FactureDetail;
+                    $detail->setCompte();
+                    $detail->setFacture($facture);
+                    $facture->addDetail($detail);
+                    $detail->setDescription('Phase '.$phase->getPosition(). ' : '.$phase->getTitre());                    
+                    $detail->setMontantHT($phase->getPrixJEH() * $phase->getNbrJEH());
+                    // TODO CONST EXTERN
+                    $detail->setTauxTVA(20.0);
+                }
+            
+            }
         }
 
         $form = $this->createForm(new FactureType, $facture);

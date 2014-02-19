@@ -28,15 +28,7 @@ class FactureType extends AbstractType {
                     'allow_delete' => true,
                     'prototype' => true,
                     'by_reference' => false,
-                ))
-                /*->add('demandeur','genemu_jqueryselect2_entity',array (
-                      'label' => 'Demandeur',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'query_builder' => function(PersonneRepository $pr) {
-                            return $pr->getMembreOnly();
-                        },
-                       'required' => true))*/
+                ))                
                 ->add('dateEmission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
                 ->add('dateVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>false, 'widget'=>'single_text'));
     }

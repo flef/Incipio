@@ -17,7 +17,7 @@ class FactureDetailType extends AbstractType {
                         'required' => true, 
                         'attr'=>array(
                             'cols'=>'100%', 
-                            'rows'=>5)
+                            'rows'=>2)
                         )
                     )
                 ->add('montantHT', 'money', array('label'=>'Prix H.T.', 'required' => false))

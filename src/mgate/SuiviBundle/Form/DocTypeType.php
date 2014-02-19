@@ -21,31 +21,17 @@ class DocTypeType extends AbstractType
         // Version du document
         $builder->add('version', 'integer', array('label'=>'Version du document'));
         
-        // Si le document n'est pas une FactureVente
-        if($options['data_class']!='mgate\SuiviBundle\Entity\FactureVente')
-        {
-             $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
-                array ('label' => 'Signataire M-GaTE',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('president%'); },
-                       'required' => true));
-        }
-        else
-        {
-             $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
-                array ('label' => 'Signataire M-GaTE',
-                       'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                       'property' => 'prenomNom',
-                       'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('tresorier'); },
-                       'required' => true));
-        }
+        $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
+            array ('label' => 'Signataire M-GaTE',
+                   'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
+                   'property' => 'prenomNom',
+                   'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('president%'); },
+                   'required' => true));
+       
         
         
         // Si le document n'est ni une FactureVente ni un RM
-        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' // le signataire2 c'est l'intervenant
-           && $options['data_class']!='mgate\SuiviBundle\Entity\FactureVente' // pas de signataire2
-           )
+        if($options['data_class']!='mgate\SuiviBundle\Entity\Mission' ) // le signataire 2 est l'intervenant
         {
             $pro=$options['prospect'];
             if($options['data_class']!='mgate\SuiviBundle\Entity\Av'){

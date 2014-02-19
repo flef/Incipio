@@ -19,8 +19,8 @@ mgateTreso_Facture_voir:
         id: \d+
     
 mgateTreso_Facture_ajouter:
-    pattern:  /Facture/Ajouter
-    defaults: { _controller: mgateTresoBundle:Facture:modifier,  id:-1  }
+    pattern:  /Facture/Ajouter/{etude_id}
+    defaults: { _controller: mgateTresoBundle:Facture:modifier,  id:-1 , etude_id:-1 }
     
 mgateTreso_Facture_modifier:
     pattern:  /Facture/Modifier/{id}
@@ -45,7 +45,7 @@ mgateTreso_Compte_index:
         
 mgateTreso_Compte_ajouter:
     pattern:  /Compte/Ajouter
-    defaults: { _controller: mgateTresoBundle:Compte:modifier,  id:-1  }
+    defaults: { _controller: mgateTresoBundle:Compte:modifier,  id:-1, etude_id :-1  }
     
 mgateTreso_Compte_modifier:
     pattern:  /Compte/Modifier/{id}

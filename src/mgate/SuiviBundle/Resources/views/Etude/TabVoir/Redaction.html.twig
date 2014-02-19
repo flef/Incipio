@@ -84,9 +84,9 @@
                                     </tr>
                                     <!--FactureVenteS-->
                                     <tr>
-                                        <th colspan="8">FactureVentes</th>
+                                        <th colspan="8">factures</th>
                                     </tr>
-                                    {% for FactureVente in formSuivi.FactureVentes %}
+                                    {% for FactureVente in formSuivi.factures %}
                                     <tr class="docTabRow">
                                         <th>FactureVente n° {{ loop.index }} {{typeFactureVenteToString(FactureVente.vars.value.type) }}</th>
                                         <td class="state">Incomplet</td>

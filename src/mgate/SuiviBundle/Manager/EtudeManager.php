@@ -369,9 +369,9 @@ class EtudeManager extends \Twig_Extension {
         
         // CC > FI
         if ($etude->getCc()) {
-            foreach ($etude->getFactureVentes() as $FactureVente) {
+            foreach ($etude->getFactures() as $FactureVente) {
                 if ($FactureVente->getDateSignature() != NULL && $etude->getCc()->getDateSignature() > $FactureVente->getDateSignature()) {
-                    $error = array('titre' => 'FactureVentes, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des FactureVentes.');
+                    $error = array('titre' => 'Factures, CC  - Date de signature : ', 'message' => 'La date de signature de la Convention Client doit être antérieure à la date de signature des Factures.');
                     array_push($errors, $error);
                     break;
                 }
