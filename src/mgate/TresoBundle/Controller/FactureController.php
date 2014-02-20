@@ -88,7 +88,7 @@ class FactureController extends Controller
                 foreach($facture->getDetails() as $factured){
                     $factured->setFacture($facture);
                 }
-                if($facture->getType() <= Facture::$TYPE_VENTE_ACCOMPTE)
+                if($facture->getType() <= Facture::$TYPE_VENTE_ACCOMPTE || $facture->getMontantADeduire() == null || $facture->getMontantADeduire()->getMontantHT() == 0)
                     $facture->setMontantADeduire(null);
                 $em->persist($facture);                
                 $em->flush();
