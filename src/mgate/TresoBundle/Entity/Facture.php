@@ -34,6 +34,12 @@ class Facture
     protected $etude;
     
     /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $beneficiaire;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="exercice", type="smallint")
@@ -382,5 +388,28 @@ class Facture
     public function getMontantADeduire()
     {
         return $this->montantADeduire;
+    }
+
+    /**
+     * Set beneficiaire
+     *
+     * @param \mgate\PersonneBundle\Entity\Prospect $beneficiaire
+     * @return Facture
+     */
+    public function setBeneficiaire(\mgate\PersonneBundle\Entity\Prospect $beneficiaire)
+    {
+        $this->beneficiaire = $beneficiaire;
+    
+        return $this;
+    }
+
+    /**
+     * Get beneficiaire
+     *
+     * @return \mgate\PersonneBundle\Entity\Prospect 
+     */
+    public function getBeneficiaire()
+    {
+        return $this->beneficiaire;
     }
 }

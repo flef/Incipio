@@ -29,6 +29,12 @@ class FactureType extends AbstractType {
                     'prototype' => true,
                     'by_reference' => false,
                 ))
+                ->add('beneficiaire', 'genemu_jqueryselect2_entity', array(
+                    'class' => 'mgate\PersonneBundle\Entity\Prospect',
+                    'property' => 'nom',
+                    'required' => true,
+                    'label' => 'Facture émise pour/par',                    
+                ))
                 ->add('montantADeduire', new FactureDetailType, array('label'=>'Montant à déduire', 'required' => true))
                 ->add('dateEmission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
                 ->add('dateVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>false, 'widget'=>'single_text'));

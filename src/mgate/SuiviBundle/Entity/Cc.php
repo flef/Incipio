@@ -27,7 +27,12 @@ class Cc extends DocType
      */
     protected $etude;
            
-   
+   /*
+    * ADDITIONAL
+    */
+    public function getReference(){
+        return $this->etude->getReference().'-CC-'.$this->getVersion();
+    }
 
     /**
      * Get id
