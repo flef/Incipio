@@ -6,7 +6,7 @@ namespace mgate\TresoBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
-
+use mgate\PubliBundle\Controller\ConversionLettreController as Formater;
 use \mgate\TresoBundle\Entity\Facture as Facture;
 use \mgate\TresoBundle\Entity\FactureDetail as FactureDetail;
 use mgate\TresoBundle\Form\FactureType as FactureType;
@@ -43,45 +43,65 @@ class FactureController extends Controller
      */
     public function modifierAction($id, $etude_id) {
         $em = $this->getDoctrine()->getManager();
+        $tauxTVA = 20.0;
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id)) {
             $facture = new Facture;
             $now = new \DateTime("now");
             $facture->setDateEmission($now);
             
-            if( $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($etude_id)){
+            if( $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($etude_id)){             
+                if($etude->getCc())
+                    $refCC = $etude->getCc()->getReference();
+                $formater = new Formater;
+                
+                
                 $facture->setEtude($etude);
-                if(!count($etude->getFactures())){
+                $facture->setBeneficiaire($etude->getProspect());            
+                
+                if(!count($etude->getFactures()) && $etude->getAcompte()){
                     $facture->setType(Facture::$TYPE_VENTE_ACCOMPTE);
+                    
+                    $montantTTC = $etude->getPourcentageAcompte() * $etude->getMontantHT() * $tauxTVA / 100;
+                    $montantTTCLettre =  $formater->ConvNumberLetter($montantTTC,1); 
+                    $facture->setObjet('Conformément à la convention client '.$refCC.', nous vous prions de nous verser la somme de '. $formater->money_format($montantTTC).' € T.T.C. ('.$montantTTCLettre.' T.T.C), correspondant au règlement de '.$formater->money_format(($etude->getPourcentageAcompte() * 100)).' % de l’étude.');
+
                     $detail = new FactureDetail;
                     $detail->setCompte();
                     $detail->setFacture($facture);
                     $facture->addDetail($detail);
-                    $detail->setDescription('Acompte sur l\'étude '.$etude->getReference());                    
+                    $detail->setDescription('Acompte de '. $formater->money_format(($etude->getPourcentageAcompte() * 100)).' % sur l\'étude '.$etude->getReference());                    
                     $detail->setMontantHT($etude->getPourcentageAcompte() * $etude->getMontantHT());
-                    // TODO CONST EXTERN
-                    $detail->setTauxTVA(20.0);
+                    $detail->setTauxTVA($tauxTVA);
                 }
                 else{
-                    $facture->setType(Facture::$TYPE_VENTE_INTERMEDIAIRE);
+                    $facture->setType(Facture::$TYPE_VENTE_SOLDE);
+                    
+                    $totalTTC = 0;
                     foreach ($etude->getPhases() as $phase){
                         $detail = new FactureDetail;
                         $detail->setCompte();
                         $detail->setFacture($facture);
                         $facture->addDetail($detail);
-                        $detail->setDescription('Phase '.$phase->getPosition(). ' : '.$phase->getTitre());                    
+                        $detail->setDescription('Phase '.($phase->getPosition() + 1). ' : '.$phase->getTitre().' : ' . $phase->getNbrJEH() . ' JEH * '. $formater->money_format($phase->getPrixJEH()) . ' €');                    
                         $detail->setMontantHT($phase->getPrixJEH() * $phase->getNbrJEH());
-                        // TODO CONST EXTERN
-                        $detail->setTauxTVA(20.0);
+                        $detail->setTauxTVA($tauxTVA);
+                        
+                        $totalTTC += $phase->getPrixJEH() * $phase->getNbrJEH();                        
                     }
                     $detail = new FactureDetail;
-                        $detail->setCompte()
-                            ->setFacture($facture)
-                            ->setDescription('Frais de dossier')
-                            ->setMontantHT($etude->getFraisDossier());
-                        $facture->addDetail($detail);
-                        
-                        // TODO CONST EXTERN
-                        $detail->setTauxTVA(20.0);
+                    $detail->setCompte()
+                           ->setFacture($facture)
+                           ->setDescription('Frais de dossier')
+                           ->setMontantHT($etude->getFraisDossier());
+                    $facture->addDetail($detail);
+                    $detail->setTauxTVA($tauxTVA);
+                    
+                    $totalTTC += $etude->getFraisDossier();
+                    $totalTTC *= $tauxTVA / 100;
+                    $totalTTCLettre =  $formater->ConvNumberLetter($totalTTC,1); 
+                    
+                    $facture->setObjet('Conformément à la convention client '.$refCC.', nous vous prions de nous verser la somme de '. $formater->money_format($totalTTC).' € T.T.C. ('.$totalTTCLettre.' T.T.C), correspondant au règlement de correspondant au solde de l’étude. La facture d’acompte '.$etude->getFa()->getReference().' a été prise en compte.');
+                    
                 }            
             }
         }

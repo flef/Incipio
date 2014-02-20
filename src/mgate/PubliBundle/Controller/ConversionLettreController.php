@@ -13,6 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class ConversionLettreController extends Controller {
 
+    public function money_format($number){
+        return number_format($number,2,',',' ');
+    }
+    
     /**
      * fonction permettant de transformer une valeur numérique en valeur en lettre
      * @param int $Nombre le nombre a convertir

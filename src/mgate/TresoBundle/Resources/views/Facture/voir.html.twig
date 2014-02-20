@@ -12,7 +12,11 @@
             <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
         </tr>
         <tr>
-            <th>Réglée le : </th>
+            <th>Facture émise {{ facture.type > 1 ? 'pour' : 'par'}}</th>
+            <td>{{ facture.beneficiaire.nom }}</td>
+        </tr>
+        <tr>
+            <th>Réglée le </th>
             <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
         </tr>
         <tr>
