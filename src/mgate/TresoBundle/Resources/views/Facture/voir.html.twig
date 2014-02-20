@@ -47,8 +47,20 @@
             <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ')}} %</td>
             <td>{{ (detail.montantHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
             <td>{{ (detail.montantHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
+        </tr>        
+        {% endfor %}
+        {% if facture.montantADeduire is not null %}
+        {% set totalHT = totalHT - facture.montantADeduire.montantHT %}
+        {% set totalTVA = totalTVA - (facture.montantADeduire.montantHT * (facture.montantADeduire.tauxTVA / 100)) %}
+        {% set totalTTC = totalTTC - (facture.montantADeduire.montantHT * ( 1 + facture.montantADeduire.tauxTVA / 100)) %}
+        <tr>
+            <th>Déjà payé</th>
+            <td>{{ facture.montantADeduire.montantHT | number_format(2, ',', ' ')}} €</td>
+            <td>{{ facture.montantADeduire.tauxTVA }} %</td>
+            <td>{{ (facture.montantADeduire.montantHT * ( facture.montantADeduire.tauxTVA / 100)) | number_format(2, ',', ' ')}} €</td>
+            <td>{{ (facture.montantADeduire.montantHT * ( 1 + facture.montantADeduire.tauxTVA / 100)) | number_format(2, ',', ' ')}} €</td>
         </tr>
-        {% endfor %}        
+        {% endif %}
         <tr>
             <th colspan="5" class="danger">Total</th>               
         </tr>
@@ -61,7 +73,7 @@
     <table class="table">
         <tr>
             <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_Facture_modifier', {'id': facture.id})}}';">Modifier la Facture</button></td>
-            <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Note de Frais</button></td>
+            <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Facture</button></td>
             <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_Facture_supprimer', {'id': facture.id})}}';">Supprimer la Facture</button></td>
         </tr>
     </table>
