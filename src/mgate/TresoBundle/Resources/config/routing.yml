@@ -23,8 +23,8 @@ mgateTreso_Facture_ajouter:
     defaults: { _controller: mgateTresoBundle:Facture:modifier,  id:-1 , etude_id:-1 }
     
 mgateTreso_Facture_modifier:
-    pattern:  /Facture/Modifier/{id}
-    defaults: { _controller: mgateTresoBundle:Facture:modifier }
+    pattern:  /Facture/Modifier/{id}/{etude_id}
+    defaults: { _controller: mgateTresoBundle:Facture:modifier, etude_id:-1 }
     requirements:
         id: \d+
     

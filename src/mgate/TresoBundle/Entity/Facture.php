@@ -29,7 +29,7 @@ class Facture
     
     /**
      * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", inversedBy="factures",  cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $etude;
     
@@ -81,11 +81,10 @@ class Facture
     private $objet;
     
     /**
-     * @var float
-     *
-     * @ORM\Column(name="montantADeduireHT", type="decimal", precision=6, scale=2, nullable=true)
+     * @ORM\OneToOne(targetEntity="FactureDetail", cascade={"persist", "merge", "refresh", "remove"})
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
-    private $montantADeduireHT;
+    private $montantADeduire;
     
    
     /**
@@ -99,7 +98,8 @@ class Facture
        $montantHT = 0;
        foreach ($this->details as $detail)
             $montantHT += $detail->getMontantHT();
-       $montantHT -= $this->montantADeduireHT;
+       if($this->montantADeduire)
+            $montantHT -= $this->montantADeduire->getMontantHT();
        return $montantHT;
     }
     
@@ -107,6 +107,8 @@ class Facture
         $TVA = 0;
         foreach ($this->details as $detail)
             $TVA += $detail->getMontantHT() * $detail->getTauxTVA() / 100;
+        if($this->montantADeduire)
+            $TVA -= $this->montantADeduire->getTauxTVA() * $this->montantADeduire->getMontantHT() / 100;
        return $TVA;
     }
     
@@ -157,7 +159,8 @@ class Facture
     public function __construct()
     {
         $this->details = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->montantADeduireHT = 0;
+        $this->montantADeduire = new FactureDetail;
+        $this->montantADeduire->setMontantHT(0);
     }
     
     /**
@@ -357,26 +360,27 @@ class Facture
     }
 
 
+
     /**
-     * Set montantADeduireHT
+     * Set montantADeduire
      *
-     * @param float $montantADeduireHT
+     * @param \mgate\TresoBundle\Entity\FactureDetail $montantADeduire
      * @return Facture
      */
-    public function setMontantADeduireHT($montantADeduireHT)
+    public function setMontantADeduire(\mgate\TresoBundle\Entity\FactureDetail $montantADeduire = null)
     {
-        $this->montantADeduireHT = $montantADeduireHT;
+        $this->montantADeduire = $montantADeduire;
     
         return $this;
     }
 
     /**
-     * Get montantADeduireHT
+     * Get montantADeduire
      *
-     * @return float 
+     * @return \mgate\TresoBundle\Entity\FactureDetail 
      */
-    public function getMontantADeduireHT()
+    public function getMontantADeduire()
     {
-        return $this->montantADeduireHT;
+        return $this->montantADeduire;
     }
 }
