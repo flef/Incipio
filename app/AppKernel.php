@@ -22,7 +22,7 @@ class AppKernel extends Kernel
 			*			Vendor - Doctrine			*
 			*****************************************/
 			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-			//new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(), pas de version stable pour sf2.3
+			new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
 			new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 			/****************************************
 			*			Vendor - FOS				*
@@ -41,10 +41,10 @@ class AppKernel extends Kernel
             
             //new Io\FormBundle\IoFormBundle(),
 			new JMS\SerializerBundle\JMSSerializerBundle($this),
-                        // JMS Security Extra Bundle :
-                        new JMS\AopBundle\JMSAopBundle(),
-                        new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
-                        new JMS\DiExtraBundle\JMSDiExtraBundle($this),
+            // JMS Security Extra Bundle :
+            new JMS\AopBundle\JMSAopBundle(),
+            new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
+            new JMS\DiExtraBundle\JMSDiExtraBundle($this),
 			
 			/****************************************
 			*				M-GaTE					*
