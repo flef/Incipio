@@ -14,7 +14,7 @@ class FactureDetailType extends AbstractType {
     public function buildForm(\Symfony\Component\Form\FormBuilderInterface $builder, array $options) {
         $builder->add('description', 'textarea', 
                     array('label' => 'Description de la dépense',
-                        'required' => true, 
+                        'required' => false, 
                         'attr'=>array(
                             'cols'=>'100%', 
                             'rows'=>2)

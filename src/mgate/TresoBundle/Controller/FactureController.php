@@ -88,6 +88,8 @@ class FactureController extends Controller
                 foreach($facture->getDetails() as $factured){
                     $factured->setFacture($facture);
                 }
+                if($facture->getType() <= Facture::$TYPE_VENTE_ACCOMPTE)
+                    $facture->setMontantADeduire(null);
                 $em->persist($facture);                
                 $em->flush();
                 return $this->redirect($this->generateUrl('mgateTreso_Facture_voir', array('id' => $facture->getId())));

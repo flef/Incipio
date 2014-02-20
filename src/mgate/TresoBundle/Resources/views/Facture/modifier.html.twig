@@ -131,4 +131,19 @@ function addDeleteButton($tag) {
     
 }  
 </script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    $('select[id$="_type"]').each(
+        function(){
+            if($(this).val() < 4) $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').hide();
+            else $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').show();
+    });
+    
+    $('select[id$="_type"]').change(
+       function(){
+            if($(this).val() < 4) $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').hide();
+            else $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').show();
+    });
+});
+</script>
 {% endblock %}
