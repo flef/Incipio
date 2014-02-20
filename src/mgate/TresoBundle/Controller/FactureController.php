@@ -73,6 +73,15 @@ class FactureController extends Controller
                         // TODO CONST EXTERN
                         $detail->setTauxTVA(20.0);
                     }
+                    $detail = new FactureDetail;
+                        $detail->setCompte()
+                            ->setFacture($facture)
+                            ->setDescription('Frais de dossier')
+                            ->setMontantHT($etude->getFraisDossier());
+                        $facture->addDetail($detail);
+                        
+                        // TODO CONST EXTERN
+                        $detail->setTauxTVA(20.0);
                 }            
             }
         }
@@ -109,9 +118,14 @@ class FactureController extends Controller
 
         if (!$facture= $em->getRepository('mgateTresoBundle:Facture')->find($id))
             throw $this->createNotFoundException('La Facture n\'existe pas !');
-
-        $em->remove($facture);                
+        
+        foreach ($facture->getDetails() as $detail)
+            $em->remove($detail);
         $em->flush();
+
+        $em->remove($facture);
+        $em->flush();
+        
         return $this->redirect($this->generateUrl('mgateTreso_Facture_index', array()));
 
 
