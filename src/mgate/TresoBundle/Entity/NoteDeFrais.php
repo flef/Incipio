@@ -149,7 +149,7 @@ class NoteDeFrais
     public function removeDetail(\mgate\TresoBundle\Entity\NoteDeFraisDetail $details)
     {
         $this->details->removeElement($details);
-        $details->setNoteDeFrais(null);
+        $details->setNoteDeFrais();
     }
 
     /**

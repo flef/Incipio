@@ -165,7 +165,7 @@ class FactureDetail
      * @param \mgate\TresoBundle\Entity\Facture $facture
      * @return FactureDetail
      */
-    public function setFacture(\mgate\TresoBundle\Entity\Facture $facture)
+    public function setFacture(\mgate\TresoBundle\Entity\Facture $facture = null)
     {
         $this->facture = $facture;
     
