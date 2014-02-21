@@ -18,6 +18,7 @@ class LoadUserData implements FixtureInterface
             645100 => 'Cotisations à l\'Urssaf',
             705000 => 'Etudes',
             708500 => 'Ports et frais accessoires facturés',
+            419100 => 'Clients - Avances et acomptes reçus sur commandes',
         );
         
         foreach ($comptes as $key => $value){

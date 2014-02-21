@@ -76,7 +76,7 @@ class Facture
     private $dateVersement;
     
     /**
-     * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="facture", cascade={"persist", "merge", "refresh", "remove"})
+     * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="facture", cascade={"persist", "detach", "remove"}, orphanRemoval=true)
      */
     private $details;
     
@@ -307,6 +307,7 @@ class Facture
     public function removeDetail(\mgate\TresoBundle\Entity\FactureDetail $details)
     {
         $this->details->removeElement($details);
+        $details->setFacture();
     }
 
     /**

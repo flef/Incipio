@@ -13,7 +13,7 @@ class CompteType extends AbstractType {
                     array('label' => 'Libellé du compte',
                         'required' => true,)
                     )
-                ->add('numero', 'integer', array('label'=>'Numéro de compte', 'required' => true, 'attr' => array('min' => 100000, 'max' => 999999,)))
+                ->add('numero', 'text', array('label'=>'Numéro de compte', 'required' => true, 'attr' => array('maxlength' => 6,)))
                 ->add('categorie', 'checkbox', array('label'=> 'Est utilisé comme catégorie ? ', 'required' => false));
     }
 

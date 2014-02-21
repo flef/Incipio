@@ -10,8 +10,14 @@
   
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $('#example').dataTable({
-            "bPaginate": false,
+        $('#FAtable').dataTable({
+            "bPaginate": true,
+            "iDisplayLength": 50,
+			"aaSorting": [[1,'desc']],
+        });
+        $('#FVtable').dataTable({
+            "bPaginate": true,
+            "iDisplayLength": 50,
 			"aaSorting": [[1,'desc']],
         });
     });
@@ -24,32 +30,74 @@
 {% endblock %}
     
 {% block content_bundle %}
-    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_Facture_ajouter')}}';">Ajouter une Facture</button>
-    <table class="display dataTable table table-bordered table-striped" id="example">
-        <thead>
-          <tr>
-            <th>Date d'émission</th>
-            <th>Référence</th>
-            <th>Objet</th>
-            <th>Montant HT</th>
-            <th>Montant TVA</th>
-            <th>Montant TTC</th>
-            <th>Statut</th>
-        </tr>
-        </thead>        
-        {% for facture in factures %}
-        <tr>
-            <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
-            <td><a href="{{ path('mgateTreso_Facture_voir', {'id': facture.id})}}">{{ facture.reference}}</a></td>
-            <td>{{ facture.objet }}</td>
-            <td style="text-align: right;">{{ facture.montantHT |number_format(2, ',', ' ')}} €</td>
-            <td style="text-align: right;">{{ facture.montantTVA |number_format(2, ',', ' ')}} €</td>
-            <td style="text-align: right;">{{ facture.montantTTC |number_format(2, ',', ' ')}} €</td>
-            <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <ul id="myTab" class="nav nav-tabs">
+        <li><a href="{{ path('mgateTreso_Facture_ajouter')}}"> <span class="glyphicon glyphicon-plus"></span> Ajouter une Facture</a></li>
+        <li class=""><a href="#FA" data-toggle="tab">Facture d'Achat</a></li>
+        <li class="active"><a href="#FV" data-toggle="tab">Facture de Vente</a></li>        
+    </ul>
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade" id="FA">
+            <table class="display dataTable table table-bordered table-striped" id="FAtable">
+                <thead>
+                  <tr>
+                    <th>Date d'émission</th>
+                    <th>Référence</th>
+                    <th>Objet</th>
+                    <th>Montant HT</th>
+                    <th>Montant TVA</th>
+                    <th>Montant TTC</th>
+                    <th>Statut</th>
+                </tr>
+                </thead>
+                {% for facture in factures if facture.type == 1 %}        
+                {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
+                <tr class="{{facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning')}}">
+                    <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
+                    <td><a href="{{ path('mgateTreso_Facture_voir', {'id': facture.id})}}">{{ facture.reference}}</a></td>
+                    <td>{{ facture.objet }}</td>
+                    <td style="text-align: right;">{{ facture.montantHT |number_format(2, ',', ' ')}} €</td>
+                    <td style="text-align: right;">{{ facture.montantTVA |number_format(2, ',', ' ')}} €</td>
+                    <td style="text-align: right;">{{ facture.montantTTC |number_format(2, ',', ' ')}} €</td>
+                    <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
+                </tr>
+                {% endfor %}
+            </table>                
+        </div>
+        <div class="tab-pane fade active in" id="FV">
+            <table class="display dataTable table table-bordered table-striped" id="FVtable">
+                <thead>
+                  <tr>
+                    <th>Date d'émission</th>
+                    <th>Référence</th>
+                    <th>Objet</th>
+                    <th>Montant HT</th>
+                    <th>Montant TVA</th>
+                    <th>Montant TTC</th>
+                    <th>Statut</th>
+                    <th>Délai</th>
+                </tr>
+                </thead>
+                {% set totalDelai = 0 %}
+                {% for facture in factures if facture.type > 1 %}        
+                {% set delai = (((facture.dateVersement ? facture.dateVersement |date('U') : 'now' | date('U')) - facture.dateEmission| date('U')) / 86400 ) |round %}
+                {% set totalDelai = delai + totalDelai %}
+                <tr class="{{facture.dateVersement ? 'success' : ( delai > 31 ? 'danger' : 'warning')}}">
+                    <td>{{ facture.dateEmission | date('d/m/Y')}}</td>
+                    <td><a href="{{ path('mgateTreso_Facture_voir', {'id': facture.id})}}">{{ facture.reference}}</a></td>
+                    <td>{{ facture.objet }}</td>
+                    <td style="text-align: right;">{{ facture.montantHT |number_format(2, ',', ' ')}} €</td>
+                    <td style="text-align: right;">{{ facture.montantTVA |number_format(2, ',', ' ')}} €</td>
+                    <td style="text-align: right;">{{ facture.montantTTC |number_format(2, ',', ' ')}} €</td>
+                    <td>{{ facture.dateVersement ? facture.dateVersement |date('d/m/Y') : 'Impayée' }}</td>
+                    <td>{{ delai }} jour{% if delai > 1%}s{% endif %}</td>
+                </tr>
+                {% endfor %}
+            </table>                
+        </div>
+   </div>
 
+    
+    
 {% endblock %}
     
     
