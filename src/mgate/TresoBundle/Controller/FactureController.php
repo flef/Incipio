@@ -97,10 +97,10 @@ class FactureController extends Controller
                     $detail->setTauxTVA($tauxTVA);
                     
                     $totalTTC += $etude->getFraisDossier();
-                    $totalTTC *= $tauxTVA / 100;
+                    $totalTTC *= (1 + $tauxTVA / 100);
                     $totalTTCLettre =  $formater->ConvNumberLetter($totalTTC,1); 
                     
-                    $facture->setObjet('Conformément à la convention client '.$refCC.', nous vous prions de nous verser la somme de '. $formater->money_format($totalTTC).' € T.T.C. ('.$totalTTCLettre.' T.T.C), correspondant au règlement de correspondant au solde de l’étude. La facture d’acompte '.$etude->getFa()->getReference().' a été prise en compte.');
+                    $facture->setObjet('Conformément à la convention client '.$refCC.', nous vous prions de nous verser la somme de '. $formater->money_format($totalTTC).' € T.T.C. ('.$totalTTCLettre.' T.T.C), correspondant au règlement de correspondant au solde de l’étude.'. ($etude->getFa() ? 'La facture d’acompte '.$etude->getFa()->getReference().' a été prise en compte.' : ''));
                     
                 }            
             }
@@ -117,6 +117,7 @@ class FactureController extends Controller
                 foreach($facture->getDetails() as $factured){
                     $factured->setFacture($facture);
                 }
+
                 if($facture->getType() <= Facture::$TYPE_VENTE_ACCOMPTE || $facture->getMontantADeduire() == null || $facture->getMontantADeduire()->getMontantHT() == 0)
                     $facture->setMontantADeduire(null);
                 $em->persist($facture);                

@@ -50,7 +50,7 @@ class NoteDeFrais
     private $objet;
     
     /**
-     * @ORM\OneToMany(targetEntity="NoteDeFraisDetail", mappedBy="noteDeFrais", cascade={"persist", "merge", "refresh", "remove"})
+     * @ORM\OneToMany(targetEntity="NoteDeFraisDetail", mappedBy="noteDeFrais", cascade={"persist", "detach", "remove"}, orphanRemoval=true)
      */
     private $details;
     
@@ -149,6 +149,7 @@ class NoteDeFrais
     public function removeDetail(\mgate\TresoBundle\Entity\NoteDeFraisDetail $details)
     {
         $this->details->removeElement($details);
+        $details->setNoteDeFrais(null);
     }
 
     /**
