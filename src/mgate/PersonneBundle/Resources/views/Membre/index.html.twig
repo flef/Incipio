@@ -6,14 +6,15 @@
 {{ parent() }}
     <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
     
-    <script type="text/javascript" charset="utf-8">
-            $(document).ready(function() {
-                    $('#example').dataTable({
-                        "bPaginate": false,
-						"aaSorting": [[0,'desc']],
-                    });
-            } );
-    </script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    $('#example').dataTable({
+        "bPaginate": true,
+        "iDisplayLength": 100,
+        "aaSorting": [[0,'desc']],
+    });
+} );
+</script>
 	
 {% endblock %}
 {% block stylesheets %}

@@ -4,17 +4,17 @@
 
 {% block javascript_quick %}
 {{ parent() }}
-    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
-    
-    <script type="text/javascript" charset="utf-8">
-            $(document).ready(function() {
-                    $('#example').dataTable({
-                        "bPaginate": false,
-						"aaSorting": [[0,'desc']],
-                    });
-            } );
-    </script>
-	
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": true,
+            "iDisplayLength": 50,
+            "aaSorting": [[0,'desc']],
+        });
+} );
+</script>	
 {% endblock %}
 {% block stylesheets %}
 {{ parent() }}

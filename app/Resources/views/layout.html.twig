@@ -13,11 +13,47 @@
         <link rel="stylesheet" href="{{ asset('css/select2.css')}}"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            #content {
-                width: 95%;
-                margin-left: auto;
-                margin-right: 40px;
-            }
+
+    /* Sticky footer styles
+    -------------------------------------------------- */
+    html {
+      position: relative;
+      min-height: 100%;
+    }
+    body {
+      /* Margin bottom by footer height */
+      margin-bottom: 60px;
+    }
+    #footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      /* Set the fixed height of the footer here */
+      height: 60px;
+      background-color: #f5f5f5;
+    }
+
+    /* Custom page CSS
+    -------------------------------------------------- */
+    /* Not required for template or sticky footer method. */
+
+    body > .container {
+      padding: 60px 15px 0;
+    }
+    .container .text-muted {
+      margin: 20px 0;
+    }
+
+    #footer > .container {
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+
+    code {
+      font-size: 80%;
+    }
+
+
         </style>
 {% endblock %}
 
@@ -58,22 +94,19 @@
             {% endblock %}
     {% endblock %}
 
-    {% block content_main %}            
-                        <div id="content">
+    {% block content_main %} 
+    <div id="content" style="width: 95%;  margin-left: auto; margin-right: 40px; margin-bottom: 100px;">
             {% block content %}
             {% endblock %}
-                            </div>
+            </div>
     {% endblock %}
 
     {% block footer_main %}
-                            <div id="footer">
-            {% block footer %}
-                                    <hr>
-                                    <footer>
-                                        <p style="text-align: right"><i>M-GaTE -- Junior-Entreprise © 2013</i></p>
-                                    </footer>
-            {% endblock %}
-                                </div>
+    <div id="footer">
+        <div class="container">
+            <p class="text-muted" style="text-align: center"><i>© 2014 M-GaTE -- Junior-Entreprise</i></p>
+        </div>
+    </div>
     {% endblock %}
 
 {% endblock %} 
