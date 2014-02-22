@@ -1,5 +1,5 @@
 <?php
-namespace mgate\DashBoardBundle\DQL;
+namespace mgate\DashboardBundle\DQL;
  
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;

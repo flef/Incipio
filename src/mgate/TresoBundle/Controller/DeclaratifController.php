@@ -132,7 +132,7 @@ class DeclaratifController extends Controller
            
         }
         sort($tvas);      
-        return $this->render('mgateTresoBundle:Declaratif:index.html.twig', 
+        return $this->render('mgateTresoBundle:Declaratif:TVA.html.twig', 
             array('form' => $form->createView(),
                 'tvas' => $tvas, 
                 'tvaDeductible' => $tvaDeductible, 
@@ -143,14 +143,39 @@ class DeclaratifController extends Controller
             );
     }
     
-    /**
+/**
      * @Secure(roles="ROLE_CA")
      */
-    public function BRCAction()
+    public function BRCAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $bvs = $em->getRepository('mgateTresoBundle:BV')->findAll();
         
-        return $this->render('mgateTresoBundle:BV:index.html.twig', array('bvs' => $bvs));
+        $defaultData = array('message' => 'Date');
+        $form = $this->createFormBuilder($defaultData)
+                      ->add(
+                          'date', 
+                          'genemu_jquerydate',
+                          array(
+                              'label'=>'Mois du déclaratif',
+                              'required'=>true, 'widget'=>'single_text',
+                              'data'=>date_create(),'format' => 'dd/MM/yyyy',)
+                      )->getForm();
+
+        if ($request->isMethod('POST'))
+        {
+            $form->bind($request);
+            $data = $form->getData();
+            $date = $data["date"];
+            $month = $date->format('m');
+            $year = $date->format('Y');
+        }else{
+            $date = new \DateTime('now');
+            $month = $date->format('m');
+            $year = $date->format('Y');
+        }
+
+        return $this->render('mgateTresoBundle:Declaratif:BRC.html.twig', 
+            array('form' => $form->createView(),)
+            );
     }
 }
