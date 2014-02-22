@@ -1,0 +1,68 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Accueil - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+
+<h2>Déclaration de la TVA</h2>
+
+<form method="post" {{ form_enctype(form) }}>
+    {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+	{{ form_label(form.date) }} {{ form_widget(form.date) }}
+	{{ form_widget(form) }}
+	<br>
+    <input type="submit" value="Chercher" class="btn"/>
+</form>        
+        
+<br>
+<table>
+    <tr>
+        <td>TVA Collectée</td>
+    </tr>
+    <tr>
+        <td>Mois de ....</td>
+    </tr>
+</table>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td colspan="{{ tvas | length +3}}"><h3>TVA Deductible</h3></td>
+    </tr>
+    <tr>
+        <td colspan="{{ tvas | length +3}}"><h4>Mois de ....</h4></td>
+    </tr>
+    <tr>
+        <th>Libellé</th>
+        <th>Montant HT</th>
+        {% for tva in tvas %}
+        <th>{{ tva }} %</th>
+        {% endfor %}
+        <th>Montant TTC</th>
+    </tr>
+    {% for line in tvaDeductible %}
+    <tr style="text-align: right;">
+        <td>{{ line['LI']}}</td>        
+        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  line['TVA']|keys %}
+                {{line['TVA'][tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+    {% endfor %}    
+</table>
+{% endblock %}
+        
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+    

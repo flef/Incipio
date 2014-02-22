@@ -53,6 +53,18 @@ class FactureDetail
      * @ORM\JoinColumn(nullable=true)
      */
     private $compte;
+    
+    /**
+     * ADDITIONAL
+     */
+    
+    public function getMontantTVA(){
+        return $this->tauxTVA * $this->montantHT / 100;        
+    }
+    
+    public function getMontantTTC(){
+        return $this->getMontantHT + $this->getMontantTVA();
+    }
 
 
     /**

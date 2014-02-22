@@ -4,6 +4,24 @@ mgate_treso_urssaf:
     
 ################################################################################
 #                                                                              #
+#                                DECLARATIFS                                   #
+#                                                                              #
+################################################################################
+
+mgateTreso_Declaratif_index:
+    pattern:  /Declaratifs
+    defaults: { _controller: mgateTresoBundle:Declaratif:index }
+    
+mgateTreso_Declaratif_TVA:
+    pattern:  /Declaratifs/TVA
+    defaults: { _controller: mgateTresoBundle:Declaratif:TVA }
+    
+mgateTreso_Declaratif_BRC:
+    pattern:  /Declaratifs/BRC
+    defaults: { _controller: mgateTresoBundle:Declaratif:BRC }
+
+################################################################################
+#                                                                              #
 #                                  FACTURES                                    #
 #                                                                              #
 ################################################################################

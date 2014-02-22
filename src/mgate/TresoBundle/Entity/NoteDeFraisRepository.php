@@ -28,4 +28,19 @@ class NoteDeFraisRepository extends EntityRepository
         }        
         return $nfsParMandat;
     }
+    
+    /**
+     * Renvoie les NDF pour un mois donné
+     * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle)
+     * @return array
+     */
+    public function findAllByMonth($month, $year) {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('f')
+                     ->from('mgateTresoBundle:NoteDeFrais', 'f')
+                     ->where("MONTH(f.date) = $month")
+                     ->andWhere("YEAR(f.date) = $year");        
+                    
+        return $query->getQuery()->getResult();;
+    }
 }

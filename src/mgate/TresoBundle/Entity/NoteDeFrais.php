@@ -76,10 +76,18 @@ class NoteDeFrais
     public function getMontantTVA(){
         $TVA = 0;
         foreach ($this->details as $detail){
-           if($detail->getType() == 1)
-               $TVA += $detail->getPrixHT() * $detail->getTauxTVA() / 100;
+            $TVA += $detail->getMontantTTC();
        }
        return $TVA;
+    }
+    
+    public function getMontantTTC(){
+        return $this->getMontantHT + $this->getMontantTVA();
+    }
+    
+    public function getReference(){
+        // UNSAFE
+        return '[M-GaTE]'.$this->mandat.'-NF'.$this->getNumero().'-'.$this->getDemandeur()->getMembre()->getIdentifiant();
     }
 
 
