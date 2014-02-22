@@ -63,7 +63,7 @@ class FactureDetail
     }
     
     public function getMontantTTC(){
-        return $this->getMontantHT + $this->getMontantTVA();
+        return $this->montantHT + $this->getMontantTVA();
     }
 
 

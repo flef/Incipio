@@ -76,7 +76,7 @@ class NoteDeFrais
     public function getMontantTVA(){
         $TVA = 0;
         foreach ($this->details as $detail){
-            $TVA += $detail->getMontantTTC();
+            $TVA += $detail->getMontantTVA();
        }
        return $TVA;
     }
