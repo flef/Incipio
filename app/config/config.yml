@@ -53,9 +53,14 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: %kernel.debug%
-        entity_managers:
+        entity_managers:            
             default:
                 auto_mapping: true
+                dql:
+                    datetime_functions:
+                        day: mgate\DashBoardBundle\DQL\Day
+                        year: mgate\DashBoardBundle\DQL\Year
+                        month: mgate\DashBoardBundle\DQL\Month
                 mappings:
                     gedmo_translatable:
                         type: annotation

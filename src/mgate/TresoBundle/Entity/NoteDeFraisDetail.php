@@ -91,6 +91,17 @@ class NoteDeFraisDetail
         else
             return $this->kilometrage * $this->tauxKm / 100;
     }
+    
+    public function getMontantTVA(){
+        if($this->type == 1)
+            return $this->tauxTVA * $this->getMontantHT() / 100;
+        else
+            return 0;            
+    }
+    
+    public function getMontantTTC(){
+        return $this->getMontantHT() + $this->getMontantTVA();
+    }
 
 
 
