@@ -18,21 +18,9 @@
 </form>        
         
 <br>
-<table>
-    <tr>
-        <td>TVA Collectée</td>
-    </tr>
-    <tr>
-        <td>Mois de ....</td>
-    </tr>
-</table>
-
 <table class="table table-bordered table-striped">
     <tr>
-        <td colspan="{{ tvas | length +3}}"><h3>TVA Deductible</h3></td>
-    </tr>
-    <tr>
-        <td colspan="{{ tvas | length +3}}"><h4>Mois de ....</h4></td>
+        <td colspan="{{ tvas | length +4}}"><h3>TVA Collectée</h3></td>
     </tr>
     <tr>
         <th>Libellé</th>
@@ -40,6 +28,54 @@
         {% for tva in tvas %}
         <th>{{ tva }} %</th>
         {% endfor %}
+        <th>TVA</th>
+        <th>Montant TTC</th>
+    </tr>
+    {% for line in tvaCollectee %}
+    <tr style="text-align: right;">
+        <td>{{ line['LI']}}</td>        
+        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  line['TVAT']|keys %}
+                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
+        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+    {% endfor %}
+    <tr style="text-align: right;">
+        <th>Total</th>
+        <td>{{ totalTvaCollectee['HT'] |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  totalTvaCollectee |keys %}
+                {{totalTvaCollectee[tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ totalTvaCollectee['TVA'] |number_format(2, ',', ' ')}} €</td>
+        <td>{{ totalTvaCollectee['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+</table>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td colspan="{{ tvas | length +4}}"><h3>TVA Deductible</h3></td>
+    </tr>
+    <tr>
+        <th>Libellé</th>
+        <th>Montant HT</th>
+        {% for tva in tvas %}
+        <th>{{ tva }} %</th>
+        {% endfor %}
+        <th>TVA</th>
         <th>Montant TTC</th>
     </tr>
     {% for line in tvaDeductible %}
@@ -48,16 +84,32 @@
         <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
         {% for tva in tvas %}
         <td>
-            {% if tva in  line['TVA']|keys %}
-                {{line['TVA'][tva] |number_format(2, ',', ' ')}} €
+            {% if tva in  line['TVAT']|keys %}
+                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
             {%else%}
                 - €                
             {% endif %}
         </td>
         {% endfor %}
+        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
         <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
     </tr>
-    {% endfor %}    
+    {% endfor %}
+    <tr style="text-align: right;">
+        <th>Total</th>
+        <td>{{ totalTvaDeductible['HT'] |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  totalTvaDeductible |keys %}
+                {{ totalTvaDeductible[tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{  totalTvaDeductible['TVA'] |number_format(2, ',', ' ')}} €</td>
+        <td>{{  totalTvaDeductible['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
 </table>
 {% endblock %}
         
