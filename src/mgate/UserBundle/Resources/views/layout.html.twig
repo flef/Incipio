@@ -4,37 +4,59 @@
 
 {% block stylesheets %}
 {{ parent() }}
-        <style>
-           .centre
-           {
-                position: relative;
-                left: 30%;
-           }
-        </style>
+<style>
+    body {
+      background-color: #eee;
+    }
+
+    .form-signin {
+      max-width: 330px;
+      padding: 15px;
+      margin: 0 auto;
+    }
+    .form-signin .form-signin-heading,
+    .form-signin .checkbox {
+      margin-bottom: 10px;
+    }
+    .form-signin .checkbox {
+      font-weight: normal;
+    }
+    .form-signin .form-control {
+      position: relative;
+      height: auto;
+      -webkit-box-sizing: border-box;
+         -moz-box-sizing: border-box;
+              box-sizing: border-box;
+      padding: 10px;
+      font-size: 16px;
+    }
+    .form-signin .form-control:focus {
+      z-index: 2;
+    }
+    .form-signin input[type="email"] {
+      margin-bottom: -1px;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .form-signin input[type="password"] {
+      margin-bottom: 10px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+</style>
 {% endblock %}
 
 
 {% block content %}
- <div class="centre">
-<p>
-{# L'utilisateur est-il connecté ? #}
+<div class="container">    
+    {% block fos_user_content %}{% endblock %}
+</div>
+<p style="text-align: right;">
 {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-    {# L'utilisateur est connecté ! #}
     <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
-
-    {# L'utilisateur est-il admin ? #}
-    {% if is_granted('ROLE_ADMIN') %}
-        {# L'utilisateur est admin ! #}
-
-    {% endif %}
 {% else %}
-    {# L'utilisateur n'est pas connecté ! #}
-    <a href="{{ path('fos_user_security_login') }}">Connexion</a> - 
-    <a href="{{ path('fos_user_registration_register') }}">Inscription</a> - 
+    <a href="{{ path('fos_user_registration_register') }}">Inscription</a> 
     <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié</a>
 {% endif %}
 </p>
-
-    {% block fos_user_content %}{% endblock %}
-</div>
 {% endblock %}

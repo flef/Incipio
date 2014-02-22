@@ -5,25 +5,15 @@
     <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
 {% endif %}
 
-<form action="{{ path("fos_user_security_check") }}" method="post" class="form-horizontal">
+<form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin" role="form" style="text-align: center;">
+    <img src="{{ asset('images/Logo SD.png') }}" width="300"/>
     <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
-
-    <div class="control-group">
-    <label for="username">{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}</label>
-    <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" />
-    </div>
-
-    <div class="control-group">
-    <label for="password">{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}</label>
-    <input type="password" id="password" name="_password" required="required" />
-    </div>
-
-    <div class="control-group">
-    <label for="remember_me"><input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}</label>
-
-    <input type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}" />
-    </div>
-    
+    <h2 class="form-signin-heading">Connexion</h2>
+    <input type="text" id="username" name="_username" class="form-control" value="{{ last_username }}" placeholder="{{ 'security.login.username'|trans({}, 'FOSUserBundle') }}" required autofocus>
+    <input type="password" id="password" name="_password" class="form-control" placeholder="{{ 'security.login.password'|trans({}, 'FOSUserBundle') }}" required>
+    <label class="checkbox">
+      <input type="checkbox" id="remember_me" name="_remember_me" value="on"> {{ 'security.login.remember_me'|trans({}, 'FOSUserBundle') }}
+    </label>
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}">{{ 'security.login.submit'|trans({}, 'FOSUserBundle') }}</button>
 </form>
 {% endblock fos_user_content %}

@@ -31,4 +31,4 @@ resetting:
 
 # Form field labels
 form:
-    current_password: "Mot de passe actuel du compte connecté :"
+    current_password: "Mot de passe actuel du compte connecté"

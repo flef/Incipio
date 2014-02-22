@@ -1,0 +1,120 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Accueil - {{ parent() }}
+{% endblock %}
+
+{% block content_bundle %}
+
+
+<h2>Déclaration de la TVA</h2>
+
+<form method="post" {{ form_enctype(form) }}>
+    {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
+	{{ form_label(form.date) }} {{ form_widget(form.date) }}
+	{{ form_widget(form) }}
+	<br>
+    <input type="submit" value="Chercher" class="btn"/>
+</form>        
+        
+<br>
+<table class="table table-bordered table-striped">
+    <tr>
+        <td colspan="{{ tvas | length +4}}"><h3>TVA Collectée</h3></td>
+    </tr>
+    <tr>
+        <th>Libellé</th>
+        <th>Montant HT</th>
+        {% for tva in tvas %}
+        <th>{{ tva }} %</th>
+        {% endfor %}
+        <th>TVA</th>
+        <th>Montant TTC</th>
+    </tr>
+    {% for line in tvaCollectee %}
+    <tr style="text-align: right;">
+        <td>{{ line['LI']}}</td>        
+        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  line['TVAT']|keys %}
+                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
+        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+    {% endfor %}
+    <tr style="text-align: right;">
+        <th>Total</th>
+        <td>{{ totalTvaCollectee['HT'] |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  totalTvaCollectee |keys %}
+                {{totalTvaCollectee[tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ totalTvaCollectee['TVA'] |number_format(2, ',', ' ')}} €</td>
+        <td>{{ totalTvaCollectee['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+</table>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td colspan="{{ tvas | length +4}}"><h3>TVA Deductible</h3></td>
+    </tr>
+    <tr>
+        <th>Libellé</th>
+        <th>Montant HT</th>
+        {% for tva in tvas %}
+        <th>{{ tva }} %</th>
+        {% endfor %}
+        <th>TVA</th>
+        <th>Montant TTC</th>
+    </tr>
+    {% for line in tvaDeductible %}
+    <tr style="text-align: right;">
+        <td>{{ line['LI']}}</td>        
+        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  line['TVAT']|keys %}
+                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
+        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+    {% endfor %}
+    <tr style="text-align: right;">
+        <th>Total</th>
+        <td>{{ totalTvaDeductible['HT'] |number_format(2, ',', ' ')}} €</td>
+        {% for tva in tvas %}
+        <td>
+            {% if tva in  totalTvaDeductible |keys %}
+                {{ totalTvaDeductible[tva] |number_format(2, ',', ' ')}} €
+            {%else%}
+                - €                
+            {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{  totalTvaDeductible['TVA'] |number_format(2, ',', ' ')}} €</td>
+        <td>{{  totalTvaDeductible['TTC'] |number_format(2, ',', ' ')}} €</td>
+    </tr>
+</table>
+{% endblock %}
+        
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}
+    

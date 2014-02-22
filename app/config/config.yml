@@ -58,9 +58,9 @@ doctrine:
                 auto_mapping: true
                 dql:
                     datetime_functions:
-                        day: mgate\DashBoardBundle\DQL\Day
-                        year: mgate\DashBoardBundle\DQL\Year
-                        month: mgate\DashBoardBundle\DQL\Month
+                        day: mgate\DashboardBundle\DQL\Day
+                        year: mgate\DashboardBundle\DQL\Year
+                        month: mgate\DashboardBundle\DQL\Month
                 mappings:
                     gedmo_translatable:
                         type: annotation
