@@ -186,10 +186,10 @@ class EtudeManager extends \Twig_Extension {
         elseif($type == 'CE'){
             if(!$etude->getMissions()->get($key) 
             || !$etude->getMissions()->get($key)->getIntervenant())
-                return "[M-GaTE]" . $etude->getMandat() . "-CE- ERROR GETTING DEV ID";
+                return $etude->getMandat() . "-CE- ERROR GETTING DEV ID";
             else
                 $identifiant = $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant();
-            return "[M-GaTE]" . $etude->getMandat() . "-CE-" . $identifiant;            
+            return $etude->getMandat() . "-CE-" . $identifiant;            
         }
         elseif($type == 'AVCC'){
             if($etude->getCc() && $etude->getAvs()->get($key))

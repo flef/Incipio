@@ -259,7 +259,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     
     /**ADITIONAL GETTERS**/
     public function getReference(){
-        return "[M-GaTE]" . (string) ($this->getMandat() * 100 + $this->getNum());
+        return (string) ($this->getMandat() * 100 + $this->getNum());
     }
     
     public function getMontantHT(){

@@ -97,7 +97,7 @@ class Facture
      * ADDITIONNAL
      */
     public function getReference(){
-        return '[M-GaTE]'.$this->exercice.'-'.($this->type > 1 ? 'FV' : 'FA').'-'. sprintf('%1$02d', $this->numero);
+        return $this->exercice.'-'.($this->type > 1 ? 'FV' : 'FA').'-'. sprintf('%1$02d', $this->numero);
     }
     
     public function getMontantHT(){

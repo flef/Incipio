@@ -24,3 +24,13 @@ parameters:
     pathToDoctype: D:/Dropbox/M-GaTE - Suivi d'Etude/My-M-GaTE/Documents Types/
     debugEnable: true
     fileType: .xml
+
+###configuration de la Junior
+    junior:
+        nom:          'Nom Junior'
+        abbr:         'Junior'
+        tag:          '[Junior]'
+        email:        contact@mgate.fr
+        adresse:      ~
+        url:          ~
+        ga_tracking:  ~

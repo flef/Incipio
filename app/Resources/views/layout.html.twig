@@ -104,7 +104,7 @@
     {% block footer_main %}
     <div id="footer">
         <div class="container">
-            <p class="text-muted" style="text-align: center"><i>© 2014 M-GaTE -- Junior-Entreprise</i></p>
+            <p class="text-muted" style="text-align: center"><i>© 2014</i></p>
         </div>
     </div>
     {% endblock %}
@@ -125,7 +125,7 @@
     <script type="text/javascript">
 
     var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-39731105-1']);
+    _gaq.push(['_setAccount', {{ junior['ga_tracking'] }}]);
     _gaq.push(['_trackPageview']);
 
     (function() {
