@@ -87,7 +87,7 @@ class NoteDeFrais
     
     public function getReference(){
         // UNSAFE
-        return '[M-GaTE]'.$this->mandat.'-NF'.$this->getNumero().'-'.$this->getDemandeur()->getMembre()->getIdentifiant();
+        return $this->mandat.'-NF'.$this->getNumero().'-'.$this->getDemandeur()->getMembre()->getIdentifiant();
     }
 
 
