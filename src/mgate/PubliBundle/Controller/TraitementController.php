@@ -223,6 +223,7 @@ class TraitementController extends Controller {
      * @Secure(roles="ROLE_SUIVEUR")
      */
     public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
+        $junior = $this->container->getParameter('junior');
         $this->purge();
         if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
             $idDocx = $_SESSION['idDocx'];
@@ -232,7 +233,7 @@ class TraitementController extends Controller {
                 $idZip = $_SESSION['idZip'];
                 $zip = new \ZipArchive;
                 $zip->open('tmp/' . $idZip, \ZipArchive::CREATE);
-                $zip->addFile('tmp/' . $idDocx, $refDocx . '.docx');
+                $zip->addFile('tmp/' . $idDocx, $junior['tag'].$refDocx . '.docx');
                 $zip->close();
             } elseif ($dlZip) {
                 $idZip = $_SESSION['idZip'];
@@ -240,7 +241,7 @@ class TraitementController extends Controller {
 
                 header('Content-Type: application/zip');
                 header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: inline; filename=' . $refDocx . '.zip');
+                header('Content-disposition: inline; filename=' . $junior['tag'].$refDocx . '.zip');
                 header('Pragma: no-cache');
                 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
                 header('Expires: 0');
@@ -251,7 +252,7 @@ class TraitementController extends Controller {
 
                 header('Content-Type: application/msword');
                 header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: attachment; filename=' . $refDocx . '.docx');
+                header('Content-disposition: attachment; filename=' .$junior['tag']. $refDocx . '.docx');
                 header('Pragma: no-cache');
                 header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
                 header('Expires: 0');
