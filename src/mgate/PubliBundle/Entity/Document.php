@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="mgate\PubliBundle\Entity\DocumentRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class Document
@@ -28,7 +28,12 @@ class Document
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      */
-    private $name;    
+    private $name;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $size;  
     
     /**
      * @var \DateTime $uptime
@@ -93,6 +98,8 @@ class Document
             $filename = sha1(uniqid(mt_rand(), true));
             $this->path = $filename.'.'.$this->file->guessExtension();
         }
+        
+         $this->size = filesize($this->file);
     }
     
     /**
@@ -104,7 +111,7 @@ class Document
         if (null === $this->file) {
             return;
         }
-
+        
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
@@ -234,5 +241,16 @@ class Document
     public function getAuthor()
     {
         return $this->author;
+    }
+
+
+    /**
+     * Get size
+     *
+     * @return integer 
+     */
+    public function getSize()
+    {
+        return $this->size;
     }
 }

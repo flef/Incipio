@@ -34,4 +34,5 @@ parameters:
         logo:         ~
         adresse:      ~
         url:          ~
-        ga_tracking:  ~
+        ga_tracking             :  ~
+        authorizedStorageSize : 1024000

@@ -1,23 +1,35 @@
 {% extends "mgatePubliBundle::layout.html.twig" %}
 
 {% block title %}
-	{{ parent() }} - Liste des documents types
+	{{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
 
-    <h2>Liste des Documents Types</h2>
+<h2>Liste des Documents</h2>
 
-    <ul>
+<h4>Espace utilisé :</h4>
+<div class="progress">
+    {% set actualSize = (totalSize/ junior['authorizedStorageSize']) | round(2) %} 
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ actualSize}}%;">
+      {{  actualSize }}%
+    </div>
+</div>
 
-        {% for doc in docs %}
-            <li>
-                <a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ app.request.basepath ~ '/' ~ doc.getWebPath }} ">{{ doc.name }}</a>
-            </li>
-        {% else %}
-            <li>Pas (encore !) de document</li>
-        {% endfor %}
-
-    </ul>
-
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Date d'upload</th>
+        <th>Mis en ligne par</th>
+        <th>Titre</th>
+        <th>Taille</th>
+    </tr>
+    {% for doc in docs %}
+    <tr>
+        <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
+        <td>{{ doc.author ? doc.author.prenomNom }}</td>
+        <td><a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ app.request.basepath ~ '/' ~ doc.getWebPath }} ">{{ doc.name}}</a></td>
+        <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+    </tr>
+    {% endfor %}
+</table>
 {% endblock %}
