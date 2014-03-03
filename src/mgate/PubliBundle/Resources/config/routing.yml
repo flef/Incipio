@@ -30,10 +30,10 @@ mgate_publi_documenttype_index:
     defaults: {_controller: mgatePubliBundle:Document:index}
 
 mgate_publi_document_uploadEtude:
-    pattern: /Documents/Upload/Etude/{id}
+    pattern: /Documents/Upload/Etude/{numero}
     defaults: {_controller: mgatePubliBundle:Document:uploadEtude}
     requirements:
-        id:  \d+
+        numero:  \d+
         
 mgate_publi_document_uploadEtudiant:
     pattern: /Documents/Upload/Etudiant/{id}

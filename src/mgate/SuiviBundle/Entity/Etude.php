@@ -55,6 +55,11 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="mgate\PubliBundle\Entity\RelatedDocument", mappedBy="etude", cascade={"remove"})
+     */
+    private $relatedDocuments;
 
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Prospect", cascade={"persist"})
@@ -290,6 +295,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * Constructor
      */
     public function __construct() {
+        $this->relatedDocuments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->clientContacts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->suivis = new \Doctrine\Common\Collections\ArrayCollection();
         $this->phases = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1377,5 +1383,39 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
             return 0;
         else
             return ($a->getDateSignature() < $b->getDateSignature()) ? -1 : 1;
+    }
+
+
+    /**
+     * Add relatedDocuments
+     *
+     * @param \mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments
+     * @return Etude
+     */
+    public function addRelatedDocument(\mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments[] = $relatedDocuments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove relatedDocuments
+     *
+     * @param \mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments
+     */
+    public function removeRelatedDocument(\mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments->removeElement($relatedDocuments);
+    }
+
+    /**
+     * Get relatedDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRelatedDocuments()
+    {
+        return $this->relatedDocuments;
     }
 }

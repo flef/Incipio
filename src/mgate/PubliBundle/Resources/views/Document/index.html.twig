@@ -22,6 +22,7 @@
         <th>Mis en ligne par</th>
         <th>Titre</th>
         <th>Taille</th>
+        <th>Action</th>
     </tr>
     {% for doc in docs %}
     <tr>
@@ -29,6 +30,7 @@
         <td>{{ doc.author ? doc.author.prenomNom }}</td>
         <td><a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ app.request.basepath ~ '/' ~ doc.getWebPath }} ">{{ doc.name}}</a></td>
         <td>{{ (doc.size / 1024) | number_format(2, ',', ' ') }} Ko</td>
+        <td><a href="{{ path('mgate_publi_document_delete', {'id' : doc.id }) }}"><i class="glyphicon glyphicon-remove"></i></a></td>
     </tr>
     {% endfor %}
 </table>

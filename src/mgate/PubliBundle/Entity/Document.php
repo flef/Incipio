@@ -19,10 +19,10 @@ class Document
     public $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="CategorieDocument", mappedBy="document", cascade={"persist", "merge", "remove"})
+     * @ORM\OneToOne(targetEntity="RelatedDocument", mappedBy="document", cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      */
-    private $categorie;
+    private $relation;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -198,26 +198,26 @@ class Document
     }
 
     /**
-     * Set categorie
+     * Set relation
      *
-     * @param \mgate\PubliBundle\Entity\CategorieDocument $categorie
+     * @param \mgate\PubliBundle\Entity\RelatedDocument $relation
      * @return Document
      */
-    public function setCategorie(\mgate\PubliBundle\Entity\CategorieDocument $categorie = null)
+    public function setRelation(\mgate\PubliBundle\Entity\RelatedDocument $relation = null)
     {
-        $this->categorie = $categorie;
+        $this->relation = $relation;
     
         return $this;
     }
 
     /**
-     * Get categorie
+     * Get relation
      *
-     * @return \mgate\PubliBundle\Entity\CategorieDocument 
+     * @return \mgate\PubliBundle\Entity\RelatedDocument 
      */
-    public function getCategorie()
+    public function getRelation()
     {
-        return $this->categorie;
+        return $this->relation;
     }
 
     /**

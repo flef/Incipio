@@ -1,0 +1,39 @@
+<nav class="navbar" role="navigation">
+    <div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-suivi">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<span class="navbar-brand">Document relatif à l'étude</span>
+		</div>
+		<div class="collapse navbar-collapse navbar-suivi">
+            <ul class="nav  navbar-nav">
+                <li><a href="{{ path('mgate_publi_document_uploadEtude', {'numero': etude.numero}) }}"><span class="glyphicon glyphicon-pencil"></span> Ajouter un document</a></li>
+            </ul>
+    </div>
+</nav>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Titre</th>
+        <th>Date d'upload</th>
+        <th>Mis en ligne par</th>
+        {% if is_granted('ROLE_CA') %}
+        <th>Action</th>
+        {% endif %}
+    </tr>
+    {% for relatedDocument in etude.relatedDocuments %}
+    {% set doc = relatedDocument.document %}
+    <tr>
+        <td><a href="{{ app.request.scheme ~ '://' ~ app.request.host ~ app.request.basepath ~ '/' ~ doc.getWebPath }} ">{{ doc.name}}</a></td>
+        <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
+        <td>{{ doc.author ? doc.author.prenomNom }}</td>
+        {% if is_granted('ROLE_CA') %}
+        <td><a href="{{ path('mgate_publi_document_delete', {'id' : doc.id }) }}"><i class="glyphicon glyphicon-remove"></i></a></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
