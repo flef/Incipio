@@ -78,7 +78,7 @@ class Document
         // the absolute directory path where uploaded
         // documents should be saved
         // store in /data/incipio as it's the place with disk free
-        return 'C:/data/incipio/'.$this->getUploadDir();
+        return '/data/incipio/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
