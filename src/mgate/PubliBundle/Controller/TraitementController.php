@@ -47,7 +47,7 @@ class TraitementController extends Controller {
 
         $request = $this->get('request');
 
-        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\DocumentType')->findOneBy(array('name' => $doc))) {
+        if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\Document')->findOneBy(array('name' => $doc))) {
             $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.docx'; //asset
         } else {
             $chemin = $documenttype->getWebPath(); // on prend le document type qui est uploadé
