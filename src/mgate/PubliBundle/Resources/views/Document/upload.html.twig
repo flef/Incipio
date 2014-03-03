@@ -15,3 +15,8 @@
     <input type="submit" value="Uploader" />
 </form>
 {% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

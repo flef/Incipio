@@ -11,13 +11,6 @@ mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
     defaults: {_controller: mgatePubliBundle:Traitement:telecharger}
     
-mgate_publi_documenttype_index:
-    pattern: /publi/documenttype
-    defaults: {_controller: mgatePubliBundle:Document:index}
-    
-mgate_publi_documenttype_upload:
-    pattern: /publi/documenttype/upload
-    defaults: {_controller: mgatePubliBundle:Document:upload}
 
 
 mgate_publi_publiposter_eleve:
@@ -27,3 +20,40 @@ mgate_publi_publiposter_eleve:
         id_eleve:  \d+
         key: \d+
         doc: AC|AA|CE
+        
+        
+######################
+# UPLOAD DE DOCUMENT #
+######################
+mgate_publi_documenttype_index:
+    pattern: /Documents
+    defaults: {_controller: mgatePubliBundle:Document:index}
+
+mgate_publi_document_uploadEtude:
+    pattern: /Documents/Upload/Etude/{id}
+    defaults: {_controller: mgatePubliBundle:Document:uploadEtude}
+    requirements:
+        id:  \d+
+        
+mgate_publi_document_uploadEtudiant:
+    pattern: /Documents/Upload/Etudiant/{id}
+    defaults: {_controller: mgatePubliBundle:Document:uploadEtudiant}
+    requirements:
+        id:  \d+
+
+mgate_publi_document_uploadFormation:
+    pattern: /Documents/Upload/Formation/{id}
+    defaults: {_controller: mgatePubliBundle:Document:uploadFormation}
+    requirements:
+        id:  \d+
+        
+mgate_publi_document_uploadDoctype:
+    pattern: /Documents/Upload/Doctype
+    defaults: {_controller: mgatePubliBundle:Document:uploadDoctype}
+
+mgate_publi_document_delete:
+    pattern: /Documents/Supprimer/{id}
+    defaults: {_controller: mgatePubliBundle:Document:delete}
+    requirements:
+        id:  \d+
+  

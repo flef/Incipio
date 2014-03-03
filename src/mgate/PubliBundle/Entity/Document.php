@@ -37,6 +37,12 @@ class Document
      * @Gedmo\Timestampable(on="update")
      */
     private $uptime;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
+     * @ORM\JoinColumn(name="personne_id", referencedColumnName="id", nullable=true)
+     */
+    private $author;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -47,10 +53,6 @@ class Document
      * @Assert\File(maxSize="6000000")
      */
     public $file;
-    
-    public function getUpTime(){
-        return $this->uptime;
-    }
 
     public function getAbsolutePath()
     {
@@ -156,19 +158,6 @@ class Document
     }
 
     /**
-     * Set uptime
-     *
-     * @param \DateTime $uptime
-     * @return Document
-     */
-    public function setUptime($uptime)
-    {
-        $this->uptime = $uptime;
-    
-        return $this;
-    }
-
-    /**
      * Get uptime
      *
      * @return \DateTime 
@@ -222,5 +211,28 @@ class Document
     public function getCategorie()
     {
         return $this->categorie;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \mgate\PersonneBundle\Entity\Personne $author
+     * @return Document
+     */
+    public function setAuthor(\mgate\PersonneBundle\Entity\Personne $author = null)
+    {
+        $this->author = $author;
+    
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \mgate\PersonneBundle\Entity\Personne 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
     }
 }

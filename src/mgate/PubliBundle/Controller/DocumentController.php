@@ -6,11 +6,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
 use mgate\PubliBundle\Entity\Document;
+use mgate\PubliBundle\Form\DocumentType;
 
 class DocumentController extends Controller
 {
     /**
-     * @Secure(roles="ROLE_SUIVEUR")
+     * @Secure(roles="ROLE_CA")
      */
     public function indexAction()
     {
@@ -23,23 +24,68 @@ class DocumentController extends Controller
         ));
        
     }
+
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    public function uploadEtudeAction($id){
+        
+    }
+
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    public function uploadEtudiantAction($id){
+        
+    }   
     
     /**
-     * @Secure(roles="ROLE_SUIVEUR")
+     * @Secure(roles="ROLE_CA")
      */
-    public function uploadAction($deleteIfExist = false)
+    public function uploadFormationAction($id){
+
+    } 
+        
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
+    public function uploadDoctypeAction(){
+        if(!$this->upload(true))// Si tout est ok
+            return $this->redirect($this->generateUrl('mgate_publi_documenttype_index'));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    public function deleteAction($id){
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$doc= $em->getRepository('mgatePubliBundle:Document')->find($id))
+            throw $this->createNotFoundException('Le Document n\'existe pas !');
+
+        $em->remove($doc);
+        $em->flush();        
+        
+        return $this->redirect($this->generateUrl('mgate_publi_documenttype_index'));  
+    }
+
+    private function upload($deleteIfExist = false, $options = array())
     {
         $document = new Document();
-        $form = $this->createFormBuilder($document)
-            ->add('name')
-            ->add('file')
-            ->getForm();
-        
-        if ($this->getRequest()->isMethod('POST')) {
-            $form->bind($this->getRequest());
-            if ($form->isValid())
+
+        $form = $this->createForm(new DocumentType, $document, $options);
+       
+        if( $this->get('request')->getMethod() == 'POST' )
+        {
+            $form->bind($this->get('request'));
+               
+            if( $form->isValid() )
             {
+                $user = $this->get('security.context')->getToken()->getUser();
+                $personne = $user->getPersonne();
+        
                 $document->setName(strtoupper($document->getName()));
+                $document->setAuthor($personne);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($document);
                 $em->flush();
@@ -54,11 +100,9 @@ class DocumentController extends Controller
                     }
                 }
                 
-                $this->redirect($this->generateUrl('mgate_publi_documenttype_index'));
+                return false;
             }
         }
-
-        //return array('form' => $form->createView());
         return $this->render('mgatePubliBundle:Document:upload.html.twig', array('form' => $form->createView()));
     }
 }
