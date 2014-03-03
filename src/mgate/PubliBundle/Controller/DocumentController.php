@@ -18,9 +18,15 @@ class DocumentController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('mgatePubliBundle:Document')->findAll();
+        
+        $totalSize = 0;
+        foreach ($entities as $entity){
+            $totalSize += $entity->getSize();
+        }
       
         return $this->render('mgatePubliBundle:Document:index.html.twig', array(
-            'docs' => $entities,
+            'docs'       => $entities,
+            'totalSize'  => $totalSize, 
         ));
        
     }
@@ -50,8 +56,10 @@ class DocumentController extends Controller
      * @Secure(roles="ROLE_ADMIN")
      */
     public function uploadDoctypeAction(){
-        if(!$this->upload(true))// Si tout est ok
+        if(!$response = $this->upload(true))// Si tout est ok
             return $this->redirect($this->generateUrl('mgate_publi_documenttype_index'));
+        else
+            return $response;
     }
     
     /**
@@ -81,12 +89,21 @@ class DocumentController extends Controller
                
             if( $form->isValid() )
             {
+                $em = $this->getDoctrine()->getManager();
+                
+                // Vérification espace libre
+                $junior = $this->container->getParameter('junior');
+                $totalSize = $document->getSize() + $em->getRepository('mgatePubliBundle:Document')->getTotalSize();
+                if($totalSize > $junior['authorizedStorageSize'])
+                    throw new \Symfony\Component\HttpFoundation\File\Exception\UploadException('Vous n\'avez plus d\'espace disponible !');
+                     
+                
                 $user = $this->get('security.context')->getToken()->getUser();
                 $personne = $user->getPersonne();
         
                 $document->setName(strtoupper($document->getName()));
                 $document->setAuthor($personne);
-                $em = $this->getDoctrine()->getManager();
+                
                 $em->persist($document);
                 $em->flush();
 
