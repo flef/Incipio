@@ -21,7 +21,7 @@ class Membre {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+       
     /**
      * @ORM\OneToMany(targetEntity="mgate\SuiviBundle\Entity\Mission", mappedBy="intervenant", cascade={"persist","remove"})
      */

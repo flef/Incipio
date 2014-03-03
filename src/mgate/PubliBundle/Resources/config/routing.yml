@@ -13,11 +13,11 @@ mgate_publi_telecharger:
     
 mgate_publi_documenttype_index:
     pattern: /publi/documenttype
-    defaults: {_controller: mgatePubliBundle:DocumentType:index}
+    defaults: {_controller: mgatePubliBundle:Document:index}
     
 mgate_publi_documenttype_upload:
     pattern: /publi/documenttype/upload
-    defaults: {_controller: mgatePubliBundle:DocumentType:upload}
+    defaults: {_controller: mgatePubliBundle:Document:upload}
 
 
 mgate_publi_publiposter_eleve:
