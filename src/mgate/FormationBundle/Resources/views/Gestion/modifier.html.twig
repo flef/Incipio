@@ -29,6 +29,10 @@
             <th>{{ form_label(form.dateFin) }}</th>
             <td>{{ form_widget(form.dateFin) }}</td>
         </tr>
+        <tr>
+            <th>{{ form_label(form.docPath) }}</th>
+            <td>{{ form_widget(form.docPath) }}</td>
+        </tr>
     </table>
     <table class="table table-bordered table-striped" id="formateurs" data-prototype="{{ form_widget(form.formateurs.vars.prototype) | e }}">
         <tr>

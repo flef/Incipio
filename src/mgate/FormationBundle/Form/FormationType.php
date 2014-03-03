@@ -44,6 +44,7 @@ class FormationType extends AbstractType {
                     'allow_delete' => true,
                     'by_reference' => false,
                 ))
+                ->add('docPath', 'text', array('label' => 'Lien vers des documents externes', 'required' => false,))
         ;
     }
 
