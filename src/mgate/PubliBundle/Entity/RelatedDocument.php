@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class CategorieDocument
+class RelatedDocument
 {
     /**
      * @ORM\Id
@@ -19,8 +19,8 @@ class CategorieDocument
     
     
     /**
-     * @ORM\OneToOne(targetEntity="Document", inversedBy="categorie", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\OneToOne(targetEntity="Document", inversedBy="relation", cascade={"persist", "merge"})
+     * @ORM\JoinColumn(nullable=true)
      */
     private $document;
     
@@ -31,7 +31,7 @@ class CategorieDocument
     private $membre;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", inversedBy="documents", cascade={"persist"})
      * @ORM\JoinColumn(name="etude_id", referencedColumnName="id", nullable=true)
      */
     private $etude;
@@ -66,7 +66,7 @@ class CategorieDocument
      * @param \mgate\PubliBundle\Entity\Document $document
      * @return CategorieDocument
      */
-    public function setDocument(\mgate\PubliBundle\Entity\Document $document)
+    public function setDocument(\mgate\PubliBundle\Entity\Document $document = null)
     {
         $this->document = $document;
     
