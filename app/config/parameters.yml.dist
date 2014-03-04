@@ -12,7 +12,7 @@ parameters:
     mailer_user:       ~
     mailer_password:   ~
     
-    su_mail:      'mgate.je@gmail.com'
+    su_mail:      'contact@incipio.fr'
     su_username:  'superadmin'
     su_password:  'motdepasse'
     
@@ -21,6 +21,7 @@ parameters:
     
     tva:  0.196
     
+#debug var
     pathToDoctype: D:/Dropbox/M-GaTE - Suivi d'Etude/My-M-GaTE/Documents Types/
     debugEnable: true
     fileType: .xml

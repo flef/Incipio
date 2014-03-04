@@ -114,8 +114,8 @@ fos_user:
       confirmation:
         enabled:    true
     from_email:
-        address:        mgate.je@gmail.com
-        sender_name:    My M-GaTE
+        address:        no-reply@incipio.fr
+        sender_name:    Incipio
 
 
 #CommentBundle

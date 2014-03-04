@@ -24,7 +24,7 @@
         <th>Taille</th>
         <th>Action</th>
     </tr>
-    {% for doc in docs %}
+    {% for doc in docs | reverse %}
     <tr>
         <td>{{ doc.uptime ? doc.uptime | date('d/m/Y - H:i:s')}}</td>
         <td>{{ doc.author ? doc.author.prenomNom }}</td>

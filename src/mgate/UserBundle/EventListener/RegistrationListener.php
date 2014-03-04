@@ -35,11 +35,11 @@ class RegistrationListener implements EventSubscriberInterface
     // Prévenir lorsque quelqu'un valide compte
     public function onRegistrationConfirmed(FilterUserResponseEvent $event)
     {
-
+        $junior = $this->container->getParameter('junior');
         $message = \Swift_Message::newInstance()
-            ->setSubject('My M-GaTE: Nouvel utilisateur '.$event->getUser()->getUsername())
-            ->setFrom('mgate.je@gmail.com')
-            ->setTo('mgate.je@gmail.com')
+            ->setSubject('Incipio : Nouvel utilisateur '.$event->getUser()->getUsername())
+            ->setFrom('no-reply@incipio.fr')
+            ->setTo($junior['email'])
             ->setBody($this->templating->render('mgateUserBundle:Default:alert-email.html.twig',
                                         array('username' => $event->getUser()->getUsername(), 'email' => $event->getUser()->getEmail())), 'text/html');
         $this->mailer->send($message);
