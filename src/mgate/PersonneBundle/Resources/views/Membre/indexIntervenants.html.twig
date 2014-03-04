@@ -53,7 +53,7 @@ $(document).ready(function() {
             <td>
                     {% for mission in membre.missions %}
                     <span class="badge badge-{{ membre.dateConventionEleve ? ( membre.dateConventionEleve <= mission.debutOm |date_modify("-7 day") ? "success" : "warning" ) : "error" }}">{{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }} -> {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</span>
-                    | <a href="{{path("mgateSuivi_etude_voir", {'numero' : mission.etude.numero})}}">{{ getRefEtude(mission.etude)}}-{{ mission.etude.nom }}</a><br/>
+                    | <a href="{{path("mgateSuivi_etude_voir", {'numero' : mission.etude.numero})}}">{{ mission.etude.reference}}-{{ mission.etude.nom }}</a><br/>
                     {% endfor %}          
             </td>
           </tr>

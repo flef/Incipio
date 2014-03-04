@@ -100,10 +100,10 @@ class ChartManager /*extends \Twig_Extension*/ {
             for($j=0;$j<count($cats);$j++)
                 $data[]=array();
             
-            if($this->etudeManager->getDateLancement($etude)&&$this->etudeManager->getDateFin($etude, true))
+            if($etude->getDateLancement()&&$etude->getDateFin(true))
             {
-                $debut = $this->etudeManager->getDateLancement($etude);
-                $fin = $this->etudeManager->getDateFin($etude, true);
+                $debut = $etude->getDateLancement();
+                $fin = $etude->getDateFin(true);
 
                 $data[] = array("low" => $debut->getTimestamp()*1000, "y" => $fin->getTimestamp()*1000, 'color'=>'#005CA4',
                         "titre"=>"Durée de déroulement des phases", "detail"=>"du ".$debut->format('d/m/Y')." au ".$fin->format('d/m/Y') );
@@ -245,10 +245,10 @@ class ChartManager /*extends \Twig_Extension*/ {
         //Etudes       
         foreach($etudes as $etude)
         {
-            if($this->etudeManager->getDateLancement($etude)&&$this->etudeManager->getDateFin($etude))
+            if($etude->getDateLancement()&&$etude->getDateFin())
             {
-                $debut = $this->etudeManager->getDateLancement($etude);
-                $fin = $this->etudeManager->getDateFin($etude);
+                $debut = $etude->getDateLancement();
+                $fin = $etude->getDateFin();
                 
                 if($naissance >= $debut) $naissance= clone $debut;
                 if($mort <= $fin) $mort= clone $fin;
@@ -261,7 +261,7 @@ class ChartManager /*extends \Twig_Extension*/ {
             else
                 $data[] = array();
             
-            $cats[] = $this->etudeManager->getRefEtude($etude);               
+            $cats[] = $etude->getReference();               
             
         }
         $series[] = array("type"=> "bar", "data" => $data);

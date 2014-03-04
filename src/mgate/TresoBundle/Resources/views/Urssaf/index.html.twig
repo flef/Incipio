@@ -49,20 +49,20 @@
 
         {% for rm in RMs %}
     <tr>
-    <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'numero': rm.etude.numero}) }}"> {{ getRefEtude(rm.etude) }}</a></div></td>
+    <td><div>{{ rm.etude.nom }}</div><div> <a href="{{ path('mgateSuivi_etude_voir', {'numero': rm.etude.numero}) }}"> {{ rm.etude.reference }}</a></div></td>
     <td>{{ rm.etude.prospect.nom }}
         <br /><br />
      {{rm.etude.suiveur.prenomNom| default("Pas de suiveur!")}}</td>
     <td>
             {% if getDateLancement(rm.etude) != NULL %}<div>{{ getDateLancement(rm.etude)|date("d/m/Y") }}</div>{% endif %}
-            {% if getDateFin(rm.etude) != NULL %}<div>{{ getDateFin(rm.etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if rm.etude.dateFin != NULL %}<div>{{ rm.etude.dateFin|date("d/m/Y") }}</div>{% endif %}
         </td>
             <td>
                 {{ rm.intervenant.personne.prenomNom | default("Intervenant non choisi") }} {{ rm.intervenant.nom | default("") }}
             </td>
             <td>
-                <div>{{ getTotalHT(rm.etude)|default('') }} €</div>
-                <div>{{ getNbrJEH(rm.etude)|default('') }} JEH</div>
+                <div>{{ rm.etude.montantHT |default('') }} €</div>
+                <div>{{ rm.etudenbrJEH |default('') }} JEH</div>
             </td>
            <td>
                {% set totalJEH = 0 %}

@@ -378,6 +378,7 @@ class Phase
 
     /**
      * Get validation
+     * @deprecated since version 0.0
      *
      * @return integer 
      */
@@ -386,12 +387,19 @@ class Phase
         return $this->validation;
     }
     
+    /**
+     * @deprecated since version 0.0
+     */
     public static function getValidationChoice()
     {
         return array(   //0 => "Aucune", //Inutile
                         1 => "Cette phase sera soumise à une validation orale lors d’un entretien avec le client.",
                         2 => "Cette phase sera soumise à une validation écrite qui prend la forme d’un Procès-Verbal Intermédiaire signé par le client.");
     }
+    
+    /**
+     * @deprecated since version 0.0
+     */
     public static function getValidationChoiceAssert()
     {
         return array_keys(Phase::getValidationChoice());

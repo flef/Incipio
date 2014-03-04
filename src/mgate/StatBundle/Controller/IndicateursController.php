@@ -297,9 +297,9 @@ class IndicateursController extends Controller {
 
             if ($dateSignature && $signee) {
                 $idMandat = $etudeManager->dateToMandat($dateSignature);
-                if($etudeManager->getDelaiEtude($etude)){
-                    $nombreJoursParMandat[$idMandat] +=  $etudeManager->getDelaiEtude($etude, false)->days;
-                    $nombreJoursAvecAvenantParMandat[$idMandat] += $etudeManager->getDelaiEtude($etude, true)->days;
+                if($etude->getDelai()){
+                    $nombreJoursParMandat[$idMandat] +=  $etude->getDelai(false)->days;
+                    $nombreJoursAvecAvenantParMandat[$idMandat] += $etude->getDelai(true)->days;
                 }
             }
         }
@@ -968,7 +968,7 @@ class IndicateursController extends Controller {
         foreach ($etudes as $etude) {
             if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {                
                 $type = $etude->getProspect()->getEntiteToString();
-                $CA = $this->get('mgate.etude_manager')->getTotalHT($etude);
+                $CA = $etude->getMontantHT();
                 $chiffreDAffairesTotal += $CA;
                 array_key_exists($type, $repartitions) ? $repartitions[$type] += $CA : $repartitions[$type] = $CA;
             }
@@ -1353,8 +1353,8 @@ class IndicateursController extends Controller {
         
                 $idMandat = $etudeManager->dateToMandat($dateSignature);
 
-                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
-                $cumulsJEH[$idMandat] += $etudeManager->getNbrJEH($etude);
+                $cumuls[$idMandat] += $etude->getMontantHT();
+                $cumulsJEH[$idMandat] += $etude->getNbrJEH();
                 $cumulsFrais[$idMandat] += $etude->getFraisDossier();
             }
         }
@@ -1462,7 +1462,7 @@ class IndicateursController extends Controller {
             if ($dateSignature && $signee) {
                 $idMandat = $etudeManager->dateToMandat($dateSignature);
 
-                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
+                $cumuls[$idMandat] += $etude->getMontantHT();
 
                 $interval = new \DateInterval('P' . ($maxMandat - $idMandat) . 'Y');
                 $dateDecale = clone $dateSignature;
@@ -1470,9 +1470,9 @@ class IndicateursController extends Controller {
 
                 $mandats[$idMandat][]
                     = array("x" => $dateDecale->getTimestamp() * 1000,
-                    "y" => $cumuls[$idMandat], "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
+                    "y" => $cumuls[$idMandat], "name" => $etude->getReference() . " - " . $etude->getNom(),
                     'date' => $dateDecale->format('d/m/Y'),
-                    'prix' => $etudeManager->getTotalHT($etude));
+                    'prix' => $etude->getMontantHT());
             }
         }
 
@@ -1591,16 +1591,16 @@ class IndicateursController extends Controller {
                 if ($addDebut) {
                     $mandats[1][]
                         = array("x" => $dateDebutDecale->getTimestamp() * 1000,
-                        "y" => 0/* $cumuls[0] */, "name" => $etudeManager->getRefEtude($etude) . " + " . $etude->getNom(),
+                        "y" => 0/* $cumuls[0] */, "name" => $etude->getReference() . " + " . $etude->getNom(),
                         'date' => $dateDebutDecale->format('d/m/Y'),
-                        'prix' => $etudeManager->getTotalHT($etude));
+                        'prix' => $etude->getMontantHT());
                 }
                 if ($addFin) {
                     $mandats[1][]
                         = array("x" => $dateFinDecale->getTimestamp() * 1000,
-                        "y" => 0/* $cumuls[0] */, "name" => $etudeManager->getRefEtude($etude) . " - " . $etude->getNom(),
+                        "y" => 0/* $cumuls[0] */, "name" => $etude->getReference() . " - " . $etude->getNom(),
                         'date' => $dateDebutDecale->format('d/m/Y'),
-                        'prix' => $etudeManager->getTotalHT($etude));
+                        'prix' => $etude->getMontantHT());
                 }
             }
         }

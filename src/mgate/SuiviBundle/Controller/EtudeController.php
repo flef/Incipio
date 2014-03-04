@@ -289,8 +289,8 @@ class EtudeController extends Controller {
         $id = 0;
         foreach (array_reverse($etudesParMandat) as $etudesInMandat) {
             foreach ($etudesInMandat as $etude) {
-                $form = $form->add((string) (2 * $id), 'hidden', array('label' => 'refEtude', 'data' => $this->get('mgate.etude_manager')->getRefEtude($etude)))
-                        ->add((string) (2 * $id + 1), 'textarea', array('label' => $this->get('mgate.etude_manager')->getRefEtude($etude), 'required' => false, 'data' => $etude->getStateDescription()));
+                $form = $form->add((string) (2 * $id), 'hidden', array('label' => 'refEtude', 'data' => $etude->getReference()))
+                        ->add((string) (2 * $id + 1), 'textarea', array('label' => $etude->getReference(), 'required' => false, 'data' => $etude->getStateDescription()));
                 $id++;
                 if ($etude->getStateID() == STATE_ID_EN_COURS)
                     array_push($etudesEnCours, $etude);
@@ -306,7 +306,7 @@ class EtudeController extends Controller {
             $id = 0;
             foreach (array_reverse($etudesParMandat) as $etudesInMandat) {
                 foreach ($etudesInMandat as $etude) {
-                    if ($data[2 * $id] == $this->get('mgate.etude_manager')->getRefEtude($etude)) {
+                    if ($data[2 * $id] == $etude->getReference()) {
                         if ($data[2 * $id] != $etude->getStateDescription()) {
                             $etude->setStateDescription($data[2 * $id + 1]);
                             $em->persist($etude);

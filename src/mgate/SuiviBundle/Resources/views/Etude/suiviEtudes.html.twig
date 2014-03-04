@@ -30,7 +30,7 @@ Récapitulatif - Suivi d'étude - {{ parent() }}
         {% set textAreaID = textAreaID + 1 %}
         {% set signe = ( etude.cc ? etude.cc.spt1 and etude.cc.spt2 : false )%}
         <tr class="{{ (etude.stateID == 1 ? "info" : (etude.stateID == 2 ? "success" : (etude.stateID == 3 ? "warning" : (etude.stateID == 4 ? "" : "error")))) }}">
-            <td><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ getRefEtude(etude) }}</a></td>
+            <td><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ etude.reference }}</a></td>
             <td>{{ etude.nom }}</td>
             <td>{% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}</td>
             <td>{% include "mgateSuiviBundle:Etude:Buttons/Suiveur.html.twig" with  {'suiveur':  etude.suiveur} %}</td>

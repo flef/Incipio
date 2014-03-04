@@ -66,7 +66,7 @@ class DefaultController extends Controller
             {
                 $idMandat=$etudeManager->dateToMandat($dateSignature);
                 
-                $cumuls[$idMandat] += $etudeManager->getTotalHT($etude);
+                $cumuls[$idMandat] += $etude->getMontantHT();
 
                 $interval = new \DateInterval('P'.($maxMandat-$idMandat).'Y');
                 $dateDecale = clone $dateSignature;
@@ -74,9 +74,9 @@ class DefaultController extends Controller
 
                 $mandats[$idMandat][]
                        = array( "x"=>$dateDecale->getTimestamp()*1000,
-                                "y"=>$cumuls[$idMandat], "name"=>$etudeManager->getRefEtude($etude)." - ".$etude->getNom(),
+                                "y"=>$cumuls[$idMandat], "name"=> $etude->getReference() ." - ".$etude->getNom(),
                                 'date'=>$dateDecale->format('d/m/Y'),
-                                'prix'=>$etudeManager->getTotalHT($etude));
+                                'prix'=>$etude->getMontantHT());
 
             }
        }

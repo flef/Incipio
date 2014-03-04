@@ -31,7 +31,7 @@ Suivi Qualité des études - {{ parent() }}
     </tr>
     {% for etude in etudes %}
     <tr>
-        <th><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ getRefEtude(etude) }} {{ etude.nom }}</a></th>
+        <th><a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ etude.reference }} {{ etude.nom }}</a></th>
         <td></td>
         <td></td>
     </tr>
