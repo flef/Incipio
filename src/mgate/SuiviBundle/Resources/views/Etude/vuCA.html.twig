@@ -5,7 +5,7 @@
 {% block menu %}
 <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
-        <a class="brand" href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"><h4>{{ getRefEtude(etude) }} - {{ etude.nom }}</h4></a>
+        <a class="brand" href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"><h4>{{ etude.reference }} - {{ etude.nom }}</h4></a>
     </div>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
@@ -63,7 +63,7 @@
             <td>Crée le</td>
             <th>{{ etude.dateCreation|date("d/m/Y") }}</th>
             <td>Fin le</td>
-            <th>{{ getDateFin(etude)|date("d/m/Y") }}</th>
+            <th>{{ etude.dateFin|date("d/m/Y") }}</th>
             <td>Dernier Contact</td>
             <th>
                         {% set dernierContact = 0 %}
@@ -94,7 +94,7 @@
                     <td>JEH</td>
                     <th colspan="2">{{getNbrJEH(etude) | default('0') }} JEH</th>
                     <td>Prix</td>
-                    <th colspan="2">{{ getTotalHT(etude) | default('0') }} € HT</th>
+                    <th colspan="2">{{ etude.montantHT | default('0') }} € HT</th>
                 </tr>
                 <tr>
                     <td colspan="6">{{etude.description }}</td>

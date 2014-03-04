@@ -6,7 +6,7 @@
 			<span class="icon-bar"></span>
 			<span class="icon-bar"></span>
 		</button>
-		<span class="navbar-brand">Etude {{ getRefEtude(etude) }} - {{ etude.nom }} |</span>
+		<span class="navbar-brand">Etude {{ etude.reference }} - {{ etude.nom }} |</span>
 	</div>
 	<div class="collapse navbar-collapse navbar-recap">
 		<ul class="nav  navbar-nav">
@@ -63,11 +63,11 @@
 				</tr>
 				<tr>
 					<th>Fin</th>
-					<td>{% if etude.avs | length > 0 %}<s><b>{%endif%}{{ getDateFin(etude)|date("d/m/Y") }}{% if etude.avs | length > 0 %}</b></s><br />{{ getDateFin(etude, true)|date("d/m/Y") }}{%endif%}</td>
+					<td>{% if etude.avs | length > 0 %}<s><b>{%endif%}{{ etude.dateFin|date("d/m/Y") }}{% if etude.avs | length > 0 %}</b></s><br />{{ etude.dateFin(true)|date("d/m/Y") }}{%endif%}</td>
 				</tr>
 				<tr>
 					<th>JEH - Prix</th>
-					<td>{{getNbrJEH(etude) | default('0') }} JEH - {{ getTotalHT(etude) | default('0') }} € HT</td>
+					<td>{{etude.nbrJEH | default('0') }} JEH - {{ etude.montantHT | default('0') }} € HT</td>
 				</tr>
 			</table>
 		</td>

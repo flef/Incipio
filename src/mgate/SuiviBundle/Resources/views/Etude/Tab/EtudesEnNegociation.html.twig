@@ -43,11 +43,11 @@
 
         {% for etude in etudesEnNegociation if not confidentielRefus(etude, app.security)%}
     <tr>
-        <td><div>{{ etude.nom }}</div><div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}<a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}">{{ getRefEtude(etude) }}</a></div></td>
+        <td><div>{{ etude.nom }}</div><div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}<a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}">{{ etude.reference }}</a></div></td>
         <td>
-            {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if etude.dateLancement != NULL %}<div>{{ etude.dateLancement|date("d/m/Y") }}</div>{% endif %}
             <br/>
-            {% if getDateFin(etude) != NULL %}<div>{{ getDateFin(etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if etude.dateFin != NULL %}<div>{{ etude.dateFin|date("d/m/Y") }}</div>{% endif %}
         </td>
         <td>
             {% include "mgateSuiviBundle:Etude:Buttons/Prospect.html.twig" with  {'prospect':  etude.prospect} %}
@@ -97,8 +97,8 @@
             {% endif %}
                 </td>
                 <td>
-                    <div>{{ etude.confidentiel ? '*' : getTotalHT(etude)|default('') }} €</div>
-                    <div>{{ etude.confidentiel ? '*' : getNbrJEH(etude)|default('') }} JEH</div>
+                    <div>{{ etude.confidentiel ? '*' : etude.montantHT |default('') }} €</div>
+                    <div>{{ etude.confidentiel ? '*' : etude.nbrJEH |default('') }} JEH</div>
                 </td>
             </tr>
         {% endfor %}

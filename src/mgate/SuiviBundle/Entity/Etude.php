@@ -15,17 +15,65 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  * @ORM\HasLifecycleCallbacks()
  */
 class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
+    /************************
+     *    ORM DEFINITIONS
+     ************************
+     * Primitive definitions
+     ************************/
 
     /**
-     * @var bool
-     */
-    private $knownProspect = false;
-
-    /**
+     * @var integer $id
      *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $newProspect;
+    private $id;
+    
+    /**
+     * @var integer $mandat
+     *
+     * @ORM\Column(name="mandat", type="integer")
+     */
+    private $mandat;
+    
+    /**
+     * @var integer $num
+     *
+     * @ORM\Column(name="num", type="integer", nullable=true)
+     */
+    private $num;
 
+    /**
+     * @var string $nom
+     *
+     * @ORM\Column(name="nom", type="text", nullable=false, length=50)
+     */
+    private $nom;
+    
+    /**
+     * @var string $description
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+    
+        /**
+     * @var \DateTime $dateCreation
+     *
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="dateCreation", type="datetime")
+     */
+    private $dateCreation;
+
+    /**
+     * @var \DateTime $dateModification
+     *
+     * @ORM\Column(name="dateModification", type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $dateModification;
+    
     /**
      * @var integer $stateID
      *
@@ -39,22 +87,40 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\Column(name="stateDescription", type="text", nullable=true)
      */
     private $stateDescription;
-
+    
     /**
      * @var boolean $confidentiel
      *
      * @ORM\Column(name="confidentiel", type="boolean", nullable=true)
      */
     private $confidentiel;
+    
+    /**
+     * @var string $competences
+     *
+     * @ORM\Column(name="competences", type="text", nullable=true)
+     */
+    private $competences;
 
     /**
-     * @var integer $id
+     * @var \DateTime $auditDate
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="auditDate", type="date", nullable=true)
      */
-    private $id;
+    private $auditDate;
+
+    /**
+     * @var string $auditType
+     *
+     * @ORM\Column(name="auditType", type="integer", nullable=true)
+     */
+    private $auditType;
+    
+    /************************
+     *    ORM DEFINITIONS
+     ************************
+     *    Relationships
+     ************************/
     
     /**
      * @ORM\OneToMany(targetEntity="mgate\PubliBundle\Entity\RelatedDocument", mappedBy="etude", cascade={"remove"})
@@ -71,14 +137,7 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected $suiveur;
-    
-    /**
-     * @var string $competences
-     *
-     * @ORM\Column(name="competences", type="text", nullable=true)
-     */
-    private $competences;
+    protected $suiveur;    
 
     /**
      * @ORM\OneToOne(targetEntity="\mgate\CommentBundle\Entity\Thread", cascade={"persist"})
@@ -86,64 +145,6 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $thread;
 
-    /**
-     * @var \DateTime $dateCreation
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="dateCreation", type="datetime")
-     */
-    private $dateCreation;
-
-    /**
-     * @var \DateTime $dateModification
-     *
-     * @ORM\Column(name="dateModification", type="datetime")
-     * @Gedmo\Timestampable(on="update")
-     */
-    private $dateModification;
-
-    /**
-     * @var integer $mandat
-     *
-     * @ORM\Column(name="mandat", type="integer")
-     */
-    private $mandat;
-
-    /**
-     * @var integer $num
-     *
-     * @ORM\Column(name="num", type="integer", nullable=true)
-     */
-    private $num;
-
-    /**
-     * @var string $nom
-     *
-     * @ORM\Column(name="nom", type="text", nullable=false, length=50)
-     */
-    private $nom;
-
-    /**
-     * @var string $description
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description;
-
-
-    /**
-     * @var \DateTime $auditDate
-     *
-     * @ORM\Column(name="auditDate", type="date", nullable=true)
-     */
-    private $auditDate;
-
-    /**
-     * @var string $auditType
-     *
-     * @ORM\Column(name="auditType", type="integer", nullable=true)
-     */
-    private $auditType;
 
     /**
      * @ORM\OneToMany(targetEntity="ClientContact", mappedBy="etude", cascade={"persist", "remove"})
@@ -160,29 +161,12 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToOne(targetEntity="Ap", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $ap;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist", "remove"})
-     * @ORM\OrderBy({"position" = "ASC"})
-     */
-    private $phases;
     
-    /**
-     * @ORM\OneToMany(targetEntity="GroupePhases", mappedBy="etude", cascade={"persist", "remove"})
-     * @ORM\OrderBy({"numero" = "ASC"})
-     */
-    private $groupes;
-
     /**
      * @ORM\OneToOne(targetEntity="Cc", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $cc;
-
-    /**
-     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist","remove"})
-     */
-    private $missions;
-
+    
     /**
      * @ORM\OneToMany(targetEntity="mgate\TresoBundle\Entity\Facture", mappedBy="etude", cascade={"persist", "remove"})
      */
@@ -197,6 +181,23 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      * @ORM\OneToMany(targetEntity="Av", mappedBy="etude", cascade={"persist", "remove"})
      */
     private $avs;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="GroupePhases", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"numero" = "ASC"})
+     */
+    private $groupes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Phase", mappedBy="etude", cascade={"persist", "remove"})
+     * @ORM\OrderBy({"position" = "ASC"})
+     */
+    private $phases;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Mission", mappedBy="etude", cascade={"persist","remove"})
+     */
+    private $missions;
 
     /**
      * @ORM\OneToMany(targetEntity="AvMission", mappedBy="etude")
@@ -261,19 +262,27 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
      */
     private $sourceDeProspection;
     
+    /************************
+     *   OTHERS DEFINITIONS
+     ************************/
     
-    /**ADITIONAL GETTERS**/
+    /**
+     * @var bool
+     */
+    private $knownProspect = false;
+
+    /**
+     * @var bool
+     */
+    private $newProspect;
+    
+    /**
+     * ADDITIONAL GETTERS/SETTERS
+     */
     public function getReference(){
         return (string) ($this->getMandat() * 100 + $this->getNum());
     }
-    
-    public function getMontantHT(){
-        $total = $this->fraisDossier;
-        foreach ($this->phases as $phase)
-            $total += $phase->getNbrJEH() * $phase->getPrixJEH();
-        return $total;
-    }
-    
+ 
     public function getFa(){
         foreach ($this->factures as $facture){
             if($facture->getType() == \mgate\TresoBundle\Entity\Facture::$TYPE_VENTE_ACCOMPTE)
@@ -290,6 +299,88 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         return null;
     }
     
+    public function getNumero(){
+        return $this->mandat * 100 + $this->num;
+    }
+    
+    public function getMontantJEHHT(){
+        $total = 0;
+        foreach ($this->phases as $phase)
+            $total += $phase->getNbrJEH() * $phase->getPrixJEH();
+        return $total;
+    }
+
+    public function getMontantHT(){
+        return $this->fraisDossier + $this->getMontantJEHHT();
+    }
+    
+    public function getNbrJEH(){
+        $total = 0;
+        foreach ($this->phases as $phase) {
+            $total += $phase->getNbrJEH();
+        }
+        return $total;
+    }
+    
+    /**
+     * Renvoie la date de lancement Réel (Signature CC) ou Théorique (Début de la phase la plus en amont)
+     * @return DateTime
+     */
+    public function getDateLancement(){
+        if($this->cc) // Réel
+            return $this->cc->getDateSignature();
+        else { // Théorique
+            $dateDebut = array();
+            $phases = $this->phases;
+            foreach ($phases as $phase) if ($phase->getDateDebut() != NULL)
+                array_push($dateDebut, $phase->getDateDebut());
+                
+            if (count($dateDebut) > 0) return min($dateDebut);
+            else return NULL;
+        }
+    }
+    
+    
+    /**
+     * Renvoie la date de fin : Fin de la phase la plus en aval
+     * @return DateTime
+     */
+    public function getDateFin($avecAvenant = false) {
+        
+        $dateFin = array();
+        $phases = $this->phases;
+        
+        foreach ($phases as $p) {
+            if ($p->getDateDebut()!=NULL && $p->getDelai()!=NULL ) {
+                $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
+                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
+                unset($dateDebut);
+            }
+        }
+
+        if (count($dateFin) > 0){
+            $dateFin = max($dateFin);
+            if($avecAvenant && $this->avs && $this->avs->last())
+                $dateFin->modify('+' . $this->avs->last()->getDifferentielDelai() . ' day');                
+            return $dateFin;
+        }
+        else return NULL;
+ 
+    }
+    
+    public function getDelai($avecAvenant = false) {
+        if($this->getDateFin($avecAvenant)){
+            if($this->cc) // Réel
+                return $this->getDateFin($avecAvenant)->diff($this->cc->getDateSignature());
+            else // Théorique
+                return $this->getDateFin($avecAvenant)->diff($this->getDateLancement());
+        }
+        return NULL;
+    }
+    
+    
+
+
     
     /**
      * Constructor
@@ -311,27 +402,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         $this->stateID = 1;
     }
 
-/// rajout à la main
-    
-    public function getNumero(){
-        return $this->mandat * 100 + $this->num;
-    }
-    public function isKnownProspect() {
-        return $this->knownProspect;
-    }
-
-    public function setKnownProspect($boolean) {
-        $this->knownProspect = $boolean;
-    }
-
-    public function getNewProspect() {
-        return $this->newProspect;
-    }
-
-    public function setNewProspect($var) {
-        $this->newProspect = $var;
-    }
-
+    /**
+     * @deprecated since 0 0
+     */
     public function getDoc($doc, $key = -1) {
         switch (strtoupper($doc)) {
             case 'AP':
@@ -360,7 +433,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
         }
     }
 
-/// fin rajout
+    /**
+     * AUTO GENERATED GETTER/SETTER
+     */
 
     /**
      * Get id
@@ -1417,5 +1492,21 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     public function getRelatedDocuments()
     {
         return $this->relatedDocuments;
+    }
+    
+        public function isKnownProspect() {
+        return $this->knownProspect;
+    }
+
+    public function setKnownProspect($boolean) {
+        $this->knownProspect = $boolean;
+    }
+
+    public function getNewProspect() {
+        return $this->newProspect;
+    }
+
+    public function setNewProspect($var) {
+        $this->newProspect = $var;
     }
 }

@@ -24,11 +24,6 @@ class EtudeManager extends \Twig_Extension {
     // Pour utiliser les fonctions depuis twig
     public function getFunctions() {
         return array(
-            'getRefEtude' => new \Twig_Function_Method($this, 'getRefEtude'),
-            'getTotalHT' => new \Twig_Function_Method($this, 'getTotalHT'),
-            'getNbrJEH' => new \Twig_Function_Method($this, 'getNbrJEH'),
-            'getDateLancement' => new \Twig_Function_Method($this, 'getDateLancement'),
-            'getDateFin' => new \Twig_Function_Method($this, 'getDateFin'),
             'getErrors' => new \Twig_Function_Method($this, 'getErrors'),
             'getWarnings' => new \Twig_Function_Method($this, 'getWarnings'),
             'getInfos' => new \Twig_Function_Method($this, 'getInfos'),
@@ -69,45 +64,12 @@ class EtudeManager extends \Twig_Extension {
 			return true;
 		}
 	}
-	
-    /**
-     * Get montant total des JEH HT
-     */
-    public function getTotalJEHHT(Etude $etude) {
-        $total = 0;
-        foreach ($etude->getPhases() as $phase) {
-            $total += $phase->getNbrJEH() * $phase->getPrixJEH();
-        }
-
-        return $total;
-    }
-
-    /**
-     * Get montant total HT
-     */
-    public function getTotalHT(Etude $etude) {
-        $total = $etude->getFraisDossier() + $this->getTotalJEHHT($etude);
-
-        return $total;
-    }
 
     /**
      * Get montant total TTC
      */
     public function getTotalTTC(Etude $etude) {
-        return round($this->getTotalHT($etude) * (1 + $this->tva), 2);
-    }
-
-    /**
-     * Get nombre de JEH
-     */
-    public function getNbrJEH(Etude $etude) {
-        $total = 0;
-
-        foreach ($etude->getPhases() as $phase) {
-            $total += $phase->getNbrJEH();
-        }
-        return $total;
+        return round($etude->getMontantHT() * (1 + $this->tva), 2);
     }
 
     /**
@@ -127,12 +89,6 @@ class EtudeManager extends \Twig_Extension {
         return round($total);
     }
 
-    /**
-     * Get référence de l'etude
-     */
-    public function getRefEtude(Etude $etude) {
-        return $etude->getReference();
-    }
 
     /*
      * Get référence du document
@@ -143,45 +99,45 @@ class EtudeManager extends \Twig_Extension {
         $type = strtoupper($type);
         if($type == 'AP'){
             if($etude->getAp())
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getAp()->getVersion();
+                return $etude->getReference() . '-' . $type . '-' . $etude->getAp()->getVersion();
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $etude->getReference() . '-' . $type . '- ERROR GETTING VERSION';
         }
         elseif($type == 'CC'){
             if($etude->getCc())
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getCc()->getVersion();
+                return $etude->getReference() . '-' . $type . '-' . $etude->getCc()->getVersion();
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $etude->getReference() . '-' . $type . '- ERROR GETTING VERSION';
         }
         elseif($type == 'RM' || $type == 'DM'){
-            if($key < 0) return $this->getRefEtude($etude) . '-' . $type;
+            if($key < 0) return $etude->getReference() . '-' . $type;
             if(!$etude->getMissions()->get($key) 
             || !$etude->getMissions()->get($key)->getIntervenant())
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING DEV ID - ERROR GETTING VERSION';
+                return $etude->getReference() . '-' . $type . '- ERROR GETTING DEV ID - ERROR GETTING VERSION';
             else
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
+                return $etude->getReference() . '-' . $type . '-' . $etude->getMissions()->get($key)->getIntervenant()->getIdentifiant() . '-' . $etude->getMissions()->get($key)->getVersion(); 
         }
         elseif($type == 'FA'){
-                return $this->getRefEtude($etude) . '-' . $type;
+                return $etude->getReference() . '-' . $type;
         }
         elseif($type == 'FI'){
-                return $this->getRefEtude($etude) . '-' . $type. ($key+1);
+                return $etude->getReference() . '-' . $type. ($key+1);
                 
         }
         elseif($type == 'FS'){
-                return $this->getRefEtude($etude) . '-' . $type;
+                return $etude->getReference() . '-' . $type;
         }
         elseif($type == 'PVI'){
             if($key>=0 && $etude->getPvis($key))
-                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '-' . $etude->getPvis($key)->getVersion();
+                return $etude->getReference() . '-' . $type . ($key+1) . '-' . $etude->getPvis($key)->getVersion();
             else
-                return $this->getRefEtude($etude) . '-' . $type . ($key+1) . '- ERROR GETTING PVI';
+                return $etude->getReference() . '-' . $type . ($key+1) . '- ERROR GETTING PVI';
         }
         elseif($type == 'PVR'){
             if($etude->getPvr())
-                return $this->getRefEtude($etude) . '-' . $type . '-' . $etude->getPvr()->getVersion();
+                return $etude->getReference() . '-' . $type . '-' . $etude->getPvr()->getVersion();
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $etude->getReference() . '-' . $type . '- ERROR GETTING VERSION';
         }
         elseif($type == 'CE'){
             if(!$etude->getMissions()->get($key) 
@@ -193,9 +149,9 @@ class EtudeManager extends \Twig_Extension {
         }
         elseif($type == 'AVCC'){
             if($etude->getCc() && $etude->getAvs()->get($key))
-                return $this->getRefEtude($etude) . '-CC-' . $etude->getCc()->getVersion() . '-AV'.($key+1) . '-'.$etude->getAvs()->get($key)->getVersion();
+                return $etude->getReference() . '-CC-' . $etude->getCc()->getVersion() . '-AV'.($key+1) . '-'.$etude->getAvs()->get($key)->getVersion();
             else
-                return $this->getRefEtude($etude) . '-' . $type . '- ERROR GETTING VERSION';
+                return $etude->getReference() . '-' . $type . '- ERROR GETTING VERSION';
             
         }
         else
@@ -257,49 +213,6 @@ class EtudeManager extends \Twig_Extension {
         else return 0;
     }
 
-    public function getDateLancement(Etude $etude) {
-        if($etude->getCc())
-            return $etude->getCc()->getDateSignature();
-        else {
-            $dateDebut = array();
-            $phases = $etude->getPhases();
-            
-            foreach ($phases as $phase)
-                if ($phase->getDateDebut() != NULL)
-                    array_push($dateDebut, $phase->getDateDebut());
-                
-            if (count($dateDebut) > 0)
-                return min($dateDebut);
-            else
-                return NULL;
-        }
-    }
-
-    public function getDateFin(Etude $etude, $avecAvenant = false) {
-        $dateFin = array();
-        $phases = $etude->getPhases();
-
-        foreach ($phases as $p) {
-            if ($p->getDateDebut()!=NULL && $p->getDelai()!=NULL ) {
-                $dateDebut = clone $p->getDateDebut(); //WARN $a = $b : $a pointe vers le même objet que $b...
-                array_push($dateFin, $dateDebut->modify('+' . $p->getDelai() . ' day'));
-                unset($dateDebut);
-            }
-        }
-
-        if (count($dateFin) > 0){
-            $dateFin = max($dateFin);
-            
-            if($avecAvenant && $etude->getAvs() && $etude->getAvs()->last())
-                $dateFin->modify('+' . $etude->getAvs()->last()->getDifferentielDelai() . ' day');
-                
-            return $dateFin;            
-        }
-        else
-            return NULL;
- 
-    }
-    
     public function getDernierContact(Etude $etude)
     {
         $dernierContact = array();
@@ -319,10 +232,6 @@ class EtudeManager extends \Twig_Extension {
             return NULL;
     }
 
-    public function getDelaiEtude(Etude $etude, $avecAvenant = false) {
-        if($this->getDateFin($etude, $avecAvenant))
-            return $this->getDateFin($etude, $avecAvenant)->diff($this->getDateLancement($etude));
-    }
 
     public function getRepository() {
         return $this->em->getRepository('mgateSuiviBundle:Etude');
@@ -392,13 +301,13 @@ class EtudeManager extends \Twig_Extension {
         
         // PVR < fin d'étude
         if ($etude->getPvr()) {
-            if ($this->getDateFin($etude, true) != NULL && $etude->getPvr()->getDateSignature() > $this->getDateFin($etude, true)) {
+            if ($etude->getDateFin(true) != NULL && $etude->getPvr()->getDateSignature() > $etude->getDateFin(true)) {
                 $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure à la date de fin de l\'étude. Consulter la Convention Client ou l\'Avenant à la Convention Client pour la fin l\'étude.');
                 array_push($errors, $error);
             }
         }
         if ($etude->getPvr()) {
-            if ($this->getDateFin($etude, true) != NULL && $etude->getPvr()->getDateSignature() > $this->getDateFin($etude, true)) {
+            if ($etude->getDateFin(true) != NULL && $etude->getPvr()->getDateSignature() > $etude->getDateFin(true)) {
                 $error = array('titre' => 'PVR  - Date de signature : ', 'message' => 'La date de signature du PVR doit être antérieure à la date de fin de l\'étude. Consulter la Convention Client ou l\'Avenant à la Convention Client pour la fin l\'étude.');
                 array_push($errors, $error);
             }
@@ -426,17 +335,17 @@ class EtudeManager extends \Twig_Extension {
         // Date de fin d'étude approche alors que le PVR n'est pas signé
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P10D');
-        if ($this->getDateFin($etude)) {
+        if ($etude->getDateFin()) {
             if (!$etude->getPvr()) {
-                if ($now < $this->getDateFin($etude, true) && $this->getDateFin($etude, true)->sub($DateAvert0) < $now) {
+                if ($now < $etude->getDateFin(true) && $etude->getDateFin(true)->sub($DateAvert0) < $now) {
                     $error = array('titre' => 'Fin de l\'étude :', 'message' => 'L\'étude se termine dans moins de dix jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');
                     array_push($errors, $error);
-                } else if ($this->getDateFin($etude, true) < $now) {
+                } else if ($etude->getDateFin(true) < $now) {
                     $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La fin de l\'étude est passée. Pensez à faire un PVR ou des avenants à la CC et au(x) RM.');
                     array_push($errors, $error);
                 }
             } else {
-                if ($etude->getPvr()->getDateSignature() > $this->getDateFin($etude, true)) {
+                if ($etude->getPvr()->getDateSignature() > $etude->getDateFin(true)) {
                     $error = array('titre' => 'Fin de l\'étude :', 'message' => 'La date du PVR est située après la fin de l\'étude.');
                     array_push($errors, $error);
                 }
@@ -479,9 +388,9 @@ class EtudeManager extends \Twig_Extension {
         $now = new \DateTime("now");
         $DateAvert0 = new \DateInterval('P20D');
         $DateAvert1 = new \DateInterval('P10D');
-        if($this->getDateFin($etude))
+        if($etude->getDateFin())
         {
-            if($this->getDateFin($etude)->sub($DateAvert1) > $now &&  $this->getDateFin($etude)->sub($DateAvert0)<$now)
+            if($etude->getDateFin()->sub($DateAvert1) > $now &&  $etude->getDateFin()->sub($DateAvert0)<$now)
             {
                 $warning = array('titre' => 'Fin de l\'étude :', 'message' => 'l\'étude se termine dans moins de vingt jours, pensez à faire signer le PVR ou à faire signer des avenants de délais si vous pensez que l\'étude ne se terminera pas à temps.');  
                 array_push($warnings, $warning);

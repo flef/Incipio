@@ -29,7 +29,6 @@ class DocTypeSuiviType extends AbstractType
 	{
             $resolver->setDefaults(array(
                 'data_class' => 'mgate\SuiviBundle\Entity\DocType',
-            /*'cascade_validation' => true,*/
             ));
     }
 }

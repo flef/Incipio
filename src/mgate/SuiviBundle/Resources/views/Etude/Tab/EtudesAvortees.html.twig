@@ -32,12 +32,12 @@
         {% for etude in etudes if not confidentielRefus(etude, app.security)%}
 <tr>
     <td><i id="commentaire" class="glyphicon glyphicon-search" data-title="{{ etude.id }}" data-content="0"></i></td>
-    <td><div>{{ etude.nom }}</div><div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}<a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ getRefEtude(etude) }}</a></div></td>
+    <td><div>{{ etude.nom }}</div><div>{{ etude.confidentiel ? '<span class="label label-danger">[CONFIDENTIEL]</span> ' }}<a href="{{ path('mgateSuivi_etude_voir', {'numero': etude.numero}) }}"> {{ etude.reference }}</a></div></td>
     <td>{{ etude.prospect.nom }}
         <br /><br />
      {{etude.suiveur.prenomNom| default("Pas de suiveur!")}}</td>
     <td>
-            {% if getDateLancement(etude) != NULL %}<div>{{ getDateLancement(etude)|date("d/m/Y") }}</div>{% endif %}
+            {% if etude.dateLancement != NULL %}<div>{{ etude.dateLancement|date("d/m/Y") }}</div>{% endif %}
         </td>
             <td>
                 {{etude.stateDescription }}
@@ -46,8 +46,8 @@
                 #
             </td>
             <td>
-                <div>{{ etude.confidentiel ? '*' : getTotalHT(etude)|default('') }} €</div>
-                <div>{{ etude.confidentiel ? '*' : getNbrJEH(etude)|default('') }} JEH</div>
+                <div>{{ etude.confidentiel ? '*' : etude.montantHT|default('') }} €</div>
+                <div>{{ etude.confidentiel ? '*' : etude.nbrJEH|default('') }} JEH</div>
             </td>
         </tr>
         {% endfor %}

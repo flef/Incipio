@@ -172,7 +172,7 @@
 </nav>
 
 <div id="fa" class="collapse">
-    {% set montantRestant = getTotalHT(etude) %}
+    {% set montantRestant = etude.montantHT %}
     <table class="table table-bordered table-striped">
         <tr>
             <th colspan="2">Factures</th>
@@ -253,7 +253,7 @@
     <table class="table table-bordered">
         <tr>
             <th>Montant Total H.T.</th>
-            <td>{{ getTotalHT(etude) | default('') }} €</td>
+            <td>{{ etude.montantHT | default('') }} €</td>
             <th>Reste à payer</th>
             <td>{{ montantRestant }} €</td>
         </tr>

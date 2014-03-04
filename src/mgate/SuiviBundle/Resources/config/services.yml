@@ -2,7 +2,6 @@ parameters:
     mgate.etude_manager.class: mgate\SuiviBundle\Manager\EtudeManager
     mgate.doctype_manager.class: mgate\SuiviBundle\Manager\DocTypeManager
     mgate.chart_manager.class: mgate\SuiviBundle\Manager\ChartManager
-    mgate.validation.class: mgate\SuiviBundle\Validation\Validation
     tva: 0.20
     
 services:
@@ -24,13 +23,6 @@ services:
           - "%tva%"
           - "@mgate.etude_manager"
           - "@logger"
-          
-    mgate.validation:
-      class: "%mgate.validation.class%"
-      arguments:
-        - "@doctrine.orm.entity_manager"
-      tags:
-        - { name: twig.extension }
         
     form.type_extension.help_message:
         class: mgate\SuiviBundle\Form\Extension\HelpMessageTypeExtension
