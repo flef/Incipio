@@ -10,7 +10,7 @@ use mgate\UserBundle\Form\UserAdminType;
 class DefaultController extends Controller
 {
     /**
-     * @Secure(roles="ROLE_CA")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function indexAction($name)
     {
@@ -18,7 +18,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Secure(roles="ROLE_CA")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function listerAction()
     {
@@ -31,7 +31,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Secure(roles="ROLE_CA")
+     * @Secure(roles="ROLE_ADMIN")
      */
     public function voirAction($id)
     {
@@ -86,7 +86,7 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Secure(roles="ROLE_SUIVEUR")
+     * @Secure(roles="ROLE_ADMIN")
      */    
     public function deleteAction($id)
     {
