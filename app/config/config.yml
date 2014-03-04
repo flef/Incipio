@@ -109,8 +109,6 @@ fos_user:
     service:
         mailer: fos_user.mailer.twig_swift
     registration:
-      form:
-        type: mgate_user_registration
       confirmation:
         enabled:    true
     from_email:

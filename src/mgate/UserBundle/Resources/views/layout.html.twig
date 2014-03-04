@@ -52,7 +52,7 @@
     {% block fos_user_content %}{% endblock %}
 </div>
 <p style="text-align: right;">
-{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+{% if app.user %}
     <a href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
 {% else %}
     <a href="{{ path('fos_user_registration_register') }}">Inscription</a> 

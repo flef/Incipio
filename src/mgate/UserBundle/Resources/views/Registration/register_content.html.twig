@@ -1,0 +1,18 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register form-signin" role="form" style="text-align: center;">
+    <img src="{{ junior['logo'] }}" width="300"/>
+    <h2 class="form-signin-heading">Inscription</h2>
+    
+
+    {{ form_widget(form.username, { 'attr': {'class': 'form-control', 'placeholder' : 'Login' } } ) }}
+    {{ form_widget(form.email, { 'attr': {'class': 'form-control', 'placeholder' : 'Email' } } ) }}
+    <br>
+    {{ form_label(form.plainPassword.first ) }}
+    {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control'} } ) }}
+    {{ form_label(form.plainPassword.second ) }}
+    {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control'} } ) }}
+    <button class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="">{{ 'registration.submit'|trans }}</button>
+
+    {{ form_rest(form) }}
+</form>
