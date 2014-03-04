@@ -1,0 +1,9 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% block fos_user_content %}
+{% if app.user %}
+<h3>Tu es déjà enregistré Bougre !</h3>
+{% else %}
+    {% include "FOSUserBundle:Registration:register_content.html.twig" %}    
+{% endif %}    
+{% endblock fos_user_content %}
