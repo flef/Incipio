@@ -370,9 +370,9 @@ class Etude extends \Symfony\Component\DependencyInjection\ContainerAware {
     
     public function getDelai($avecAvenant = false) {
         if($this->getDateFin($avecAvenant)){
-            if($this->cc) // Réel
+            if($this->cc && $this->cc->getDateSignature()) // Réel
                 return $this->getDateFin($avecAvenant)->diff($this->cc->getDateSignature());
-            else // Théorique
+            elseif ($this->getDateLancement())
                 return $this->getDateFin($avecAvenant)->diff($this->getDateLancement());
         }
         return NULL;
