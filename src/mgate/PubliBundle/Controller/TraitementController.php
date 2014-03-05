@@ -5,26 +5,150 @@ namespace mgate\PubliBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 
+
+
 class TraitementController extends Controller {
 
-    private $SFD = '~';                                                         //Start Field       Delimiter
-    private $EFD = '~~';                                                        //End   Field       Delimiter
-
-    
-    //Vérification du fichier
-    //if match % _ % then pasbien
-    private function verifierTemplates($templatesXML) {
-        $SFD = $this->SFD;
-        $EFD = $this->EFD;
-        $allmatches = array();
-
-        foreach ($templatesXML as $templateXML) {
-            preg_match_all('#' . $SFD . '(.*?)' . $EFD . '#', $templateXML, $matches);
-            $allmatches += $matches[1];
-        }
-        return $allmatches;
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function publiposterAction($templateName, $rootName, $rootObject_id){
+        $this->publipostage($templateName, $rootName, $rootObject_id);
+        return $this->telechargerAction($templateName);
     }
 
+    private function publipostage($templateName, $rootName, $rootObject_id){
+        $em = $this->getDoctrine()->getManager();    
+        
+        switch ($rootName) {
+            case 'etude':
+                if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                if($this->get('mgate.etude_manager')->confidentielRefus($rootObject, $this->container->get('security.context')))
+                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                break;
+            case 'etudiant':
+                if (!$rootObject = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                break;
+            case 'mission':
+                if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                break;
+            case 'facture':
+                if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\Facture')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                if($rootObject->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->container->get('security.context')))
+                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                break;
+            case 'nf':
+                if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\NoteDeFrais')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                break;
+            case 'bv':
+                if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\BV')->find($rootObject_id))
+                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                if($rootObject->getMission() && $rootObject->getMission()->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getMission()->getEtude(), $this->container->get('security.context')))
+                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                break;
+            default:
+                throw $this->createNotFoundException('Publipostage invalid ! Pas de bol...');
+                break;
+        }
+
+        $chemin = $this->getDoctypeAbsolutePathFromName($templateName);
+        
+        //DEBUG   
+        if ($this->container->getParameter('debugEnable')) {
+            $path = $this->container->getParameter('pathToDoctype');
+            $chemin = $path . $templateName . '.docx';
+        }
+        
+        $templatesXMLtraite = $this->traiterTemplates($chemin, $rootName, $rootObject);
+        $repertoire = 'tmp';
+
+        //SI DM on prend la ref de RM et ont remplace RM par DM
+        if ($templateName == 'DM') {
+            $templateName = 'RM';  $isDM = true;
+        }
+
+        if ($rootName == 'etude' && $rootObject->getReference())// TODO IMPLEMENT getref
+            $refDocx = $rootObject->getReference();
+        elseif ($rootName == 'etudiant')
+            $refDocx = $templateName.'-'.$rootObject->getIdentifiant();
+        else
+            $refDocx = 'UNREF';
+            
+
+        //On remplace DM par RM si DM
+        if (isset($isDM) && $isDM)
+            $refDocx = preg_replace("#RM#", 'DM', $refDocx);
+
+        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
+        copy($chemin, $repertoire . '/' . $idDocx);
+        $zip = new \ZipArchive();
+        $zip->open($repertoire . '/' . $idDocx);
+
+        
+        /*
+         * TRAITEMENT INSERT IMAGE
+         */
+        $images = array();
+        //Gantt
+        if ($templateName == 'AP' || (isset($isDM) && $isDM)) {
+            $chartManager = $this->get('mgate.chart_manager');
+            $ob = $chartManager->getGantt($rootObject, $templateName);
+            if ($chartManager->exportGantt($ob, $idDocx)) {
+                $image = array();
+                $image['fileLocation'] = "$repertoire/$idDocx.png";
+                $info = getimagesize("$repertoire/$idDocx.png");
+                $image['width'] = $info[0];
+                $image['height'] = $info[1];
+                $images['imageVARganttAP'] = $image;
+            }
+        }
+
+        //Intégration temporaire
+        $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
+        foreach ($imagesInDocx as $image) {
+            $zip->deleteName('word/media/' . $image[2]);
+            $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
+        }
+        /*****/
+
+        foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
+            $zip->deleteName('word/' . $templateXMLName);
+            $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+        }
+        
+        $zip->close();
+
+        $_SESSION['idDocx'] = $idDocx;
+        $_SESSION['refDocx'] = $refDocx;
+    }
+     
+    /**
+     * @Secure(roles="ROLE_SUIVEUR")
+     */
+    public function telechargerAction($templateName) {
+        $junior = $this->container->getParameter('junior');
+        $this->purge();
+        if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
+            $idDocx = $_SESSION['idDocx'];
+            $refDocx = $_SESSION['refDocx'];   
+            
+            $templateName = 'tmp/' . $idDocx;
+            header('Content-Type: application/msword');
+            header('Content-Length: ' . filesize($templateName));
+            header('Content-disposition: attachment; filename=' .$junior['tag']. $refDocx . '.docx');
+            header('Pragma: no-cache');
+            header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+            header('Expires: 0');
+            readfile($templateName);
+            exit();
+        }
+        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)));
+    }
 
 
     private function array_push_assoc(&$array, $key, $value) {
@@ -32,25 +156,15 @@ class TraitementController extends Controller {
         return $array;
     }
 
-    private function getEtudeFromID($id_etude) {
-        $em = $this->getDoctrine()->getManager();
 
-        //Récupère l'étude avec son id
-        if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude))
-            throw $this->createNotFoundException('Etude[id=' . $id_etude . '] inexistant');
-        
-        return $etude;
-    }
-
+    //TODO
     private function getDoctypeAbsolutePathFromName($doc) {
         $em = $this->getDoctrine()->getManager();
 
-        $request = $this->get('request');
-
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\Document')->findOneBy(array('name' => $doc))) {
-            $chemin = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/bundles/mgatepubli/document-type/' . $doc . '.docx'; //asset
+            throw $this->createNotFoundException('Le doctype n\'existe pas... C\'est bien balo');
         } else {
-            $chemin = $documenttype->getWebPath(); // on prend le document type qui est uploadé
+            $chemin = $documenttype->getWebPath();
         }
         return $chemin;
     }
@@ -112,161 +226,8 @@ class TraitementController extends Controller {
         return $allmatches;
     }
 
-    private function publipostageEtude($id_etude, $doc, $key) {
-        $key = intval($key);
 
-        $etude = $this->getEtudeFromID($id_etude);
-        $chemin = $this->getDoctypeAbsolutePathFromName($doc);
-
-        //DEBUG   
-        if ($this->container->getParameter('debugEnable')) {
-            $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path . $doc . '.docx';
-        }
-        
-        $templatesXMLtraite = $this->traiterTemplates($chemin, 'etude', $etude);
-        $champsBrut = $this->verifierTemplates($templatesXMLtraite);
-        $repertoire = 'tmp';
-
-        //SI DM on prend la ref de RM et ont remplace RM par DM
-        if ($doc == 'DM') {
-            $doc = 'RM';  $isDM = true;
-        }
-
-        if ($etude->getDoc($doc, $key))
-            $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc, $key);
-        else
-            $refDocx = 'ERROR';
-
-        //On remplace DM par RM si DM
-        if (isset($isDM) && $isDM)
-            $refDocx = preg_replace("#RM#", 'DM', $refDocx);
-
-        $idDocx = $refDocx . '-' . ((int) strtotime("now") + rand());
-        copy($chemin, $repertoire . '/' . $idDocx);
-        $zip = new \ZipArchive();
-        $zip->open($repertoire . '/' . $idDocx);
-
-        
-        /*
-         * TRAITEMENT INSERT IMAGE
-         */
-        $images = array();
-        //Gantt
-        if ($doc == 'AP' || (isset($isDM) && $isDM)) {
-            $chartManager = $this->get('mgate.chart_manager');
-            $ob = $chartManager->getGantt($etude, $doc);
-            if ($chartManager->exportGantt($ob, $idDocx)) {
-                $image = array();
-                $image['fileLocation'] = "$repertoire/$idDocx.png";
-                $info = getimagesize("$repertoire/$idDocx.png");
-                $image['width'] = $info[0];
-                $image['height'] = $info[1];
-                $images['imageVARganttAP'] = $image;
-            }
-        }
-
-        //Intégration temporaire
-        $imagesInDocx = $this->traiterImages($templatesXMLtraite, $images);
-        foreach ($imagesInDocx as $image) {
-            $zip->deleteName('word/media/' . $image[2]);
-            $zip->addFile($repertoire . '/' . $idDocx . '.png', 'word/media/' . $image[2]);
-        }
-        /*****/
-
-        foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
-            $zip->deleteName('word/' . $templateXMLName);
-            $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
-        }
-        
-        $zip->close();
-
-        $_SESSION['idDocx'] = $idDocx;
-        $_SESSION['refDocx'] = $refDocx;
-
-        return array($champsBrut);
-    }
-
-    public function publiposterMultipleEtude($id_etude, $doc) {
-        $etude = $this->getEtudeFromID($id_etude);
-        $refDocx = $this->get('mgate.etude_manager')->getRefDoc($etude, $doc);
-        $idZip = 'ZIP' . $refDocx . '-' . ((int) strtotime("now") + rand());
-        $_SESSION['idZip'] = $idZip;
-
-        foreach ($etude->getMissions() as $key => $mission) {
-            $this->publipostageEtude($id_etude, $doc, $key);
-            $this->telechargerAction('', true);
-        }
-
-        $_SESSION['refDocx'] = $refDocx;
-
-        $this->telechargerAction('', false, true);
-    }
-
-    /** publication du doc
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function publiposterEtudeAction($id_etude, $doc, $key) {
-        if (($doc == 'RM' || $doc == 'DM') && $key == -1)
-            $champsBrut = $this->publiposterMultipleEtude($id_etude, $doc);
-        else
-            $champsBrut = $this->publipostageEtude($id_etude, $doc, $key);
-        
-        // TODO REACTIVER LES ERREURS
-        if (false)//count($champsBrut[0])) {
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0])));
-        else
-            return $this->telechargerAction($doc);
-    }
-
-    /** A nettoyer !!
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function telechargerAction($docType = 'AP', $addZip = false, $dlZip = false) {
-        $junior = $this->container->getParameter('junior');
-        $this->purge();
-        if (isset($_SESSION['idDocx']) && isset($_SESSION['refDocx'])) {
-            $idDocx = $_SESSION['idDocx'];
-            $refDocx = $_SESSION['refDocx'];
-
-            if ($addZip) {
-                $idZip = $_SESSION['idZip'];
-                $zip = new \ZipArchive;
-                $zip->open('tmp/' . $idZip, \ZipArchive::CREATE);
-                $zip->addFile('tmp/' . $idDocx, $junior['tag'].$refDocx . '.docx');
-                $zip->close();
-            } elseif ($dlZip) {
-                $idZip = $_SESSION['idZip'];
-                $doc = 'tmp/' . $idZip;
-
-                header('Content-Type: application/zip');
-                header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: inline; filename=' . $junior['tag'].$refDocx . '.zip');
-                header('Pragma: no-cache');
-                header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-                header('Expires: 0');
-                readfile($doc);
-                exit();
-            } else {
-                $doc = 'tmp/' . $idDocx;
-
-                header('Content-Type: application/msword');
-                header('Content-Length: ' . filesize($doc));
-                header('Content-disposition: attachment; filename=' .$junior['tag']. $refDocx . '.docx');
-                header('Pragma: no-cache');
-                header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-                header('Expires: 0');
-                readfile($doc);
-                exit();
-            }
-        } else {
-            
-        }
-
-        return $this->redirect($this->generateUrl('mgateSuivi_etude_homepage', array('page' => 1)));
-    }
-
-    //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de n = 1 jours
+    //Nettoie le dossier tmp : efface les fichiers temporaires vieux de plus de 1 jours
     private function purge() {
         $Patern = '*';
         $oldSec = 86400; // = 1 Jours
@@ -278,93 +239,45 @@ class TraitementController extends Controller {
         }
     }
 
-   
-
-    /* Publipostage documents élèves
-     *  
-     */
-
-    /** publication du doc
-     * @Secure(roles="ROLE_SUIVEUR")
-     */
-    public function publiposterEleveAction($id_eleve, $doc, $key) {
-        $champsBrut = $this->publipostageEleve($id_eleve, $doc, $key);
-
-        // TODO REACTIVER ERREUR
-        if (false)//count($champsBrut[0]))
-            return $this->render('mgatePubliBundle:Traitement:index.html.twig', array('nbreChampsNonRemplis' => count($champsBrut[0]), 'champsNonRemplis' => array_unique($champsBrut[0], SORT_STRING), 'aides' => $champsBrut[1]));
-        else 
-            return $this->telechargerAction($doc);
-    }
-    
-    
-    /***
-     * 
-     * OLD 
-     * A CONVERTIR EN FILTRE
-     * 
-     * 
-     */
-     //Formate un nombre à la francaise ex 1 234,56 avec deux décimals 
-    //SEE_ALSO moneyformat LC_MONETARY fr_FR
-    private function formaterNombre($number) {
-        if (is_int($number)) // Si entier
-            return number_format($number, 0, ',', ' ');
-        else
-            return number_format($number, 2, ',', ' ');
-    }
-
-    private function jourVersSemaine($j) {
-        $converter = $this->get('mgate.conversionlettre');
-
-        $jour = $j % 7;
-        $semaine = (int) floor($j / 7);
-
-        $jour_str = $converter->ConvNumberLetter($jour);
-        $semaine_str = $converter->ConvNumberLetter($semaine);
-
-        $jourVersSemaine = "";
-        if ($semaine)
-            $jourVersSemaine = $semaine_str . ($semaine > 1 ? " semaines" : "e semaine");
-        if ($jour)
-            $jourVersSemaine .= ($semaine > 0 ? " et " : "" ) . $jour_str . " jour" . ($jour > 1 ? "s" : "");
-        return $jourVersSemaine;
-    }
-    
-    public function commenceParUneVoyelle($mot) {
-        return preg_match('#^[aeiouy]#', $mot);
-    }
-
-    private function nombreVersMois($m) {
-        $mois = array('janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
-        return $mois[($m % 12) - 1];
-    }
     /**
-       //Remplissage des %champs%
-      private function remplirChamps(&$templateXML, $fieldValues) {
-          $SFD = $this->SFD;
- -
-          $EFD = $this->EFD;
- +        
- +        $date = new \DateTime('now');
- +        $date = $date->format('Y-m-d\TH:i:sZ');
- +        
- +        $EID = '</w:t></w:ins>';
- +        
-  
-          foreach ($fieldValues as $field => $values) {//Remplacement des champs
- +            $SID = '<w:ins w:id="0" w:author="'.$field.'" w:date="'.$date.'"><w:t xml:space="preserve">';
-              //WARNING : ($values != NULL) remplacer par ($values !== NULL), les valeurs NULL de type non NULL sont permises !!!!!!!
-              //TODO : Verification type NULL sur champs vide 
-              if ($values !== NULL) {
-                  if (is_int($values) || is_float($values)) //Formatage des nombres à la francaise
-                      $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', preg_replace("# #", " ", $this->formaterNombre($values)), $templateXML);
-                  else
- -                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', $this->nl2wbr(htmlspecialchars($values)), $templateXML);
- +                    $templateXML = preg_replace('#' . $SFD . $field . $EFD . '#U', ' '.$SID.$this->nl2wbr(htmlspecialchars($values)).$EID, $templateXML);
-              }
-          }
-     * 
+     * @Secure(roles="ROLE_SUPER_ADMIN")
+     * //UNSAFE
+     * //TODO
+     * //PASPROPRE
      */
+    public function verifierTemplatesAction(){
+        $data = array();
+        $form = $this->createFormBuilder($data)
+            ->add('template', 'textarea')
+            ->add('etudiant', 'genemu_jqueryselect2_entity', array(
+               'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
+               'property' => 'personne.prenomNom',
+               'label' => 'Intervenant',
+               'required' => false
+               ))
+            ->add('etude','genemu_jqueryselect2_entity',array (
+                      'label' => 'Etude',
+                       'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
+                       'property' => 'reference',                      
+                       'required' => false))
+            ->getForm();
 
+         if ($this->get('request')->getMethod() == 'POST') {
+            $form->bind($this->get('request'));
+
+            if ($form->isValid()) {           
+            
+            $data = $form->getData();
+            
+            return new \Symfony\Component\HttpFoundation\Response($this->get('twig')->render(preg_replace('#\n#','<br>', $data['template']), array('etude'=> $data['etude'], 'etudiant' => $data['etudiant']))); 
+            }
+         }
+        
+        return new \Symfony\Component\HttpFoundation\Response(
+            $this->get('twig')->render(
+                '<form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Test"/></form>', 
+                array('form' => $form->createView()))
+            ); 
+               
+    }
 }

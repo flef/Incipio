@@ -11,9 +11,9 @@ Affichage d'un Membre - {{ parent() }}
             <td rowspan="4" colspan="2" style="text-align: center;">
                 <img class="img-thumbnail" style="height: 200px" src="{{ asset(pictureURL) }}"/>
             </td>
-            <th colspan="2"><a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "AA" }) }}">FA</a>
-                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "CE" }) }}">CE</a>
-                <a href="{{ path('mgate_publi_publiposter_eleve', {'id_eleve': membre.personne.id, 'doc' : "AC" }) }}">AC</a> Informations</th>
+            <th colspan="2"><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'FM', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">FM</a>
+                <a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'CE', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">CE</a>
+                <a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'AC', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">AC</a> Informations</th>
         </tr>
         <tr>
             <td colspan="2"><h4>{{ membre.personne.nomformel }}</h4></td>

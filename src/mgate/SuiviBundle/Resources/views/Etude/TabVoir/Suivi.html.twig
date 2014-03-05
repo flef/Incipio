@@ -25,7 +25,7 @@
         <ul class="nav navbar-nav">
             <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Rediger</a></li>
           {% if etude.ap.dateSignature |default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'AP'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'AP', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
           {% endif %}
         </ul>
     </div>
@@ -67,7 +67,7 @@
         <ul class="nav navbar-nav">
             <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Rediger</a></li>
                     {% if etude.cc.dateSignature |default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'CC'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'CC', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
                     {% endif %}
         </ul>
     </div>
@@ -103,11 +103,6 @@
      <div class="collapse navbar-collapse navbar-rm">
         <ul class="nav navbar-nav">
             <li><a href="{{ path('mgateSuivi_missions_modifier', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span>  Intervenants</a></li>
-        {% if etude.missions | length %}
-            <!--li><a href="{#{ path('mgateSuivi_missions_repartition', {'id': etude.id}) }#}"><span class="glyphicon glyphicon-tasks"></span>  Répartition JEH</a></li-->
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer les RM</a></li>
-            <li><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer les DM</a></li>
-        {% endif %}
         </ul>
     </div>
 </nav>
@@ -118,12 +113,12 @@
             <table class="table table-bordered table-striped">
                 <tr>
                     <td colspan="2">
-                        {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : loop.index0} %}
+                        {% include "mgateSuiviBundle:Etude:Buttons/Intervenant.html.twig" with  {'idEtude':  etude.id, 'intervenant' : mission.intervenant, 'keyMission' : mission.id} %}
                     </td>
                 </tr>
                 <tr>
-                    <td><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'RM', 'key' : loop.index0 }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> RM</a></td> 
-                    <td><a href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'DM', 'key' : loop.index0 }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> DM</a></td>
+                    <td><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'RM', 'rootName' : 'mission', 'rootObject_id' : mission.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> RM</a></td> 
+                    <td><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'DM', 'rootName' : 'mission', 'rootObject_id' : mission.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> DM</a></td>
                 </tr>
                 <tr>
                     <th>Date du RM</th>
@@ -184,7 +179,7 @@
             <td>{% if is_granted('ROLE_CA') %}
                 <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'FV', 'rootName' : 'facture', 'rootObject_id' : facture.id}) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': facture.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                 {% endif %}
@@ -292,7 +287,7 @@
             <td style="width: 100px;">
                 <a title="Modifier" href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'PVI', 'key' : loop.index0 }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'PVRI', 'rootName' : 'pvri', 'rootObject_id' : pvi.id }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Supprimer" href="#"><span class="glyphicon glyphicon-remove"></span></a>
             </td>
@@ -312,7 +307,7 @@
         <tr>
             <td><a title="Modifier" href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'PVR' }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'PVRF', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
             </td>
             <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': etude.pvr.id}) }}">PVR</a></td>
             <td>Toutes</td>
