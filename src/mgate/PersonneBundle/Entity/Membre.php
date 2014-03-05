@@ -88,7 +88,7 @@ class Membre {
      * @ORM\Column(name="nationalite", type="string", nullable=true)
      */
     private $nationalite;
-
+    
     private function enMinusculeSansAccent($texte){
     $texte = mb_strtolower($texte, 'UTF-8');
     $texte = str_replace(

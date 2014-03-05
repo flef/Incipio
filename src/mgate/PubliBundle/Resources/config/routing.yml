@@ -1,25 +1,18 @@
 mgate_publi_publiposter:
-    pattern: /documents/telecharger/etude/{id_etude}/{doc}/{key}
-    defaults: {_controller: mgatePubliBundle:Traitement:publiposterEtude, key : -1}
+    pattern: /Documents/Publiposter/{templateName}/{rootName}/{rootObject_id}
+    defaults: {_controller: mgatePubliBundle:Traitement:publiposter}
     requirements:
-        id_etude:  \d+
-        key: \d+
-        doc: AP|CC|FA|RM|PVR|PVI|FS|DM|FI|BV
-        #change tolower
+        rootObject_id:  \d+
+        rootName: \w+
+        templateName: \w+
     
 mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
     defaults: {_controller: mgatePubliBundle:Traitement:telecharger}
-    
-
-
-mgate_publi_publiposter_eleve:
-    pattern: /documents/telecharger/eleve/{id_eleve}/{doc}/{key}
-    defaults: {_controller: mgatePubliBundle:Traitement:publiposterEleve, key : -1}
-    requirements:
-        id_eleve:  \d+
-        key: \d+
-        doc: AC|AA|CE
+        
+mgate_publi_verifier:
+    pattern: /documents/verifier
+    defaults: {_controller: mgatePubliBundle:Traitement:verifierTemplates}
         
         
 ######################
