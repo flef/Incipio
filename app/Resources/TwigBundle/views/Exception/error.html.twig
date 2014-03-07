@@ -1,0 +1,10 @@
+{% extends "::layout.html.twig" %}
+
+{% block title %}Hum... les béta...{% endblock %}
+
+{% block content %}
+<div class="alert alert-danger">
+    <strong>Oups! Une erreur {{ status_code }} est survenue</strong>
+{{ status_text }}
+</div>
+{% endblock %}
