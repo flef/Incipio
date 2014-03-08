@@ -112,6 +112,14 @@ class Phase
      * @ORM\Column(name="etatSurAvenant", type="integer", nullable=true)
      */
     private $etatSurAvenant;
+    
+    /**
+     * ADDITIONAL GETTERS/SETTERS
+     */
+    
+    public function getMontantHT(){
+        return $this->nbrJEH * $this->prixJEH;
+    }
 
 
     public function __construct()
