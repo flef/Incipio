@@ -15,9 +15,11 @@ class TwigExtensionManager extends \Twig_Extension {
     
     public function getFilters() {
         return array(
-            'nl2wbr' => new \Twig_Filter_Method($this, 'nl2wbr'),
-            'money' => new \Twig_Filter_Method($this, 'money'),
-            'nbrToLetters' =>  new \Twig_Filter_Method($this, 'nbrToLetters'),
+            'nl2wbr'        => new \Twig_Filter_Method($this, 'nl2wbr'),
+            'money'         => new \Twig_Filter_Method($this, 'money'),
+            'nbrToLetters'  => new \Twig_Filter_Method($this, 'nbrToLetters'),
+            'liaison'       => new \Twig_Filter_Method($this, 'liaison'),
+            'pluriel'       => new \Twig_Filter_Method($this, 'pluriel'),
         );
     }
     
@@ -39,6 +41,24 @@ class TwigExtensionManager extends \Twig_Extension {
     public function nbrToLetters($nbr, $devise = 0, $langue = 0) {        
         $cv = new \mgate\PubliBundle\Controller\ConversionLettreController;
         return $cv->ConvNumberLetter($nbr, $devise, $langue);
+    }
+    
+    public function liaison($mot, $entiere = 'de', $contractee = null){
+        if(!$contractee)
+            $contractee = substr ($entiere, 0, 1)."'";
+        
+        if(preg_match('#^[aeiouy]#', $mot))
+            return $contractee.' '.$mot;
+        else
+            return $entiere.' '.$mot;
+        
+    }
+    
+    public function pluriel($mot, $nbr, $pluriel = 's', $simple = ''){
+        if($nbr > 1)
+            return $mot.$pluriel;
+        else
+            return $mot.$simple;
     }
     
 }

@@ -61,7 +61,7 @@ class TraitementController extends Controller {
         //DEBUG   
         if ($this->container->getParameter('debugEnable')) {
             $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path . $templateName . '.docx';
+            $chemin = $path.$chemin;
         }
         
         $templatesXMLtraite = $this->traiterTemplates($chemin, $rootName, $rootObject);
@@ -269,7 +269,22 @@ class TraitementController extends Controller {
             
             $data = $form->getData();
             
-            return new \Symfony\Component\HttpFoundation\Response($this->get('twig')->render(preg_replace('#\n#','<br>', $data['template']), array('etude'=> $data['etude'], 'etudiant' => $data['etudiant']))); 
+            $template =  $data['template'];
+            
+            $template = preg_replace('#\{%\s*Pfor[^%]*%\}#', '$0<p>', $template);
+            $template = preg_replace('#Pfor#', 'for', $template);
+            $template = preg_replace('#\{%\s*endforP[^%]*%\}#', '$0</p>', $template);
+            $template = preg_replace('#endforP#', 'endfor', $template);
+            
+            $template = preg_replace('#\{%\s*TRfor[^%]*%\}#', '$0<p>', $template);
+            $template = preg_replace('#TRfor#', 'for', $template);
+            $template = preg_replace('#\{%\s*endforTR[^%]*%\}#', '$0</p>', $template);
+            $template = preg_replace('#endforTR#', 'endfor', $template);
+            
+            $template = preg_replace('#‘|’#','\'',$template);
+            $template = preg_replace('#\n#','<br>',$template);
+            
+            return new \Symfony\Component\HttpFoundation\Response($this->get('twig')->render($template, array('etude'=> $data['etude'], 'etudiant' => $data['etudiant']))); 
             }
          }
         
