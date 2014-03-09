@@ -67,7 +67,7 @@ class PosteController extends Controller
         $entity = $em->getRepository('mgatePersonneBundle:Poste')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Poste entity.');
+            throw $this->createNotFoundException('Le poste demandé n\'existe pas !');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
@@ -85,7 +85,7 @@ class PosteController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
-            throw $this->createNotFoundException('Poste [id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Le poste demandé n\'existe pas !');
 
         // On passe l'$article récupéré au formulaire
         $form        = $this->createForm(new PosteType, $poste);
@@ -125,7 +125,7 @@ class PosteController extends Controller
             $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->find($id) )
-                throw $this->createNotFoundException('Poste[id='.$id.'] inexistant');
+                throw $this->createNotFoundException('Le poste demandé n\'existe pas !');
             
             foreach($entity->getMembres() as $membre)
                     $membre->setPoste(null);

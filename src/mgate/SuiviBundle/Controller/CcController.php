@@ -35,10 +35,10 @@ class CcController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Cc')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Cc')->find($id); 
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cc entity.');
+            throw $this->createNotFoundException('La CC n\'existe pas !');
         }
 		
 		$etude = $entity->getEtude();
@@ -62,9 +62,7 @@ class CcController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-        {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
-        }
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');

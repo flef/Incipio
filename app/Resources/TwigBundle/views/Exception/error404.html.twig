@@ -8,9 +8,8 @@
       <h3 class="panel-title">Oups! Une erreur est survenue</h3>
     </div>
     <div class="panel-body">
-      {{ status_code }} {{ status_text }}<br>
-      Tu peux m'envoyer un petit rapport de bug à support@incipio.fr<br>
-      Expliques bien le contexte, des petites images et tout et tout :D
+        <code>{{ status_code }} {{ status_text }}</code>
+        <p>{{ exception.message }}</p>
     </div>
 </div>
 {% endblock %}

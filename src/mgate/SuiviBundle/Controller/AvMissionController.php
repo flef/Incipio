@@ -68,7 +68,7 @@ class AvMissionController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:AvMission')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:AvMission')->find($id); 
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find AvMission entity.');

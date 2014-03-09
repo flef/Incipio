@@ -71,7 +71,7 @@ class ProspectController extends Controller
         $entity = $em->getRepository('mgatePersonneBundle:Prospect')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('Le prospect demandé n\'existe pas !');
         }
         
         $mailing ="";
@@ -101,7 +101,7 @@ class ProspectController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
-            throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Le prospect demandé n\'existe pas!');
 
 
         // On passe l'$article récupéré au formulaire
@@ -173,7 +173,7 @@ class ProspectController extends Controller
             $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($id) )
-                throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
+                throw $this->createNotFoundException('Le prospect demandé n\'existe pas!');
             
             /*if($entity->getPersonne())
             {

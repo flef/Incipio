@@ -132,10 +132,10 @@ class AvController extends Controller {
     public function voirAction($id) {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('mgateSuiviBundle:Av')->find($id); // Ligne qui posse problème
+        $entity = $em->getRepository('mgateSuiviBundle:Av')->find($id); 
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cc entity.');
+            throw $this->createNotFoundException('La Convention Cliente n\'existe pas !');
         }
 		
 		$etude = $entity->getEtude();
@@ -209,13 +209,13 @@ class AvController extends Controller {
 
         if ($idEtude) {
             if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($idEtude))
-                throw $this->createNotFoundException('Unable to find Etude entity.');
+                throw $this->createNotFoundException('L\'étude n\'existe pas !');
             $av = new Av;
             $av->setEtude($etude);
             $etude->addAv($av);
         }
         else if (!$av = $em->getRepository('mgate\SuiviBundle\Entity\Av')->find($id))
-            throw $this->createNotFoundException('Unable to find Av entity.');
+            throw $this->createNotFoundException('L\'avenant n\'existe pas !');
 
 		
 		$etude = $av->getEtude();
