@@ -39,7 +39,7 @@ class ClientContactController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 
         if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
@@ -74,9 +74,8 @@ class ClientContactController extends Controller
 
         $contactClient = $em->getRepository('mgateSuiviBundle:ClientContact')->find($id);
 
-        if (!$contactClient) {
-            throw $this->createNotFoundException('Unable to find ClientContact entity.');
-        }
+        if (!$contactClient)
+            throw $this->createNotFoundException('Ce Contact Client n\'existe pas !');
 		
 		$etude = $contactClient->getEtude();
 		
@@ -104,7 +103,7 @@ class ClientContactController extends Controller
 
         if( ! $clientcontact = $em->getRepository('mgate\SuiviBundle\Entity\ClientContact')->find($id) )
         {
-            throw $this->createNotFoundException('ClientContact[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Ce Contact Client n\'existe pas !');
         }
 		
 		$etude = $clientcontact->getEtude();

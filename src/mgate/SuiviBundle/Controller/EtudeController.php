@@ -98,7 +98,7 @@ class EtudeController extends Controller {
         $etudeID = isset($_POST['etude']) ? intval($_POST['etude']) : 0;
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($etudeID)) {
-            throw $this->createNotFoundException('Etude[id=' . $etudeID . '] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
         } else {
 
             $etude->setStateDescription($stateDescription);
@@ -157,7 +157,7 @@ class EtudeController extends Controller {
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($numero);
 
         if (!$etude)
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
@@ -183,7 +183,7 @@ class EtudeController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
-            throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 			
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
@@ -222,7 +222,7 @@ class EtudeController extends Controller {
             $em = $this->getDoctrine()->getManager();
 
             if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
-                throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
+                throw $this->createNotFoundException('L\'étude n\'existe pas !');
 				
 			if($this->get('mgate.etude_manager')->confidentielRefus($entity, $this->container->get('security.context')))
 				throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
@@ -244,7 +244,7 @@ class EtudeController extends Controller {
     private function createDeleteForm($numero) {
         $em = $this->getDoctrine()->getManager();
          if (!$entity = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->findByNumero($numero))
-                throw $this->createNotFoundException('Etude[id=' . $numero . '] inexistant');
+                throw $this->createNotFoundException('L\'étude n\'existe pas !');
          else
              $id = $entity->getId();
         return $this->createFormBuilder(array('id' => $id))
@@ -363,7 +363,7 @@ class EtudeController extends Controller {
      */
     public function suiviUpdateAction($id) {
         $em = $this->getDoctrine()->getManager();
-        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); 
 
         if (!$etude)
             throw $this->createNotFoundException('Unable to find Etude entity.');

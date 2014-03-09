@@ -39,7 +39,7 @@ class MissionController extends Controller {
 
         $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id);
             if (!$etude) {
-                throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+                throw $this->createNotFoundException('L\'Ã©tude n\'existe pas !');
             } else {
                 $etude->getMissions()->get($intervenant)->setAvancement($avancement);
                 $em->persist($etude->getMissions()->get($intervenant));
@@ -57,13 +57,13 @@ class MissionController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         if (!$mission = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($id)) {
-            throw $this->createNotFoundException('Mission[id=' . $id . '] inexistant');
+            throw $this->createNotFoundException('La mission n\'existe pas !');
         }
 		
 		$etude = $mission->getEtude();
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
-			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette ï¿½tude est confidentielle');
 
         $form = $this->createForm(new MissionType, $mission);
 

@@ -62,7 +62,7 @@ class ProcesVerbalController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) ) {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
         }
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
@@ -98,7 +98,7 @@ class ProcesVerbalController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $procesverbal = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
-            throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
+            throw $this->createNotFoundException('Le Procès Verbal n\'existe pas !');
 			
 		$etude = $procesverbal->getEtude();
 		
@@ -139,7 +139,7 @@ class ProcesVerbalController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id_etude) )
-            throw $this->createNotFoundException('Etude[id='.$id_etude.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
@@ -192,7 +192,7 @@ class ProcesVerbalController extends Controller
             $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($id_pv) )
-                throw $this->createNotFoundException('ProcesVerbal[id='.$id_pv.'] inexistant');
+                throw $this->createNotFoundException('Le Procès Verbal n\'existe pas !');
 				
 			$etude = $entity->getEtude();
 		

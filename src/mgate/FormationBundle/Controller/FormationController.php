@@ -43,7 +43,7 @@ class FormationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
-            throw $this->createNotFoundException('La formation n\'existe pas !');
+            throw $this->createNotFoundException('La formation demandée n\'existe pas !');
       
         return $this->render('mgateFormationBundle:Formations:voir.html.twig', array(
             'formation' => $formation,
@@ -89,7 +89,7 @@ class FormationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if( ! $formation = $em->getRepository('mgate\FormationBundle\Entity\Formation')->find($id) )
-            throw $this->createNotFoundException('La formation n\'existe pas !');
+            throw $this->createNotFoundException('La formation demandée n\'existe pas !');
 
         $em->remove($formation);                
         $em->flush();

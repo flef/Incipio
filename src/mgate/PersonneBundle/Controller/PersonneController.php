@@ -77,7 +77,7 @@ class PersonneController extends Controller {
         $em = $this->getDoctrine()->getManager();
    
            if( ! $entity = $em->getRepository('mgate\PersonneBundle\Entity\Personne')->find($id) )
-                throw $this->createNotFoundException('Prospect[id='.$id.'] inexistant');
+                throw $this->createNotFoundException('La personne demandée n\'existe pas !');
             
             $em->remove($entity);
             $em->flush();

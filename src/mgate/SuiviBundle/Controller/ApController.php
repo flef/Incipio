@@ -41,10 +41,10 @@ class ApController extends Controller {
         // en fait y a 2 fonction voir
         // une pour voir le suivi
         // et une pour voir la redaction
-        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); // Ligne qui posse problème
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->find($id); 
         $entity = $etude->getAp();
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Ap entity.');
+            throw $this->createNotFoundException('L\'Avant-Projet demandé n\'existe pas !');
         }
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
@@ -64,7 +64,7 @@ class ApController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
-            throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+            throw $this->createNotFoundException('L\'étude demandée n\'existe pas!');
         }
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
@@ -105,7 +105,7 @@ class ApController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         if (!$etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id)) {
-            throw $this->createNotFoundException('Etude[id=' . $id . '] inexistant');
+            throw $this->createNotFoundException('L\'étude demandée n\'existe pas!');
         }
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))

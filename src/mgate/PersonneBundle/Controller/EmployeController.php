@@ -22,7 +22,7 @@ class EmployeController extends Controller
         // On vérifie que le prospect existe bien
         if( ! $prospect = $em->getRepository('mgate\PersonneBundle\Entity\Prospect')->find($prospect_id) )
         {
-            throw $this->createNotFoundException('Prospect[id='.$prospect_id.'] inexistant');
+            throw $this->createNotFoundException('Ce prospect n\'existe pas');
         }
         
         
@@ -79,7 +79,7 @@ class EmployeController extends Controller
         $entity = $em->getRepository('mgatePersonneBundle:Employe')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Employe entity.');
+            throw $this->createNotFoundException('L\'employé demandé n\'existe pas');
         }
 
         //$deleteForm = $this->createDeleteForm($id);
@@ -98,7 +98,7 @@ class EmployeController extends Controller
 
         if( ! $employe = $em->getRepository('mgate\PersonneBundle\Entity\Employe')->find($id) )
         {
-            throw $this->createNotFoundException('Employe [id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'employé demandé n\'existe pas');
         }
 
         // On passe l'$article récupéré au formulaire

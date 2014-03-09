@@ -79,7 +79,7 @@ class MembreController extends Controller {
         $entity = $em->getRepository('mgatePersonneBundle:Membre')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Membre entity.');
+            throw $this->createNotFoundException('Le membre demandé n\'existe pas !');
         }
         
         $path =  $entity->getPromotion() .'/' . 
@@ -236,7 +236,7 @@ class MembreController extends Controller {
             $em = $this->getDoctrine()->getManager();
 
             if (!$entity = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id))
-                throw $this->createNotFoundException('Membre[id=' . $id . '] inexistant');
+                throw $this->createNotFoundException('Le membre demandé n\'existe pas !');
 
             if ($entity->getPersonne()) {
                 $entity->getPersonne()->setMembre(null);

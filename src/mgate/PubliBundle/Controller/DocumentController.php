@@ -39,10 +39,10 @@ class DocumentController extends Controller
         $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($numero);
 
         if (!$etude)
-            throw $this->createNotFoundException('Unable to find Etude entity.');
+            throw $this->createNotFoundException('Le document ne peut être lié à une étude qui n\'existe pas!');
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
-			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle !');
         
         $options['etude'] = $etude;
         
@@ -126,7 +126,7 @@ class DocumentController extends Controller
                 $junior = $this->container->getParameter('junior');
                 $totalSize = $document->getSize() + $em->getRepository('mgatePubliBundle:Document')->getTotalSize();
                 if($totalSize > $junior['authorizedStorageSize'])
-                    throw new \Symfony\Component\HttpFoundation\File\Exception\UploadException('Vous n\'avez plus d\'espace disponible !');
+                    throw new \Symfony\Component\HttpFoundation\File\Exception\UploadException('Vous n\'avez plus d\'espace disponible ! Vous pouvez en demander plus à contact@incipio.fr.');
                      
                 
                 $user = $this->get('security.context')->getToken()->getUser();

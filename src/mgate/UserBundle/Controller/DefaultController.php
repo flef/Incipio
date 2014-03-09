@@ -37,9 +37,9 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('mgateUserBundle:User')->find($id); // Ligne qui posse problème
+        $user = $em->getRepository('mgateUserBundle:User')->find($id); 
         if (!$user) {
-            throw $this->createNotFoundException('Unable to find User entity.');
+            throw $this->createNotFoundException('L\'utilisateur n\'existe pas !');
         }
         
         return $this->render('mgateUserBundle:Default:voir.html.twig', array('user' => $user));
@@ -52,12 +52,15 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $user = $em->getRepository('mgateUserBundle:User')->find($id); // Ligne qui posse problème
-        if (!$user) {
-            throw $this->createNotFoundException('Unable to find User entity.');
-        }
+        $user = $em->getRepository('mgateUserBundle:User')->find($id);
+        if (!$user)
+            throw $this->createNotFoundException('L\'utilisateur n\'existe pas !');
         
-        $form = $this->createForm(new UserAdminType('mgate\UserBundle\Entity\User'), $user);
+        if($user->getId() == 1)
+            throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Impossible de modifier le Super Administrateur. Contactez support@incipio.fr pour toute modification.');
+
+
+            $form = $this->createForm(new UserAdminType('mgate\UserBundle\Entity\User'), $user);
         $deleteForm = $this->createDeleteForm($id);
         if( $this->get('request')->getMethod() == 'POST' )
         {
@@ -100,7 +103,11 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
    
             if( ! $entity = $em->getRepository('mgate\UserBundle\Entity\User')->find($id) )
-                throw $this->createNotFoundException('User[id='.$id.'] inexistant');
+                throw $this->createNotFoundException('L\'utilisateur n\'existe pas !');
+            
+            if($entity->getId() == 1)
+                throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Impossible de supprimer le Super Administrateur. Contactez support@incipio.fr pour toute modification.');
+
             
             if($entity->getPersonne())
                 $entity->getPersonne()->setUser(null);

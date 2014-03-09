@@ -47,7 +47,7 @@ class SuiviController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
-            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 
         
         
@@ -91,7 +91,7 @@ class SuiviController extends Controller
         $suivi = $em->getRepository('mgateSuiviBundle:Suivi')->find($id);
 
         if (!$suivi) {
-            throw $this->createNotFoundException('Unable to find Suivi entity.');
+            throw $this->createNotFoundException('Ce suivi n\'existe pas !');
         }
 
         $etude = $suivi->getEtude();
@@ -115,7 +115,7 @@ class SuiviController extends Controller
 
         if( ! $suivi = $em->getRepository('mgate\SuiviBundle\Entity\Suivi')->find($id) )
         {
-            throw $this->createNotFoundException('Suivi[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('Ce suivi n\'existe pas !');
         }
 
         $form        = $this->createForm(new SuiviType, $suivi);

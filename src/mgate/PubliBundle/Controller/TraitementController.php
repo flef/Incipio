@@ -23,36 +23,36 @@ class TraitementController extends Controller {
         switch ($rootName) {
             case 'etude':
                 if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 if($this->get('mgate.etude_manager')->confidentielRefus($rootObject, $this->container->get('security.context')))
                     throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
                 break;
             case 'etudiant':
                 if (!$rootObject = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 break;
             case 'mission':
                 if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 break;
             case 'facture':
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\Facture')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 if($rootObject->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->container->get('security.context')))
                     throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
                 break;
             case 'nf':
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\NoteDeFrais')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 break;
             case 'bv':
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\BV')->find($rootObject_id))
-                    throw $this->createNotFoundException('Entity[id=' . $rootObject_id. '] inexistant');
+                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
                 if($rootObject->getMission() && $rootObject->getMission()->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getMission()->getEtude(), $this->container->get('security.context')))
                     throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
                 break;
             default:
-                throw $this->createNotFoundException('Publipostage invalid ! Pas de bol...');
+                throw $this->createNotFoundException('Publipostage invalide ! Pas de bol...');
                 break;
         }
 

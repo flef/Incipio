@@ -39,7 +39,7 @@ class PhasesController extends Controller
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id) )
         {
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
         }
 		
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))

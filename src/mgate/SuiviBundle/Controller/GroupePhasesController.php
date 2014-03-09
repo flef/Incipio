@@ -25,7 +25,7 @@ class GroupePhasesController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if( ! $etude = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($id))
-            throw $this->createNotFoundException('Etude[id='.$id.'] inexistant');
+            throw $this->createNotFoundException('L\'étude n\'existe pas !');
 			
 		if($this->get('mgate.etude_manager')->confidentielRefus($etude, $this->container->get('security.context')))
 			throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
