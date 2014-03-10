@@ -16,7 +16,7 @@ class BVType extends AbstractType {
             ->add('nombreJEH', 'integer')
             ->add('remunerationBruteParJEH', 'money')
             ->add('dateDeVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
-            ->add('dateDemission', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>true, 'widget'=>'single_text'))
+            ->add('dateDemission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
             ->add('typeDeTravail', 'text')            
             ->add('mission','genemu_jqueryselect2_entity',array (
                       'label' => 'Mission',

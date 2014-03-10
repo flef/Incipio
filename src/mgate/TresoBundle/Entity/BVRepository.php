@@ -28,4 +28,18 @@ class BVRepository extends EntityRepository
         }        
         return $bvsParMandat;
     }
+    
+    /**
+     * Renvoie les bv d'un mois concerné
+     * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle)
+     * @return array
+     */
+    public function findAllByMonth($month, $year) {
+        $qb = $this->_em->createQueryBuilder();
+        $query = $qb->select('b')
+                     ->from('mgateTresoBundle:BV', 'b')
+                     ->where("MONTH(b.dateDeVersement) = $month")
+                     ->andWhere("YEAR(b.dateDeVersement) = $year");
+        return $query->getQuery()->getResult();
+    }
 }

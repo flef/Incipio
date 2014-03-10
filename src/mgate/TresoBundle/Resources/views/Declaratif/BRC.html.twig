@@ -18,97 +18,30 @@
 </form>        
         
 <br>
+<h4 title="Nombre d’intervenants différents ayant reçu au moins un JEH via un Bulletin de Versement sur la période">
+    Nombre de salariés ou d’assurés rémunérés dans l’établissement concernés par la déclaration pour la période : {{ nbSalarieRemunere }}
+</h4>
+<h4 title="Nombre d’intervenants différents ayant au moins un RM en cours à la fin de la période">
+    Nombre de salariés concernés par la déclaration au dernier jour de la période
+</h4>
 <table class="table table-bordered table-striped">
     <tr>
-        <td colspan="{{ tvas | length +4}}"><h3>TVA Collectée</h3></td>
+        <th>Référence du BV</th>
+        <th>Etudiant</th>
+        <th>Montant des Cotisations</th>
     </tr>
+    {% set totalCotisation = 0 %}
+    {% for bv in bvs %}
+    {% set totalCotisation = totalCotisation + bv.partJunior %}
     <tr>
-        <th>Libellé</th>
-        <th>Montant HT</th>
-        {% for tva in tvas %}
-        <th>{{ tva }} %</th>
-        {% endfor %}
-        <th>TVA</th>
-        <th>Montant TTC</th>
-    </tr>
-    {% for line in tvaCollectee %}
-    <tr style="text-align: right;">
-        <td>{{ line['LI']}}</td>        
-        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
-        {% for tva in tvas %}
-        <td>
-            {% if tva in  line['TVAT']|keys %}
-                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
-            {%else%}
-                - €                
-            {% endif %}
-        </td>
-        {% endfor %}
-        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
-        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
+        <td>{{ bv.reference }}</td>
+        <td>{{ bv.mission.intervenant.personne.prenomNom }}</td>
+        <td>{{ bv.partJunior }}</td>
     </tr>
     {% endfor %}
-    <tr style="text-align: right;">
-        <th>Total</th>
-        <td>{{ totalTvaCollectee['HT'] |number_format(2, ',', ' ')}} €</td>
-        {% for tva in tvas %}
-        <td>
-            {% if tva in  totalTvaCollectee |keys %}
-                {{totalTvaCollectee[tva] |number_format(2, ',', ' ')}} €
-            {%else%}
-                - €                
-            {% endif %}
-        </td>
-        {% endfor %}
-        <td>{{ totalTvaCollectee['TVA'] |number_format(2, ',', ' ')}} €</td>
-        <td>{{ totalTvaCollectee['TTC'] |number_format(2, ',', ' ')}} €</td>
-    </tr>
-</table>
-
-<table class="table table-bordered table-striped">
     <tr>
-        <td colspan="{{ tvas | length +4}}"><h3>TVA Deductible</h3></td>
-    </tr>
-    <tr>
-        <th>Libellé</th>
-        <th>Montant HT</th>
-        {% for tva in tvas %}
-        <th>{{ tva }} %</th>
-        {% endfor %}
-        <th>TVA</th>
-        <th>Montant TTC</th>
-    </tr>
-    {% for line in tvaDeductible %}
-    <tr style="text-align: right;">
-        <td>{{ line['LI']}}</td>        
-        <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
-        {% for tva in tvas %}
-        <td>
-            {% if tva in  line['TVAT']|keys %}
-                {{line['TVAT'][tva] |number_format(2, ',', ' ')}} €
-            {%else%}
-                - €                
-            {% endif %}
-        </td>
-        {% endfor %}
-        <td>{{ line['TVA']  |number_format(2, ',', ' ')}} €</td>
-        <td>{{ line['TTC'] |number_format(2, ',', ' ')}} €</td>
-    </tr>
-    {% endfor %}
-    <tr style="text-align: right;">
-        <th>Total</th>
-        <td>{{ totalTvaDeductible['HT'] |number_format(2, ',', ' ')}} €</td>
-        {% for tva in tvas %}
-        <td>
-            {% if tva in  totalTvaDeductible |keys %}
-                {{ totalTvaDeductible[tva] |number_format(2, ',', ' ')}} €
-            {%else%}
-                - €                
-            {% endif %}
-        </td>
-        {% endfor %}
-        <td>{{  totalTvaDeductible['TVA'] |number_format(2, ',', ' ')}} €</td>
-        <td>{{  totalTvaDeductible['TTC'] |number_format(2, ',', ' ')}} €</td>
+        <th colspan="2">Total</th>
+        <th>{{ totalCotisation }}</th>
     </tr>
 </table>
 {% endblock %}

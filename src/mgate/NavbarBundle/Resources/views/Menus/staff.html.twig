@@ -1,3 +1,12 @@
+<style>
+.dropdown-menu > li > ul{
+    padding: 3px 20px;
+    margin: 0 !important;
+    text-align: right !important;
+    min-width: 300px;
+}
+</style>
+
 <ul class="nav navbar-nav pull-left">
 
 <!-- GESTION ASSOCIATIVE -->
@@ -22,7 +31,7 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formations <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li class="dropdown-header">Formations</li>
-            <li><a href="{{ path('mgate_formations_lister') }}"><span class="glyphicon glyphicon-briefcase"></span> Voir les formations</a></li>
+            <li><a href="{{ path('mgate_formations_lister') }}"><span class="glyphicon glyphicon-paperclip"></span> Voir les formations</a></li>
             {% if is_granted('ROLE_CA') %}
             <li class="divider"></li>
             <li class="dropdown-header">Administration</li>
@@ -56,7 +65,7 @@
             <li class="dropdown-header">Administration</li>
             <li><a href="{{ path('mgateSuivi_clientcontact_index') }}"><span class="glyphicon glyphicon-envelope"></span> Contacts Client</a></li>
             <li><a href="{{ path('mgateSuivi_vu_ca') }}"><span class="glyphicon glyphicon-eye-open"></span> Vu CA</a></li>
-            <li><a href="{{ path('mgateSuivi_etude_suivi') }}"><span class="glyphicon glyphicon-calendar"></span> Récapitulatif</a></li>
+            <!--li><a href="{#{ path('mgateSuivi_etude_suivi') }#}"><span class="glyphicon glyphicon-tasks"></span> Récapitulatif</a></li-->
             {% endif %}
         </ul>
     </li>
@@ -66,25 +75,43 @@
     {% if is_granted('ROLE_CA') %}
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Trésorerie<b class="caret"></b></a>
-        <ul class="dropdown-menu">
-            <li class="dropdown-header">Outils</li>
-            <li><a href="{{ path('mgate_treso_urssaf') }}"><span class="glyphicon glyphicon-info-sign"></span> URSSAF</a></li>
+        <ul class="dropdown-menu">            
+            <li class="dropdown-header">Saisie des informations</li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">Factures</span>
+                    <li><a href="{{ path('mgateTreso_Facture_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_Facture_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">BVs</span>
+                    <li><a href="{{ path('mgateTreso_BV_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_BV_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">NFs</span>
+                    <li><a href="{{ path('mgateTreso_NoteDeFrais_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_NoteDeFrais_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
             <li class="divider"></li>
-            <li class="dropdown-header">Factures</li>
-            <li><a href="{{ path('mgateTreso_Facture_index') }}"><span class="glyphicon glyphicon-list"></span> Lister les Factures</a></li>
-            <li><a href="{{ path('mgateTreso_Facture_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter une Factures</a></li>
+            <li class="dropdown-header">Tableaux de Suivi</li>
+            <li><a href="{{ path('mgateTreso_Declaratif_TVA') }}"><span class="glyphicon glyphicon-barcode"></span> Déclaratif TVA</a></li>
+            <li><a href="{{ path('mgateTreso_Compte_index') }}"><span class="glyphicon glyphicon-qrcode"></span> Bordereau Récapitulatif des Cotisations</a></li>
             <li class="divider"></li>
-            <li class="dropdown-header">Bulletins de Versement</li>
-            <li><a href="{{ path('mgateTreso_BV_index') }}"><span class="glyphicon glyphicon-list"></span> Lister les BVs</a></li>
-            <li><a href="{{ path('mgateTreso_BV_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un BV</a></li>
-            <li class="divider"></li>
-            <li class="dropdown-header">Notes de Frais</li>
-            <li><a href="{{ path('mgateTreso_NoteDeFrais_index') }}"><span class="glyphicon glyphicon-list"></span> Lister les Notes de Frais</a></li>
-            <li><a href="{{ path('mgateTreso_NoteDeFrais_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter une Note de Frais</a></li>
-            <li class="divider"></li>
-            <li class="dropdown-header">Comptes Comptable</li>
-            <li><a href="{{ path('mgateTreso_Compte_index') }}"><span class="glyphicon glyphicon-list"></span> Lister les Comptes</a></li>
-            <li><a href="{{ path('mgateTreso_Compte_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter un Compte</a></li>
+            <li class="dropdown-header">Administration</li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">Comptes</span>
+                    <li><a href="{{ path('mgateTreso_Compte_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_Compte_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
+            
         </ul>
     </li>
     {% endif %}
@@ -122,7 +149,7 @@
     <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration<b class="caret"></b></a>
         <ul class="dropdown-menu">
-            <li><a href="{{ path('mgate_publi_documenttype_index') }}"><span class="glyphicon glyphicon-wrench"></span> Gestion des Doctypes</a></li>
+            <li><a href="{{ path('mgate_publi_documenttype_index') }}"><span class="glyphicon glyphicon-file"></span> Gestion des Documents</a></li>
             <li class="divider"></li>
             <li class="dropdown-header">Postes</li>
             <li><a href="{{ path('mgatePersonne_poste_homepage') }}"><span class="glyphicon glyphicon-list"></span> Lister les postes</a></li>

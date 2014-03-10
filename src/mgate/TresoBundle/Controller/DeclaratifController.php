@@ -173,9 +173,18 @@ class DeclaratifController extends Controller
             $month = $date->format('m');
             $year = $date->format('Y');
         }
-
+        
+        $bvs = $em->getRepository('mgateTresoBundle:BV')->findAllByMonth($month, $year);
+        
+        $salarieRemunere = array();
+        foreach ($bvs as $bv){
+            $id = $bv->getMission()->getIntervenant()->getIdentifiant();
+            $salarieRemunere[$id] = 1;
+        }
+        $nbSalarieRemunere = count($salarieRemunere);
+        
         return $this->render('mgateTresoBundle:Declaratif:BRC.html.twig', 
-            array('form' => $form->createView(),)
+            array('form' => $form->createView(), 'bvs' => $bvs, 'nbSalarieRemunere' => $nbSalarieRemunere)
             );
     }
 }
