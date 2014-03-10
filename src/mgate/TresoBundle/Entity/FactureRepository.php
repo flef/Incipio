@@ -27,6 +27,6 @@ class FactureRepository extends EntityRepository
                      ->andWhere("YEAR(f.$date) = $year");    
                   
                     
-        return $query->getQuery()->getResult();;
+        return $query->getQuery()->getResult();
     }
 }
