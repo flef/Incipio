@@ -34,9 +34,9 @@ class DocumentController extends Controller
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function uploadEtudeAction($numero){
+    public function uploadEtudeAction($etude_id){
         $em = $this->getDoctrine()->getManager();
-        $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($numero);
+        $etude = $em->getRepository('mgateSuiviBundle:Etude')->findByNumero($etude_id);
 
         if (!$etude)
             throw $this->createNotFoundException('Le document ne peut être lié à une étude qui n\'existe pas!');
@@ -49,14 +49,25 @@ class DocumentController extends Controller
         if(!$response = $this->upload(false, $options))// Si tout est ok
             return $this->redirect($this->generateUrl('mgateSuivi_etude_voir', array('numero' => $etude->getNumero())));
         else
-            return $response;      
-        
+            return $response;
     }
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
      */
-    public function uploadEtudiantAction($id){
+    public function uploadEtudiantAction($membre_id){
+        $em = $this->getDoctrine()->getManager();
+        $membre = $em->getRepository('mgatePersonneBundle:Membre')->find($membre_id);
+
+        if (!$membre)
+            throw $this->createNotFoundException('Le document ne peut être lié à un membre qui n\'existe pas!');		
+        
+        $options['etudiant'] = $membre;
+        
+        if(!$response = $this->upload(false, $options))// Si tout est ok
+            return $this->redirect($this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre_id)));
+        else
+            return $response;
         
     }   
     
@@ -108,6 +119,8 @@ class DocumentController extends Controller
             $document->setRelation($relatedDocument);
             if(key_exists('etude', $options))
                 $relatedDocument->setEtude($options['etude']);
+            if(key_exists('etudiant', $options))
+                $relatedDocument->setMembre($options['etudiant']);
             
         }
         

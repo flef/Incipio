@@ -23,16 +23,16 @@ mgate_publi_documenttype_index:
     defaults: {_controller: mgatePubliBundle:Document:index}
 
 mgate_publi_document_uploadEtude:
-    pattern: /Documents/Upload/Etude/{numero}
+    pattern: /Documents/Upload/Etude/{etude_id}
     defaults: {_controller: mgatePubliBundle:Document:uploadEtude}
     requirements:
-        numero:  \d+
+        etude_id:  \d+
         
 mgate_publi_document_uploadEtudiant:
-    pattern: /Documents/Upload/Etudiant/{id}
+    pattern: /Documents/Upload/Etudiant/{membre_id}
     defaults: {_controller: mgatePubliBundle:Document:uploadEtudiant}
     requirements:
-        id:  \d+
+        membre_id:  \d+
 
 mgate_publi_document_uploadFormation:
     pattern: /Documents/Upload/Formation/{id}

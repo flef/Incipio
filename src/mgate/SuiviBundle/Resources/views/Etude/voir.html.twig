@@ -12,8 +12,8 @@ Affichage d'une étude - {{ parent() }}
         <li><a href="#tab3" data-toggle="tab">Rédaction et Génération</a></li>
         {% if is_granted('ROLE_CA') %}
         <li><a href="#tab4" data-toggle="tab">Suivi</a></li>
-        <li><a href="#tab5" data-toggle="tab">Documents</a></li>
         {%endif%}
+        <li><a href="#tab5" data-toggle="tab">Documents</a></li>        
     </ul>
     <div class="tab-content">
     <!-- ERRORS -->

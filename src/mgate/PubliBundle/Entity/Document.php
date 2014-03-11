@@ -45,7 +45,7 @@ class Document
     
     /**
      * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Personne", cascade={"persist"})
-     * @ORM\JoinColumn(name="personne_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="author_personne_id", referencedColumnName="id", nullable=true)
      */
     private $author;
 
