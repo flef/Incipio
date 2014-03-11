@@ -36,14 +36,11 @@ class RelatedDocumentType extends AbstractType {
                     'label' => 'Document lié à la formation',
                     'configs' => array('placeholder' => 'Sélectionnez une formation', 'allowClear' => true)
                 ));
-        if($options['etudiant'])
-        $builder->add('etudiant', 'genemu_jqueryselect2_entity', array(
+        if($options['etudiant'] || $options['etude'])
+        $builder->add('membre', 'genemu_jqueryselect2_entity', array(
                     'label' => 'Document lié à l\'étudiant',
-                    'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
-                    'property' => 'prenomNom',
-                    'query_builder' => function(PersonneRepository $pr) {
-                        return $pr->getMembreOnly();
-                    },
+                    'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
+                    'property' => 'personne.prenomNom',
                     'required' => false,
                     'configs' => array('placeholder' => 'Sélectionnez un étudiant', 'allowClear' => true)))
         ;

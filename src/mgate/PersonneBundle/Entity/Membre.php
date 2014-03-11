@@ -89,6 +89,11 @@ class Membre {
      */
     private $nationalite;
     
+    /**
+     * @ORM\OneToMany(targetEntity="mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"})
+     */
+    private $relatedDocuments;
+    
     private function enMinusculeSansAccent($texte){
     $texte = mb_strtolower($texte, 'UTF-8');
     $texte = str_replace(
@@ -195,7 +200,6 @@ class Membre {
      */
     public function setPoste(\mgate\PersonneBundle\Entity\Poste $poste = null) {
         $this->poste = $poste;
-
         return $this;
     }
 
@@ -214,6 +218,7 @@ class Membre {
     public function __construct() {
         $this->mandats = new \Doctrine\Common\Collections\ArrayCollection();
         $this->missions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->relatedDocuments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -431,5 +436,38 @@ class Membre {
     public function getMissions()
     {
         return $this->missions;
+    }
+
+    /**
+     * Add relatedDocuments
+     *
+     * @param \mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments
+     * @return Membre
+     */
+    public function addRelatedDocument(\mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments[] = $relatedDocuments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove relatedDocuments
+     *
+     * @param \mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments
+     */
+    public function removeRelatedDocument(\mgate\PubliBundle\Entity\RelatedDocument $relatedDocuments)
+    {
+        $this->relatedDocuments->removeElement($relatedDocuments);
+    }
+
+    /**
+     * Get relatedDocuments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRelatedDocuments()
+    {
+        return $this->relatedDocuments;
     }
 }

@@ -5,68 +5,22 @@ Affichage d'un Membre - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
-<div style="max-width: 800px;">
-    <table class="table table-bordered table-striped">
-        <tr>
-            <td rowspan="4" colspan="2" style="text-align: center;">
-                <img class="img-thumbnail" style="height: 200px" src="{{ asset(pictureURL) }}"/>
-            </td>
-            <th colspan="2"><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'FM', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">FM</a>
-                <a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'CE', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">CE</a>
-                <a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'AC', 'rootName' : 'etudiant', 'rootObject_id' : membre.id}) }}">AC</a> Informations</th>
-        </tr>
-        <tr>
-            <td colspan="2"><h4>{{ membre.personne.nomformel }}</h4></td>
-        </tr>
-        <tr>
-            <td><i class="glyphicon glyphicon-book"></i> P{{ membre.promotion }}</td>
-            <td><i class="glyphicon glyphicon-barcode"></i> Identifiant : {{ membre.identifiant }}</td>
-        </tr>
-        <tr>
-            <td><span class="badge badge-{{ membre.personne.estAbonneNewsletter ? "success" : "warning" }}">{{ membre.personne.estAbonneNewsletter ? "Est" : "N'est pas" }} abonné à la newsletter</span>
-                <br /><span class="badge badge-{{ membre.personne.emailEstValide ? "success" : "error" }}">Email {{ membre.personne.emailEstValide ? "valide" : "plus valide" }}</span></td>
-            <td><span class="badge badge-{{ membre.dateConventionEleve ? "success" : "error" }}">Convention élève {{ membre.dateConventionEleve ? membre.dateConventionEleve | date('d/m/Y') : "Non signée" }}</span></td>
-        </tr>
-        <tr>
-            <td><i class="glyphicon glyphicon-headphones"></i> {{ membre.personne.mobile }}</td>
-            <td colspan="3">
-                <i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ membre.personne.email }}">{{ membre.personne.email }}</a>
-                <br />
-                <i class="glyphicon glyphicon-envelope"></i> <a href="mailto:{{ membre.emailEMSE }}">{{ membre.emailEMSE }}</a>
-            </td>
-        </tr>
-        <tr>
-            <td>Né le : {{ membre.dateDeNaissance ? membre.dateDeNaissance | date("d/m/Y") }}</td>
-            <td>Né à : {{ membre.lieuDeNaissance }}</td>
-			<td colspan="2">Nationalité : {{ membre.nationalite }}</td>
-        </tr>
-        <tr>
-            <td>Chambre</td>
-            <td>{{ membre.appartement }}</td>
-            <td>Adresse</td>
-            <td>{{ membre.personne.adresse }}</td>
-        </tr>
-        <tr>
-            <td colspan="4"><h4>Postes occupés</h4></td>
-        </tr>
-    {% for mandat in membre.mandats %}
-        <tr class="mandats {{ "now"|date('Ymd')  > mandat.finMandat |date('Ymd') ? 'danger' : 'success'}}">
-            <td colspan="2">{{ mandat.poste.intitule }}</td>
-            <td>Du : {{ mandat.debutMandat | date("d/m/Y") }}</td>
-            <td>Au : {{ mandat.finMandat | date("d/m/Y") }}</td>
-        </tr>
-    {% endfor %}
-        <tr>
-            <td colspan="4"><h4>Missions réalisées</h4></td>
-        </tr>
-    {% for mission in membre.missions %}
-        <tr class="mandats {{ "now"|date('Ymd')  > mission.etude.dateFin |date('Ymd') ? 'danger' : 'success'}}">
-            <td colspan="2"><a href="{{path("mgateSuivi_etude_voir", {'numero' : mission.etude.numero})}}" title="{{ mission.etude.nom }}">{{ mission.etude.reference }}</a></td>
-            <td>Du : {{ mission.debutOm ? mission.debutOm  | date("d/m/Y") : "?" }}</td>
-            <td>Au : {{ mission.finOm ? mission.finOm | date("d/m/Y") : "?" }}</td>
-        </tr>
-    {% endfor %}
-    </table>
+
+<div class="tabs-container no-margin">
+    <ul class="nav nav-tabs no-margin" style="font-weight: bold;">
+        <li class="active"><a href="#tab1" data-toggle="tab">Fiche</a></li>
+        <li><a href="#tab2" data-toggle="tab">Documents</a></li>
+    </ul>
+    <div class="tab-content">
+    <!-- FICHE -->
+        <div class="tab-pane active" id="tab1">
+            {% include "mgatePersonneBundle:Membre:TabVoir/fiche.html.twig" with  {'membre':  membre} %}
+        </div>
+    <!-- DOCUMENTS -->
+        <div class="tab-pane" id="tab2">
+            {% include "mgatePersonneBundle:Membre:TabVoir/documents.html.twig" with  {'membre':  membre} %}
+        </div>
+    </div>
 </div>
 <p>
     <a href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">Modifier le membre</a><br />
