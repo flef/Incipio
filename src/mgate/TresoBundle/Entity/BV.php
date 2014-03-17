@@ -73,56 +73,31 @@ class BV
     private $typeDeTravail;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
-     */
-    private $mission;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="baseURSSAF", type="float")
-     */
-    private $baseURSSAF;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="tauxJuniorAssietteDeCotisation", type="float")
-     */
-    private $tauxJuniorAssietteDeCotisation;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="tauxJuniorRemunerationBrute", type="float")
-     */
-    private $tauxJuniorRemunerationBrute;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="tauxEtudiantAssietteDeCotisation", type="float")
-     */
-    private $tauxEtudiantAssietteDeCotisation;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="tauxEtudiantRemunerationBrute", type="float")
-     */
-    private $tauxEtudiantRemunerationBrute;
-
-    
-
-    /**
      * @var string
      *
      * @ORM\Column(name="numeroVirement", type="string", length=255)
      */
     private $numeroVirement;
     
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Mission")
+     */
+    private $mission;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="mgate\TresoBundle\Entity\BaseURSSAF")
+     */
+    private $baseURSSAF;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="mgate\TresoBundle\Entity\BaseURSSAF")
+     */
+    private $CotisationURSSAF;
+
+
+    
     //GETTER ADITION
-    public function getPartJunior(){
+   /* public function getPartJunior(){
         return round($this->nombreJEH  * ($this->baseURSSAF * $this->tauxJuniorAssietteDeCotisation 
             + $this->tauxJuniorRemunerationBrute * $this->remunerationBruteParJEH),2);
     }
@@ -135,10 +110,18 @@ class BV
     }
     public function getRemunerationBrute(){
         return $this->getRemunerationBruteParJEH() * $this->nombreJEH;
-    }
+    }*/
     
     ///////
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->CotisationURSSAF = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
     /**
      * Get id
      *
@@ -147,52 +130,6 @@ class BV
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set dateDeVersement
-     *
-     * @param \DateTime $dateDeVersement
-     * @return BV
-     */
-    public function setDateDeVersement($dateDeVersement)
-    {
-        $this->dateDeVersement = $dateDeVersement;
-    
-        return $this;
-    }
-
-    /**
-     * Get dateDeVersement
-     *
-     * @return \DateTime 
-     */
-    public function getDateDeVersement()
-    {
-        return $this->dateDeVersement;
-    }
-
-    /**
-     * Set typeDeTravail
-     *
-     * @param string $typeDeTravail
-     * @return BV
-     */
-    public function setTypeDeTravail($typeDeTravail)
-    {
-        $this->typeDeTravail = $typeDeTravail;
-    
-        return $this;
-    }
-
-    /**
-     * Get typeDeTravail
-     *
-     * @return string 
-     */
-    public function getTypeDeTravail()
-    {
-        return $this->typeDeTravail;
     }
 
     /**
@@ -242,121 +179,6 @@ class BV
     }
 
     /**
-     * Set baseURSSAF
-     *
-     * @param float $baseURSSAF
-     * @return BV
-     */
-    public function setBaseURSSAF($baseURSSAF)
-    {
-        $this->baseURSSAF = $baseURSSAF;
-    
-        return $this;
-    }
-
-    /**
-     * Get baseURSSAF
-     *
-     * @return float 
-     */
-    public function getBaseURSSAF()
-    {
-        return $this->baseURSSAF;
-    }
-
-    /**
-     * Set tauxJuniorAssietteDeCotisation
-     *
-     * @param float $tauxJuniorAssietteDeCotisation
-     * @return BV
-     */
-    public function setTauxJuniorAssietteDeCotisation($tauxJuniorAssietteDeCotisation)
-    {
-        $this->tauxJuniorAssietteDeCotisation = $tauxJuniorAssietteDeCotisation;
-    
-        return $this;
-    }
-
-    /**
-     * Get tauxJuniorAssietteDeCotisation
-     *
-     * @return float 
-     */
-    public function getTauxJuniorAssietteDeCotisation()
-    {
-        return $this->tauxJuniorAssietteDeCotisation;
-    }
-
-    /**
-     * Set tauxJuniorRemunerationBrute
-     *
-     * @param float $tauxJuniorRemunerationBrute
-     * @return BV
-     */
-    public function setTauxJuniorRemunerationBrute($tauxJuniorRemunerationBrute)
-    {
-        $this->tauxJuniorRemunerationBrute = $tauxJuniorRemunerationBrute;
-    
-        return $this;
-    }
-
-    /**
-     * Get tauxJuniorRemunerationBrute
-     *
-     * @return float 
-     */
-    public function getTauxJuniorRemunerationBrute()
-    {
-        return $this->tauxJuniorRemunerationBrute;
-    }
-
-    /**
-     * Set tauxEtudiantAssietteDeCotisation
-     *
-     * @param float $tauxEtudiantAssietteDeCotisation
-     * @return BV
-     */
-    public function setTauxEtudiantAssietteDeCotisation($tauxEtudiantAssietteDeCotisation)
-    {
-        $this->tauxEtudiantAssietteDeCotisation = $tauxEtudiantAssietteDeCotisation;
-    
-        return $this;
-    }
-
-    /**
-     * Get tauxEtudiantAssietteDeCotisation
-     *
-     * @return float 
-     */
-    public function getTauxEtudiantAssietteDeCotisation()
-    {
-        return $this->tauxEtudiantAssietteDeCotisation;
-    }
-
-    /**
-     * Set tauxEtudiantRemunerationBrute
-     *
-     * @param float $tauxEtudiantRemunerationBrute
-     * @return BV
-     */
-    public function setTauxEtudiantRemunerationBrute($tauxEtudiantRemunerationBrute)
-    {
-        $this->tauxEtudiantRemunerationBrute = $tauxEtudiantRemunerationBrute;
-    
-        return $this;
-    }
-
-    /**
-     * Get tauxEtudiantRemunerationBrute
-     *
-     * @return float 
-     */
-    public function getTauxEtudiantRemunerationBrute()
-    {
-        return $this->tauxEtudiantRemunerationBrute;
-    }
-
-    /**
      * Set nombreJEH
      *
      * @param integer $nombreJEH
@@ -377,29 +199,6 @@ class BV
     public function getNombreJEH()
     {
         return $this->nombreJEH;
-    }
-
-    /**
-     * Set numeroVirement
-     *
-     * @param string $numeroVirement
-     * @return BV
-     */
-    public function setNumeroVirement($numeroVirement)
-    {
-        $this->numeroVirement = $numeroVirement;
-    
-        return $this;
-    }
-
-    /**
-     * Get numeroVirement
-     *
-     * @return string 
-     */
-    public function getNumeroVirement()
-    {
-        return $this->numeroVirement;
     }
 
     /**
@@ -426,26 +225,26 @@ class BV
     }
 
     /**
-     * Set mission
+     * Set dateDeVersement
      *
-     * @param \mgate\SuiviBundle\Entity\Mission $mission
+     * @param \DateTime $dateDeVersement
      * @return BV
      */
-    public function setMission(\mgate\SuiviBundle\Entity\Mission $mission = null)
+    public function setDateDeVersement($dateDeVersement)
     {
-        $this->mission = $mission;
+        $this->dateDeVersement = $dateDeVersement;
     
         return $this;
     }
 
     /**
-     * Get mission
+     * Get dateDeVersement
      *
-     * @return \mgate\SuiviBundle\Entity\Mission 
+     * @return \DateTime 
      */
-    public function getMission()
+    public function getDateDeVersement()
     {
-        return $this->mission;
+        return $this->dateDeVersement;
     }
 
     /**
@@ -469,5 +268,130 @@ class BV
     public function getDateDemission()
     {
         return $this->dateDemission;
+    }
+
+    /**
+     * Set typeDeTravail
+     *
+     * @param string $typeDeTravail
+     * @return BV
+     */
+    public function setTypeDeTravail($typeDeTravail)
+    {
+        $this->typeDeTravail = $typeDeTravail;
+    
+        return $this;
+    }
+
+    /**
+     * Get typeDeTravail
+     *
+     * @return string 
+     */
+    public function getTypeDeTravail()
+    {
+        return $this->typeDeTravail;
+    }
+
+    /**
+     * Set numeroVirement
+     *
+     * @param string $numeroVirement
+     * @return BV
+     */
+    public function setNumeroVirement($numeroVirement)
+    {
+        $this->numeroVirement = $numeroVirement;
+    
+        return $this;
+    }
+
+    /**
+     * Get numeroVirement
+     *
+     * @return string 
+     */
+    public function getNumeroVirement()
+    {
+        return $this->numeroVirement;
+    }
+
+    /**
+     * Set mission
+     *
+     * @param \mgate\SuiviBundle\Entity\Mission $mission
+     * @return BV
+     */
+    public function setMission(\mgate\SuiviBundle\Entity\Mission $mission = null)
+    {
+        $this->mission = $mission;
+    
+        return $this;
+    }
+
+    /**
+     * Get mission
+     *
+     * @return \mgate\SuiviBundle\Entity\Mission 
+     */
+    public function getMission()
+    {
+        return $this->mission;
+    }
+
+    /**
+     * Set baseURSSAF
+     *
+     * @param \mgate\TresoBundle\Entity\BaseURSSAF $baseURSSAF
+     * @return BV
+     */
+    public function setBaseURSSAF(\mgate\TresoBundle\Entity\BaseURSSAF $baseURSSAF = null)
+    {
+        $this->baseURSSAF = $baseURSSAF;
+    
+        return $this;
+    }
+
+    /**
+     * Get baseURSSAF
+     *
+     * @return \mgate\TresoBundle\Entity\BaseURSSAF 
+     */
+    public function getBaseURSSAF()
+    {
+        return $this->baseURSSAF;
+    }
+
+    /**
+     * Add CotisationURSSAF
+     *
+     * @param \mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF
+     * @return BV
+     */
+    public function addCotisationURSSAF(\mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF)
+    {
+        $this->CotisationURSSAF[] = $cotisationURSSAF;
+    
+        return $this;
+    }
+
+    /**
+     * Remove CotisationURSSAF
+     *
+     * @param \mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF
+     */
+    public function removeCotisationURSSAF(\mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF)
+    {
+        $this->CotisationURSSAF->removeElement($cotisationURSSAF);
+    }
+
+    /**
+     * Get CotisationURSSAF
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCotisationURSSAF()
+    {
+        return $this->CotisationURSSAF;
     }
 }
