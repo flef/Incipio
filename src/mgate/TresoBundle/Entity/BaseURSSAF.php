@@ -22,8 +22,8 @@ class BaseURSSAF
     private $id;
 
     /**
-     * @var string
-     *
+     * @var float
+     * 
      * @ORM\Column(name="baseURSSAF", type="decimal", precision=4, scale=2)
      */
     private $baseURSSAF;
@@ -51,29 +51,6 @@ class BaseURSSAF
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set baseURSSAF
-     *
-     * @param string $baseURSSAF
-     * @return BaseURSSAF
-     */
-    public function setBaseURSSAF($baseURSSAF)
-    {
-        $this->baseURSSAF = $baseURSSAF;
-    
-        return $this;
-    }
-
-    /**
-     * Get baseURSSAF
-     *
-     * @return string 
-     */
-    public function getBaseURSSAF()
-    {
-        return $this->baseURSSAF;
     }
 
     /**
@@ -120,5 +97,29 @@ class BaseURSSAF
     public function getDateFin()
     {
         return $this->dateFin;
+    }
+
+
+    /**
+     * Set baseURSSAF
+     *
+     * @param string $baseURSSAF
+     * @return BaseURSSAF
+     */
+    public function setBaseURSSAF($baseURSSAF)
+    {
+        $this->baseURSSAF = $baseURSSAF;
+    
+        return $this;
+    }
+
+    /**
+     * Get baseURSSAF
+     *
+     * @return string 
+     */
+    public function getBaseURSSAF()
+    {
+        return $this->baseURSSAF;
     }
 }

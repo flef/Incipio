@@ -22,13 +22,8 @@ class BVType extends AbstractType {
                       'label' => 'Mission',
                        'class' => 'mgate\\SuiviBundle\\Entity\\Mission',
                        'property' => 'reference',                      
-                       'required' => true))
-            ->add('baseURSSAF', 'money')
-            ->add('numeroVirement', 'text')
-            ->add('tauxJuniorAssietteDeCotisation', 'percent', array('precision' => 2))
-            ->add('tauxJuniorRemunerationBrute', 'percent', array('precision' => 2))
-            ->add('tauxEtudiantAssietteDeCotisation', 'percent', array('precision' => 2))
-            ->add('tauxEtudiantRemunerationBrute', 'percent', array('precision' => 2));
+                       'required' => true))            
+            ->add('numeroVirement', 'text', array('label'=>'Numéro de Virement', 'required'=>false));            
     }
 
     public function getName() {

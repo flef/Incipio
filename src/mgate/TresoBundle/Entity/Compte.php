@@ -120,4 +120,14 @@ class Compte
     {
         return $this->categorie;
     }
+
+    /**
+     * Get categorie
+     *
+     * @return boolean 
+     */
+    public function getCategorie()
+    {
+        return $this->categorie;
+    }
 }
