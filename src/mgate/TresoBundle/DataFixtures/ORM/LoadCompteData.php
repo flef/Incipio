@@ -6,7 +6,7 @@ use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use mgate\TresoBundle\Entity\Compte;
 
-class LoadUserData implements FixtureInterface
+class LoadCompteData implements FixtureInterface
 {
     /**
      * {@inheritDoc}
@@ -26,6 +26,7 @@ class LoadUserData implements FixtureInterface
             $compte->setCategorie(false)->setLibelle($value)->setNumero($key);
             $manager->persist($compte);
         }
-        $manager->flush();
+        if(!$manager->getRepository('mgateTresoBundle:Compte')->findBy(array('numero' => $compte->getNumero())))
+            $manager->flush();
     }
 }
