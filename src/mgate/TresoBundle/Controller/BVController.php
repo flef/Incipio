@@ -28,12 +28,7 @@ class BVController extends Controller
 
         if (!$bv= $em->getRepository('mgateTresoBundle:BV')->find($id)) {
             $bv = new BV;
-            $bv->setBaseURSSAF(38.12)
-                ->setTauxJuniorAssietteDeCotisation(0.2985)
-                ->setTauxJuniorRemunerationBrute(0.043)
-                ->setTauxEtudiantAssietteDeCotisation(0.158)
-                ->setTauxEtudiantRemunerationBrute(0.024)
-                ->setTypeDeTravail('Réalisateur')
+            $bv ->setTypeDeTravail('Réalisateur')
                 ->setDateDeVersement(new \DateTime('now'))
                 ->setDateDemission(new \DateTime('now'));
         }
@@ -45,8 +40,21 @@ class BVController extends Controller
             $form->bind($this->get('request'));
             if( $form->isValid() )
             {
+                $bv->setCotisationURSSAF();
+                $charges = $em->getRepository('mgateTresoBundle:CotisationURSSAF')->findAllByDate($bv->getDateDemission());
+                foreach ($charges as $charge)
+                    $bv->addCotisationURSSAF($charge);
+                
+                $baseURSSAF = $em->getRepository('mgateTresoBundle:BaseURSSAF')->findByDate($bv->getDateDemission());
+                $bv->setBaseURSSAF($baseURSSAF);
+                
                 $em->persist($bv);                
                 $em->flush();
+                
+                 return $this->render('mgateTresoBundle:BV:modifier.html.twig', array(
+                    'form' => $form->createView(),
+                    'bv' =>$bv,
+                ));
                 return $this->redirect($this->generateUrl('mgateTreso_BV_index', array()));
             }
         }

@@ -90,27 +90,44 @@ class BV
     private $baseURSSAF;
     
     /**
-     * @ORM\ManyToMany(targetEntity="mgate\TresoBundle\Entity\BaseURSSAF")
+     * @ORM\ManyToMany(targetEntity="mgate\TresoBundle\Entity\CotisationURSSAF")
      */
-    private $CotisationURSSAF;
-
-
+    private $cotisationURSSAF;
+    
+    
     
     //GETTER ADITION
-   /* public function getPartJunior(){
-        return round($this->nombreJEH  * ($this->baseURSSAF * $this->tauxJuniorAssietteDeCotisation 
-            + $this->tauxJuniorRemunerationBrute * $this->remunerationBruteParJEH),2);
-    }
-    public function getPartEtudiant(){
-        return round($this->nombreJEH  * ($this->baseURSSAF * $this->tauxEtudiantAssietteDeCotisation
-            + $this->tauxEtudiantRemunerationBrute * $this->remunerationBruteParJEH),2);
-    }
     public function getReference(){
         return $this->mandat.'-BV-'.sprintf('%1$02d',$this->numero);
     }
+    
     public function getRemunerationBrute(){
         return $this->getRemunerationBruteParJEH() * $this->nombreJEH;
-    }*/
+    }    
+    
+    public function getPartJunior(){
+        $partJunior = 0;
+        foreach ($this->cotisationURSSAF as $cotisation){
+            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
+                $partJunior += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartJE() / 100,2);
+            else
+                $partJunior += round($this->nombreJEH  * $cotisation->getTauxPartJE() / 100 * $this->remunerationBruteParJEH,2);
+        }    
+        return $partJunior;
+    }
+    
+    public function getPartEtudiant(){
+        $partEtu = 0;
+        
+        foreach ($this->cotisationURSSAF as $cotisation){
+            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
+                $partEtu += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartEtu() / 100 ,2);
+            else
+                $partEtu += round($this->nombreJEH  * $cotisation->getTauxPartEtu() * $this->remunerationBruteParJEH / 100,2);
+        }    
+        return $partEtu;
+    }
+
     
     ///////
 
@@ -119,7 +136,7 @@ class BV
      */
     public function __construct()
     {
-        $this->CotisationURSSAF = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cotisationURSSAF = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -362,36 +379,49 @@ class BV
         return $this->baseURSSAF;
     }
 
+
+
     /**
-     * Add CotisationURSSAF
+     * Add cotisationURSSAF
      *
-     * @param \mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF
+     * @param \mgate\TresoBundle\Entity\CotisationURSSAF $cotisationURSSAF
      * @return BV
      */
-    public function addCotisationURSSAF(\mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF)
+    public function addCotisationURSSAF(\mgate\TresoBundle\Entity\CotisationURSSAF $cotisationURSSAF)
     {
-        $this->CotisationURSSAF[] = $cotisationURSSAF;
+        $this->cotisationURSSAF[] = $cotisationURSSAF;
     
         return $this;
     }
 
     /**
-     * Remove CotisationURSSAF
+     * Remove cotisationURSSAF
      *
-     * @param \mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF
+     * @param \mgate\TresoBundle\Entity\CotisationURSSAF $cotisationURSSAF
      */
-    public function removeCotisationURSSAF(\mgate\TresoBundle\Entity\BaseURSSAF $cotisationURSSAF)
+    public function removeCotisationURSSAF(\mgate\TresoBundle\Entity\CotisationURSSAF $cotisationURSSAF)
     {
-        $this->CotisationURSSAF->removeElement($cotisationURSSAF);
+        $this->cotisationURSSAF->removeElement($cotisationURSSAF);
     }
 
     /**
-     * Get CotisationURSSAF
+     * Get cotisationURSSAF
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getCotisationURSSAF()
     {
-        return $this->CotisationURSSAF;
+        return $this->cotisationURSSAF;
+    }
+    
+    /**
+     * Get cotisationURSSAF
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function setCotisationURSSAF()
+    {
+        $this->cotisationURSSAF = null;
+        return $this;
     }
 }

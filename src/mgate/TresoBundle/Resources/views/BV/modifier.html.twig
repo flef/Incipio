@@ -39,30 +39,16 @@
         </tr>
         <tr>
             <th>{{ form_label(form.dateDemission) }}</th>
-            <td>{{ form_widget(form.dateDemission) }}</td>
-            <th>{{ form_label(form.baseURSSAF) }}</th>
-            <td>{{ form_widget(form.baseURSSAF) }}</td>
-        </tr>
-        <tr>
-            <th>{{ form_label(form.tauxJuniorAssietteDeCotisation) }}</th>
-            <td>{{ form_widget(form.tauxJuniorAssietteDeCotisation) }}</td>
-            <th>{{ form_label(form.tauxJuniorRemunerationBrute) }}</th>
-            <td>{{ form_widget(form.tauxJuniorRemunerationBrute) }}</td>
-        </tr>
-        <tr>
-            <th>{{ form_label(form.tauxEtudiantAssietteDeCotisation) }}</th>
-            <td>{{ form_widget(form.tauxEtudiantAssietteDeCotisation) }}</td>
-            <th>{{ form_label(form.tauxEtudiantRemunerationBrute) }}</th>
-            <td>{{ form_widget(form.tauxEtudiantRemunerationBrute) }}</td>
-        </tr>
+            <td colspan="3">{{ form_widget(form.dateDemission) }}</td>
+        </tr>        
     </table>
-    <input type="submit" value="Enregistrer" />
+            <input type="submit" class="btn btn-success" value="Enregistrer" />
     {{ form_rest(form) }} 
     </form>
     {% if bv.numero %}
     <table class="table">
         <tr>
-            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_BV_supprimer', {'id': bv.id})}}';">Supprimer le Compte (ADMIN)</button></td>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_BV_supprimer', {'id': bv.id})}}';">Supprimer le BV</button></td>
         </tr>
     </table>
     {% endif %}

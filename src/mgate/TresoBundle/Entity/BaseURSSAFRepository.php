@@ -11,5 +11,22 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class BaseURSSAFRepository extends EntityRepository
-{
+{    
+    /**
+     * Renvoie les cotisations pour une date donnée
+     * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle)
+     * @return array
+     */
+    public function findByDate(\DateTime $date) {
+        $qb = $this->_em->createQueryBuilder();
+        
+        $date = $date->format('Y-m-d');
+      
+        $query = $qb->select('b')
+                     ->from('mgateTresoBundle:BaseURSSAF', 'b')
+                     ->where("'$date' >= b.dateDebut")
+                     ->andWhere("'$date' <= b.dateFin"); 
+
+        return $query->getQuery()->getOneOrNullResult();
+    }
 }
