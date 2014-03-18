@@ -27,7 +27,8 @@ class TwigExtensionManager extends \Twig_Extension {
         return preg_replace('#(\\r\\n)|(\\n)|(\\r)#', '<w:br />', $input);
     }
     
-    public function money($input) {        
+    public function money($input, $displayZero = true) {    
+        if($input == 0 && !$displayZero) return '';
         return number_format($input, 2, ',', ' ');
     }
     

@@ -103,29 +103,105 @@ class BV
     
     public function getRemunerationBrute(){
         return $this->getRemunerationBruteParJEH() * $this->nombreJEH;
-    }    
-    
-    public function getPartJunior(){
-        $partJunior = 0;
-        foreach ($this->cotisationURSSAF as $cotisation){
-            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
-                $partJunior += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartJE(),2);
-            else
-                $partJunior += round($this->nombreJEH  * $cotisation->getTauxPartJE()* $this->remunerationBruteParJEH,2);
-        }    
-        return $partJunior;
     }
     
-    public function getPartEtudiant(){
-        $partEtu = 0;
+    public function getAssietteDesCotisations(){
+        return $this->baseURSSAF->getBaseURSSAF() * $this->nombreJEH;
+    }
+    
+    public function getRemunerationNet(){
+        return $this->getRemunerationBrute() - $this->getPartEtudiant();
+    }
+    
+    public function getRemunerationNetImposable(){
+        return $this->getRemunerationBrute() - $this->getPartEtudiant(false, true);
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getTauxPartJunior(){
+        $tauxPartJunior= array(
+            'baseURSSAF'    => 0,
+            'baseBrute'     => 0
+        );
         
         foreach ($this->cotisationURSSAF as $cotisation){
             if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
-                $partEtu += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartEtu() ,2);
+                $tauxPartJunior['baseURSSAF'] += $cotisation->getTauxPartJE();
             else
-                $partEtu += round($this->nombreJEH  * $cotisation->getTauxPartEtu() * $this->remunerationBruteParJEH,2);
+                $tauxPartJunior['baseBrute'] += $cotisation->getTauxPartJE();
         }    
-        return $partEtu;
+        return $tauxPartJunior;
+    }
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getTauxPartEtu(){
+        $tauxPartEtu= array(
+            'baseURSSAF'    => 0,
+            'baseBrute'     => 0
+        );
+        
+        foreach ($this->cotisationURSSAF as $cotisation){
+            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
+                $tauxPartEtu['baseURSSAF'] += $cotisation->getTauxPartEtu();
+            else
+                $tauxPartEtu['baseBrute'] += $cotisation->getTauxPartEtu();
+        }    
+        return $tauxPartEtu;
+    }
+    
+    /**
+     * 
+     * @param boolean $inArray
+     * @return mixte
+     */
+    public function getPartJunior($inArray = false){
+        $partJunior = array(
+            'baseURSSAF'    => 0,
+            'baseBrute'     => 0
+        );
+        foreach ($this->cotisationURSSAF as $cotisation){
+            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
+                $partJunior['baseURSSAF'] += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartJE(),2);
+            else
+                $partJunior['baseBrute'] += round($this->nombreJEH  * $cotisation->getTauxPartJE()* $this->remunerationBruteParJEH,2);
+        }
+        if($inArray)
+            return $partJunior;
+        else
+            return $partJunior['baseURSSAF'] +  $partJunior['baseBrute'];
+            
+    }
+    
+    /**
+     * 
+     * @param boolean $inArray
+     * @return mixte
+     */
+    public function getPartEtudiant($inArray = false, $nonImposable = false){
+        $partEtu = array(
+            'baseURSSAF'    => 0,
+            'baseBrute'     => 0
+        );
+        
+        foreach ($this->cotisationURSSAF as $cotisation){
+            if($nonImposable && !$cotisation->getDeductible()) continue;
+            
+            if($cotisation->getIsSurBaseURSSAF() && $this->baseURSSAF)
+                $partEtu['baseURSSAF'] += round($this->nombreJEH  * $this->baseURSSAF->getBaseURSSAF() * $cotisation->getTauxPartEtu() ,2);
+            else
+                $partEtu['baseBrute'] += round($this->nombreJEH  * $cotisation->getTauxPartEtu() * $this->remunerationBruteParJEH,2);
+        }    
+        
+        if($inArray)
+            return $partEtu;
+        else
+            return $partEtu['baseURSSAF'] +  $partEtu['baseBrute'];
     }
 
     
