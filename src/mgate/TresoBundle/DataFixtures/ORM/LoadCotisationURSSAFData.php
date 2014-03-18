@@ -22,7 +22,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
             'libelle' => 'C.R.D.S. + CSG non déductible',
             'isBaseUrssaf' => true,
             'tauxJE' => 0,
-            'tauxEtu' => 2.90,
+            'tauxEtu' => 0.029,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -31,7 +31,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
             'libelle' => 'C.S.G.',
             'isBaseUrssaf' => true,
             'tauxJE' => 0,
-            'tauxEtu' => 5.10,
+            'tauxEtu' => 0.051,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -39,8 +39,8 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Assurance maladie',
             'isBaseUrssaf' => true,
-            'tauxJE' => 12.80,
-            'tauxEtu' => 0.75,
+            'tauxJE' => 0.1280,
+            'tauxEtu' => 0.0075,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -48,7 +48,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Contribution solidarité autonomie',
             'isBaseUrssaf' => true,
-            'tauxJE' => 0.30,
+            'tauxJE' => 0.0030,
             'tauxEtu' => 0,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
@@ -57,8 +57,8 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Assurance vieillesse déplafonnée',
             'isBaseUrssaf' => true,
-            'tauxJE' => 1.75,
-            'tauxEtu' => 0.25,
+            'tauxJE' => 0.0175,
+            'tauxEtu' => 0.0025,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -66,8 +66,8 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Assurance vieillesse plafonnée TA',
             'isBaseUrssaf' => true,
-            'tauxJE' => 8.45,
-            'tauxEtu' => 6.80,
+            'tauxJE' => 0.0845,
+            'tauxEtu' => 0.0680,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -75,7 +75,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Accident du travail',
             'isBaseUrssaf' => true,
-            'tauxJE' => 1.50,
+            'tauxJE' => 0.0150,
             'tauxEtu' => 0,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
@@ -84,7 +84,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Allocations familliales',
             'isBaseUrssaf' => true,
-            'tauxJE' => 5.25,
+            'tauxJE' => 0.0525,
             'tauxEtu' => 0,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
@@ -93,7 +93,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Fond National d\'Aide au Logement',
             'isBaseUrssaf' => true,
-            'tauxJE' => 0.10,
+            'tauxJE' => 0.0010,
             'tauxEtu' => 0,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
@@ -111,8 +111,8 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'Assurance chômage',
             'isBaseUrssaf' => false,
-            'tauxJE' => 4.00,
-            'tauxEtu' => 2.40,
+            'tauxJE' => 0.0400,
+            'tauxEtu' => 0.0240,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),
             );
@@ -120,7 +120,7 @@ class LoadCotisationURSSAFData implements FixtureInterface
         $cotisations[] = array(
             'libelle' => 'AGS',
             'isBaseUrssaf' => false,
-            'tauxJE' => 0.30,
+            'tauxJE' => 0.030,
             'tauxEtu' => 0,
             'dateDebut' => new \DateTime('2014-01-01'),
             'dateFin' => new \DateTime('2014-12-31'),

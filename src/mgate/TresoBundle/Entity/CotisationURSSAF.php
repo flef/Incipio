@@ -38,14 +38,14 @@ class CotisationURSSAF
     /**
      * @var string
      *
-     * @ORM\Column(name="tauxPartJE", type="decimal", precision=5, scale=2)
+     * @ORM\Column(name="tauxPartJE", type="decimal", scale=4)
      */
     private $tauxPartJE;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tauxPartEtu", type="decimal", precision=5, scale=2)
+     * @ORM\Column(name="tauxPartEtu", type="decimal", scale=4)
      */
     private $tauxPartEtu;
 

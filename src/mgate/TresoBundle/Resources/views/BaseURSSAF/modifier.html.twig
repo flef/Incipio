@@ -1,0 +1,40 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des BV - {{ parent() }}
+{% endblock %}
+
+
+    
+{% block content_bundle %}
+    <h3>{{ base.baseURSSAF ? "Ajout d'une" :  "Modification de la" }} Base : </h3>
+    <form method="post" {{ form_enctype(form) }}>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.dateDebut) }}</th>
+            <td>{{ form_widget(form.dateDebut) }}</td>
+            <th>{{ form_label(form.dateFin) }}</th>
+            <td>{{ form_widget(form.dateFin) }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">{{ form_label(form.baseURSSAF) }}</th>
+            <td colspan="2">{{ form_widget(form.baseURSSAF) }}</td>
+        </tr>   
+    </table>
+            <input type="submit" class="btn btn-success" value="Enregistrer" />
+    {{ form_rest(form) }} 
+    </form>
+    {% if base.baseURSSAF %}
+    <table class="table">
+        <tr>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_BaseURSSAF_supprimer', {'id': base.id})}}';">Supprimer la base</button></td>
+        </tr>
+    </table>
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}     
+{% endblock %}
