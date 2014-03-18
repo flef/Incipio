@@ -101,7 +101,7 @@
             <li class="divider"></li>
             <li class="dropdown-header">Tableaux de Suivi</li>
             <li><a href="{{ path('mgateTreso_Declaratif_TVA') }}"><span class="glyphicon glyphicon-barcode"></span> Déclaratif TVA</a></li>
-            <li><a href="{{ path('mgateTreso_Declaratif_BRC') }}"><span class="glyphicon glyphicon-qrcode"></span> Bordereau Récapitulatif des Cotisations</a></li>
+            <li><a href="{{ path('mgateTreso_Declaratif_BRC') }}"><span class="glyphicon glyphicon-qrcode"></span> Bordereau Récapitulatif des Cotisations </a></li>
             <li class="divider"></li>
             <li class="dropdown-header">Administration</li>
             <li>                
@@ -109,6 +109,20 @@
                     <span class="pull-left">Comptes</span>
                     <li><a href="{{ path('mgateTreso_Compte_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
                     <li><a href="{{ path('mgateTreso_Compte_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">B. URSSAF</span>
+                    <li><a href="{{ path('mgateTreso_BaseURSSAF_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_BaseURSSAF_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
+                </ul>
+            </li>
+            <li>                
+                <ul class="pager">
+                    <span class="pull-left">Charges</span>
+                    <li><a href="{{ path('mgateTreso_CotisationURSSAF_index') }}"><span class="glyphicon glyphicon-list"></span> Lister</a></li>
+                    <li><a href="{{ path('mgateTreso_CotisationURSSAF_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter</a></li>
                 </ul>
             </li>
             
