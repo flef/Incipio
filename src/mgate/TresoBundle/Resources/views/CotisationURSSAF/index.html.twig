@@ -1,0 +1,53 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des Cotisation URSSAF - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": true,
+            "iDisplayLength": 50,
+			"aaSorting": [[0,'desc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_CotisationURSSAF_ajouter')}}';">Ajouter une cotisation URSSAF</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Applicable du</th>
+            <th>Applicable au</th>
+            <th>Libelle</th>            
+            <th>Taux Part Junior</th>
+            <th>Taux Part Etudiant</th>
+            <th>Applicable sur la base</th>
+        </tr>
+        </thead>        
+        {% for cotisation in cotisations %}
+        <tr>
+            <td><a href="{{ path('mgateTreso_CotisationURSSAF_modifier', {'id' : cotisation.id })}}">{{ cotisation.dateDebut | date('d/m/Y')}}</a></td>
+            <td>{{ cotisation.dateFin | date('d/m/Y') }}</td>
+            <td>{{ cotisation.libelle }}</td>
+            <td>{{ cotisation.tauxPartJE * 100 }} %</td>
+            <td>{{ cotisation.tauxPartEtu * 100}} %</td>
+            <td>Base {{ cotisation.isSurBaseURSSAF ? "URSSAF" : "Brut" }}</td>            
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

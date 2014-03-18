@@ -2,6 +2,8 @@ mgate_treso_urssaf:
     pattern:  /urssaf
     defaults: { _controller: mgateTresoBundle:Urssaf:index }
     
+
+    
 ################################################################################
 #                                                                              #
 #                                DECLARATIFS                                   #
@@ -51,31 +53,7 @@ mgateTreso_Facture_supprimer:
     defaults: { _controller: mgateTresoBundle:Facture:supprimer }
     requirements:
         id: \d+
-################################################################################
-#                                                                              #
-#                               COMPTES COMPTA                                 #
-#                                                                              #
-################################################################################
-    
-mgateTreso_Compte_index:
-    pattern:  /Comptes
-    defaults: { _controller: mgateTresoBundle:Compte:index }
-        
-mgateTreso_Compte_ajouter:
-    pattern:  /Compte/Ajouter
-    defaults: { _controller: mgateTresoBundle:Compte:modifier,  id:-1, etude_id :-1  }
-    
-mgateTreso_Compte_modifier:
-    pattern:  /Compte/Modifier/{id}
-    defaults: { _controller: mgateTresoBundle:Compte:modifier }
-    requirements:
-        id: \d+
-    
-mgateTreso_Compte_supprimer:
-    pattern:  /Compte/Supprimer/{id}
-    defaults: { _controller: mgateTresoBundle:Compte:supprimer }
-    requirements:
-        id: \d+    
+
 ################################################################################
 #                                                                              #
 #                                NOTE DE FRAIS                                 #
@@ -136,3 +114,87 @@ mgateTreso_BV_supprimer:
 ################################################################################
 ################################################################################
 ################################################################################
+#
+#                               ADMINISTRATION
+#
+################################################################################
+################################################################################
+################################################################################
+
+################################################################################
+#                                                                              #
+#                               COMPTES COMPTA                                 #
+#                                                                              #
+################################################################################
+    
+mgateTreso_Compte_index:
+    pattern:  /Comptes
+    defaults: { _controller: mgateTresoBundle:Compte:index }
+        
+mgateTreso_Compte_ajouter:
+    pattern:  /Compte/Ajouter
+    defaults: { _controller: mgateTresoBundle:Compte:modifier,  id:-1, etude_id :-1  }
+    
+mgateTreso_Compte_modifier:
+    pattern:  /Compte/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:Compte:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_Compte_supprimer:
+    pattern:  /Compte/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:Compte:supprimer }
+    requirements:
+        id: \d+    
+        
+################################################################################
+#                                                                              #
+#                                BASE URSSAF                                   #
+#                                                                              #
+################################################################################
+mgateTreso_BaseURSSAF_index:
+    pattern:  /BasesURSSAF
+    defaults: { _controller: mgateTresoBundle:BaseURSSAF:index }
+        
+mgateTreso_BaseURSSAF_ajouter:
+    pattern:  /BaseURSSAF/Ajouter
+    defaults: { _controller: mgateTresoBundle:BaseURSSAF:modifier,  id:-1  }
+    
+mgateTreso_BaseURSSAF_modifier:
+    pattern:  /BaseURSSAF/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:BaseURSSAF:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_BaseURSSAF_supprimer:
+    pattern:  /BaseURSSAF/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:BaseURSSAF:supprimer }
+    requirements:
+        id: \d+    
+
+
+################################################################################
+#                                                                              #
+#                              COTISATION URSSAF                               #
+#                                                                              #
+################################################################################
+
+mgateTreso_CotisationURSSAF_index:
+    pattern:  /CotisationsURSSAF
+    defaults: { _controller: mgateTresoBundle:CotisationURSSAF:index }
+        
+mgateTreso_CotisationURSSAF_ajouter:
+    pattern:  /CotisationURSSAF/Ajouter
+    defaults: { _controller: mgateTresoBundle:CotisationURSSAF:modifier,  id:-1  }
+    
+mgateTreso_CotisationURSSAF_modifier:
+    pattern:  /CotisationURSSAF/Modifier/{id}
+    defaults: { _controller: mgateTresoBundle:CotisationURSSAF:modifier }
+    requirements:
+        id: \d+
+    
+mgateTreso_CotisationURSSAF_supprimer:
+    pattern:  /CotisationURSSAF/Supprimer/{id}
+    defaults: { _controller: mgateTresoBundle:BV:supprimer }
+    requirements:
+        id: \d+    

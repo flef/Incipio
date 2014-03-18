@@ -1,0 +1,47 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des BV - {{ parent() }}
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+  
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#example').dataTable({
+            "bPaginate": true,
+            "iDisplayLength": 50,
+			"aaSorting": [[0,'desc']],
+        });
+    });
+</script>
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+    
+{% block content_bundle %}
+    <button type="button" class="btn btn-success" onclick="location.href='{{ path('mgateTreso_BaseURSSAF_ajouter')}}';">Ajouter une base URSSAF</button>
+    <table class="display dataTable table table-bordered table-striped" id="example">
+        <thead>
+          <tr>
+            <th>Applicable du</th>
+            <th>Applicable au</th>
+            <th>Montant</th>
+        </tr>
+        </thead>        
+        {% for base in bases %}
+        <tr>
+            <td>{{ base.dateDebut | date('d/m/Y') }}</td>
+            <td>{{ base.dateFin | date('d/m/Y') }}</td>
+            <td><a href="{{ path('mgateTreso_BaseURSSAF_modifier', {'id' : base.id })}}">{{ base.baseURSSAF }}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

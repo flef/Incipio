@@ -50,11 +50,7 @@ class BVController extends Controller
                 
                 $em->persist($bv);                
                 $em->flush();
-                
-                 return $this->render('mgateTresoBundle:BV:modifier.html.twig', array(
-                    'form' => $form->createView(),
-                    'bv' =>$bv,
-                ));
+
                 return $this->redirect($this->generateUrl('mgateTreso_BV_index', array()));
             }
         }

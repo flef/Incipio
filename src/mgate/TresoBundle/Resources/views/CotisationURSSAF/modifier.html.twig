@@ -1,0 +1,48 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des Cotisations URSSAF - {{ parent() }}
+{% endblock %}
+
+
+    
+{% block content_bundle %}
+    <h3>{{ cotisation.libelle ? "Ajout d'une" :  "Modification d'une" }} Charge  </h3>
+    <form method="post" {{ form_enctype(form) }}>
+    <table class="table table-bordered table-striped standard">
+        <tr>
+            <th>{{ form_label(form.libelle) }}</th>
+            <td>{{ form_widget(form.libelle) }}</td>
+            <th>{{ form_label(form.isSurBaseURSSAF) }}</th>
+            <td>{{ form_widget(form.isSurBaseURSSAF) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.tauxPartJE) }}</th>
+            <td>{{ form_widget(form.tauxPartJE) }}</td>
+            <th>{{ form_label(form.tauxPartEtu) }}</th>
+            <td>{{ form_widget(form.tauxPartEtu) }}</td>
+        </tr>
+        <tr>
+            <th>{{ form_label(form.dateDebut) }}</th>
+            <td>{{ form_widget(form.dateDebut) }}</td>
+            <th>{{ form_label(form.dateFin) }}</th>
+            <td>{{ form_widget(form.dateFin) }}</td>
+        </tr>       
+    </table>
+            <input type="submit" class="btn btn-success" value="Enregistrer" />
+    {{ form_rest(form) }} 
+    </form>
+    {% if cotisation.libelle %}
+    <table class="table">
+        <tr>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_CotisationURSSAF_supprimer', {'id': cotisation.id})}}';">Supprimer la Cotisation URSSAF</button></td>
+        </tr>
+    </table>
+    {% endif %}
+    
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}     
+{% endblock %}
