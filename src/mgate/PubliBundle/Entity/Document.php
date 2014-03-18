@@ -16,7 +16,7 @@ class Document
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
     
     /**
      * @ORM\OneToOne(targetEntity="RelatedDocument", mappedBy="document", cascade={"all"})
@@ -52,12 +52,12 @@ class Document
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    private $path;
     
     /**
      * @Assert\File(maxSize="6000000")
      */
-    public $file;
+    private $file;
 
     public function getAbsolutePath()
     {

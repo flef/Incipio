@@ -15,7 +15,7 @@ class RelatedDocument
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    public $id;
+    protected $id;
     
     
     /**
@@ -25,13 +25,13 @@ class RelatedDocument
     private $document;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="mgate\PersonneBundle\Entity\Membre", inversedBy="relatedDocuments", cascade={"persist"})
      * @ORM\JoinColumn(name="membre_id", referencedColumnName="id", nullable=true)
      */
     private $membre;
     
     /**
-     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", inversedBy="documents", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="mgate\SuiviBundle\Entity\Etude", inversedBy="relatedDocuments", cascade={"persist"})
      * @ORM\JoinColumn(name="etude_id", referencedColumnName="id", nullable=true)
      */
     private $etude;
