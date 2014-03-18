@@ -14,7 +14,8 @@ class CotisationURSSAFType extends AbstractType {
             ->add('dateFin', 'genemu_jquerydate', array('label'=>'Applicable au', 'required'=>true, 'widget'=>'single_text'))
             ->add('tauxPartJE', 'percent',array('label'=>'Taux Part Junior', 'required' => false, 'precision' => 2))
             ->add('tauxPartEtu', 'percent',array('label'=>'Taux Part Etu', 'required' => false, 'precision' => 2))
-            ->add('isSurBaseURSSAF', 'checkbox', array('label'=>'Est indexé sur la base URSSAF', 'required'=>false));
+            ->add('isSurBaseURSSAF', 'checkbox', array('label'=>'Est indexé sur la base URSSAF ?', 'required'=>false))
+            ->add('deductible', 'checkbox', array('label'=>'Est déductible ?', 'required'=>false));
     }
 
     public function getName() {

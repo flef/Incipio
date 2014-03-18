@@ -62,7 +62,19 @@ class CotisationURSSAF
      * @ORM\Column(name="dateFin", type="date")
      */
     private $dateFin;
-
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deductible", type="boolean")
+     */
+    private $deductible;
+    
+    
+    public function __construct() {
+        $this->deductible = true;
+        return $this;
+    }
 
     /**
      * Get id
@@ -210,5 +222,28 @@ class CotisationURSSAF
     public function getDateFin()
     {
         return $this->dateFin;
+    }
+
+    /**
+     * Set deductible
+     *
+     * @param boolean $deductible
+     * @return CotisationURSSAF
+     */
+    public function setDeductible($deductible)
+    {
+        $this->deductible = $deductible;
+    
+        return $this;
+    }
+
+    /**
+     * Get deductible
+     *
+     * @return boolean 
+     */
+    public function getDeductible()
+    {
+        return $this->deductible;
     }
 }
