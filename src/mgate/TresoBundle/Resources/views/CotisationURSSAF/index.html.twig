@@ -36,16 +36,18 @@
             <th>Taux Part Junior</th>
             <th>Taux Part Etudiant</th>
             <th>Applicable sur la base</th>
+            <th>Est déductible ?</th>
         </tr>
         </thead>        
         {% for cotisation in cotisations %}
-        <tr>
+        <tr style="text-align: right;">
             <td><a href="{{ path('mgateTreso_CotisationURSSAF_modifier', {'id' : cotisation.id })}}">{{ cotisation.dateDebut | date('d/m/Y')}}</a></td>
             <td>{{ cotisation.dateFin | date('d/m/Y') }}</td>
             <td>{{ cotisation.libelle }}</td>
-            <td>{{ cotisation.tauxPartJE * 100 }} %</td>
-            <td>{{ cotisation.tauxPartEtu * 100}} %</td>
-            <td>Base {{ cotisation.isSurBaseURSSAF ? "URSSAF" : "Brut" }}</td>            
+            <td>{{ (cotisation.tauxPartJE * 100) | money(false)}}</td>
+            <td>{{ (cotisation.tauxPartEtu * 100) | money(false)}}</td>
+            <td>Base {{ cotisation.isSurBaseURSSAF ? "URSSAF" : "Brut" }}</td>
+            <td>{{ cotisation.deductible ? "" : "Non" }} déductible</td>   
         </tr>
         {% endfor %}
     </table>
