@@ -94,6 +94,12 @@ mgateTreso_NoteDeFrais_supprimer:
 mgateTreso_BV_index:
     pattern:  /BV
     defaults: { _controller: mgateTresoBundle:BV:index }
+    
+mgateTreso_BV_voir:
+    pattern:  /BV/Voir/{id}
+    defaults: { _controller: mgateTresoBundle:BV:voir }
+    requirements:
+        id: \d+
         
 mgateTreso_BV_ajouter:
     pattern:  /BV/Ajouter

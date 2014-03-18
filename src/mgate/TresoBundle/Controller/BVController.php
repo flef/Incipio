@@ -23,6 +23,17 @@ class BVController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */
+    public function voirAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $bv = $em->getRepository('mgateTresoBundle:BV')->find($id);
+        
+        return $this->render('mgateTresoBundle:BV:voir.html.twig', array('bv' => $bv));
+    }
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getManager();
 

@@ -41,7 +41,7 @@
         </thead>        
         {% for bv in bvs %}
         <tr>
-            <td><a href="{{ path('mgateTreso_BV_modifier', {'id' : bv.id })}}">{{ bv.reference }}</a></td>
+            <td><a href="{{ path('mgateTreso_BV_voir', {'id' : bv.id })}}">{{ bv.reference }}</a></td>
             <td>{{ bv.dateDeVersement | date('d/m/Y') }}</td>
             <td>{{ bv.mission.intervenant.personne.prenomNom}}</td>
             <td>{{ bv.mission.reference }}</td>

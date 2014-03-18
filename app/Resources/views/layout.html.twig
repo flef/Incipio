@@ -52,6 +52,17 @@
     code {
       font-size: 80%;
     }
+    
+    .contentMain {
+        width: 95%;
+        margin-left: auto;
+        margin-right: 40px;
+        margin-bottom: 100px;
+    }
+    
+    @media print{
+
+    }
 
 
         </style>
@@ -74,13 +85,11 @@
 {% endblock %}            
             
 {% block body %} 
-
     {% block main_header %}
-                <div id="header">
+            <div id="header" class="hidden-print">
             {% block header %}
-                        <!--<h1>header</h1>-->
             {% endblock %}
-                    </div>
+        </div>
     {% endblock %}
 
     {% block menu_main %}
@@ -95,14 +104,14 @@
     {% endblock %}
 
     {% block content_main %} 
-    <div id="content" style="width: 95%;  margin-left: auto; margin-right: 40px; margin-bottom: 100px;">
+            <div id="content" class="contentMain">
             {% block content %}
             {% endblock %}
             </div>
     {% endblock %}
 
     {% block footer_main %}
-    <div id="footer">
+            <div id="footer" class="hidden-print">
         <div class="container">
             <p class="text-muted" style="text-align: center">V 0.1 <i>© Incipio 2014</i></p>
         </div>

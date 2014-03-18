@@ -1,0 +1,136 @@
+{% extends "mgateTresoBundle::layout.html.twig" %}
+
+{% block title %}
+	Gestion des BV - {{ parent() }}
+{% endblock %}
+
+    
+{% block content_bundle %}
+    <style>
+    .money{
+        text-align: right;
+    }
+    </style>
+    
+    <h3>Bulletin de versement</h3>
+    <h4>{{ bv.reference }} &thinsp;&thinsp;&thinsp;&thinsp;&thinsp;&thinsp; {{ bv.dateDemission | date('d/m/Y') }}</h4>
+    <table class="table table-bordered table-condensed">
+        <tr>
+            <th>Rémunération brute : </th>
+            <td class="money">{{ bv.remunerationBrute | money }}&nbsp;€</td>
+        </tr>
+        <tr>
+            <th>Nombre de jours-étude homme : </th>
+            <td class="money">{{ bv.nombreJEH }}</td>
+        </tr>
+        <tr>
+            <th>Rémunération brute par JEH : </th>
+            <td class="money">{{ bv.remunerationBruteParJEH | money }}&nbsp;€</td>
+        </tr>
+        <tr>
+            <th>Base U.R.S.S.A.F. : </th>
+            <td class="money">{{ bv.baseURSSAF ? bv.baseURSSAF.baseURSSAF | money }}&nbsp;€</td>
+        </tr>
+        <tr>
+            <th>Assiette des cotisations : </th>
+            <td class="money">{{ bv.assietteDesCotisations | money }}&nbsp;€</td>
+        </tr>
+
+        <tr><td colspan="2" style="visibility: hidden;"></td></tr>
+        
+        <tr style="text-align: center;" class="active">
+            <th rowspan="2">COTISATIONS SOCIALES</th>
+            <th rowspan="2">BASE</th>
+            <th colspan="2">Part Junior-Entreprise</th>
+            <th colspan="2">Part étudiant</th>
+        </tr>
+        <tr style="text-align: center;" class="active">
+            <th>TAUX</th>
+            <th>MONTANT</th>
+            <th>TAUX</th>
+            <th>MONTANT</th>
+        </tr>
+        {% for cotisation in bv.cotisationURSSAF %}
+        <tr class="money">
+            <td>{{ cotisation.libelle }}</td>
+            <td>{{ (cotisation.isSurBaseURSSAF ? bv.assietteDesCotisations : bv.remunerationBrute ) | money}}</td>
+            <td>{{ cotisation.tauxPartJE != 0 ? (cotisation.tauxPartJE * 100) | money(false) ~ ' %' }}</td>
+            <td>{{ ((cotisation.isSurBaseURSSAF ? bv.assietteDesCotisations : bv.remunerationBrute) * cotisation.tauxPartJE) | money(false)}}</td>
+            <td>{{ cotisation.tauxPartEtu != 0 ? (cotisation.tauxPartEtu * 100) | money(false) ~ ' %' }}</td>
+            <td>{{ ((cotisation.isSurBaseURSSAF ? bv.assietteDesCotisations : bv.remunerationBrute) * cotisation.tauxPartEtu) | money(false)}}</td>
+        </tr>
+        {% endfor %}
+        <tr class="active money">
+            <th style="text-align: left;">TOTAL DES COTISATIONS DUES<br>(indexées sur l'assiette de cotisation)</th>
+            <th>{{ bv.assietteDesCotisations | money}}&nbsp;€</th>
+            <th>{{ (bv.tauxPartJunior['baseURSSAF'] * 100) | money }}&nbsp;%</th>
+            <th>{{ bv.partJunior(true)['baseURSSAF'] | money }}&nbsp;€</th>
+            <th>{{ (bv.tauxPartEtu['baseURSSAF'] * 100) | money }}&nbsp;%</th>
+            <th>{{ bv.partEtudiant(true)['baseURSSAF'] | money }}&nbsp;€</th>
+        </tr>
+        <tr class="active money">
+            <th style="text-align: left;">TOTAL DES COTISATIONS DUES<br>(indexées sur la rémunération brute)</th>
+            <th>{{ bv.remunerationBrute  | money}}&nbsp;€</th>
+            <th>{{ (bv.tauxPartJunior['baseBrute']*100) | money }}&nbsp;%</th>
+            <th>{{ bv.partJunior(true)['baseBrute'] | money }}&nbsp;€</th>
+            <th>{{ (bv.tauxPartEtu['baseBrute']*100) | money }}&nbsp;%</th>
+            <th>{{ bv.partEtudiant(true)['baseBrute'] | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr><td colspan="2" style="visibility: hidden;"></td></tr>
+        
+        <tr>
+            <th>TOTAL DES COTISATIONS  (part Junior) </th>
+            <th class="money">{{ bv.partJunior | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr>
+            <th>TOTAL DES COTISATIONS  (part étudiant) </th>
+            <th class="money">{{ bv.partEtudiant | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr>
+            <th>TOTAL DES COTISATIONS  (part Junior + part étudiant) </th>
+            <th class="money">{{ (bv.partJunior + bv.partEtudiant) | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr><td colspan="2" style="visibility: hidden;"></td></tr>
+        
+        <tr>
+            <th>Rémunération Brute</th>
+            <th class="money">{{ bv.remunerationBrute | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr>
+            <th>Total retenues étudiant </th>
+            <th class="money">{{ bv.partEtudiant | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr>
+            <th>Montant net </th>
+            <th class="money">{{ bv.remunerationNet | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr>
+            <th>Montant net imposable (net+C.S.G. Non déd +R.D.S.)</th>
+            <th class="money">{{ bv.remunerationNetImposable | money }}&nbsp;€</th>
+        </tr>
+        
+        <tr class="active">
+            <th>TOTAL A PAYER :</th>
+            <th class="money">{{ bv.remunerationNet | money }}&nbsp;€</th>
+        </tr>
+    
+    
+    </table>
+    
+    
+    
+    
+    <table class="table hidden-print">
+        <tr>
+            <td style="text-align: left;"><a class="btn btn-success" href="{{ path('mgateTreso_BV_modifier', {'id' : bv.id })}}">Modifier</a></td>
+            <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_BV_supprimer', {'id': bv.id})}}';">Supprimer le BV</button></td>
+        </tr>
+    </table>
+{% endblock %}
