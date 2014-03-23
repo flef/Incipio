@@ -106,7 +106,10 @@ class BV
     }
     
     public function getAssietteDesCotisations(){
-        return $this->baseURSSAF->getBaseURSSAF() * $this->nombreJEH;
+        if ($this->baseURSSAF)
+            return $this->baseURSSAF->getBaseURSSAF() * $this->nombreJEH;
+        else 
+            return null;
     }
     
     public function getRemunerationNet(){
