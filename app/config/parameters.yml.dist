@@ -7,7 +7,7 @@ parameters:
     database_user:     root
     database_password: ~
     
-    mailer_transport:  smtp
+    mailer_transport:  mail
     mailer_host:       localhost
     mailer_user:       ~
     mailer_password:   ~
@@ -36,4 +36,4 @@ parameters:
         adresse:      ~
         url:          ~
         ga_tracking             :  ~
-        authorizedStorageSize : 1024000
+        authorizedStorageSize : 104857600
