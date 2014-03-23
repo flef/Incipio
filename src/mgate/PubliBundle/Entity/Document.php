@@ -232,6 +232,14 @@ class Document
     
         return $this;
     }
+    
+    public function getFile(){
+        return $this->file;
+    }
+    
+    public function setFile($file){
+        $this->file = $file;
+    }    
 
     /**
      * Get author
