@@ -10,7 +10,7 @@
 
 <h4>Espace utilisé :</h4>
 <div class="progress">
-    {% set actualSize = (totalSize/ junior['authorizedStorageSize']) | round(2) %} 
+    {% set actualSize = (100 * totalSize / junior['authorizedStorageSize']) | round(2) %} 
     <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ actualSize}}%;">
       {{  actualSize }}%
     </div>
