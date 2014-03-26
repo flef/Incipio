@@ -13,7 +13,7 @@
         $('#example').dataTable({
             "bPaginate": true,
             "iDisplayLength": 50,
-			"aaSorting": [[0,'desc']],
+			"aaSorting": [[1,'desc']],
         });
     });
 </script>
@@ -30,6 +30,7 @@
     <table class="display dataTable table table-bordered table-striped" id="example">
         <thead>
           <tr>
+            <th>Action</th>
             <th>Applicable du</th>
             <th>Applicable au</th>
             <th>Libelle</th>            
@@ -40,14 +41,15 @@
         </tr>
         </thead>        
         {% for cotisation in cotisations %}
-        <tr style="text-align: right;">
-            <td><a href="{{ path('mgateTreso_CotisationURSSAF_modifier', {'id' : cotisation.id })}}">{{ cotisation.dateDebut | date('d/m/Y')}}</a></td>
+        <tr style="text-align: right;" class="{{ cotisation.dateFin < date() ? 'danger' : 'success' }}">
+            <td><a href="{{ path('mgateTreso_CotisationURSSAF_modifier', {'id' : cotisation.id })}}" title="Modifier"><span class="glyphicon glyphicon-pencil"></span></a></td>
+            <td>{{ cotisation.dateDebut | date('d/m/Y')}}</td>
             <td>{{ cotisation.dateFin | date('d/m/Y') }}</td>
             <td>{{ cotisation.libelle }}</td>
             <td>{{ (cotisation.tauxPartJE * 100) | money(false)}}</td>
             <td>{{ (cotisation.tauxPartEtu * 100) | money(false)}}</td>
-            <td>Base {{ cotisation.isSurBaseURSSAF ? "URSSAF" : "Brut" }}</td>
-            <td>{{ cotisation.deductible ? "" : "Non" }} déductible</td>   
+            <td><span class="label label-{{ cotisation.isSurBaseURSSAF ? 'success' : 'warning'}}">Base {{ cotisation.isSurBaseURSSAF ? "URSSAF" : "Brut" }}</span></td>
+            <td><span class="label label-{{ cotisation.deductible ? 'success' : 'danger'}}">{{ cotisation.deductible ? "" : "Non" }} déductible</span></td>   
         </tr>
         {% endfor %}
     </table>

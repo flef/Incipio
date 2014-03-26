@@ -647,29 +647,34 @@ class IndicateursController extends Controller {
         $etudes = $em->getRepository('mgateSuiviBundle:Etude')->findAll();
 
         
-
-        $dejaClient = array();
-        $ancienClients = 0;
-        $nouveauClients = 0;
+        $clients = array();
         foreach ($etudes as $etude) {
-            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) {                
-                if($etude->getProspect() && in_array($etude->getProspect()->getNom(), $dejaClient)){
-                    $ancienClients++;
-                    $nouveauClients--;
-                }else{
-                    $nouveauClients++;
-                    $dejaClient[] = $etude->getProspect()->getNom();
-                }
-                
+            if ($etude->getStateID() == STATE_ID_EN_COURS_X || $etude->getStateID() == STATE_ID_TERMINEE_X) { 
+                $clientID = $etude->getProspect()->getId();
+                if(key_exists($clientID, $clients))
+                    $clients[$clientID]++;
+                else
+                    $clients[$clientID] = 1;
             }
+        }
+        
+        $repartitions = array();
+        $nombreClient = count($clients);
+        foreach ($clients as $clientID => $nombreEtude){
+            if(key_exists($nombreEtude,  $repartitions))
+                $repartitions[$nombreEtude]++;
+            else
+                $repartitions[$nombreEtude] = 1;
         }
         
         /* Initialisation */
         $data = array();
-        $data[] = array('Anciens Clients', 100 * $ancienClients / ($nouveauClients +  $ancienClients));
-        $data[] = array('Nouveaux Clients', 100 * $nouveauClients / ($nouveauClients +  $ancienClients));
+        ksort($repartitions);
+        foreach ($repartitions as $occ => $nbr ){
+            $data[] = array($occ == 1 ? "$nbr Nouveaux clients" : "$nbr Anciens clients ($occ études)", 100 * $nbr / $nombreClient);
+        }
         
-        $series = array(array('type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data, 'Nombre d\'études' => $ancienClients + $nouveauClients));
+        $series = array(array('type' => 'pie', 'name' => 'Taux de fidélisation', 'data' => $data, 'Nombre de client' => $nombreClient));
 
 
         /*         * ***********************
