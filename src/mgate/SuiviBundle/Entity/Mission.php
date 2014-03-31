@@ -120,6 +120,13 @@ class Mission extends DocType {
             
         return array('jehRemuneration' => $nbrJEHRemuneration, 'montantRemuneration' => $prixRemuneration);
     }
+    
+    public function getNbrJEH(){
+        $nbr = 0;
+        foreach ($this->repartitionsJEH as $repartition)
+            $nbr += $repartition->getNbrJEH();
+        return $nbr;
+    }
 
 //Block astuce pour ajout direct d'intervenant dans formulaire
     public function getMission() {
