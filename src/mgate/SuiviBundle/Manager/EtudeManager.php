@@ -322,11 +322,12 @@ class EtudeManager extends \Twig_Extension {
                 if ($dateSignature == NULL || $dateDebutOm == NULL ) continue;
                     
                 $error = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La date de signature de la Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' doit être antérieure d\'au moins une semaine à la date de signature du récapitulatifs de mission.');
-                    
-                if ((   $intervenant->getDateConventionEleve() == NULL ||
-                        $intervenant->getDateConventionEleve() >= $dateSignature->modify('-7 day')) || 
-                    (   $intervenant->getDateConventionEleve() == NULL ||
-                        $intervenant->getDateConventionEleve() >= $dateDebutOm->modify('-7 day'))){
+                $errorAbs = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' n\'est pas signée.');
+                
+                if ($intervenant->getDateConventionEleve() == NULL)
+                    array_push($errors, $errorAbs);                        
+                elseif ($intervenant->getDateConventionEleve() >= $dateSignature->modify('-7 day') || 
+                        $intervenant->getDateConventionEleve() >= $dateDebutOm->modify('-7 day')){
                     array_push($errors, $error);                        
                 }
             }
@@ -361,6 +362,21 @@ class EtudeManager extends \Twig_Extension {
             $error = array('titre' => 'Description de l\'étude:', 'message' => 'Attention la description de l\'étude dans l\'AP fait moins de 300 caractères');
             array_push($errors, $error);
         }
+        
+        /**************************************************
+         * Vérification de la cohérence des JEH reversés  *
+         **************************************************/
+        
+        // JEH présent dans RM > JEH facturé (ne prend pas en compte les avenants)
+        $jehReverses = 0;
+        $jehFactures = $etude->getNbrJEH();
+        foreach ($etude->getMissions() as $mission)
+            $jehReverses += $mission->getNbrJEH();
+        if ($jehReverses > $jehFactures) {
+            $error = array('titre' => 'Incohérence dans les JEH reversé', 'message' => "Vous reversez plus de JEH ($jehReverses) que vous n'en n'avez facturé ($jehFactures)");
+            array_push($errors, $error);
+        }
+        
         
         return $errors;
     }
