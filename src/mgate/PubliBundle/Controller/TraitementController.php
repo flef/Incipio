@@ -8,6 +8,23 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 class TraitementController extends Controller {
+    const IMAGE_FIX = "imageFIX";
+    const IMAGE_VAR = "imageVAR";
+    // On considère que les TAG ont déjà été nettoyé du XML
+    const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
+    const REG_REPEAT_PARAGRAPH  = "#(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*Pfor[^\%]*\%\})(.*?)(\{\%\s*endforP\s*\%\})(.*?</w:p>)#";
+    /*
+     * Si l'on veut décomposer en deux étapes
+     */
+    //const REG_REPEAT_PARAGRAPH_START = @"(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*for(?:[^<]*)\%\})";
+    //const REG_REPEAT_PARAGRAPH_END = @"(\{\%\s*endfor\s*\%\})(.*?w:p>)";
+    const REG_CHECK_FIELDS = "#\{[\{%].*?[\}%]\}#";
+    //const REG_CHECK_OPERATOR = @"\{\{((?:[\s\w\+\d\*\/\.\|\(\)])*?)(&\w*?;)((?:[\s\w\+\d\*\/\.\|\(\)\:\?‘’])*?)\}\}";
+    const REG_XML_NODE_IDENTIFICATOR = "#<.*?>#";
+    const REG_IMAGE_DOC = "#<w:drawing.*?/w:drawing>#";
+    const REG_IMAGE_DOC_FIELD = "#wp:extent cx=\"(\\d+)\" cy=\"(\\d+)\".*wp:docPr.*descr=\"(.*?)\".*a:blip r:embed=\"(rId\\d+)#";
+    const REG_IMAGE_REL = "#Id=\"(rId\\d+)\" Type=\"\\S*\" Target=\"media\\/(image\\d+.(jpeg|jpg|png))\"#";
+    const REG_SPECIAL_CHAR = '{}()[]|';
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -246,6 +263,85 @@ class TraitementController extends Controller {
      * //PASPROPRE
      */
     public function verifierTemplatesAction(){
+        
+        $templatesXML = $this->getDocxContent('C:\\Users\\flo\\Documents\\Visual Studio 2012\\Projects\\wordCleaner - Twig\\wordCleaner\\bin\\Debug\\AP.docx');
+        $templatesXMLTraite = array();
+        $outputs = array();
+        $fields = array();
+        foreach ($templatesXML as $templateName => $templateXML) {
+            /**
+             * Traitement des champs (Nettoyage XML)
+             */
+            preg_match_all(self::REG_CHECK_FIELDS, $templateXML, $fields);
+            $fields = $fields[0];
+            foreach($fields as $field){                
+                $originalField = $field;                
+                $field = preg_replace('#‘#', '\'', $field); // Peut etre simplifier en une ligne avec un array
+                $field = preg_replace('#’#', '\'', $field);
+                $field = preg_replace(self::REG_XML_NODE_IDENTIFICATOR, '', $field);
+                if($field == strtoupper($field))
+                    $field = strtolower($field);
+
+                $templateXML = preg_replace('#'. addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) .'#', $field, $templateXML);   
+            } 
+            
+            /**
+             * Traitement des lignes de tableaux
+             */
+            $parts = array();
+            $nbr = preg_match_all(self::REG_REPEAT_LINE, $templateXML, $parts);
+            $datas = array();
+            foreach ($parts as $part){
+                for($i = 0; $i < $nbr; $i++){
+                    $datas[$i][] = $part[$i];
+                }
+            }
+            
+            foreach ($datas as $data){
+                $forStart = $data[2];               
+                $forEnd = $data[4];
+                
+                $body = preg_replace(array(
+                    '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
+                    '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
+                
+                $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#TRfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
+            }
+            
+            /**
+             * Traitement Paragraphe
+             */
+            $parts = array();
+            $nbr = preg_match_all(self::REG_REPEAT_PARAGRAPH, $templateXML, $parts);
+            $datas = array();
+            foreach ($parts as $part){
+                for($i = 0; $i < $nbr; $i++){
+                    $datas[$i][] = $part[$i];
+                }
+            }
+            
+            foreach ($datas as $data){
+                $forStart = $data[2];               
+                $forEnd = $data[4];
+                
+                $body = preg_replace(array(
+                    '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
+                    '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
+                
+                $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#Pfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
+            }
+            
+            $this->array_push_assoc($templatesXMLTraite, $templateName, $templateXML);
+        }
+        var_dump(htmlspecialchars($templateXML));
+
+        //return $templatesXMLTraite;
+        
+        
+        
+        
+        /*
+        
         $data = array();
         $form = $this->createFormBuilder($data)
             ->add('template', 'textarea')
@@ -286,13 +382,16 @@ class TraitementController extends Controller {
             
             return new \Symfony\Component\HttpFoundation\Response($this->get('twig')->render($template, array('etude'=> $data['etude'], 'etudiant' => $data['etudiant']))); 
             }
-         }
+         }*/
         
         return new \Symfony\Component\HttpFoundation\Response(
             $this->get('twig')->render(
-                '<form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Test"/></form>', 
-                array('form' => $form->createView()))
+                '{% for output in outputs %}{{ output }}<br><br>{% endfor %}', 
+                array('outputs' => $outputs))
             ); 
                
     }
+    
+    
+    
 }
