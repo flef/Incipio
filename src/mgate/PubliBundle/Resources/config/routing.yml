@@ -13,6 +13,8 @@ mgate_publi_telecharger:
 mgate_publi_verifier:
     pattern: /documents/verifier
     defaults: {_controller: mgatePubliBundle:Traitement:verifierTemplates}
+    
+    
         
         
 ######################
