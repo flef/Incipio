@@ -8,23 +8,22 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 
 class TraitementController extends Controller {
-    const IMAGE_FIX = "imageFIX";
-    const IMAGE_VAR = "imageVAR";
+    
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
     const REG_REPEAT_PARAGRAPH  = "#(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*Pfor[^\%]*\%\})(.*?)(\{\%\s*endforP\s*\%\})(.*?</w:p>)#";
-    /*
-     * Si l'on veut décomposer en deux étapes
-     */
-    //const REG_REPEAT_PARAGRAPH_START = @"(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*for(?:[^<]*)\%\})";
-    //const REG_REPEAT_PARAGRAPH_END = @"(\{\%\s*endfor\s*\%\})(.*?w:p>)";
+    // Champs
     const REG_CHECK_FIELDS = "#\{[\{%].*?[\}%]\}#";
-    //const REG_CHECK_OPERATOR = @"\{\{((?:[\s\w\+\d\*\/\.\|\(\)])*?)(&\w*?;)((?:[\s\w\+\d\*\/\.\|\(\)\:\?‘’])*?)\}\}";
     const REG_XML_NODE_IDENTIFICATOR = "#<.*?>#";
+    // Images
     const REG_IMAGE_DOC = "#<w:drawing.*?/w:drawing>#";
     const REG_IMAGE_DOC_FIELD = "#wp:extent cx=\"(\\d+)\" cy=\"(\\d+)\".*wp:docPr.*descr=\"(.*?)\".*a:blip r:embed=\"(rId\\d+)#";
     const REG_IMAGE_REL = "#Id=\"(rId\\d+)\" Type=\"\\S*\" Target=\"media\\/(image\\d+.(jpeg|jpg|png))\"#";
+    const IMAGE_FIX = "imageFIX";
+    const IMAGE_VAR = "imageVAR";
+    // Autres
     const REG_SPECIAL_CHAR = '{}()[]|';
+    const REG_FILE_EXT = "#\.(jpg|png|jpeg)#i";
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
@@ -203,6 +202,23 @@ class TraitementController extends Controller {
         }
         return $templateXML;
     }
+    
+    //prendre le fichier relationShip
+    private function getDocxRelationShip($docxFullPath){
+        $zip = new \ZipArchive;
+        $templateXML = array();
+        if ($zip->open($docxFullPath) === TRUE) {
+
+
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $name = $zip->getNameIndex($i);
+                if ((strstr($name, "document.xml.rel")))
+                    $templateXML = $zip->getFromIndex($i);
+            }
+            $zip->close();
+        }
+        return $templateXML;
+    }
 
     private function traiterTemplates($templateFullPath, $rootName, $rootObject) {
         $templatesXML = $this->getDocxContent($templateFullPath); //récup contenu XML
@@ -265,6 +281,8 @@ class TraitementController extends Controller {
     public function verifierTemplatesAction(){
         
         $templatesXML = $this->getDocxContent('C:\\Users\\flo\\Documents\\Visual Studio 2012\\Projects\\wordCleaner - Twig\\wordCleaner\\bin\\Debug\\AP.docx');
+        $relationship = $this->getDocxRelationShip('C:\\Users\\flo\\Documents\\Visual Studio 2012\\Projects\\wordCleaner - Twig\\wordCleaner\\bin\\Debug\\AP.docx');
+
         $templatesXMLTraite = array();
         $outputs = array();
         $fields = array();
@@ -332,9 +350,37 @@ class TraitementController extends Controller {
             }
             
             $this->array_push_assoc($templatesXMLTraite, $templateName, $templateXML);
+            
+            /**
+             * Traitement des images
+             */
+
+            $images = array();
+            preg_match(self::REG_IMAGE_DOC, $templateXML, $images);
+            foreach ($images as $image){
+                $imageInfo = array();
+                if(preg_match(self::REG_IMAGE_DOC_FIELD, $image, $imageInfo)){
+                    $cx = $imageInfo[1];
+                    $cy = $imageInfo[2];
+                    $fileName = explode('\\', $imageInfo[3]);
+                    $originalFilename = preg_replace(self::REG_FILE_EXT,  '', end($fileName));                    
+                    $rId = $imageInfo[4];
+                    
+                    if(preg_match('#imageVAR#', $originalFilename) || preg_match('#imageFIX#', $originalFilename)){
+                        $relatedImage = array();
+                        preg_match(self::REG_IMAGE_REL, $relationship, $relatedImage);
+                        $localFilename = $relatedImage[2];
+                        
+                        $commentsRel = "<!--IMAGE|" . $originalFilename . "|" . $rId . "|" . $localFilename . "|" . $cx . "|" . $cy . "|/IMAGE-->";
+                        $templateXML = $commentsRel.$templateXML;
+                    }
+                }
+            }
         }
         var_dump(htmlspecialchars($templateXML));
 
+        
+        //prochaine étape : on repack, on test et si c ok on update sinon on envoi chier !
         //return $templatesXMLTraite;
         
         
