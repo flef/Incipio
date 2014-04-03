@@ -57,9 +57,9 @@ class Mission extends DocType {
     private $finOm;
 
     /**
-     * @var integer $pourcentageJunior
+     * @var float $pourcentageJunior
      *
-     * @ORM\Column(name="pourcentageJunior", type="integer", nullable=true)
+     * @ORM\Column(name="pourcentageJunior", type="float", nullable=true)
      */
     private $pourcentageJunior;
 
@@ -106,7 +106,7 @@ class Mission extends DocType {
     }
     
     /**
-     * 
+     * @deprecated since version 0.1
      * @return array('jehRemuneration','montantRemuneration');
      */
     public function getRemuneration() {
@@ -116,9 +116,19 @@ class Mission extends DocType {
             $nbrJEHRemuneration += $repartitionJEH->getNbrJEH();
             $prixRemuneration += $repartitionJEH->getNbrJEH() * $repartitionJEH->getPrixJEH();
         }
-        $prixRemuneration *= 1 - $this->getPourcentageJunior() / 100;            
+        $prixRemuneration *= 1 - $this->getPourcentageJunior();            
             
         return array('jehRemuneration' => $nbrJEHRemuneration, 'montantRemuneration' => $prixRemuneration);
+    }
+    
+    public function getRemunerationBrute() {
+        $prixRemuneration = (float) 0;
+        foreach ($this->getRepartitionsJEH() as $repartitionJEH){
+            $prixRemuneration += $repartitionJEH->getNbrJEH() * $repartitionJEH->getPrixJEH();
+        }
+        $prixRemuneration *= 1 - $this->getPourcentageJunior();            
+            
+        return $prixRemuneration;
     }
     
     public function getNbrJEH(){
@@ -410,7 +420,7 @@ class Mission extends DocType {
     public function __construct()
     {
         $this->repartitionsJEH = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pourcentageJunior = 40;
+        $this->pourcentageJunior = 0.4;
     }
     
 }
