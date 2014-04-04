@@ -395,7 +395,7 @@ class TraitementController extends Controller {
 
 
     /**
-     * @Secure(roles="ROLE_SUPER_ADMIN")
+     * @Secure(roles="ROLE_ADMIN")
      */    
     public function uploadNewDoctypeAction(){
         $message = '';

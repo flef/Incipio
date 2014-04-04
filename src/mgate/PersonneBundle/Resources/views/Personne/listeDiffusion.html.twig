@@ -10,13 +10,19 @@
     </tr>
     <tr>
         <td>
-            {% for personne in personnes if personne.employe and personne.emailestvalide and personne.estabonnenewsletter and personne.email %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+            {% for personne in personnes if personne.employe and personne.emailestvalide and personne.estabonnenewsletter and personne.email %}
+                {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
+            {% endfor %}
         </td>
         <td>
-            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter and  personne.email %}{{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />{% endfor %}
+            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter and  personne.email %}
+                {{personne.prenomNom }} &lt;{{ personne.email }}&gt;;<br />
+            {% endfor %}
         </td>
         <td>
-            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter  %}{{personne.prenomNom }} &lt;{{ personne.membre.emailEtu }}&gt;;<br />{% endfor %}
+            {% for personne in personnes if personne.membre and personne.emailestvalide and personne.estabonnenewsletter  %}
+                {{personne.prenomNom }} &lt;{{ personne.membre.emailEtu }}&gt;;<br />
+            {% endfor %}
         </td>
     </tr>
     <tr>
@@ -36,11 +42,11 @@
         </td>
     </tr>
 </table>
-<h3>Liste de diffusion cotisant ({{ nbrCotisantsEtu}})(etu.emse.fr)</h3>
+<h3>Liste de diffusion cotisant ({{ nbrCotisantsEtu}})(mails école)</h3>
 <pre>
 {{ cotisantsEtu }}
 </pre>
-<h3>Liste de diffusion cotisant ({{ nbrCotisants }}) (hors etu)</h3>
+<h3>Liste de diffusion cotisant ({{ nbrCotisants }}) (hors mails école)</h3>
 <pre>
 {{ cotisants }}
 </pre>

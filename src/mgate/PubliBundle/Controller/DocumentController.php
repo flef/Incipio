@@ -27,11 +27,8 @@ class DocumentController extends Controller
         return $this->render('mgatePubliBundle:Document:index.html.twig', array(
             'docs'       => $entities,
             'totalSize'  => $totalSize, 
-        ));
-       
-    }
-    
-
+        ));       
+    }    
 
     /**
      * @Secure(roles="ROLE_SUIVEUR")
