@@ -238,6 +238,7 @@ class Document
     
     public function setFile($file){
         $this->file = $file;
+        return $this;
     }    
 
     /**

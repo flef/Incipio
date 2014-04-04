@@ -9,6 +9,20 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
     
+    const DOCTYPE_SUIVI_ETUDE               = 'Fiche de suivi d\'étude';
+    const DOCTYPE_AVANT_PROJET              = 'Avant-Projet';
+    const DOCTYPE_CONVENTION_CLIENT         = 'Convention Client';
+    const DOCTYPE_FACTURE_ACOMTE            = 'Facture d\'acompte';
+    const DOCTYPE_FACTURE_INTERMEDIAIRE     = 'Facture intermédiaire';
+    const DOCTYPE_FACTURE_SOLDE             = 'Facture de solde';
+    const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'Procès verbal de recette intermédiaire';
+    const DOCTYPE_PROCES_VERBAL_FINAL       = 'Procès verbal de recette final';
+    const DOCTYPE_RECAPITULATIF_MISSION     = 'Récapitulatif de mission';
+    const DOCTYPE_CONVENTION_ETUDIANT       = 'Convention Etudiant';
+    const DOCTYPE_FICHE_ADHESION            = 'Fiche d\'adhésion';
+    const DOCTYPE_ACCORD_CONFIDENTIALITE    = 'Accord de confidentialité';
+    const DOCTYPE_DECLARATION_ETUDIANT_ETR  = 'Déclaration étudiant étranger';
+    
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
     const REG_REPEAT_PARAGRAPH  = "#(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*Pfor[^\%]*\%\})(.*?)(\{\%\s*endforP\s*\%\})(.*?</w:p>)#";
@@ -19,8 +33,8 @@ class TraitementController extends Controller {
     const REG_IMAGE_DOC = "#<w:drawing.*?/w:drawing>#";
     const REG_IMAGE_DOC_FIELD = "#wp:extent cx=\"(\\d+)\" cy=\"(\\d+)\".*wp:docPr.*descr=\"(.*?)\".*a:blip r:embed=\"(rId\\d+)#";
     const REG_IMAGE_REL = "#Id=\"(rId\\d+)\" Type=\"\\S*\" Target=\"media\\/(image\\d+.(jpeg|jpg|png))\"#";
-    const IMAGE_FIX = "imageFIX";
-    const IMAGE_VAR = "imageVAR";
+    const IMAGE_FIX = "#imageFIX#";
+    const IMAGE_VAR = "#imageVAR#";
     // Autres
     const REG_SPECIAL_CHAR = '{}()[]|';
     const REG_FILE_EXT = "#\.(jpg|png|jpeg)#i";
@@ -132,6 +146,9 @@ class TraitementController extends Controller {
         }
         /*****/
 
+        $zip = new \ZipArchive();
+        $zip->open($repertoire . '/' . $idDocx);
+        
         foreach ($templatesXMLtraite as $templateXMLName => $templateXMLContent) {
             $zip->deleteName('word/' . $templateXMLName);
             $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
@@ -271,169 +288,212 @@ class TraitementController extends Controller {
                 @unlink($filename);
         }
     }
-
+    
+    
     /**
-     * @Secure(roles="ROLE_SUPER_ADMIN")
-     * //UNSAFE
-     * //TODO
-     * //PASPROPRE
+     * Traitement des champs (Nettoyage XML)
      */
-    public function verifierTemplatesAction(){
-        
-        $templatesXML = $this->getDocxContent('C:\\Users\\flo\\Documents\\Visual Studio 2012\\Projects\\wordCleaner - Twig\\wordCleaner\\bin\\Debug\\AP.docx');
-        $relationship = $this->getDocxRelationShip('C:\\Users\\flo\\Documents\\Visual Studio 2012\\Projects\\wordCleaner - Twig\\wordCleaner\\bin\\Debug\\AP.docx');
-
-        $templatesXMLTraite = array();
-        $outputs = array();
+    private function cleanDocxFields(&$templateXML){
         $fields = array();
-        foreach ($templatesXML as $templateName => $templateXML) {
-            /**
-             * Traitement des champs (Nettoyage XML)
-             */
-            preg_match_all(self::REG_CHECK_FIELDS, $templateXML, $fields);
-            $fields = $fields[0];
-            foreach($fields as $field){                
-                $originalField = $field;                
-                $field = preg_replace('#‘#', '\'', $field); // Peut etre simplifier en une ligne avec un array
-                $field = preg_replace('#’#', '\'', $field);
-                $field = preg_replace(self::REG_XML_NODE_IDENTIFICATOR, '', $field);
-                if($field == strtoupper($field))
-                    $field = strtolower($field);
+        preg_match_all(self::REG_CHECK_FIELDS, $templateXML, $fields);
+        $fields = $fields[0];
+        foreach($fields as $field){
+            $originalField = $field;                
+            $field = preg_replace('#‘#', '\'', $field); // Peut etre simplifier en une ligne avec un array
+            $field = preg_replace('#’#', '\'', $field);
+            $field = preg_replace(self::REG_XML_NODE_IDENTIFICATOR, '', $field);
+            if($field == strtoupper($field))
+                $field = strtolower($field);
 
-                $templateXML = preg_replace('#'. addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) .'#', $field, $templateXML);   
-            } 
-            
-            /**
-             * Traitement des lignes de tableaux
-             */
-            $parts = array();
-            $nbr = preg_match_all(self::REG_REPEAT_LINE, $templateXML, $parts);
-            $datas = array();
-            foreach ($parts as $part){
-                for($i = 0; $i < $nbr; $i++){
-                    $datas[$i][] = $part[$i];
-                }
-            }
-            
-            foreach ($datas as $data){
-                $forStart = $data[2];               
-                $forEnd = $data[4];
-                
-                $body = preg_replace(array(
-                    '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
-                    '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
-                
-                $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#TRfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
-            }
-            
-            /**
-             * Traitement Paragraphe
-             */
-            $parts = array();
-            $nbr = preg_match_all(self::REG_REPEAT_PARAGRAPH, $templateXML, $parts);
-            $datas = array();
-            foreach ($parts as $part){
-                for($i = 0; $i < $nbr; $i++){
-                    $datas[$i][] = $part[$i];
-                }
-            }
-            
-            foreach ($datas as $data){
-                $forStart = $data[2];               
-                $forEnd = $data[4];
-                
-                $body = preg_replace(array(
-                    '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
-                    '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
-                
-                $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#Pfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
-            }
-            
-            $this->array_push_assoc($templatesXMLTraite, $templateName, $templateXML);
-            
-            /**
-             * Traitement des images
-             */
+            $templateXML = preg_replace('#'. addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) .'#', $field, $templateXML);   
+        } 
+        return $templateXML;
+    }
+    
+    /**
+    * Traitement des lignes de tableaux
+    */
+    private function cleanDocxTableRow(&$templateXML){    
+       $parts = array();
+       $nbr = preg_match_all(self::REG_REPEAT_LINE, $templateXML, $parts);
+       $datas = array();
+       foreach ($parts as $part){
+           for($i = 0; $i < $nbr; $i++){
+               $datas[$i][] = $part[$i];
+           }
+       }
 
-            $images = array();
-            preg_match(self::REG_IMAGE_DOC, $templateXML, $images);
-            foreach ($images as $image){
-                $imageInfo = array();
-                if(preg_match(self::REG_IMAGE_DOC_FIELD, $image, $imageInfo)){
-                    $cx = $imageInfo[1];
-                    $cy = $imageInfo[2];
-                    $fileName = explode('\\', $imageInfo[3]);
-                    $originalFilename = preg_replace(self::REG_FILE_EXT,  '', end($fileName));                    
-                    $rId = $imageInfo[4];
-                    
-                    if(preg_match('#imageVAR#', $originalFilename) || preg_match('#imageFIX#', $originalFilename)){
-                        $relatedImage = array();
-                        preg_match(self::REG_IMAGE_REL, $relationship, $relatedImage);
-                        $localFilename = $relatedImage[2];
-                        
-                        $commentsRel = "<!--IMAGE|" . $originalFilename . "|" . $rId . "|" . $localFilename . "|" . $cx . "|" . $cy . "|/IMAGE-->";
-                        $templateXML = $commentsRel.$templateXML;
-                    }
+       foreach ($datas as $data){
+           $forStart = $data[2];               
+           $forEnd = $data[4];
+
+           $body = preg_replace(array(
+               '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
+               '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
+
+           $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#TRfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
+       }
+       
+       return $templateXML;
+    }
+    
+    /**
+    * Traitement Paragraphe
+    */
+    private function cleanDocxParagraph(&$templateXML){
+       $parts = array();
+       $nbr = preg_match_all(self::REG_REPEAT_PARAGRAPH, $templateXML, $parts);
+       $datas = array();
+       foreach ($parts as $part){
+           for($i = 0; $i < $nbr; $i++){
+               $datas[$i][] = $part[$i];
+           }
+       }
+
+       foreach ($datas as $data){
+           $forStart = $data[2];               
+           $forEnd = $data[4];
+
+           $body = preg_replace(array(
+               '#'. addcslashes(addslashes($forStart), self::REG_SPECIAL_CHAR) .'#',
+               '#'. addcslashes(addslashes($forEnd), self::REG_SPECIAL_CHAR) .'#'), '', $data[0]);
+
+           $templateXML = preg_replace('#'. addcslashes(addslashes($data[0]), self::REG_SPECIAL_CHAR) .'#', preg_replace('#Pfor#', 'for', $forStart).$body.'{% endfor %}', $templateXML);
+       }
+       
+       return $templateXML;
+    }
+    
+    /**
+     * Traitement des images
+     */
+    private function linkDocxImages(&$templateXML, $relationship){
+        $images = array();
+        preg_match(self::REG_IMAGE_DOC, $templateXML, $images);
+        foreach ($images as $image){
+            $imageInfo = array();
+            if(preg_match(self::REG_IMAGE_DOC_FIELD, $image, $imageInfo)){
+                $cx = $imageInfo[1];
+                $cy = $imageInfo[2];
+                $fileName = explode('\\', $imageInfo[3]);
+                $originalFilename = preg_replace(self::REG_FILE_EXT,  '', end($fileName));                    
+                $rId = $imageInfo[4];
+
+                if(preg_match(self::IMAGE_VAR, $originalFilename) || preg_match(self::IMAGE_VAR, $originalFilename)){
+                    $relatedImage = array();
+                    preg_match(self::REG_IMAGE_REL, $relationship, $relatedImage);
+                    $localFilename = $relatedImage[2];
+
+                    $commentsRel = "<!--IMAGE|" . $originalFilename . "|" . $rId . "|" . $localFilename . "|" . $cx . "|" . $cy . "|/IMAGE-->";
+                    $templateXML = preg_replace("#(<\?.*?\?>)#", "$0$commentsRel", $templateXML, 1);
                 }
             }
         }
-        var_dump(htmlspecialchars($templateXML));
+        return $templateXML;
+    }
 
-        
-        //prochaine étape : on repack, on test et si c ok on update sinon on envoi chier !
-        //return $templatesXMLTraite;
-        
-        
-        
-        
-        /*
-        
+
+    /**
+     * @Secure(roles="ROLE_SUPER_ADMIN")
+     */    
+    public function uploadNewDoctypeAction(){
+        $message = '';
         $data = array();
         $form = $this->createFormBuilder($data)
-            ->add('template', 'textarea')
-            ->add('etudiant', 'genemu_jqueryselect2_entity', array(
+            ->add('name', 'choice', array(
+                'required' => true, 
+                'choices' => array(
+                    self::DOCTYPE_SUIVI_ETUDE => 'Fiche de suivi d\'étude',
+                    self::DOCTYPE_AVANT_PROJET => 'Avant-Projet',
+                    self::DOCTYPE_CONVENTION_CLIENT => 'Convention Client',
+                    self::DOCTYPE_FACTURE_ACOMTE => 'Facture d\'acompte',
+                    self::DOCTYPE_FACTURE_INTERMEDIAIRE => 'Facture intermédiaire',
+                    self::DOCTYPE_FACTURE_SOLDE => 'Facture de solde',
+                    self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE => 'Procès verbal de recette intermédiaire',
+                    self::DOCTYPE_PROCES_VERBAL_FINAL => 'Procès verbal de recette final',
+                    self::DOCTYPE_RECAPITULATIF_MISSION => 'Récapitulatif de mission',
+                    self::DOCTYPE_CONVENTION_ETUDIANT => 'Convention Etudiant',
+                    self::DOCTYPE_FICHE_ADHESION => 'Fiche d\'adhésion',
+                    self::DOCTYPE_ACCORD_CONFIDENTIALITE => 'Accord de confidentialité',
+                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR => 'Déclaration étudiant étranger',
+                    )))
+            /*->add('etudiant', 'genemu_jqueryselect2_entity', array(
                'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
                'property' => 'personne.prenomNom',
-               'label' => 'Intervenant',
+               'label' => 'Intervenant pour vérifier le template',
                'required' => false
-               ))
-            ->add('etude','genemu_jqueryselect2_entity',array (
-                      'label' => 'Etude',
+               ))*/
+            ->add('template', 'file', array('required' => true))
+            /*->add('etude','genemu_jqueryselect2_entity',array (
+                      'label' => 'Etude pour vérifier le template',
                        'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
                        'property' => 'reference',                      
                        'required' => false))
+            ->add('verification', 'checkbox', array('label' => 'Désactiver la vérification', 'required' => false))*/
             ->getForm();
 
          if ($this->get('request')->getMethod() == 'POST') {
             $form->bind($this->get('request'));
 
             if ($form->isValid()) {           
-            
-            $data = $form->getData();
-            
-            $template =  $data['template'];
-            
-            $template = preg_replace('#\{%\s*Pfor[^%]*%\}#', '$0<p>', $template);
-            $template = preg_replace('#Pfor#', 'for', $template);
-            $template = preg_replace('#\{%\s*endforP[^%]*%\}#', '$0</p>', $template);
-            $template = preg_replace('#endforP#', 'endfor', $template);
-            
-            $template = preg_replace('#\{%\s*TRfor[^%]*%\}#', '$0<p>', $template);
-            $template = preg_replace('#TRfor#', 'for', $template);
-            $template = preg_replace('#\{%\s*endforTR[^%]*%\}#', '$0</p>', $template);
-            $template = preg_replace('#endforTR#', 'endfor', $template);
-            
-            $template = preg_replace('#‘|’#','\'',$template);
-            $template = preg_replace('#\n#','<br>',$template);
-            
-            return new \Symfony\Component\HttpFoundation\Response($this->get('twig')->render($template, array('etude'=> $data['etude'], 'etudiant' => $data['etudiant']))); 
-            }
-         }*/
+                $data = $form->getData();
+
+                // Création d'un fichier temporaire
+                $file = $data['template'];
+                $filename = sha1(uniqid(mt_rand(), true));
+                $filename .= '.'.$file->guessExtension();
+                $file->move('tmp/', $filename);
+                $docxFullPath = 'tmp/'. $filename;
+
+                // Extraction des infos XML
+                $templatesXML = $this->getDocxContent($docxFullPath);
+                $relationship = $this->getDocxRelationShip($docxFullPath);                
+                // Nettoyage des XML
+                $templatesXMLTraite = array(); 
+                foreach ($templatesXML as $templateName => $templateXML) {
+                    $this->cleanDocxFields($templateXML);
+                    $this->cleanDocxTableRow($templateXML);
+                    $this->cleanDocxParagraph($templateXML);
+                    $this->linkDocxImages($templateXML, $relationship);
+                    $this->array_push_assoc($templatesXMLTraite, $templateName, $templateXML);
+                }
+                
+                // Enregistrement dans le fichier temporaire
+                $zip = new \ZipArchive();
+                $zip->open($docxFullPath);
+
+                foreach ($templatesXMLTraite as $templateXMLName => $templateXMLContent) {
+                    $zip->deleteName('word/' . $templateXMLName);
+                    $zip->addFromString('word/' . $templateXMLName, $templateXMLContent);
+                }
+                $zip->close();
         
+                // Vérification du template
+                // TODO
+                
+                
+                // Enregistrement du template
+                $em = $this->getDoctrine()->getManager();
+                $user = $this->get('security.context')->getToken()->getUser();
+                $personne = $user->getPersonne();
+                $file = new \Symfony\Component\HttpFoundation\File\File($docxFullPath);
+                
+                
+                $doc = new \mgate\PubliBundle\Entity\Document();
+                $doc->setAuthor($personne)
+                    ->setName($data['name'])
+                    ->setFile($file);
+                $em->persist($doc);
+                $em->flush();
+                
+                $message = 'Le document a été mis à jour : ';
+            }
+         }
+
         return new \Symfony\Component\HttpFoundation\Response(
             $this->get('twig')->render(
-                '{% for output in outputs %}{{ output }}<br><br>{% endfor %}', 
-                array('outputs' => $outputs))
+                $message.(array_key_exists('name', $data) ? $data['name'] : '').'<br><form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Mettre à jour"/></form>', 
+                array('form' => $form->createView()))
             ); 
                
     }
