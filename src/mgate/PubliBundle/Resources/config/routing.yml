@@ -9,12 +9,10 @@ mgate_publi_publiposter:
 mgate_publi_telecharger:
     pattern: /publi/publiposter/telecharger
     defaults: {_controller: mgatePubliBundle:Traitement:telecharger}
-        
-mgate_publi_verifier:
-    pattern: /documents/verifier
-    defaults: {_controller: mgatePubliBundle:Traitement:verifierTemplates}
-    
-    
+
+mgate_publi_documenttype_upload:
+    pattern: /DocumentsType/Upload
+    defaults: {_controller: mgatePubliBundle:Traitement:uploadNewDoctype}  
         
         
 ######################
