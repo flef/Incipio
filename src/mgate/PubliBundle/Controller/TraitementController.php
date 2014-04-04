@@ -9,19 +9,20 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
     
-    const DOCTYPE_SUIVI_ETUDE               = 'Fiche de suivi d\'étude';
-    const DOCTYPE_AVANT_PROJET              = 'Avant-Projet';
-    const DOCTYPE_CONVENTION_CLIENT         = 'Convention Client';
-    const DOCTYPE_FACTURE_ACOMTE            = 'Facture d\'acompte';
-    const DOCTYPE_FACTURE_INTERMEDIAIRE     = 'Facture intermédiaire';
-    const DOCTYPE_FACTURE_SOLDE             = 'Facture de solde';
-    const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'Procès verbal de recette intermédiaire';
-    const DOCTYPE_PROCES_VERBAL_FINAL       = 'Procès verbal de recette final';
-    const DOCTYPE_RECAPITULATIF_MISSION     = 'Récapitulatif de mission';
-    const DOCTYPE_CONVENTION_ETUDIANT       = 'Convention Etudiant';
-    const DOCTYPE_FICHE_ADHESION            = 'Fiche d\'adhésion';
-    const DOCTYPE_ACCORD_CONFIDENTIALITE    = 'Accord de confidentialité';
-    const DOCTYPE_DECLARATION_ETUDIANT_ETR  = 'Déclaration étudiant étranger';
+    const DOCTYPE_SUIVI_ETUDE               = 'FSE';
+    const DOCTYPE_AVANT_PROJET              = 'AP';
+    const DOCTYPE_CONVENTION_CLIENT         = 'CC';
+    const DOCTYPE_FACTURE_ACOMTE            = 'FA';
+    const DOCTYPE_FACTURE_INTERMEDIAIRE     = 'FI';
+    const DOCTYPE_FACTURE_SOLDE             = 'FS';
+    const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'PVI';
+    const DOCTYPE_PROCES_VERBAL_FINAL       = 'PVR';
+    const DOCTYPE_RECAPITULATIF_MISSION     = 'RM';
+    const DOCTYPE_DESCRIPTIF_MISSION        = 'DM';
+    const DOCTYPE_CONVENTION_ETUDIANT       = 'CE';
+    const DOCTYPE_FICHE_ADHESION            = 'FM';
+    const DOCTYPE_ACCORD_CONFIDENTIALITE    = 'AC';
+    const DOCTYPE_DECLARATION_ETUDIANT_ETR  = 'DEE';
     
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
@@ -98,7 +99,7 @@ class TraitementController extends Controller {
         $repertoire = 'tmp';
 
         //SI DM on prend la ref de RM et ont remplace RM par DM
-        if ($templateName == 'DM') {
+        if ($templateName == self::DOCTYPE_DESCRIPTIF_MISSION) {
             $templateName = 'RM';  $isDM = true;
         }
 
@@ -412,6 +413,7 @@ class TraitementController extends Controller {
                     self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE => 'Procès verbal de recette intermédiaire',
                     self::DOCTYPE_PROCES_VERBAL_FINAL => 'Procès verbal de recette final',
                     self::DOCTYPE_RECAPITULATIF_MISSION => 'Récapitulatif de mission',
+                    self::DOCTYPE_DESCRIPTIF_MISSION => 'Descriptif de mission',
                     self::DOCTYPE_CONVENTION_ETUDIANT => 'Convention Etudiant',
                     self::DOCTYPE_FICHE_ADHESION => 'Fiche d\'adhésion',
                     self::DOCTYPE_ACCORD_CONFIDENTIALITE => 'Accord de confidentialité',
@@ -484,6 +486,8 @@ class TraitementController extends Controller {
                     ->setName($data['name'])
                     ->setFile($file);
                 $em->persist($doc);
+                $docs = $em->getRepository('mgatePubliBundle:Document')->findBy(array('name' => $doc->getName() ));
+                foreach ($docs as $doc) $em->remove($doc);
                 $em->flush();
                 
                 $message = 'Le document a été mis à jour : ';
