@@ -2,31 +2,58 @@
 
 {% extends "mgateDashboardBundle::layout.html.twig" %}
 {% block content %}
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-            <div class="fb-like-box"
-     data-href="https://www.facebook.com/mgate.je" 
-     data-width="850" 
-     data-height="600" 
-     data-colorscheme="light" 
-     data-show-faces="false" 
-     data-header="false" 
-     data-stream="true" 
-     data-show-border="false"></div>
-    <div class="fb-like-box" 
-         data-href="https://www.facebook.com/junior.entreprises"
-         data-width="300" 
-         data-height="600" 
-         data-colorscheme="light" 
-         data-show-faces="false" 
-         data-header="false" 
-         data-stream="true" 
-         data-show-border="false"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <iframe src="http://incipio.fr/push.html" width="100%" height="350" frameBorder="0"> </iframe>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table">
+                <tr>
+                    <th colspan="2">Informations</th>
+                </tr>
+                <tr>
+                    <td>Connecté en tant que </td>
+                    <th>{{ app.user.username }}</th>
+                </tr>
+                <tr>
+                    <td>Dernière connexion le </td>
+                    <th>{{ app.user.lastLogin ? app.user.lastLogin | date ('d M Y')  }}</th>
+                </tr>
+                <tr>
+                    <td colspan="2"><a href="{{ path('fos_user_security_logout') }}"><span class="glyphicon glyphicon-remove-sign"></span> Déconnexion</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
+            <table class="table">
+                <tr>
+                    <th colspan="2">Décidez vous même des infos à présenter</th>
+                </tr>
+                <tr>
+                    <th>CA en Négociation ?</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>CA Signé ? </th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>CA Réalisé ?</th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th>Envoyez vos suggestions à <br><a href="mailto:support@incipio.fr">support@incipio.fr</a></th>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-4">
 
+        </div>
+    </div>
+</div>
 {% endblock %}
