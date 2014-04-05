@@ -17,16 +17,20 @@ class FactureRepository extends EntityRepository
      * YEAR MONTH DAY sont défini dans DashBoardBundle/DQL (qui doit devenir FrontEndBundle)
      * @return array
      */
-    public function findAllTVAByMonth($type, $month, $year) {
+    public function findAllTVAByMonth($type, $month, $year, $trimestriel = false) {
         $date = ($type == 1 ? 'dateEmission' : 'dateVersement');
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('f')
                      ->from('mgateTresoBundle:Facture', 'f')
-                     ->where('f.type '.($type == 1 ? '=' : '>').' 1')
-                     ->andWhere("MONTH(f.$date) = $month")
-                     ->andWhere("YEAR(f.$date) = $year");    
-                  
-                    
+                     ->where('f.type '.($type == Facture::$TYPE_ACHAT ? '=' : '>').' '.Facture::$TYPE_ACHAT);
+        if($trimestriel)
+            $query->andWhere("MONTH(f.$date) >= $month")
+                  ->andWhere("MONTH(f.$date) < ($month + 2)");
+        else
+            $query->where("MONTH(f.$date) = $month");
+            
+        
+        $query->andWhere("YEAR(f.$date) = $year")->orderBy("f.$date");                
         return $query->getQuery()->getResult();
     }
 }

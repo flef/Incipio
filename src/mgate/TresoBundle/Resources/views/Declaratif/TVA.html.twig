@@ -16,13 +16,14 @@
 	<br>
     <input type="submit" value="Chercher" class="btn"/>
 </form>        
-        
+<h3>{{ periode }}</h3>
 <br>
 <table class="table table-bordered table-striped">
     <tr>
-        <td colspan="{{ tvas | length +4}}"><h3>TVA Collectée</h3></td>
+        <td colspan="{{ tvas | length +5}}"><h3>TVA Collectée</h3></td>
     </tr>
     <tr>
+        <th>Date</th>
         <th>Libellé</th>
         <th>Montant HT</th>
         {% for tva in tvas %}
@@ -33,6 +34,7 @@
     </tr>
     {% for line in tvaCollectee %}
     <tr style="text-align: right;">
+        <td>{{ line['DATE'] | date('d/m/Y') }}</td>
         <td>{{ line['LI']}}</td>        
         <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
         {% for tva in tvas %}
@@ -49,7 +51,7 @@
     </tr>
     {% endfor %}
     <tr style="text-align: right;">
-        <th>Total</th>
+        <th colspan="2">Total</th>
         <td>{{ totalTvaCollectee['HT'] |number_format(2, ',', ' ')}} €</td>
         {% for tva in tvas %}
         <td>
@@ -63,13 +65,17 @@
         <td>{{ totalTvaCollectee['TVA'] |number_format(2, ',', ' ')}} €</td>
         <td>{{ totalTvaCollectee['TTC'] |number_format(2, ',', ' ')}} €</td>
     </tr>
-</table>
-
-<table class="table table-bordered table-striped">
     <tr>
-        <td colspan="{{ tvas | length +4}}"><h3>TVA Deductible</h3></td>
+        <td colspan="{{ tvas | length +5}}" style="visibility: hidden;"></td>
     </tr>
     <tr>
+        <td colspan="{{ tvas | length +5}}" style="visibility: hidden;"></td>
+    </tr>
+    <tr>
+        <td colspan="{{ tvas | length +5}}"><h3>TVA Deductible</h3></td>
+    </tr>
+    <tr>
+        <th>Date</th>
         <th>Libellé</th>
         <th>Montant HT</th>
         {% for tva in tvas %}
@@ -80,6 +86,7 @@
     </tr>
     {% for line in tvaDeductible %}
     <tr style="text-align: right;">
+        <td>{{ line['DATE'] | date('d/m/Y') }}</td>
         <td>{{ line['LI']}}</td>        
         <td>{{ line['HT']  |number_format(2, ',', ' ')}} €</td>
         {% for tva in tvas %}
@@ -96,7 +103,7 @@
     </tr>
     {% endfor %}
     <tr style="text-align: right;">
-        <th>Total</th>
+        <th colspan="2">Total</th>
         <td>{{ totalTvaDeductible['HT'] |number_format(2, ',', ' ')}} €</td>
         {% for tva in tvas %}
         <td>
