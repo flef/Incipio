@@ -96,6 +96,16 @@ class Facture
     /**
      * ADDITIONNAL
      */
+    
+    /*
+     * pour la TVA collectée (factures clients), la date d’exigibilité c’est la date d’encaissement
+     * pour la TVA déductible, la date d’exigibilité c’est soit la date de facturation dans le cas de vente de biens soit la date de décaissement dans le cas de services
+     * la CNJE simplifie pour les Junior-Entrepreneurs en leur disant de prendre en compte la date de facturation pour toutes les opérations (biens et services)
+     */
+    public function getDate(){
+        return $this->type == self::$TYPE_ACHAT ? $this->dateEmission : $this->dateVersement;
+    }
+    
     public function getReference(){
         return $this->exercice.'-'.($this->type > 1 ? 'FV' : 'FA').'-'. sprintf('%1$02d', $this->numero);
     }

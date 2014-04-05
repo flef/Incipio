@@ -7,7 +7,7 @@
 {% block content_bundle %}
 
 
-<h2>Déclaration de la TVA</h2>
+<h2>Déclaration URSSAF - BRC</h2>
 
 <form method="post" {{ form_enctype(form) }}>
     {% form_theme form 'mgateSuiviBundle:Form:fields.html.twig' %}
@@ -21,9 +21,9 @@
 <h4 title="Nombre d’intervenants différents ayant reçu au moins un JEH via un Bulletin de Versement sur la période">
     Nombre de salariés ou d’assurés rémunérés dans l’établissement concernés par la déclaration pour la période : {{ nbSalarieRemunere }}
 </h4>
-<h4 title="Nombre d’intervenants différents ayant au moins un RM en cours à la fin de la période">
+<!--h4 title="Nombre d’intervenants différents ayant au moins un RM en cours à la fin de la période">
     Nombre de salariés concernés par la déclaration au dernier jour de la période
-</h4>
+</h4-->
 <table class="table table-bordered table-striped">
     <tr>
         <th>Référence du BV</th>

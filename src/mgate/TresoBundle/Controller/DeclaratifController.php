@@ -28,6 +28,7 @@ class DeclaratifController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
     
+        $data = array();
         $tvaCollectee   = array();
         $tvaDeductible = array();
         $totalTvaCollectee = array('HT' => 0, 'TTC' => 0, 'TVA' => 0);
@@ -40,11 +41,18 @@ class DeclaratifController extends Controller
                           'date', 
                           'genemu_jquerydate',
                           array(
-                              'label'=>'Mois du déclaratif',
+                              'label'=>'Mois considéré',
                               'required'=>true, 'widget'=>'single_text',
-                              'data'=>date_create(),'format' => 'dd/MM/yyyy',)
-                      )->getForm();
+                              'data'=>date_create(),'format' => 'dd/MM/yyyy',))
+                       ->add('trimestriel', 'checkbox', array('label' => 'Trimestriel ?', 'required' => false))
+                       ->getForm();
 
+        $periode = '';
+        $nfs = array();
+        $fas = array();
+        $fvs = array();
+        
+        
         if ($request->isMethod('POST'))
         {
             $form->bind($request);
@@ -55,12 +63,27 @@ class DeclaratifController extends Controller
         }else{
             $date = new \DateTime('now');
             $month = $date->format('m');
-            $year = $date->format('Y');
+            $year = $date->format('Y');            
         }
+        setlocale(LC_TIME, 'fra_fra');
+        if(array_key_exists('trimestriel', $data) && $data['trimestriel']){            
+            $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')).' - '.strftime('%B', $date->modify('+2 month')->format('U')));
+            for($i = 0; $i < 3; $i++){
+                $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year, true);
+                $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_ACHAT, $month, $year, true);
+                $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_VENTE, $month, $year, true);
+            }            
+        }            
+        else{
+            $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')));
+            $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year);
+            $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_ACHAT, $month, $year);
+            $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_VENTE, $month, $year);
+        }
+            
 
-        $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year);
-        $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_ACHAT, $month, $year);
-        $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_VENTE, $month, $year);
+        
+        
         
         /**
          * TVA DEDUCTIBLE
@@ -91,7 +114,7 @@ class DeclaratifController extends Controller
                     else
                         $totalTvaDeductible[$tauxTVA] += $entityDeductibled->getMontantTVA();
                 }
-                $tvaDeductible[] = array('LI'=> $entityDeductible->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC, 'TVA' => $entityDeductible->getMontantTVA(), 'TVAT' => $montantTvaParType);
+                $tvaDeductible[] = array('DATE' => $entityDeductible->getDate(), 'LI'=> $entityDeductible->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC, 'TVA' => $entityDeductible->getMontantTVA(), 'TVAT' => $montantTvaParType);
                 
             }
         }
@@ -127,7 +150,7 @@ class DeclaratifController extends Controller
                 // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
                 if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
             }
-            $tvaCollectee[] = array('LI'=> $fv->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC,'TVA' => $fv->getMontantTVA() , 'TVAT' => $montantTvaParType);
+            $tvaCollectee[] = array('DATE' => $fv->getDate(),'LI'=> $fv->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC,'TVA' => $fv->getMontantTVA() , 'TVAT' => $montantTvaParType);
             
            
         }
@@ -139,6 +162,7 @@ class DeclaratifController extends Controller
                 'tvaCollectee' => $tvaCollectee,
                 'totalTvaDeductible' => $totalTvaDeductible,
                 'totalTvaCollectee' => $totalTvaCollectee,
+                'periode' => $periode,
                 )
             );
     }
