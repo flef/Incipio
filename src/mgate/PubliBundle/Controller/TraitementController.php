@@ -9,20 +9,28 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 
 class TraitementController extends Controller {
     
-    const DOCTYPE_SUIVI_ETUDE               = 'FSE';
-    const DOCTYPE_AVANT_PROJET              = 'AP';
-    const DOCTYPE_CONVENTION_CLIENT         = 'CC';
-    const DOCTYPE_FACTURE_ACOMTE            = 'FA';
-    const DOCTYPE_FACTURE_INTERMEDIAIRE     = 'FI';
-    const DOCTYPE_FACTURE_SOLDE             = 'FS';
-    const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE = 'PVI';
-    const DOCTYPE_PROCES_VERBAL_FINAL       = 'PVR';
-    const DOCTYPE_RECAPITULATIF_MISSION     = 'RM';
-    const DOCTYPE_DESCRIPTIF_MISSION        = 'DM';
-    const DOCTYPE_CONVENTION_ETUDIANT       = 'CE';
-    const DOCTYPE_FICHE_ADHESION            = 'FM';
-    const DOCTYPE_ACCORD_CONFIDENTIALITE    = 'AC';
-    const DOCTYPE_DECLARATION_ETUDIANT_ETR  = 'DEE';
+    const DOCTYPE_SUIVI_ETUDE                   = 'FSE';
+    const DOCTYPE_AVANT_PROJET                  = 'AP';
+    const DOCTYPE_CONVENTION_CLIENT             = 'CC';
+    const DOCTYPE_FACTURE_ACOMTE                = 'FA';
+    const DOCTYPE_FACTURE_INTERMEDIAIRE         = 'FI';
+    const DOCTYPE_FACTURE_SOLDE                 = 'FS';
+    const DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE   = 'PVI';
+    const DOCTYPE_PROCES_VERBAL_FINAL           = 'PVR';
+    const DOCTYPE_RECAPITULATIF_MISSION         = 'RM';
+    const DOCTYPE_DESCRIPTIF_MISSION            = 'DM';
+    const DOCTYPE_CONVENTION_ETUDIANT           = 'CE';
+    const DOCTYPE_FICHE_ADHESION                = 'FM';
+    const DOCTYPE_ACCORD_CONFIDENTIALITE        = 'AC';
+    const DOCTYPE_DECLARATION_ETUDIANT_ETR      = 'DEE';
+    
+    const ROOTNAME_ETUDE                        = 'etude';
+    const ROOTNAME_ETUDIANT                     = 'etudiant';
+    const ROOTNAME_MISSION                      = 'mission';
+    const ROOTNAME_NOTE_DE_FRAIS                = 'nf';
+    const ROOTNAME_FACTURE                      = 'facture';
+    const ROOTNAME_BULLETIN_DE_VERSEMENT        = 'bv';
+    
     
     // On considère que les TAG ont déjà été nettoyé du XML
     const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
@@ -48,49 +56,52 @@ class TraitementController extends Controller {
         return $this->telechargerAction($templateName);
     }
 
-    private function publipostage($templateName, $rootName, $rootObject_id){
-        $em = $this->getDoctrine()->getManager();    
+    private function publipostage($templateName, $rootName, $rootObject_id, $debug = false){
+        $em = $this->getDoctrine()->getManager();
+        
+        $errorRootObjectNotFound = $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+        $errorEtudeConfidentielle = new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
         
         switch ($rootName) {
-            case 'etude':
+            case self::ROOTNAME_ETUDE:
                 if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Etude')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 if($this->get('mgate.etude_manager')->confidentielRefus($rootObject, $this->container->get('security.context')))
-                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                    throw $errorEtudeConfidentielle;
                 break;
-            case 'etudiant':
+            case self::ROOTNAME_ETUDIANT:
                 if (!$rootObject = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 break;
-            case 'mission':
+            case self::ROOTNAME_MISSION:
                 if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\Mission')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 break;
-            case 'facture':
+            case self::ROOTNAME_FACTURE:
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\Facture')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 if($rootObject->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->container->get('security.context')))
-                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                    throw $errorEtudeConfidentielle;
                 break;
-            case 'nf':
+            case self::ROOTNAME_NOTE_DE_FRAIS:
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\NoteDeFrais')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 break;
-            case 'bv':
+            case self::ROOTNAME_BULLETIN_DE_VERSEMENT:
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\BV')->find($rootObject_id))
-                    throw $this->createNotFoundException('Le document ne peut être plubliposter car l\'objet de référence n\'existe pas !');
+                    throw $errorRootObjectNotFound;
                 if($rootObject->getMission() && $rootObject->getMission()->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getMission()->getEtude(), $this->container->get('security.context')))
-                    throw new \Symfony\Component\Security\Core\Exception\AccessDeniedException ('Cette étude est confidentielle');
+                    throw $errorEtudeConfidentielle;
                 break;
             default:
                 throw $this->createNotFoundException('Publipostage invalide ! Pas de bol...');
                 break;
         }
 
-        $chemin = $this->getDoctypeAbsolutePathFromName($templateName);
+        $chemin = $this->getDoctypeAbsolutePathFromName($templateName, $debug);
         
         //DEBUG   
-        if ($this->container->getParameter('debugEnable')) {
+        if ($this->container->getParameter('debugEnable') && !$debug) {
             $path = $this->container->getParameter('pathToDoctype');
             $chemin = $path.$chemin;
         }
@@ -159,6 +170,8 @@ class TraitementController extends Controller {
 
         $_SESSION['idDocx'] = $idDocx;
         $_SESSION['refDocx'] = $refDocx;
+        
+        return true;
     }
      
     /**
@@ -192,9 +205,12 @@ class TraitementController extends Controller {
 
 
     //TODO
-    private function getDoctypeAbsolutePathFromName($doc) {
+    private function getDoctypeAbsolutePathFromName($doc, $debug = false) {
         $em = $this->getDoctrine()->getManager();
-
+        
+        // Utilisé pour tester un template lors de l'upload d'un nouveau
+        if($debug) return $doc;
+        
         if (!$documenttype = $em->getRepository('mgate\PubliBundle\Entity\Document')->findOneBy(array('name' => $doc))) {
             throw $this->createNotFoundException('Le doctype n\'existe pas... C\'est bien balo');
         } else {
@@ -419,19 +435,19 @@ class TraitementController extends Controller {
                     self::DOCTYPE_ACCORD_CONFIDENTIALITE => 'Accord de confidentialité',
                     self::DOCTYPE_DECLARATION_ETUDIANT_ETR => 'Déclaration étudiant étranger',
                     )))
-            /*->add('etudiant', 'genemu_jqueryselect2_entity', array(
+            ->add('etudiant', 'genemu_jqueryselect2_entity', array(
                'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
                'property' => 'personne.prenomNom',
                'label' => 'Intervenant pour vérifier le template',
                'required' => false
-               ))*/
+               ))
             ->add('template', 'file', array('required' => true))
-            /*->add('etude','genemu_jqueryselect2_entity',array (
+            ->add('etude','genemu_jqueryselect2_entity',array (
                       'label' => 'Etude pour vérifier le template',
                        'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
                        'property' => 'reference',                      
                        'required' => false))
-            ->add('verification', 'checkbox', array('label' => 'Désactiver la vérification', 'required' => false))*/
+            ->add('verification', 'checkbox', array('label' => 'Activer la vérification', 'required' => false))
             ->getForm();
 
          if ($this->get('request')->getMethod() == 'POST') {
@@ -470,9 +486,33 @@ class TraitementController extends Controller {
                 }
                 $zip->close();
         
-                // Vérification du template
-                // TODO
                 
+                if(array_key_exists('etude', $data))
+                    $etude = $data['etude'];
+                else
+                    $etude = null;
+                // Vérification du template (document étude)
+                if( $etude && ($data['name'] == self::DOCTYPE_AVANT_PROJET ||
+                    $data['name'] == self::DOCTYPE_CONVENTION_CLIENT ||
+                    $data['name'] == self::DOCTYPE_SUIVI_ETUDE) && 
+                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDE, $etude->getId(), true)
+                    ){
+                    $message .= 'Le template a été vérifié, il ne contient pas d\'erreur<br>';
+                }
+                
+                if(array_key_exists('etudiant', $data))
+                    $etudiant = $data['etudiant'];
+                else
+                    $etudiant = null;
+                
+                $etudiant = $data['etudiant'];
+                // Vérification du template (document étudiant)
+                if( $etudiant && ($data['name'] == self::DOCTYPE_CONVENTION_ETUDIANT ||
+                    $data['name'] == self::DOCTYPE_DECLARATION_ETUDIANT_ETR) && 
+                    $data['verification'] && $this->publipostage($docxFullPath, self::ROOTNAME_ETUDIANT, $etudiant->getId(), true)
+                    ){
+                    $message .= 'Le template a été vérifié, il ne contient pas d\'erreur<br>';
+                }
                 
                 // Enregistrement du template
                 $em = $this->getDoctrine()->getManager();
@@ -490,13 +530,13 @@ class TraitementController extends Controller {
                 foreach ($docs as $doc) $em->remove($doc);
                 $em->flush();
                 
-                $message = 'Le document a été mis à jour : ';
+                $message .= 'Le document a été mis à jour : ';
             }
          }
 
         return new \Symfony\Component\HttpFoundation\Response(
             $this->get('twig')->render(
-                $message.(array_key_exists('name', $data) ? $data['name'] : '').'<br><form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Mettre à jour"/></form>', 
+                $message.(array_key_exists('name', $data) ? $data['name'] : '').'<br><form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Mettre à jour"/></form><br><code>Cette fonction est en béta</code>', 
                 array('form' => $form->createView()))
             ); 
                
