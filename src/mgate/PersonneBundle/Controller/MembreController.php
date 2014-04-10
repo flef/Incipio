@@ -192,6 +192,11 @@ class MembreController extends Controller {
                     $membre->setIdentifiant(strtoupper($initial . $ident));
                 }
                 
+                if(isset($now)){ // Si c'est un nouveau membre et qu'on ajoute un poste
+                    $em->persist($membre);
+                    $em->flush();                   
+                    return $this->redirect($this->generateUrl('mgatePersonne_membre_modifier', array('id' => $membre->getId())));                    
+                }
                 
                 // Suppression des mandat à supprimer
                     //Recherche des mandats supprimés
