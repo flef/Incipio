@@ -92,52 +92,8 @@ class Membre {
     /**
      * @ORM\OneToMany(targetEntity="mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"})
      */
-    private $relatedDocuments;
+    private $relatedDocuments;    
     
-    private function enMinusculeSansAccent($texte){
-    $texte = mb_strtolower($texte, 'UTF-8');
-    $texte = str_replace(
-        array(
-            'à', 'â', 'ä', 'á', 'ã', 'å',
-            'î', 'ï', 'ì', 'í', 
-            'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 
-            'ù', 'û', 'ü', 'ú', 
-            'é', 'è', 'ê', 'ë', 
-            'ç', 'ÿ', 'ñ', 
-        ),
-        array(
-            'a', 'a', 'a', 'a', 'a', 'a', 
-            'i', 'i', 'i', 'i', 
-            'o', 'o', 'o', 'o', 'o', 'o', 
-            'u', 'u', 'u', 'u', 
-            'e', 'e', 'e', 'e', 
-            'c', 'y', 'n', 
-        ),
-        $texte
-    );
-    return $texte;        
-}
-
-    /**
-     * Get Adresse Mail Etu
-     * @return string format@etu.emse.fr
-     */
-    public function getEmailEtu() {
-        $now = new \DateTime("now");
-        $now = (int) $now->format("Y");
-
-        if ($promo = $this->getPromotion() && $this->getPersonne()) {
-            if ($promo < $now)
-                return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom(). '.' . $this->getPersonne()->getNom())) . "@emse-ismin.fr";
-            if ($promo < 2014)
-                return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent(substr($this->getPersonne ()->getPrenom (), 0, 1) . $this->getPersonne ()->getNom ())) . "@etu.emse.fr";
-            else
-            return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom() . '.' . $this->getPersonne()->getNom())) . "@etu.emse.fr";
-        }
-        else if($this->getPersonne()){
-            return preg_replace('#[^a-zA-Z.0-9_]#','',$this->enMinusculeSansAccent($this->getPersonne()->getPrenom() . '.' . $this->getPersonne()->getNom())) . "@etu.emse.fr";
-        } else return null;
-    }
 
     /**
      * Get id
