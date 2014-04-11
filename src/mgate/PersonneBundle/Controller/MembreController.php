@@ -296,8 +296,8 @@ class MembreController extends Controller {
      */
     public function getEmailEtu($membre) {
         $junior = $this->container->getParameter('junior');
-        $emailEtu = array_key_exists('domaineEmailEtu', $junior) ? $junior['domaineEmailEtu'] : '@';
-        $emailAncien = array_key_exists('domaineEmailAncien', $junior) ? $junior['domaineEmailAncien'] : '@';        
+        $emailEtu = array_key_exists('domaineEmailEtu', $junior) ? '@'.$junior['domaineEmailEtu'] : '@';
+        $emailAncien = array_key_exists('domaineEmailAncien', $junior) ? '@'.$junior['domaineEmailAncien'] : '@';        
         
         $now = new \DateTime("now");
         $now = (int) $now->format("Y");
