@@ -37,3 +37,5 @@ parameters:
         url:          ~
         ga_tracking             :  ~
         authorizedStorageSize : 104857600
+        domaineEmailEtu:    ~
+        domaineEmailAncien: ~

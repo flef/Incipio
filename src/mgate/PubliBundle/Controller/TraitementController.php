@@ -10,6 +10,7 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 class TraitementController extends Controller {
     
     const DOCTYPE_SUIVI_ETUDE                   = 'FSE';
+    const DOCTYPE_DEVIS                         = 'DEVIS';
     const DOCTYPE_AVANT_PROJET                  = 'AP';
     const DOCTYPE_CONVENTION_CLIENT             = 'CC';
     const DOCTYPE_FACTURE_ACOMTE                = 'FA';
@@ -420,20 +421,21 @@ class TraitementController extends Controller {
             ->add('name', 'choice', array(
                 'required' => true, 
                 'choices' => array(
-                    self::DOCTYPE_SUIVI_ETUDE => 'Fiche de suivi d\'étude',
-                    self::DOCTYPE_AVANT_PROJET => 'Avant-Projet',
-                    self::DOCTYPE_CONVENTION_CLIENT => 'Convention Client',
-                    self::DOCTYPE_FACTURE_ACOMTE => 'Facture d\'acompte',
-                    self::DOCTYPE_FACTURE_INTERMEDIAIRE => 'Facture intermédiaire',
-                    self::DOCTYPE_FACTURE_SOLDE => 'Facture de solde',
+                    self::DOCTYPE_SUIVI_ETUDE               => 'Fiche de suivi d\'étude',
+                    self::DOCTYPE_DEVIS                     => 'Devis',
+                    self::DOCTYPE_AVANT_PROJET              => 'Avant-Projet',
+                    self::DOCTYPE_CONVENTION_CLIENT         => 'Convention Client',
+                    self::DOCTYPE_FACTURE_ACOMTE            => 'Facture d\'acompte',
+                    self::DOCTYPE_FACTURE_INTERMEDIAIRE     => 'Facture intermédiaire',
+                    self::DOCTYPE_FACTURE_SOLDE             => 'Facture de solde',
                     self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE => 'Procès verbal de recette intermédiaire',
-                    self::DOCTYPE_PROCES_VERBAL_FINAL => 'Procès verbal de recette final',
-                    self::DOCTYPE_RECAPITULATIF_MISSION => 'Récapitulatif de mission',
-                    self::DOCTYPE_DESCRIPTIF_MISSION => 'Descriptif de mission',
-                    self::DOCTYPE_CONVENTION_ETUDIANT => 'Convention Etudiant',
-                    self::DOCTYPE_FICHE_ADHESION => 'Fiche d\'adhésion',
-                    self::DOCTYPE_ACCORD_CONFIDENTIALITE => 'Accord de confidentialité',
-                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR => 'Déclaration étudiant étranger',
+                    self::DOCTYPE_PROCES_VERBAL_FINAL       => 'Procès verbal de recette final',
+                    self::DOCTYPE_RECAPITULATIF_MISSION     => 'Récapitulatif de mission',
+                    self::DOCTYPE_DESCRIPTIF_MISSION        => 'Descriptif de mission',
+                    self::DOCTYPE_CONVENTION_ETUDIANT       => 'Convention Etudiant',
+                    self::DOCTYPE_FICHE_ADHESION            => 'Fiche d\'adhésion',
+                    self::DOCTYPE_ACCORD_CONFIDENTIALITE    => 'Accord de confidentialité',
+                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR  => 'Déclaration étudiant étranger',
                     )))
             ->add('etudiant', 'genemu_jqueryselect2_entity', array(
                'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
