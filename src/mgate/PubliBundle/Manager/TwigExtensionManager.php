@@ -55,11 +55,11 @@ class TwigExtensionManager extends \Twig_Extension {
         
     }
     
-    public function pluriel($mot, $nbr, $pluriel = 's', $simple = ''){
+    public function pluriel($nbr, $pluriel = 's', $simple = ''){
         if($nbr > 1)
-            return $mot.$pluriel;
+            return $pluriel;
         else
-            return $mot.$simple;
+            return $simple;
     }
     
 }
