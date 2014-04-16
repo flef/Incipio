@@ -14,3 +14,8 @@ mgate_user_supprimer:
     pattern:  /user/supprimer/{id}
     defaults: { _controller: mgateUserBundle:Default:delete }
 
+
+mgate_user_addFromPersonne:
+    pattern: /user/addFromPersonne/{id}
+    defaults: { _controller: mgateUserBundle:Default:addUserFromPersonne }
+

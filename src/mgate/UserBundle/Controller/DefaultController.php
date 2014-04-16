@@ -87,6 +87,7 @@ class DefaultController extends Controller
             ));       
         
     }
+
     
     /**
      * @Secure(roles="ROLE_ADMIN")
@@ -125,5 +126,73 @@ class DefaultController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
+    public function addUserFromPersonneAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $personne = $em->getRepository('mgatePersonneBundle:Personne')->find($id);
+
+        if(!$personne)
+            throw $this->createNotFoundException('La personne n\'existe pas !');
+
+        if($personne->getUser())
+            throw new \Exception("Un utilisateur est déjà liée à cette personne !");
+        if(!$personne->getEmail())
+            throw new \Exception("l'utilisateur n'a pas d'email valide !");
+
+        $temporaryPassword = md5(mt_rand());
+        $token = sha1(uniqid(mt_rand(), true));
+        
+        /* Génération de l'user */
+        $userManager = $this->get('fos_user.user_manager');
+
+        $user = $userManager->createUser();
+        $user->setPersonne($personne);
+        $user->setEmail($personne->getEmail());
+        $user->setPlainPassword($temporaryPassword);
+        // Utilisateur à confirmer
+        $user->setEnabled(false);
+        $user->setConfirmationToken($token);
+        // \\
+        $user->setUsername($this->enMinusculeSansAccent($personne->getPrenom().'.'.$personne->getNom()));
+        /**/
+
+        $userManager->updateUser($user); // Pas besoin de faire un flush (ça le fait tout seul)
+
+        /* Envoie d'un email de confirmation */
+        $mailer = $this->container->get('fos_user.mailer');
+        $mailer->sendConfirmationEmailMessage($user);   
+        
+
+        return $this->redirect( $this->generateUrl('mgate_user_lister'));
+    }
+
+    private function enMinusculeSansAccent($texte){
+        $texte = mb_strtolower($texte, 'UTF-8');
+        $texte = str_replace(
+            array(
+                'à', 'â', 'ä', 'á', 'ã', 'å',
+                'î', 'ï', 'ì', 'í', 
+                'ô', 'ö', 'ò', 'ó', 'õ', 'ø', 
+                'ù', 'û', 'ü', 'ú', 
+                'é', 'è', 'ê', 'ë', 
+                'ç', 'ÿ', 'ñ', 
+            ),
+            array(
+                'a', 'a', 'a', 'a', 'a', 'a', 
+                'i', 'i', 'i', 'i', 
+                'o', 'o', 'o', 'o', 'o', 'o', 
+                'u', 'u', 'u', 'u', 
+                'e', 'e', 'e', 'e', 
+                'c', 'y', 'n', 
+            ),
+            $texte
+        );
+        return $texte;        
     }
 }
