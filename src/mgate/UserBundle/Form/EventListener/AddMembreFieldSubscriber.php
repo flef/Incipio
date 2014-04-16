@@ -35,13 +35,9 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
         // setData is called with an actual Entity object in it (whether new
         // or fetched with Doctrine). This if statement lets you skip right
         // over the null condition.
-        //if (null === $data)
-            //return;
-        
-        //if (!$data->getId())
         {
         $user=$data;
-        $form->add('personne', 'entity', array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
+        $form->add('personne', 'genemu_jqueryselect2_entity', array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
                        'class' => 'mgate\PersonneBundle\Entity\Personne',
                        'property' => 'prenomNom',
                        'required' => false,
@@ -49,12 +45,5 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
                         ));
                        
         }
-        // check if the product object is "new"
-        /*
-        if (!$data->getId())
-        {
-            $form->add($this->factory->createNamed('user', 'entity'));
-        }
-        */
     }
 }

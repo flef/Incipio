@@ -13,7 +13,7 @@
 </form>
 
 
-    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_poste_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    <form class="bootbox-confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement ce poste ?" action="{{ path('mgatePersonne_poste_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
         <button>Supprimer le poste</button>
     </form>    

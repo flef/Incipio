@@ -24,13 +24,13 @@ Affichage d'un Membre - {{ parent() }}
 </div>
 <p>
     <a class="btn btn-warning" href="{{ path('mgatePersonne_membre_modifier', {'id': membre.id}) }}">Modifier le membre</a> 
-    {% if membre.personne and membre.personne.user is null and membre.personne.email is not null %}
+    {% if is_granted('ROLE_ADMIN') and membre.personne and membre.personne.user is null and membre.personne.email is not null %}
     <a class="btn btn-danger" href="{{ path('mgate_user_addFromPersonne', { 'id':membre.personne.id }) }}">Ouvrir un compte Utilisateur</a>
     {% endif %}
     <a class="btn btn-info" href="{{ path('mgatePersonne_membre_homepage') }}">Retour à la liste des membres</a>
 </p>
 <br>
-{% if membre.personne.email is null %}
+{% if is_granted('ROLE_ADMIN') and membre.personne.email is null %}
 <code>
     Vous devez définir un email valide pour créer un compte utilisateur à ce membre.
 </code>

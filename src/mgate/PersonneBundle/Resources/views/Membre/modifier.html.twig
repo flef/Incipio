@@ -5,8 +5,6 @@
 <h2>Ajouter/Modifier un membre</h2>
 
 <form method="POST" {{ form_enctype(form) }}>
-    <!--<input type="submit" value="Enregistrer" />
-    <input type="submit" value="Ajouter mandat" name="add"/>-->
 
     <table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
         <tr>
@@ -74,20 +72,13 @@
     {% endfor %}
     </table>
 {{ form_rest(form) }}
-    <input name="save" type="submit" value="Enregistrer" class="btn" />
+    <input name="save" type="submit" value="Enregistrer" class="btn btn-success" />
 </form>
-{#
-<form method="post" {{ form_enctype(form) }}>
-	
-	{{ form_widget(form) }}
-	
-	<input type="submit" />
-</form>
-#}
-<form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+
+<form class="bootbox-confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement ce membre ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
 		<br>
-        <button class="btn">Supprimer le membre</button>
+        <button class="btn btn-danger">Supprimer le membre</button>
     </form>    
 	<br>
     <p>

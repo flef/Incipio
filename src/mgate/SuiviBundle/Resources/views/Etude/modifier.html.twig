@@ -84,7 +84,7 @@
     </p>
     
     
-        <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgateSuivi_etude_supprimer', { 'numero': etude.numero }) }}" method="post">
+        <form class="bootbox-confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cette étude ?" action="{{ path('mgateSuivi_etude_supprimer', { 'numero': etude.numero }) }}" method="post">
             {{ form_widget(delete_form) }}
                 <button class="btn">Supprimer l'étude</button>
         </form>

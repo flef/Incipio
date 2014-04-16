@@ -6,19 +6,47 @@
 
 {% block content %}
 
-    <h2>Modifier un utilisateur</h2>
+    <h2>Modifier l'utilisateur</h2>
 
-<form method="post" {{ form_enctype(form) }}>
+    <form method="post" {{ form_enctype(form) }} style="max-width: 600px">
+    <table class="table table-bordered">
+        <tr>
+            <td>{{ form_label(form.username) }}</td>
+            <td>{{ form_widget(form.username) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.email) }}</td>
+            <td>{{ form_widget(form.email) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.enabled) }}</td>
+            <td>{{ form_widget(form.enabled) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.personne) }}</td>
+            <td>{{ form_widget(form.personne) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.roles) }}</td>
+            <td>{{ form_widget(form.roles) }}</td>
+        </tr>
+    </table>
+    
 	
 	{{ form_widget(form) }}
 	{{ form_rest(form) }}
-	<input type="submit" value="Enregistrer l'Utilisateur"/>
+	<input class ="btn btn-success" type="submit" value="Enregistrer l'Utilisateur"/>
+</form>
+<br>
+    
+<form action="{{ path('mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
+    {{ form_widget(delete_form) }}
+    <button class="btn btn-danger bootbox-confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet utilisateur ?">Supprimer l'utilisateur</button>
 </form>
 
-    
-    <form id="confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement cet élément ?" action="{{ path('mgate_user_supprimer', { 'id': form.vars.value.id }) }}" method="post">
-    {{ form_widget(delete_form) }}
-        <button>Supprimer l'utilisateur</button>
-    </form>
+{% endblock %}
 
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}     
 {% endblock %}
