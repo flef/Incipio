@@ -69,8 +69,6 @@ class DocumentController extends Controller
             return $response;
         
     }
-   
-
     
     /**
      * @Secure(roles="ROLE_CA")

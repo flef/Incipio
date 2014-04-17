@@ -43,6 +43,7 @@ class MembreType extends AbstractType {
                     'by_reference' => false, //indispensable cf doc
                 ))
                 ->add('dateConventionEleve', 'genemu_jquerydate', array('label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'));
+                        
     }
 
     public function getName() {

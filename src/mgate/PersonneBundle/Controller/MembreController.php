@@ -139,12 +139,12 @@ class MembreController extends Controller {
         $promo = $membre->getPromotion();
         
 	   // TODO TOREMOVE Specifique EMSE
-        if(!$membre->getPhotoURI() && $promo != null) {
+        if(!$membre->getPhotoURI() && $promo != null && $membre->getPersonne()) {
             $photo = new Document();
             $photoInformation = new RelatedDocument();
             
             $photo->setRelation($photoInformation);
-            $photo->setName('Photo - ' . $membre->getIdentifiant());
+            $photo->setName('Photo - ' . $membre->getPersonne()->getPrenomNom() . ' - ' . $membre->getIdentifiant());
 
             $user = $this->get('security.context')->getToken()->getUser();
             $personne = $user->getPersonne();
@@ -190,7 +190,6 @@ class MembreController extends Controller {
             $form->bind($this->get('request'));
 
             if ($form->isValid()) {
-
                 if ($this->get('request')->get('add')) {
                     $mandatNew = new Mandat;
                     $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
