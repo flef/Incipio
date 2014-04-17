@@ -92,7 +92,14 @@ class Membre {
     /**
      * @ORM\OneToMany(targetEntity="mgate\PubliBundle\Entity\RelatedDocument", mappedBy="membre", cascade={"remove"})
      */
-    private $relatedDocuments;    
+    private $relatedDocuments;
+    
+    
+    /**
+     * @var string $photoURI
+     * @ORM\Column(name="photoURI", type="string", nullable=true)
+     */
+    private $photoURI;
     
 
     /**
@@ -425,5 +432,28 @@ class Membre {
     public function getRelatedDocuments()
     {
         return $this->relatedDocuments;
+    }
+
+    /**
+     * Set photoURI
+     *
+     * @param string $photoURI
+     * @return Membre
+     */
+    public function setPhotoURI($photoURI)
+    {
+        $this->photoURI = $photoURI;
+    
+        return $this;
+    }
+
+    /**
+     * Get photoURI
+     *
+     * @return string 
+     */
+    public function getPhotoURI()
+    {
+        return $this->photoURI;
     }
 }

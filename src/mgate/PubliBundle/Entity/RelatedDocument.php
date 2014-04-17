@@ -16,8 +16,7 @@ class RelatedDocument
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
-    
+   
     /**
      * @ORM\OneToOne(targetEntity="Document", inversedBy="relation", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=true)

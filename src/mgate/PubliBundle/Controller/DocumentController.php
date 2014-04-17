@@ -68,7 +68,9 @@ class DocumentController extends Controller
         else
             return $response;
         
-    }   
+    }
+   
+
     
     /**
      * @Secure(roles="ROLE_CA")
@@ -144,7 +146,6 @@ class DocumentController extends Controller
                 $user = $this->get('security.context')->getToken()->getUser();
                 $personne = $user->getPersonne();
         
-                $document->setName(strtoupper($document->getName()));
                 $document->setAuthor($personne);
                 
                 $em->persist($document);

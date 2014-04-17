@@ -10,6 +10,9 @@ use mgate\PersonneBundle\Entity\Personne;
 use mgate\PersonneBundle\Entity\Mandat;
 use mgate\PersonneBundle\Form\MembreType;
 
+use mgate\PubliBundle\Entity\Document;
+use mgate\PubliBundle\Entity\RelatedDocument;
+
 class MembreController extends Controller {
 
     /**
@@ -82,36 +85,8 @@ class MembreController extends Controller {
             throw $this->createNotFoundException('Le membre demandé n\'existe pas !');
         }
         
-        $path =  $entity->getPromotion() .'/' . 
-       		preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
-        		'_',
-			mb_strtolower($entity->getPersonne()->getNom(),'UTF-8')
-		) . '_'.
-        	preg_replace(
-        		'#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
-        		'_',
-			mb_strtolower($entity->getPersonne()->getPrenom(), 'UTF-8')
-		) . '.jpg';
-        $promo = $entity->getPromotion();
-        
-	
-        if(file_exists('images/photos/P'. $path))
-            $pictureURL = 'images/photos/P'. $path;
-        else{
-            $pictureURL = 'http://ismin.emse.fr/ismin/Photos/P' . $path;
-            if (!file_exists('images/photos') and !is_dir('images/photos'))
-                mkdir('images/photos');   
-            if (!file_exists('images/photos/P'.$promo) and !is_dir('images/photos/P'.$promo))
-                mkdir('images/photos/P'.$promo); 
-
-            copy('http://ismin.emse.fr/ismin/Photos/P'.urlencode($path), 'images/photos/P'. $path);
-        }
-
-
         return $this->render('mgatePersonneBundle:Membre:voir.html.twig', array(
                     'membre' => $entity,
-                    'pictureURL' => $pictureURL,
         ));
     }
 
@@ -138,24 +113,71 @@ class MembreController extends Controller {
             $membre->setDateDeNaissance($now);
         }
         
+        // Mail étudiant
         if(!$membre->getEmailEMSE())  
             $membre->setEmailEMSE($this->getEmailEtu($membre));
-        /*
-        if (!count($membre->getMandats()->toArray())) {
-            $mandatNew = new Mandat;
-            $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
-            $dt = new \DateTime("now");
-            $dtl = clone $dt;
-            $dtl->modify('+1 year');
+        //
+        
 
-            if ($poste)
-                $mandatNew->setPoste($poste);
-            $mandatNew->setMembre($membre);
-            $mandatNew->setDebutMandat($dt);
-            $mandatNew->setFinMandat($dtl);
-            $membre->addMandat($mandatNew);
-        }*/
+        // TODO TOREMOVE Specifique EMSE
+        if($membre->getPersonne()){
+            // Photo de l'étudiant 
+            $path =  $membre->getPromotion() .'/' . 
+                preg_replace(
+                    '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
+                    '_',
+                mb_strtolower($membre->getPersonne()->getNom(),'UTF-8')
+            ) . '_'.
+                preg_replace(
+                    '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
+                    '_',
+                mb_strtolower($membre->getPersonne()->getPrenom(), 'UTF-8')
+            ) . '.jpg';
+        }
+        else
+            $path = '';
+        $promo = $membre->getPromotion();
+        
+	   // TODO TOREMOVE Specifique EMSE
+        if(!$membre->getPhotoURI() && $promo != null) {
+            $photo = new Document();
+            $photoInformation = new RelatedDocument();
+            
+            $photo->setRelation($photoInformation);
+            $photo->setName('Photo - ' . $membre->getIdentifiant());
 
+            $user = $this->get('security.context')->getToken()->getUser();
+            $personne = $user->getPersonne();
+            $photo->setAuthor($personne);
+
+            $photoInformation->setDocument($photo);
+            $photoInformation->setMembre($membre);
+
+            $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);
+            $tempURI = 'tmp/'.$membre->getIdentifiant();
+ 
+            if(($handle = @fopen($ressourceURL , 'r')) !== FALSE) {
+                file_put_contents($tempURI, $handle);
+                fclose($handle);
+
+                // MIME-type
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                // le dernier true indique de ne pas vérifier si le fichier à été téléchargé en HTTP
+                $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($tempURI, $membre->getIdentifiant().'.jpg', finfo_file($finfo, $tempURI), filesize($tempURI), null, true);
+                
+                $photo->setFile($file);
+
+                $em->persist($photoInformation);
+                $em->persist($photo);
+
+                $membre->setPhotoURI($photo->getAbsolutePath());                          
+                $em->persist($membre);
+
+                $em->flush();
+            }
+        }
+        //
+        
 
         $form = $this->createForm(new MembreType, $membre);
         $deleteForm = $this->createDeleteForm($id);

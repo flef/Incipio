@@ -46,16 +46,16 @@ $(document).ready(function() {
                 {% for membre in membres %}
               <td style="text-align: center;"><h4><span class="label label-default">{{ membre.promotion ? "P" ~ membre.promotion}}</span></td>
             <td style="text-align: center;"><h4><span class="label label-info">{{ membre.identifiant }}</span></h4></td>
-            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.prenom }}</a></td>
-			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne.nom }}</a></td>
+            <td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.prenom }}</a></td>
+			<td><a href="{{ path('mgatePersonne_membre_voir', {'id': membre.id}) }}">{{ membre.personne ? membre.personne.nom }}</a></td>
             <td>
                 {% for mandat in membre.mandats %}
                     <span class="label label-{{"now"|date('Ymd')  > mandat.finMandat |date('Ymd') ? 'default' : 'success' }}" data-valide="{{"now"|date('Ymd')  > mandat.finMandat |date('Ymd') ? 'ancien' : 'actuel' }}{{mandat.poste.intitule }}">{{ mandat.debutMandat | date("d/m/Y") }} <span class="glyphicon glyphicon-arrow-right"></span> {{ mandat.finMandat | date("d/m/Y") }}</span> {{ mandat.poste.intitule }}<br />
                 {% endfor %}
             </td>            
-            <td>{{ membre.personne.email }}</td>
-            <td>{{ membre.personne.mobile }}</td>
-            <td>{{ membre.appartement }}</td>
+            <td>{{ membre.personne ? membre.personne.email }}</td>
+            <td>{{ membre.personne ? membre.personne.mobile }}</td>
+            <td>{{ membre.personne ? membre.appartement }}</td>
           </tr>
                 {% else %}
                     <li>Pas (encore !) de Membre</li>

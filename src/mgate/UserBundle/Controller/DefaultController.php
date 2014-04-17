@@ -167,7 +167,7 @@ class DefaultController extends Controller
         /* Envoie d'un email de confirmation */
         $mailer = $this->container->get('fos_user.mailer');
         $mailer->sendConfirmationEmailMessage($user);   
-        
+        $mailer->sendResettingEmailMessage($user);         
 
         return $this->redirect( $this->generateUrl('mgate_user_lister'));
     }

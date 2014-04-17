@@ -76,7 +76,7 @@ class PersonneRepository extends EntityRepository
         return $query;
     }
     
-    public function getMembreNotUser($user)
+    public function getMembreNotUser($user = null)
     {
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('n')->from('mgatePersonneBundle:Personne', 'n')
