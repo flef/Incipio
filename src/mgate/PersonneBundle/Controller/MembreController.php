@@ -170,7 +170,7 @@ class MembreController extends Controller {
                 $em->persist($photoInformation);
                 $em->persist($photo);
 
-                $membre->setPhotoURI($photo->getAbsolutePath());                          
+                $membre->setPhotoURI($photo->getWebPath());                          
                 $em->persist($membre);
 
                 $em->flush();
