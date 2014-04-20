@@ -1,0 +1,54 @@
+{% extends "mgateFormationBundle::layout.html.twig" %}
+
+{% block javascript_quick %}
+{{ parent() }}
+<script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    $('#table').dataTable({
+        "bPaginate": false,
+        "aaSorting": [[0,'asc']],
+    });
+} );
+</script>
+	
+{% endblock %}
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+
+ 
+{% block content_bundle %}
+<h2>Formations {{ junior['abbr'] }}</h2>
+
+<table id="table" class="dataTable table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>Présents</th>
+        {% for formation in formations %}
+        <th>{{ formation.titre }}</th>
+        {% endfor %}
+        <th>Taux</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for nom, present in presents %}
+   <tr style="text-align: center">
+        <td>{{ nom }}</td>
+        {% for formation in formations %}
+        <td>
+        {% if formation.id in present %}
+               <span class="label label-success"><span class="glyphicon glyphicon-ok"> 1</span></span>
+        {% else %}
+            <span class="label label-danger"><span class="glyphicon glyphicon-remove">  0</span></span>
+        {% endif %}
+        </td>
+        {% endfor %}
+        <td>{{ present | length }} / {{ formations | length }} </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -82,6 +82,36 @@ class FormationController extends Controller
         ));
     }
     
+    
+    /**
+     * @Secure(roles="ROLE_CA")
+     */
+    public function participationAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $formationsParMandat = $em->getRepository('mgateFormationBundle:Formation')->findAllByMandat();
+        
+        $idMandat;
+        $formations = $formationsParMandat[6];
+        $presents = array();
+        
+        foreach ($formations as $formation){
+            foreach($formation->getMembresPresents() as $present){
+                $id = $present->getPrenomNom();
+                if(array_key_exists($id, $presents)){
+                    $presents[$id][] = $formation->getId();
+                }else
+                     $presents[$id] = array($formation->getId());
+            }
+        }
+        
+              
+        return $this->render('mgateFormationBundle:Gestion:participation.html.twig', array(
+            'formations' => $formations,
+            'presents' => $presents,
+        ));
+    }
+    
     /**
      * @Secure(roles="ROLE_ADMIN")
      */

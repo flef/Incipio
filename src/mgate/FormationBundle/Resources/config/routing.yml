@@ -28,3 +28,7 @@ mgate_formation_supprimer:
     defaults: { _controller: mgateFormationBundle:Formation:supprimer }
     requirements:
         id: \d+
+        
+mgate_formation_participation:
+    pattern:  /admin/formations/participation
+    defaults: { _controller: mgateFormationBundle:Formation:participation }

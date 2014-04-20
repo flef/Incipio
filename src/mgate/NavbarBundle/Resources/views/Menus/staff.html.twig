@@ -31,12 +31,13 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Formations <b class="caret"></b></a>
         <ul class="dropdown-menu">
             <li class="dropdown-header">Formations</li>
-            <li><a href="{{ path('mgate_formations_lister') }}"><span class="glyphicon glyphicon-paperclip"></span> Voir les formations</a></li>
+            <li><a href="{{ path('mgate_formations_lister') }}"><span class="glyphicon glyphicon-book"></span> Voir les formations</a></li>
             {% if is_granted('ROLE_CA') %}
             <li class="divider"></li>
             <li class="dropdown-header">Administration</li>
             <li><a href="{{ path('mgate_formations_index_admin') }}"><span class="glyphicon glyphicon-list"></span> Gérer les formations</a></li>
             <li><a href="{{ path('mgate_formation_ajouter') }}"><span class="glyphicon glyphicon-plus"></span> Ajouter une formation</a></li>
+            <li><a href="{{ path('mgate_formation_participation') }}"><span class="glyphicon glyphicon-tasks"></span> Voir les participants</a></li>
             {% endif %}
         </ul>
     </li>

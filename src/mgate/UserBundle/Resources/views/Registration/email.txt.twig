@@ -7,11 +7,9 @@
 {% endblock %}
 {% block body_text %}
 {% autoescape false %}
-Un compte utilisateur a été créé pour vous :<br>
-{{ 'registration.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}<br>
-Votre mot de passe temporaire est : {{ user.plainPassword }}<br>
-{{ 'resetting.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}<br>
-<br>
+{{ 'registration.email.message'|trans({'%username%': user.username, '%confirmationUrl%': confirmationUrl}) }}
+Si ce compte a été automatiquement créé pour vous, il vous faudra changer de mot de passe :
+{{ path('fos_user_resetting_request') }}
 {% endautoescape %}
 {% endblock %}
 {% block body_html %}{% endblock %}
