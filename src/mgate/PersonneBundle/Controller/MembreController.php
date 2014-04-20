@@ -204,8 +204,8 @@ class MembreController extends Controller {
                                     $relation = $doc->getRelation();
                                     $doc->setRelation();
                                     $em->remove ($relation);
-                                }else
-                                    $em->remove($doc);
+                                }
+                                $em->remove($doc);
                             }
                         }                
                         $em->persist($photoInformation);
