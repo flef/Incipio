@@ -23,6 +23,12 @@ $(document).ready(function() {
 {% block content_bundle %}
 <h2>Formations {{ junior['abbr'] }}</h2>
 
+<form method="post" {{ form_enctype(form) }}>
+	{{ form_label(form.mandat) }} {{ form_widget(form.mandat) }}
+	{{ form_widget(form) }}
+    <input type="submit" value="Chercher" class="btn"/>
+</form>   
+
 <table id="table" class="dataTable table table-bordered table-striped">
     <thead>
     <tr>

@@ -6,6 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use JMS\SecurityExtraBundle\Annotation\Secure;
 use mgate\FormationBundle\Form\FormationType;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use mgate\FormationBundle\Entity\Formation;
 
 class FormationController extends Controller
@@ -86,13 +88,40 @@ class FormationController extends Controller
     /**
      * @Secure(roles="ROLE_CA")
      */
-    public function participationAction()
+    public function participationAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $formationsParMandat = $em->getRepository('mgateFormationBundle:Formation')->findAllByMandat();
         
-        $idMandat;
-        $formations = $formationsParMandat[6];
+        $choices = array();
+        foreach ($formationsParMandat as $key => $value){
+            $choices[$key] = $key;
+        }
+        
+        
+        $defaultData = array();
+        $form = $this->createFormBuilder($defaultData)
+                      ->add(
+                          'mandat', 
+                          'choice',
+                          array(
+                              'label'       =>'Présents aux formations du mandat ',
+                              'choices'     => $choices,
+                              'required'    =>true,
+                              )
+                      )->getForm();
+        
+        if ($request->isMethod('POST'))
+        { 
+            $form->bind($request);
+            $data = $form->getData();
+            $mandat = $data['mandat'];
+            $formations = array_key_exists($mandat, $formationsParMandat) ? $formationsParMandat[$mandat] : array();
+        }else{
+            $formations = count($formationsParMandat) ? reset($formationsParMandat) : array();
+        }
+
+        
         $presents = array();
         
         foreach ($formations as $formation){
@@ -107,6 +136,7 @@ class FormationController extends Controller
         
               
         return $this->render('mgateFormationBundle:Gestion:participation.html.twig', array(
+            'form' => $form->createView(),
             'formations' => $formations,
             'presents' => $presents,
         ));
