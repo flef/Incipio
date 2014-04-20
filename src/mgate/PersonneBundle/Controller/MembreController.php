@@ -204,6 +204,7 @@ class MembreController extends Controller {
                                     $relation = $doc->getRelation();
                                     $doc->setRelation();
                                     $em->remove ($relation);
+                                    $em->flush();
                                 }
                                 $em->remove($doc);
                             }
