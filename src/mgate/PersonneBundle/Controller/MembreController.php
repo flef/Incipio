@@ -117,67 +117,6 @@ class MembreController extends Controller {
         if(!$membre->getEmailEMSE())  
             $membre->setEmailEMSE($this->getEmailEtu($membre));
         //
-        
-
-        // TODO TOREMOVE Specifique EMSE
-        if($membre->getPersonne()){
-            // Photo de l'étudiant 
-            $path =  $membre->getPromotion() .'/' . 
-                preg_replace(
-                    '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
-                    '_',
-                mb_strtolower($membre->getPersonne()->getNom(),'UTF-8')
-            ) . '_'.
-                preg_replace(
-                    '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
-                    '_',
-                mb_strtolower($membre->getPersonne()->getPrenom(), 'UTF-8')
-            ) . '.jpg';
-        }
-        else
-            $path = '';
-        $promo = $membre->getPromotion();
-        
-	   // TODO TOREMOVE Specifique EMSE
-        if(!$membre->getPhotoURI() && $promo != null && $membre->getPersonne()) {
-            $photo = new Document();
-            $photoInformation = new RelatedDocument();
-            
-            $photo->setRelation($photoInformation);
-            $photo->setName('Photo - ' . $membre->getPersonne()->getPrenomNom() . ' - ' . $membre->getIdentifiant());
-
-            $user = $this->get('security.context')->getToken()->getUser();
-            $personne = $user->getPersonne();
-            $photo->setAuthor($personne);
-
-            $photoInformation->setDocument($photo);
-            $photoInformation->setMembre($membre);
-
-            $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);
-            $tempURI = 'tmp/'.$membre->getIdentifiant();
- 
-            if(($handle = @fopen($ressourceURL , 'r')) !== FALSE) {
-                file_put_contents($tempURI, $handle);
-                fclose($handle);
-
-                // MIME-type
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                // le dernier true indique de ne pas vérifier si le fichier à été téléchargé en HTTP
-                $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($tempURI, $membre->getIdentifiant().'.jpg', finfo_file($finfo, $tempURI), filesize($tempURI), null, true);
-                
-                $photo->setFile($file);
-
-                $em->persist($photoInformation);
-                $em->persist($photo);
-
-                $membre->setPhotoURI($photo->getWebPath());                          
-                $em->persist($membre);
-
-                $em->flush();
-            }
-        }
-        //
-        
 
         $form = $this->createForm(new MembreType, $membre);
         $deleteForm = $this->createDeleteForm($id);
@@ -188,8 +127,98 @@ class MembreController extends Controller {
 
         if ($this->get('request')->getMethod() == 'POST') {
             $form->bind($this->get('request'));
-
+            $photoUpload = $form->get('photo')->getData();
+            
             if ($form->isValid()) {
+                /**
+                 * Traitement de la photo
+                 */
+                
+                // TODO TOREMOVE Specifique EMSE
+                if($membre->getPersonne()){
+                    // Photo de l'étudiant 
+                    $path =  $membre->getPromotion() .'/' . 
+                        preg_replace(
+                            '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
+                            '_',
+                        mb_strtolower($membre->getPersonne()->getNom(),'UTF-8')
+                    ) . '_'.
+                        preg_replace(
+                            '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
+                            '_',
+                        mb_strtolower($membre->getPersonne()->getPrenom(), 'UTF-8')
+                    ) . '.jpg';
+                }
+                else
+                    $path = '';
+                $promo = $membre->getPromotion();
+
+               // TODO TOREMOVE Specifique EMSE
+                if($photoUpload || !$membre->getPhotoURI() && $promo != null && $membre->getPersonne()) {
+                    $photo = new Document();
+                    $photoInformation = new RelatedDocument();
+
+                    $photo->setRelation($photoInformation);
+                    $photo->setName('Photo - ' . $membre->getPersonne()->getPrenomNom() . ' - ' . $membre->getIdentifiant());
+
+                    $user = $this->get('security.context')->getToken()->getUser();
+                    $personne = $user->getPersonne();
+                    $photo->setAuthor($personne);
+
+                    $photoInformation->setDocument($photo);
+                    $photoInformation->setMembre($membre);
+
+                    $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);
+                    $tempURI = 'tmp/'.$membre->getIdentifiant();
+                    
+                    if($photoUpload != null){
+                        if(in_array($photoUpload->getMimeType(), array('image/jpeg', 'image/png', 'image/bmp'))){
+                            $photo->setFile($photoUpload);
+                            
+                        }
+                    }
+                    if(!$membre->getPhotoURI() && ($handle = @fopen($ressourceURL , 'r')) !== FALSE) {
+                        file_put_contents($tempURI, $handle);
+                        fclose($handle);
+
+                        // MIME-type
+                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                        // le dernier true indique de ne pas vérifier si le fichier à été téléchargé en HTTP
+                        $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($tempURI, $membre->getIdentifiant().'.jpg', finfo_file($finfo, $tempURI), filesize($tempURI), null, true);
+
+                        $photo->setFile($file);
+
+                        $em->persist($photoInformation);
+                        $em->persist($photo);
+
+                        $membre->setPhotoURI($photo->getWebPath());                          
+                        $em->persist($membre);
+
+                        $em->flush();
+                    }
+                    if($photoUpload || $handle){
+                        $docs = $em->getRepository('mgatePubliBundle:Document')->findBy(array('name' => $photo->getName() ));
+                        if ($docs) {
+                            foreach ($docs as $doc) {
+                                if($doc->getRelation()){
+                                    $relation = $doc->getRelation();
+                                    $doc->setRelation();
+                                    $em->remove ($relation);
+                                }else
+                                    $em->remove($doc);
+                            }
+                        }                
+                        $em->persist($photoInformation);
+                        $em->persist($photo);
+                        $membre->setPhotoURI($photo->getWebPath()); 
+                    }
+                }
+                //
+                
+                
+                /**
+                 * Traitement des postes
+                 */
                 if ($this->get('request')->get('add')) {
                     $mandatNew = new Mandat;
                     $poste = $em->getRepository('mgate\PersonneBundle\Entity\Poste')->findOneBy(array("intitule" => "Membre"));
@@ -239,12 +268,13 @@ class MembreController extends Controller {
             }
         }
         // TODO A modifier, l'ajout de poste dois se faire en js cf formation membre
-        if ($this->get('request')->get('save'))
-            return $this->redirect($this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre->getId())));
+        //if ($this->get('request')->get('save'))
+         //   return $this->redirect($this->generateUrl('mgatePersonne_membre_voir', array('id' => $membre->getId())));
         
         return $this->render('mgatePersonneBundle:Membre:modifier.html.twig', array(
                     'form' => $form->createView(),
                     'delete_form' => $deleteForm->createView(),
+                    'photoURI' => $membre->getPhotoURI(),
                 ));
              
     }

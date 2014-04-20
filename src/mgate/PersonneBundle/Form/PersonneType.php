@@ -37,14 +37,6 @@ class PersonneType extends AbstractType {
             $builder->add('fix', 'text', array('required' => false));
         if (!$options['mini'])
             $builder->add('adresse', 'text', array('required' => false, 'attr' => array('title' => 'Sous la forme: Appartement 3114, 879 Route de Mimet, 13120 Gardanne')));
-
-        if ($options['user']) {
-            //Finalement non, on associe dans ce sens la
-            //Parce que la situation la plus commune sera :
-            // membre créé en premier, compte ensuite
-            $subscriber = new AddUserFieldSubscriber($builder->getFormFactory());
-            $builder->addEventSubscriber($subscriber);
-        }
     }
 
     public function getName() {

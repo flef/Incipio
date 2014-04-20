@@ -19,7 +19,7 @@ class Document
     protected $id;
     
     /**
-     * @ORM\OneToOne(targetEntity="RelatedDocument", mappedBy="document", cascade={"all"})
+     * @ORM\OneToOne(targetEntity="RelatedDocument", inversedBy="document", cascade={"all"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $relation;

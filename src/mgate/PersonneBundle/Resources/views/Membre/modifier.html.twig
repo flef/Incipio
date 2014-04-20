@@ -3,12 +3,14 @@
 
 {% block content_bundle %}
 <h2>Ajouter/Modifier un membre</h2>
-
-<form method="POST" {{ form_enctype(form) }}>
+<form id="form" method="POST" {{ form_enctype(form) }}>
 
     <table class="table table-bordered table-striped" data-prototype="{{ form_widget(form.mandats.vars.prototype) | e }}">
         <tr>
-            <th colspan="6">Informations Membre</th>
+            <th colspan="7">Informations Membre</th>
+        </tr>
+        <tr>
+            <td rowspan="6" style="text-align: center;"><img class="img-thumbnail" style="height: 200px" src="{{ asset(photoURI) }}"/><br><br>{{ form_widget(form.photo) }}</td>
         </tr>
         <tr>
             <td>{{ form_label(form.personne.sexe) }}</td>
@@ -51,11 +53,11 @@
             <td>{{ form_widget(form.personne.adresse) }}</td>
         </tr>
         <tr>
-            <th colspan="6">Informations Intervenant</th>
+            <th colspan="7">Informations Intervenant</th>
         </tr>
         <tr>
             <td colspan="4">{{ form_label(form.dateConventionEleve) }}</td>
-            <td colspan="2">{{ form_widget(form.dateConventionEleve) }}</td>
+            <td colspan="3">{{ form_widget(form.dateConventionEleve) }}</td>
         </tr>
         <tr>
             <td colspan="6"><button class="btn" type="submit" value="Ajouter mandat" name="add"><i class="glyphicon glyphicon-plus"></i></button> <h4 style="display: inline;">Postes occupés</h4></td>
@@ -63,7 +65,7 @@
     {% for mandat in form.mandats %}
         <tr class="mandats">
             <td>{{ form_label(mandat.poste) }}</td>
-            <td>{{ form_widget(mandat.poste) }}</td>
+            <td colspan="2">{{ form_widget(mandat.poste) }}</td>
             <td>{{ form_label(mandat.debutMandat) }}</td>
             <td>{{ form_widget(mandat.debutMandat) }}</td>
             <td>{{ form_label(mandat.finMandat) }}</td>
@@ -74,12 +76,12 @@
 {{ form_rest(form) }}
     <input name="save" type="submit" value="Enregistrer" class="btn btn-success" />
 </form>
-
+<br>
 <form class="bootbox-confirm" data-content="Êtes-vous sûr de vouloir supprimer définitivement ce membre ?" action="{{ path('mgatePersonne_membre_supprimer', { 'id': form.vars.value.id }) }}" method="post">
     {{ form_widget(delete_form) }}
-		<br>
-        <button class="btn btn-danger">Supprimer le membre</button>
-    </form>    
+    <button class="btn btn-danger">Supprimer le membre</button>
+</form>
+
 	<br>
     <p>
         <a href="{{ path('mgatePersonne_membre_homepage') }}" >Retour à la liste des membres</a>

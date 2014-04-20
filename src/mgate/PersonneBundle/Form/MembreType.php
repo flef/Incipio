@@ -42,7 +42,12 @@ class MembreType extends AbstractType {
                     'prototype' => true,
                     'by_reference' => false, //indispensable cf doc
                 ))
-                ->add('dateConventionEleve', 'genemu_jquerydate', array('label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'));
+                ->add('dateConventionEleve', 'genemu_jquerydate', array('label' => 'Date de Signature de la Convention Elève', 'format' => 'dd/MM/yyyy', 'required' => false, 'widget' => 'single_text'))
+                ->add('photo', 'file', array(
+                    'mapped' => false,
+                    'required' => false,
+                    'label' => 'Modifier la photo de profil du membre',
+                ));
                         
     }
 

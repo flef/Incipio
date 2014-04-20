@@ -18,7 +18,7 @@ class RelatedDocument
     protected $id;
    
     /**
-     * @ORM\OneToOne(targetEntity="Document", inversedBy="relation", cascade={"persist", "merge"})
+     * @ORM\OneToOne(targetEntity="Document", mappedBy="relation", cascade={"persist", "merge"})
      * @ORM\JoinColumn(nullable=true)
      */
     private $document;

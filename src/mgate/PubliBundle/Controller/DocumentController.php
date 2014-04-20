@@ -154,7 +154,12 @@ class DocumentController extends Controller
                     $docs = $em->getRepository('mgatePubliBundle:Document')->findBy(array('name' => $document->getName() ));
                     if ($docs) {
                         foreach ($docs as $doc) {
-                            $em->remove($doc);
+                            if($doc->getRelation()){
+                                $relation = $doc->getRelation();
+                                $doc->setRelation();
+                                $em->remove ($relation);
+                            }else
+                                $em->remove($doc);
                         }
                     }
                 }
