@@ -17,25 +17,20 @@ parameters:
     su_password:  'motdepasse'
     
     locale:            fr
-    secret:            ThisIsNotSecret
+    secret:            ThisIsNotSecretYouKnow
     
-    tva:  0.196
-    
-#debug var
-    pathToDoctype: D:/Dropbox/M-GaTE - Suivi d'Etude/My-M-GaTE/Documents Types/
-    debugEnable: true
-    fileType: .xml
+    tva:  0.200
 
 ###configuration de la Junior
     junior:
-        nom:          'Nom Junior'
-        abbr:         'Junior'
-        id:           'user'
-        email:        contact@mgate.fr
+        nom:          ~
+        abbr:         ~
+        id:           ~
+        email:        ~
         logo:         ~
         adresse:      ~
         url:          ~
-        ga_tracking             :  ~
+        ga_tracking:  ~
         authorizedStorageSize : 104857600
         domaineEmailEtu:    ~
         domaineEmailAncien: ~

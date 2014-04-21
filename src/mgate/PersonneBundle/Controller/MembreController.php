@@ -162,7 +162,8 @@ class MembreController extends Controller {
                     $name = 'Photo - '.$membre->getIdentifiant(). ' - '.$membre->getPersonne()->getPrenomNom();
                     
                     if($photoUpload){
-                        $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name, $photoInformation, true);
+                        $document = $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name, $photoInformation, true);
+                        $membre->setPhotoURI($document->getWebPath());
                     }
                     elseif(!$membre->getPhotoURI() && $promo != null && $membre->getPersonne()){ // Spécifique EMSE
                         $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);

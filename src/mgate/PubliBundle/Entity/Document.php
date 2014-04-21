@@ -55,11 +55,19 @@ class Document
     private $path;
     
     /**
+     * @var UploadedFile
      * @Assert\File(maxSize="6000000")
      */
     private $file;
     
-    
+    /**
+     * @var string
+     * @Assert\NotBlank
+     */
+    private $subdirectory;
+
+
+
     public function getAbsolutePath()
     {
         return null === $this->path
@@ -79,7 +87,7 @@ class Document
         // the absolute directory path where uploaded
         // documents should be saved
         // store in /data/incipio as it's the place with disk free
-        return '/data/incipio/'.$this->getUploadDir();
+        return '/data/incipio/'.$this->subdirectory.'/'.$this->getUploadDir();
     }
 
     protected function getUploadDir()
@@ -88,6 +96,7 @@ class Document
         // when displaying uploaded doc/image in the view.
         return 'documents';
     }
+    
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -183,6 +192,19 @@ class Document
     public function setPath($path)
     {
         $this->path = $path;
+    
+        return $this;
+    }
+    
+    /**
+     * Set path
+     *
+     * @param string $junior['id']
+     * @return Document
+     */
+    public function setSubdirectory($path)
+    {
+        $this->subdirectory = $path;
     
         return $this;
     }
