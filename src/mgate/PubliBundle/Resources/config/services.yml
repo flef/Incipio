@@ -1,7 +1,7 @@
 parameters:
-#    mgate_publi.example.class: mgate\PubliBundle\Example
     mgate.conversionlettre.class: mgate\PubliBundle\Controller\ConversionLettreController
     mgate.twigextentionmanager.class: mgate\PubliBundle\Manager\TwigExtensionManager
+    mgate.documentManager.class: mgate\PubliBundle\Manager\DocumentManager
 
 
 services:
@@ -15,10 +15,9 @@ services:
         class: "%mgate.twigextentionmanager.class%"
         tags:
             - { name: twig.extension }
-
-
-
-#services:
-#    mgate_publi.example:
-#        class: %mgate_publi.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mgate.documentManager:
+        class: "%mgate.documentManager.class%"
+        arguments:
+            em : "@doctrine.orm.entity_manager"
+            container : "@service_container"
+            securityContext : "@security.context"

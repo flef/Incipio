@@ -30,7 +30,7 @@ parameters:
     junior:
         nom:          'Nom Junior'
         abbr:         'Junior'
-        tag:          '[Junior]'
+        id:           'user'
         email:        contact@mgate.fr
         logo:         ~
         adresse:      ~

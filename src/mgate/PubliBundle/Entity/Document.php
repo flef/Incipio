@@ -58,7 +58,8 @@ class Document
      * @Assert\File(maxSize="6000000")
      */
     private $file;
-
+    
+    
     public function getAbsolutePath()
     {
         return null === $this->path
@@ -238,6 +239,7 @@ class Document
     
     public function setFile($file){
         $this->file = $file;
+        $this->size = filesize($file);
         return $this;
     }    
 

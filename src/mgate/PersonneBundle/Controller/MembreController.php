@@ -99,6 +99,7 @@ class MembreController extends Controller {
      */
     public function modifierAction($id) {
         $em = $this->getDoctrine()->getManager();
+        $documentManager = $this->get('mgate.documentManager');
 
         if (!$membre = $em->getRepository('mgate\PersonneBundle\Entity\Membre')->find($id)) {
             $membre = new Membre;
@@ -130,9 +131,6 @@ class MembreController extends Controller {
             $photoUpload = $form->get('photo')->getData();
             
             if ($form->isValid()) {
-                /**
-                 * Traitement de la photo
-                 */
                 
                 // TODO TOREMOVE Specifique EMSE
                 if($membre->getPersonne()){
@@ -147,76 +145,35 @@ class MembreController extends Controller {
                             '#[^a-zA-Z0-9ÁÀÂÄÉÈÊËÍÌÎÏÓÒÔÖÚÙÛÜáàâäéèêëíìîïóòôöúùûüÇç\-_]#',
                             '_',
                         mb_strtolower($membre->getPersonne()->getPrenom(), 'UTF-8')
-                    ) . '.jpg';
+                    );
                 }
                 else
                     $path = '';
                 $promo = $membre->getPromotion();
-
-               // TODO TOREMOVE Specifique EMSE
-                if($photoUpload || !$membre->getPhotoURI() && $promo != null && $membre->getPersonne()) {
-                    $photo = new Document();
-                    $photoInformation = new RelatedDocument();
-
-                    $photo->setRelation($photoInformation);
-                    $photo->setName('Photo - ' . $membre->getPersonne()->getPrenomNom() . ' - ' . $membre->getIdentifiant());
-
-                    $user = $this->get('security.context')->getToken()->getUser();
-                    $personne = $user->getPersonne();
-                    $photo->setAuthor($personne);
-
-                    $photoInformation->setDocument($photo);
+                
+                               
+                /**
+                 * Traitement de l'image de profil
+                 */
+                if($membre->getPersonne()){
+                    $authorizedMIMEType = array('image/jpeg', 'image/png', 'image/bmp');
+                    $photoInformation = new RelatedDocument();                    
                     $photoInformation->setMembre($membre);
-
-                    $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);
-                    $tempURI = 'tmp/'.$membre->getIdentifiant();
+                    $name = 'Photo - '.$membre->getIdentifiant(). ' - '.$membre->getPersonne()->getPrenomNom();
                     
-                    if($photoUpload != null){
-                        if(in_array($photoUpload->getMimeType(), array('image/jpeg', 'image/png', 'image/bmp'))){
-                            $photo->setFile($photoUpload);
-                            
+                    if($photoUpload){
+                        $documentManager->uploadDocumentFromFile($photoUpload, $authorizedMIMEType, $name, $photoInformation, true);
+                    }
+                    elseif(!$membre->getPhotoURI() && $promo != null && $membre->getPersonne()){ // Spécifique EMSE
+                        $ressourceURL = 'http://ismin.emse.fr/ismin/Photos/P'.urlencode($path);
+                        $headers = get_headers($ressourceURL);
+                        if(preg_match('#200#', $headers[0])){
+                            $document = $documentManager->uploadDocumentFromUrl($ressourceURL, $authorizedMIMEType, $name, $photoInformation, true);
+                            $membre->setPhotoURI($document->getWebPath());
                         }
-                    }
-                    if(!$membre->getPhotoURI() && ($handle = @fopen($ressourceURL , 'r')) !== FALSE) {
-                        file_put_contents($tempURI, $handle);
-                        fclose($handle);
+                    }                    
+                }                
 
-                        // MIME-type
-                        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                        // le dernier true indique de ne pas vérifier si le fichier à été téléchargé en HTTP
-                        $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($tempURI, $membre->getIdentifiant().'.jpg', finfo_file($finfo, $tempURI), filesize($tempURI), null, true);
-
-                        $photo->setFile($file);
-
-                        $em->persist($photoInformation);
-                        $em->persist($photo);
-
-                        $membre->setPhotoURI($photo->getWebPath());                          
-                        $em->persist($membre);
-
-                        $em->flush();
-                    }
-                    if($photoUpload || $handle){
-                        $docs = $em->getRepository('mgatePubliBundle:Document')->findBy(array('name' => $photo->getName() ));
-                        if ($docs) {
-                            foreach ($docs as $doc) {
-                                if($doc->getRelation()){
-                                    $relation = $doc->getRelation();
-                                    $doc->setRelation();
-                                    $em->remove ($relation);
-                                    $em->flush();
-                                }
-                                $em->remove($doc);
-                            }
-                        }                
-                        $em->persist($photoInformation);
-                        $em->persist($photo);
-                        $membre->setPhotoURI($photo->getWebPath()); 
-                    }
-                }
-                //
-                
-                
                 /**
                  * Traitement des postes
                  */

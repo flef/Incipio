@@ -119,11 +119,9 @@ class DocumentController extends Controller
             if(key_exists('etude', $options))
                 $relatedDocument->setEtude($options['etude']);
             if(key_exists('etudiant', $options))
-                $relatedDocument->setMembre($options['etudiant']);
-            
-        }
+                $relatedDocument->setMembre($options['etudiant']);            
+        }        
         
-
         $form = $this->createForm(new DocumentType, $document, $options);
        
         if( $this->get('request')->getMethod() == 'POST' )
@@ -132,38 +130,8 @@ class DocumentController extends Controller
                
             if( $form->isValid() )
             {
-                $em = $this->getDoctrine()->getManager();
-                
-                // Vérification espace libre
-                $junior = $this->container->getParameter('junior');
-                $totalSize = $document->getSize() + $em->getRepository('mgatePubliBundle:Document')->getTotalSize();
-                if($totalSize > $junior['authorizedStorageSize'])
-                    throw new \Symfony\Component\HttpFoundation\File\Exception\UploadException('Vous n\'avez plus d\'espace disponible ! Vous pouvez en demander plus à contact@incipio.fr.');
-                     
-                
-                $user = $this->get('security.context')->getToken()->getUser();
-                $personne = $user->getPersonne();
-        
-                $document->setAuthor($personne);
-                
-                $em->persist($document);
-                $em->flush();
-
-                
-                if($deleteIfExist){
-                    $docs = $em->getRepository('mgatePubliBundle:Document')->findBy(array('name' => $document->getName() ));
-                    if ($docs) {
-                        foreach ($docs as $doc) {
-                            if($doc->getRelation()){
-                                $relation = $doc->getRelation();
-                                $doc->setRelation();
-                                $em->remove ($relation);
-                            }else
-                                $em->remove($doc);
-                        }
-                    }
-                }
-                
+                $documentManager = $this->get('mgate.documentManager');
+                $documentManager->uploadDocument($document, null, $deleteIfExist);                
                 return false;
             }
         }

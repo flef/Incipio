@@ -3,7 +3,6 @@
 namespace mgate\SuiviBundle\Manager;
 
 use Doctrine\ORM\EntityManager;
-use mgate\SuiviBundle\Manager\BaseManager;
 use mgate\SuiviBundle\Entity\Etude as Etude;
 
 class EtudeManager extends \Twig_Extension {
