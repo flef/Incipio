@@ -24,8 +24,10 @@ class TraitementController extends Controller {
     const DOCTYPE_FICHE_ADHESION                = 'FM';
     const DOCTYPE_ACCORD_CONFIDENTIALITE        = 'AC';
     const DOCTYPE_DECLARATION_ETUDIANT_ETR      = 'DEE';
+    const DOCTYPE_NOTE_DE_FRAIS                 = 'NF';
     
     const ROOTNAME_ETUDE                        = 'etude';
+    const ROOTNAME_PROCES_VERBAL                = 'pvr';
     const ROOTNAME_ETUDIANT                     = 'etudiant';
     const ROOTNAME_MISSION                      = 'mission';
     const ROOTNAME_NOTE_DE_FRAIS                = 'nf';
@@ -92,6 +94,12 @@ class TraitementController extends Controller {
                 if (!$rootObject = $em->getRepository('mgate\TresoBundle\Entity\BV')->find($rootObject_id))
                     throw $errorRootObjectNotFound;
                 if($rootObject->getMission() && $rootObject->getMission()->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getMission()->getEtude(), $this->container->get('security.context')))
+                    throw $errorEtudeConfidentielle;
+                break;
+            case self::ROOTNAME_PROCES_VERBAL:
+                if (!$rootObject = $em->getRepository('mgate\SuiviBundle\Entity\ProcesVerbal')->find($rootObject_id))
+                    throw $errorRootObjectNotFound;
+                if($rootObject->getEtude() && $this->get('mgate.etude_manager')->confidentielRefus($rootObject->getEtude(), $this->container->get('security.context')))
                     throw $errorEtudeConfidentielle;
                 break;
             default:
@@ -421,21 +429,22 @@ class TraitementController extends Controller {
             ->add('name', 'choice', array(
                 'required' => true, 
                 'choices' => array(
-                    self::DOCTYPE_SUIVI_ETUDE               => 'Fiche de suivi d\'étude',
-                    self::DOCTYPE_DEVIS                     => 'Devis',
-                    self::DOCTYPE_AVANT_PROJET              => 'Avant-Projet',
-                    self::DOCTYPE_CONVENTION_CLIENT         => 'Convention Client',
-                    self::DOCTYPE_FACTURE_ACOMTE            => 'Facture d\'acompte',
-                    self::DOCTYPE_FACTURE_INTERMEDIAIRE     => 'Facture intermédiaire',
-                    self::DOCTYPE_FACTURE_SOLDE             => 'Facture de solde',
-                    self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE => 'Procès verbal de recette intermédiaire',
-                    self::DOCTYPE_PROCES_VERBAL_FINAL       => 'Procès verbal de recette final',
-                    self::DOCTYPE_RECAPITULATIF_MISSION     => 'Récapitulatif de mission',
-                    self::DOCTYPE_DESCRIPTIF_MISSION        => 'Descriptif de mission',
-                    self::DOCTYPE_CONVENTION_ETUDIANT       => 'Convention Etudiant',
-                    self::DOCTYPE_FICHE_ADHESION            => 'Fiche d\'adhésion',
-                    self::DOCTYPE_ACCORD_CONFIDENTIALITE    => 'Accord de confidentialité',
-                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR  => 'Déclaration étudiant étranger',
+                    self::DOCTYPE_SUIVI_ETUDE                   => 'Fiche de suivi d\'étude',
+                    self::DOCTYPE_DEVIS                         => 'Devis',
+                    self::DOCTYPE_AVANT_PROJET                  => 'Avant-Projet',
+                    self::DOCTYPE_CONVENTION_CLIENT             => 'Convention Client',
+                    self::DOCTYPE_FACTURE_ACOMTE                => 'Facture d\'acompte',
+                    self::DOCTYPE_FACTURE_INTERMEDIAIRE         => 'Facture intermédiaire',
+                    self::DOCTYPE_FACTURE_SOLDE                 => 'Facture de solde',
+                    self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE   => 'Procès verbal de recette intermédiaire',
+                    self::DOCTYPE_PROCES_VERBAL_FINAL           => 'Procès verbal de recette final',
+                    self::DOCTYPE_RECAPITULATIF_MISSION         => 'Récapitulatif de mission',
+                    self::DOCTYPE_DESCRIPTIF_MISSION            => 'Descriptif de mission',
+                    self::DOCTYPE_CONVENTION_ETUDIANT           => 'Convention Etudiant',
+                    self::DOCTYPE_FICHE_ADHESION                => 'Fiche d\'adhésion',
+                    self::DOCTYPE_ACCORD_CONFIDENTIALITE        => 'Accord de confidentialité',
+                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR      => 'Déclaration étudiant étranger',
+                    self::DOCTYPE_NOTE_DE_FRAIS                 => 'Note de Frais',
                     )))
             ->add('etudiant', 'genemu_jqueryselect2_entity', array(
                'class' => 'mgate\\PersonneBundle\\Entity\\Membre',

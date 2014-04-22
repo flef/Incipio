@@ -25,7 +25,12 @@
         <ul class="nav navbar-nav">
             <li><a href="{{ path('mgateSuivi_ap_rediger', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Rediger</a></li>
           {% if etude.ap.dateSignature |default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'AP', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', 
+                    { 'templateName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_AVANT_PROJET'), 
+                    'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_ETUDE'), 
+                    'rootObject_id' : etude.id}) }}">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span> Generer
+                </a></li>
           {% endif %}
         </ul>
     </div>
@@ -44,8 +49,8 @@
     <tr>
         <td>{{ ( etude.ap and etude.ap.dateSignature ) ? etude.ap.dateSignature | date("d/m/Y") : "Non signé" }}</td>
         <td>{{ etude.ap.nbrDev| default('Non estimé') }}</td>
-        <td>{% if etude.presentationprojet|default(0) %}<i>Dans le cadre de son activité professionnelle, </i>{{etude.prospect.nom |default('')}}{% endif %} {{etude.presentationprojet|default('')|nl2br}}</td>
-        <td>{% if etude.descriptionPrestation|default(0) %}<i>La prestation proposée par M-GaTE consiste à réaliser</i>{% endif %} {{etude.descriptionPrestation|default('')|nl2br}}</td>
+        <td>{{etude.presentationprojet|default('')|nl2br}}</td>
+        <td>{{etude.descriptionPrestation|default('')|nl2br}}</td>
         <td>{{etude.typeprestationtostring|default('')}}</td>
         <td>{% if etude.competences|default(0) %}<i>Les réalisateurs de cette étude devront donc être capables de : </i><br />{% endif %}{{etude.competences|default('')|nl2br}}</td>
     </tr>
@@ -67,7 +72,12 @@
         <ul class="nav navbar-nav">
             <li><a href="{{ path('mgateSuivi_cc_rediger', {'id': etude.id}) }}"><span class="glyphicon glyphicon-pencil"></span> Rediger</a></li>
                     {% if etude.cc.dateSignature |default('0') %}
-            <li><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'CC', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> Generer</a></li>
+            <li><a href="{{ path('mgate_publi_publiposter', 
+                    { 'templateName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_CONVENTION_CLIENT'), 
+                    'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_ETUDE'), 
+                    'rootObject_id' : etude.id}) }}">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span> Generer
+                </a></li>
                     {% endif %}
         </ul>
     </div>
@@ -117,8 +127,18 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'RM', 'rootName' : 'mission', 'rootObject_id' : mission.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> RM</a></td> 
-                    <td><a href="{{ path('mgate_publi_publiposter', { 'templateName' : 'DM', 'rootName' : 'mission', 'rootObject_id' : mission.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span> DM</a></td>
+                    <td><a href="{{ path('mgate_publi_publiposter', 
+                            { 'templateName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_RECAPITULATIF_MISSION'), 
+                            'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_MISSION'), 
+                            'rootObject_id' : mission.id}) }}">
+                            <span class="glyphicon glyphicon-circle-arrow-down"></span> RM
+                        </a></td> 
+                    <td><a href="{{ path('mgate_publi_publiposter', 
+                            { 'templateName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_DESCRIPTIF_MISSION'), 
+                            'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_MISSION'), 
+                            'rootObject_id' : mission.id}) }}">
+                            <span class="glyphicon glyphicon-circle-arrow-down"></span> DM
+                        </a></td>
                 </tr>
                 <tr>
                     <th>Date du RM</th>
@@ -179,7 +199,12 @@
             <td>{% if is_granted('ROLE_CA') %}
                 <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': facture.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'FV', 'rootName' : 'facture', 'rootObject_id' : facture.id}) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', 
+                                        { 'templateName' : facture.typeAbbrToString ,
+                                         'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_FACTURE'), 
+                                        'rootObject_id' : facture.id}) }}#">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                </a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': facture.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
                 {% endif %}
@@ -189,61 +214,7 @@
             <td>{{ facture.montantHT | default(0) }} €</td>
         </tr>
         {% set montantRestant =  montantRestant - facture.montantHT | default(0) %}        
-        {% endfor %}
-        {# 
-        <tr>
-            <th colspan="4">FactureVente d'Acompte</th>
-        </tr>
-       <tr>
-            <td style="width: 100px;">
-                <a title="Modifier" href="{{ path('mgateSuivi_FactureVente_rediger', {'id_etude': etude.id, 'type': 'fa'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FA'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
-            </td>
-            <td style="width: 200px;">FactureVente d'Acompte</td>
-            <td>{{ ( etude.fa and etude.fa.dateSignature ) ? etude.fa.dateSignature | date("d/m/Y") : "Non signé" }}</td>
-            <td>{{ etude.fa.montantHT | default(0) }} €</td>
-        </tr>
-        {% set montantRestant =  montantRestant - etude.fa.montantHT | default(0) %}
-        {% if etude.fis %}
-        <tr>
-            <th colspan="4">factures Intermédiaires</th>
-        </tr>
-        {% endif %}
-        {% for fi in etude.fis %}
-        <tr>
-            <td>
-                <a title="Modifier" href="{{ path('mgateTreso_Facture_modifier', {'id': fi.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude':etude.id, 'doc':'FI', 'key' : loop.index0 }) }}#"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
-                &nbsp;&nbsp;&nbsp;
-                <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': fi.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
-            </td>
-            <td><a href="{{ path('mgateTreso_Facture_modifier', {'id': fi.id}) }}">FactureVente intermédiaire n° {{ loop.index }}</a></td>
-            <td>{{ ( fi and fi.dateSignature ) ? fi.dateSignature | date("d/m/Y") : "Non signé" }}</td>
-            <td>{{ fi.montantHT | default(0) }} €</td>
-        </tr>
-        {% set montantRestant =  montantRestant - fi.montantHT | default(0) %}
-        {% endfor %}
-        <tr>
-            <th colspan="4">FactureVente de solde</th>
-        </tr>
-        <tr>
-            <td>
-                <a title="Modifier" href="{{ path('mgateSuivi_FactureVente_rediger', {'id_etude': etude.id, 'type': 'fs'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
-                &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', {'id_etude': etude.id, 'doc' : 'FS'}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
-                &nbsp;&nbsp;&nbsp;
-                {% if etude.fs.id | default(0) %}
-                <a title="Supprimer" href="{{ path('mgateTreso_Facture_supprimer', { 'id': etude.fs.id }) }}"><span class="glyphicon glyphicon-remove"></span></a>
-                {% endif %}
-            </td>
-            <td>FactureVente solde</td>
-            <td>{{ ( etude.fs and etude.fs.dateSignature ) ? etude.fs.dateSignature | date("d/m/Y") : "Non signé" }}</td>
-            <td>{{ etude.fs.montantHT | default(0) }} €</td>
-        </tr>
-        {% set montantRestant =  montantRestant - etude.fs.montantHT | default(0)  %}
-        #}
+        {% endfor %}     
     </table>
     <table class="table table-bordered">
         <tr>
@@ -287,7 +258,12 @@
             <td style="width: 100px;">
                 <a title="Modifier" href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': pvi.id}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'PVRI', 'rootName' : 'pvri', 'rootObject_id' : pvi.id }) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', 
+                                        { 'templateName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE'), 
+                                        'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_PROCES_VERBAL'),
+                                        'rootObject_id' : etude.id }) }}">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                </a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Supprimer" href="#"><span class="glyphicon glyphicon-remove"></span></a>
             </td>
@@ -307,7 +283,12 @@
         <tr>
             <td><a title="Modifier" href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
-                <a title="Télécharger" href="{{ path('mgate_publi_publiposter', { 'templateName' : 'PVRF', 'rootName' : 'etude', 'rootObject_id' : etude.id}) }}"><span class="glyphicon glyphicon-circle-arrow-down"></span></a>
+                <a title="Télécharger" href="{{ path('mgate_publi_publiposter',
+                                        { 'templateName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_PROCES_VERBAL'),
+                                          'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_ETUDE'),
+                                          'rootObject_id' : etude.id}) }}">
+                    <span class="glyphicon glyphicon-circle-arrow-down"></span>
+                </a>
             </td>
             <td><a href="{{ path('mgateSuivi_procesverbal_modifier', {'id_pv': etude.pvr.id}) }}">PVR</a></td>
             <td>Toutes</td>

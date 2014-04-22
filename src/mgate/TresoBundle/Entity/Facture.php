@@ -132,6 +132,18 @@ class Facture
         return $this->getMontantHT() + $this->getMontantTVA();
     }
     
+    public function getTypeAbbrToString(){
+        $type = array(
+            0 => 'Facture',
+            1 => 'Facture',
+            2 => 'FV',
+            3 => \mgate\PubliBundle\Controller\TraitementController::DOCTYPE_FACTURE_ACOMTE,
+            4 => \mgate\PubliBundle\Controller\TraitementController::DOCTYPE_FACTURE_INTERMEDIAIRE,
+            5 => \mgate\PubliBundle\Controller\TraitementController::DOCTYPE_FACTURE_SOLDE);
+        
+        return $type[$this->type];
+    }
+    
     /**
      * Get type
      *

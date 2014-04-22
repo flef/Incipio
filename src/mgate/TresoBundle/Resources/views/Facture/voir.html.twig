@@ -77,7 +77,7 @@
     <table class="table">
         <tr>
             <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_Facture_modifier', {'id': facture.id})}}';">Modifier la Facture</button></td>
-            <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Facture</button></td>
+            <td style="text-align: center;"><a type="button" class="btn btn-success" href="{{ path('mgate_publi_publiposter', { 'templateName' : facture.typeAbbrToString , 'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_FACTURE'), 'rootObject_id' : facture.id}) }}">Générer la Facture</a></td>
             <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_Facture_supprimer', {'id': facture.id})}}';">Supprimer la Facture</button></td>
         </tr>
     </table>

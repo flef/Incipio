@@ -80,7 +80,7 @@
     <table class="table">
         <tr>
             <td style="text-align: left;"><button type="button" class="btn btn-primary" onclick="location.href='{{ path('mgateTreso_NoteDeFrais_modifier', {'id': nf.id})}}';">Modifier la Note de Frais</button></td>
-            <td style="text-align: center;"><button type="button" class="btn btn-success" onclick="alert('Comming Soon !');">Générer la Note de Frais</button></td>
+            <td style="text-align: center;"><a type="button" class="btn btn-success" href="{{ path('mgate_publi_publiposter', { 'templateName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_NOTE_DE_FRAIS') , 'rootName' : constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_NOTE_DE_FRAIS'), 'rootObject_id' : nf.id}) }}">Générer la Note de Frais</a></td>
             <td style="text-align: right;"><button type="button" class="btn btn-danger" onclick="location.href='{{ path('mgateTreso_NoteDeFrais_supprimer', {'id': nf.id})}}';">Supprimer la Note de Frais</button></td>
         </tr>
     </table>
