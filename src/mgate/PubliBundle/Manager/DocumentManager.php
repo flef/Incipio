@@ -49,7 +49,7 @@ class DocumentManager extends BaseManager{
      * @throws \Exception
      */
     public function uploadDocumentFromUrl($url, array $authorizedMIMEType, $name, $relatedDocument = null, $deleteIfExist = false){
-        $tempStorage = 'tmp'.sha1(uniqid(mt_rand(), true));
+        $tempStorage = 'tmp/'.sha1(uniqid(mt_rand(), true));
         
         if(($handle = @fopen($url , 'r')) === FALSE) // Erreur
             throw new \Exception('La ressource demandée ne peut être lue.');
@@ -59,7 +59,7 @@ class DocumentManager extends BaseManager{
         // MIME-type
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($finfo, $tempStorage);
-        $extension = substr(strrchr($mimi, "\\"), 1);
+        $extension = substr(strrchr($mime, "\\"), 1);
 
         // le dernier true indique de ne pas vérifier si le fichier à été téléchargé en HTTP
         $file = new \Symfony\Component\HttpFoundation\File\UploadedFile($tempStorage, $name.'.'.$extension, $mime, filesize($tempStorage), null, true);
