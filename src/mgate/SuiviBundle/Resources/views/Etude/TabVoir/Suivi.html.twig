@@ -202,7 +202,7 @@
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', 
                                         { 'templateName' : facture.typeAbbrToString ,
                                          'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_FACTURE'), 
-                                        'rootObject_id' : facture.id}) }}#">
+                                         'rootObject_id' : facture.id}) }}#">
                     <span class="glyphicon glyphicon-circle-arrow-down"></span>
                 </a>
                 &nbsp;&nbsp;&nbsp;
@@ -260,7 +260,7 @@
                 &nbsp;&nbsp;&nbsp;
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter', 
                                         { 'templateName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE'), 
-                                        'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_PROCES_VERBAL'),
+                                        'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_ETUDE'),
                                         'rootObject_id' : etude.id }) }}">
                     <span class="glyphicon glyphicon-circle-arrow-down"></span>
                 </a>
@@ -284,7 +284,7 @@
             <td><a title="Modifier" href="{{ path('mgateSuivi_procesverbal_rediger', {'id_etude': etude.id, 'type': 'pvr'}) }}"><span class="glyphicon glyphicon-pencil"></span></a>
                 &nbsp;&nbsp;&nbsp;
                 <a title="Télécharger" href="{{ path('mgate_publi_publiposter',
-                                        { 'templateName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_PROCES_VERBAL'),
+                                        { 'templateName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::DOCTYPE_PROCES_VERBAL_FINAL'),
                                           'rootName' :  constant('\\mgate\\PubliBundle\\Controller\\TraitementController::ROOTNAME_ETUDE'),
                                           'rootObject_id' : etude.id}) }}">
                     <span class="glyphicon glyphicon-circle-arrow-down"></span>
