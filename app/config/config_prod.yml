@@ -25,7 +25,7 @@ monolog:
             handler: swift
         swift:
             type:       swift_mailer
-            from_email: error@mgate.fr
-            to_email:   dsi@mgate.fr
+            from_email: no-reply@incipio.fr
+            to_email:   support@incipio.fr
             subject:    An Error Occurred!
             level:      error
