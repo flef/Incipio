@@ -4,7 +4,7 @@ namespace mgate\PubliBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use JMS\SecurityExtraBundle\Annotation\Secure;
-
+use \mgate\PubliBundle\Form\DocTypeType;
 
 
 class TraitementController extends Controller {
@@ -39,7 +39,7 @@ class TraitementController extends Controller {
     const REG_REPEAT_LINE       = "#(<w:tr(?:(?!w:tr\s).)*?)(\{\%\s*TRfor[^\%]*\%\})(.*?)(\{\%\s*endforTR\s*\%\})(.*?</w:tr>)#";
     const REG_REPEAT_PARAGRAPH  = "#(<w:p(?:(?!<w:p\s).)*?)(\{\%\s*Pfor[^\%]*\%\})(.*?)(\{\%\s*endforP\s*\%\})(.*?</w:p>)#";
     // Champs
-    const REG_CHECK_FIELDS = "#\{[\{%].*?[\}%]\}#";
+    const REG_CHECK_FIELDS = "#\{[^\}%]*?[\{%][^\}%]+?[\}%][^\}%]*?\}#";
     const REG_XML_NODE_IDENTIFICATOR = "#<.*?>#";
     // Images
     const REG_IMAGE_DOC = "#<w:drawing.*?/w:drawing>#";
@@ -48,7 +48,7 @@ class TraitementController extends Controller {
     const IMAGE_FIX = "#imageFIX#";
     const IMAGE_VAR = "#imageVAR#";
     // Autres
-    const REG_SPECIAL_CHAR = '{}()[]|';
+    const REG_SPECIAL_CHAR = '{}()[]|><?=;!+*-/';
     const REG_FILE_EXT = "#\.(jpg|png|jpeg)#i";
 
     /**
@@ -327,11 +327,13 @@ class TraitementController extends Controller {
             $originalField = $field;                
             $field = preg_replace('#‘#', '\'', $field); // Peut etre simplifier en une ligne avec un array
             $field = preg_replace('#’#', '\'', $field);
+            $field = preg_replace('#«#', '"', $field);
+            $field = preg_replace('#»#', '"', $field);
             $field = preg_replace(self::REG_XML_NODE_IDENTIFICATOR, '', $field);
-            if($field == strtoupper($field))
+            if($field == strtoupper($field)){
                 $field = strtolower($field);
-
-            $templateXML = preg_replace('#'. addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) .'#', $field, $templateXML);   
+            }
+            $templateXML = preg_replace('#'. addcslashes(addslashes($originalField), self::REG_SPECIAL_CHAR) .'#', html_entity_decode($field), $templateXML);
         } 
         return $templateXML;
     }
@@ -425,41 +427,7 @@ class TraitementController extends Controller {
     public function uploadNewDoctypeAction(){
         $message = '';
         $data = array();
-        $form = $this->createFormBuilder($data)
-            ->add('name', 'choice', array(
-                'required' => true, 
-                'choices' => array(
-                    self::DOCTYPE_SUIVI_ETUDE                   => 'Fiche de suivi d\'étude',
-                    self::DOCTYPE_DEVIS                         => 'Devis',
-                    self::DOCTYPE_AVANT_PROJET                  => 'Avant-Projet',
-                    self::DOCTYPE_CONVENTION_CLIENT             => 'Convention Client',
-                    self::DOCTYPE_FACTURE_ACOMTE                => 'Facture d\'acompte',
-                    self::DOCTYPE_FACTURE_INTERMEDIAIRE         => 'Facture intermédiaire',
-                    self::DOCTYPE_FACTURE_SOLDE                 => 'Facture de solde',
-                    self::DOCTYPE_PROCES_VERBAL_INTERMEDIAIRE   => 'Procès verbal de recette intermédiaire',
-                    self::DOCTYPE_PROCES_VERBAL_FINAL           => 'Procès verbal de recette final',
-                    self::DOCTYPE_RECAPITULATIF_MISSION         => 'Récapitulatif de mission',
-                    self::DOCTYPE_DESCRIPTIF_MISSION            => 'Descriptif de mission',
-                    self::DOCTYPE_CONVENTION_ETUDIANT           => 'Convention Etudiant',
-                    self::DOCTYPE_FICHE_ADHESION                => 'Fiche d\'adhésion',
-                    self::DOCTYPE_ACCORD_CONFIDENTIALITE        => 'Accord de confidentialité',
-                    self::DOCTYPE_DECLARATION_ETUDIANT_ETR      => 'Déclaration étudiant étranger',
-                    self::DOCTYPE_NOTE_DE_FRAIS                 => 'Note de Frais',
-                    )))
-            ->add('etudiant', 'genemu_jqueryselect2_entity', array(
-               'class' => 'mgate\\PersonneBundle\\Entity\\Membre',
-               'property' => 'personne.prenomNom',
-               'label' => 'Intervenant pour vérifier le template',
-               'required' => false
-               ))
-            ->add('template', 'file', array('required' => true))
-            ->add('etude','genemu_jqueryselect2_entity',array (
-                      'label' => 'Etude pour vérifier le template',
-                       'class' => 'mgate\\SuiviBundle\\Entity\\Etude',
-                       'property' => 'reference',                      
-                       'required' => false))
-            ->add('verification', 'checkbox', array('label' => 'Activer la vérification', 'required' => false))
-            ->getForm();
+        $form = $this->createForm(new DocTypeType, $data);
 
          if ($this->get('request')->getMethod() == 'POST') {
             $form->bind($this->get('request'));
@@ -545,11 +513,7 @@ class TraitementController extends Controller {
             }
          }
 
-        return new \Symfony\Component\HttpFoundation\Response(
-            $this->get('twig')->render(
-                $message.(array_key_exists('name', $data) ? $data['name'] : '').'<br><form method="post" {{ form_enctype(form) }}>{{ form_widget(form) }}<input type="submit" value="Mettre à jour"/></form><br><code>Cette fonction est en béta</code>', 
-                array('form' => $form->createView()))
-            ); 
+        return $this->render('mgatePubliBundle:DocType:upload.html.twig', array('form' => $form->createView()));
                
     }
     

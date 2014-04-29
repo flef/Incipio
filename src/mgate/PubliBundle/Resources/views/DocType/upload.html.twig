@@ -1,0 +1,47 @@
+{% extends "mgatePubliBundle::layout.html.twig" %}
+
+{% block title %}
+	{{ parent() }} - Uploader un Document Type
+{% endblock %}
+
+{% block content_bundle %}
+
+
+<h4>Uploader un Document Type</h4>
+<form action="" method="post" {{ form_enctype(form) }}>
+    <h4></h4>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td>{{ form_label(form.name) }}</td>
+            <td>{{ form_widget(form.name) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.template) }}</td>
+            <td>{{ form_widget(form.template) }}</td>
+        </tr>
+        <tr>
+            <th colspan="2">Vérification : </th>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.etude) }}</td>
+            <td>{{ form_widget(form.etude) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.etudiant) }}</td>
+            <td>{{ form_widget(form.etudiant) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.verification) }}</td>
+            <td>{{ form_widget(form.verification) }}</td>
+        </tr>
+    </table>
+    {{ form_widget(form) }}
+
+    <input type="submit" class="btn btn-success" value="Uploader" />
+</form>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {{ form_javascript(form) }}
+{% endblock %}

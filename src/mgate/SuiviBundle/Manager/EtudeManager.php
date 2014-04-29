@@ -312,7 +312,7 @@ class EtudeManager extends \Twig_Extension {
             }
         }
         
-        // CE + 1w < RM
+        // CE <= RM
         foreach ($etude->getMissions() as $mission) {
                 if($intervenant = $mission->getIntervenant()){
                 $dateSignature = $dateDebutOm = NULL;
@@ -320,17 +320,18 @@ class EtudeManager extends \Twig_Extension {
                 if($mission->getDebutOm() != NULL ) $dateDebutOm = clone $mission->getDebutOm();
                 if ($dateSignature == NULL || $dateDebutOm == NULL ) continue;
                     
-                $error = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La date de signature de la Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' doit être antérieure d\'au moins une semaine à la date de signature du récapitulatifs de mission.');
+                $error = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La date de signature de la Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' doit être antérieure à la date de signature du récapitulatifs de mission.');
                 $errorAbs = array('titre' => 'CE - RM : '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'La Convention Eleve de '.$intervenant->getPersonne()->getPrenomNom().' n\'est pas signée.');
                 
                 if ($intervenant->getDateConventionEleve() == NULL)
                     array_push($errors, $errorAbs);                        
-                elseif ($intervenant->getDateConventionEleve() >= $dateSignature->modify('-7 day') || 
-                        $intervenant->getDateConventionEleve() >= $dateDebutOm->modify('-7 day')){
+                elseif ($intervenant->getDateConventionEleve() >= $dateSignature || 
+                        $intervenant->getDateConventionEleve() >= $dateDebutOm){
                     array_push($errors, $error);                        
                 }
             }
-        }
+        }       
+        
         
         // Date de fin d'étude approche alors que le PVR n'est pas signé
         $now = new \DateTime("now");
