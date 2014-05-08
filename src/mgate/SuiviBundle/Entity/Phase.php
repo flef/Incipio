@@ -87,9 +87,9 @@ class Phase
     private $dateDebut;
     
     /**
-     * @var string $delai
+     * @var integer $delai
      *
-     * @ORM\Column(name="delai", type="text", nullable=true)
+     * @ORM\Column(name="delai", type="integer", nullable=true)
      */
     private $delai;
     
@@ -119,6 +119,17 @@ class Phase
     
     public function getMontantHT(){
         return $this->nbrJEH * $this->prixJEH;
+    }
+
+    public function getDateFin() {
+        if($this->dateDebut){
+            $date = clone $this->dateDebut;
+            $date->modify('+ '.$this->delai.' day');
+            return $date;
+        }
+        else
+            return new \DateTime("now");
+        
     }
 
 

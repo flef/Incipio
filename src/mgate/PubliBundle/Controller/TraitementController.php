@@ -109,12 +109,6 @@ class TraitementController extends Controller {
 
         $chemin = $this->getDoctypeAbsolutePathFromName($templateName, $debug);
         
-        //DEBUG   
-        if ($this->container->getParameter('debugEnable') && !$debug) {
-            $path = $this->container->getParameter('pathToDoctype');
-            $chemin = $path.$chemin;
-        }
-        
         $templatesXMLtraite = $this->traiterTemplates($chemin, $rootName, $rootObject);
         $repertoire = 'tmp';
 
@@ -398,6 +392,7 @@ class TraitementController extends Controller {
     private function linkDocxImages(&$templateXML, $relationship){
         $images = array();
         preg_match(self::REG_IMAGE_DOC, $templateXML, $images);
+        
         foreach ($images as $image){
             $imageInfo = array();
             if(preg_match(self::REG_IMAGE_DOC_FIELD, $image, $imageInfo)){
