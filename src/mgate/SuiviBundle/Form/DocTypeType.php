@@ -22,7 +22,7 @@ class DocTypeType extends AbstractType
         $builder->add('version', 'integer', array('label'=>'Version du document'));
         
         $builder->add('signataire1', 'genemu_jqueryselect2_entity', 
-            array ('label' => 'Signataire M-GaTE',
+            array ('label' => 'Signataire Junior',
                    'class' => 'mgate\\PersonneBundle\\Entity\\Personne',
                    'property' => 'prenomNom',
                    'query_builder' => function(PersonneRepository $pr) { return $pr->getMembresByPoste('president%'); },

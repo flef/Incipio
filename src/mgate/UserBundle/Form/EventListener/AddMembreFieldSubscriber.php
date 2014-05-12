@@ -37,7 +37,7 @@ class AddMembreFieldSubscriber implements EventSubscriberInterface
         // over the null condition.
         {
         $user=$data;
-        $form->add('personne', 'genemu_jqueryselect2_entity', array ('label' => "Associer ce compte d'utilisateur à un Membre M-GaTE existant",
+        $form->add('personne', 'genemu_jqueryselect2_entity', array ('label' => "Associer ce compte d'utilisateur à un Membre existant",
                        'class' => 'mgate\PersonneBundle\Entity\Personne',
                        'property' => 'prenomNom',
                        'required' => false,
