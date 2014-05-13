@@ -1,0 +1,60 @@
+{% extends "mgateSuiviBundle::layout.html.twig" %}
+
+{% block title %}
+	Affichage des domaines de compétences - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<ul class="breadcrumb no-margin">
+    <li><a href="{{ path('mgateSuivi_etude_homepage') }}">Suivi d'Étude</a></li>    
+</ul>
+{% endblock %}
+
+{% block javascript_quick %}
+{{ parent() }}
+    <script src="{{ asset('js/jquery.dataTables.min.js')}}"></script>
+    
+    <script type="text/javascript" charset="utf-8">
+            $(document).ready(function() {
+                    $('#example').dataTable({
+                        "bPaginate": false,
+						"aaSorting": [[0,'desc']],
+                    });
+            } );
+    </script>
+	
+{% endblock %}
+
+
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/datatable.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/datatable_page.css') }}">
+{% endblock %}
+    
+{% block content_bundle %}
+<form method="post" {{ form_enctype(form) }}>
+    <table>
+        <tr><td>{{ form_widget(form) }}</td><td><input type="submit" value="Ajouter" class="btn-sucess"/></td></tr>
+    </table>
+</form>
+<br>
+<table style="width: 100%;" aria-describedby="example_info" class="display dataTable table table-bordered table-striped" id="example">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Domaine</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for domaine in domaines %}
+        <tr>
+            <td><a href="{{ path('mgateSuivi_domaine_delete', { 'id' : domaine.id }) }}"><span class="glyphicon glyphicon-remove">
+                
+            </span></a></td>
+            <td>{{ domaine.nom }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

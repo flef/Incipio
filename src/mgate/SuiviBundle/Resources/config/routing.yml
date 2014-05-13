@@ -1,3 +1,17 @@
+# Domaines de compétence ######################################################
+
+mgateSuivi_domaine_index:
+    pattern: /DomainesDeCompetence
+    defaults: {_controller: mgateSuiviBundle:DomaineCompetence:index }
+
+mgateSuivi_domaine_delete:
+    pattern: /DomainesDeCompetence/Supprimer/{id}
+    defaults: {_controller: mgateSuiviBundle:DomaineCompetence:delete }
+    requirements:
+      id : \d+
+
+###############################################################################
+
 mgateSuivi_vu_ca:
     pattern:  /ca/{id}
     defaults: {_controller: mgateSuiviBundle:Etude:vuCA, id:-1 }
@@ -35,16 +49,13 @@ mgateSuivi_etude_modifier:
     defaults: {_controller: mgateSuiviBundle:Etude:modifier}
     requirements:
         numero:  \d+
-        
 
-       
 mgateSuivi_etude_supprimer:
     pattern: /etude/supprimer/{numero}
     defaults: {_controller: mgateSuiviBundle:Etude:delete}
     requirements:
-        numero: \d+
-        
-        
+        numero: \d+      
+
 mgateSuivi_ap_voir:
     pattern: /ap/voir/{id}
     defaults: {_controller: mgateSuiviBundle:Ap:voir}
@@ -74,21 +85,19 @@ mgateSuivi_cc_voir:
     defaults: {_controller: mgateSuiviBundle:Cc:voir}
     requirements:
         id: \d+
-       
-        
+
 mgateSuivi_cc_suivi:
     pattern: /cc/suivi/{id}
     defaults: {_controller: mgateSuiviBundle:Cc:suivi}
     requirements:
         id: \d+   
-    
-        
+
 mgateSuivi_mission_rediger:
     pattern: /mission/rediger/{id}
     defaults: {_controller: mgateSuiviBundle:Mission:rediger}
     requirements:
         id: \d+
-        
+
 mgateSuivi_missions_modifier:
     pattern: /missions/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:Missions:modifier}
@@ -100,12 +109,11 @@ mgateSuivi_missions_modifier:
 mgateSuivi_mission_avancement:
     pattern: /missions/modifier/avancement/
     defaults: {_controller: mgateSuiviBundle:Mission:avancement}
-    
+
 mgateSuivi_state:
     pattern: /suivi/state/
     defaults: {_controller: mgateSuiviBundle:Etude:state}
-        
-      
+
 #mgateSuivi_missions_repartition:
 #    pattern: /missions/repartition/{id}
 #    defaults: {_controller: mgateSuiviBundle:MissionsRepartition:index}
@@ -118,7 +126,7 @@ mgateSuivi_clientcontact_ajouter:
     defaults: {_controller: mgateSuiviBundle:ClientContact:add}
     requirements:
         id: \d+
-        
+
 mgateSuivi_clientcontact_modifier:
     pattern: /clientcontact/modifier/{id}
     defaults: {_controller: mgateSuiviBundle:ClientContact:modifier}

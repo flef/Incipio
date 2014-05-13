@@ -41,8 +41,13 @@ class EtudeType extends AbstractType
                        'property' => 'prenomNom',
                        'query_builder' => function(PersonneRepository $pr) { return $pr->getMembreOnly(); },
                        'required' => false))
-              ->add('domaineDeCompetence', 'choice', array('choices' => Etude::getDomaineDeCompetenceChoice(), 'required' => false))
-              ->add('sourceDeProspection', 'choice', array('choices' => Etude::getSourceDeProspectionChoice(), 'required' => false));        
+            ->add('domaineCompetence', 'genemu_jqueryselect2_entity', array(
+                'class' => 'mgate\SuiviBundle\Entity\DomaineCompetence',
+                'property' => 'nom',
+                'required' => false,
+                'label' => 'Domaine de compétence',
+                ))
+            ->add('sourceDeProspection', 'choice', array('choices' => Etude::getSourceDeProspectionChoice(), 'required' => false));        
     }
 
     public function getName()
