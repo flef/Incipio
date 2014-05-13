@@ -90,7 +90,7 @@
             {% block menu %}
 				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 					{# L'utilisateur est connecté ! #}
-					{% render url('navbar_homepage') %}
+					{% render url('mgate_dashboard_navbar') %}
 					{% else %}
 					{# L'utilisateur n'est pas connecté ! #}
 				{% endif %}

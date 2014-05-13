@@ -1,3 +1,0 @@
-navbar_homepage:
-    pattern:  /navbar/
-    defaults: { _controller: NavbarBundle:Default:index }

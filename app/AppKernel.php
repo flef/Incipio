@@ -53,7 +53,6 @@ class AppKernel extends Kernel
 			new mgate\PubliBundle\mgatePubliBundle(),
             new mgate\DashboardBundle\mgateDashboardBundle(),
             new mgate\StatBundle\mgateStatBundle(),
-            new mgate\NavbarBundle\NavbarBundle(),
             new mgate\TresoBundle\mgateTresoBundle(),
             new mgate\FormationBundle\mgateFormationBundle(),
 			new mgate\PersonneBundle\mgatePersonneBundle(),

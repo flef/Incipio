@@ -6,10 +6,6 @@ mgateTresoBundle:
     resource: "@mgateTresoBundle/Resources/config/routing.yml"
     prefix:   /Tresorerie
 
-navbar:
-    resource: "@NavbarBundle/Resources/config/routing.yml"
-    prefix:   /
-
 mgate_stat:
     resource: "@mgateStatBundle/Resources/config/routing.yml"
     prefix:   /
