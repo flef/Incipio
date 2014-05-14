@@ -124,24 +124,22 @@ class DeclaratifController extends Controller
          */
         foreach ($fvs as $fv){
             $montantTvaParType = array();
-            $montantHT = 0;
-            $montantTTC = 0;
+            
+            $montantHT = $fv->getMontantHT();
+            $montantTTC = $fv->getMontantTVA();
+            
+            // Mise à jour du montant global pour le taux de TVA ciblé 
+            $totalTvaCollectee['HT']  += $fv->getMontantHT();
+            $totalTvaCollectee['TTC'] += $fv->getMontantTTC();
+            $totalTvaCollectee['TVA'] += $fv->getMontantTVA();
+            
             foreach ($fv->getDetails() as $fvd){
                 $tauxTVA = $fvd->getTauxTVA();
                 if(key_exists($tauxTVA, $montantTvaParType))
                     $montantTvaParType[$tauxTVA] += $fvd->getMontantTVA();
                 else
                     $montantTvaParType[$tauxTVA] = $fvd->getMontantTVA();
-                $montantHT  += $fvd->getMontantHT();
-                $montantTTC += $fvd->getMontantTTC(); 
-                
-                // mise à jour des montant Globaux
-                $totalTvaCollectee['HT']  += $fvd->getMontantHT();
-                $totalTvaCollectee['TTC'] += $fvd->getMontantTTC();
-                $totalTvaCollectee['TVA'] += $fvd->getMontantTVA();
-                
-                // Mise à jour du montant global pour le taux de TVA ciblé    
-                
+
                 if(!key_exists($tauxTVA, $totalTvaCollectee))
                     $totalTvaCollectee[$tauxTVA] = $fvd->getMontantTVA();
                 else
@@ -150,6 +148,22 @@ class DeclaratifController extends Controller
                 // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
                 if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
             }
+            if($md = $fv->getMontantADeduire()){
+                $tauxTVA = $md->getTauxTVA();
+                if(key_exists($tauxTVA, $montantTvaParType))
+                    $montantTvaParType[$tauxTVA] -= $md->getMontantTVA();
+                else
+                    $montantTvaParType[$tauxTVA] = - $md->getMontantTVA();
+
+                if(!key_exists($tauxTVA, $totalTvaCollectee))
+                    $totalTvaCollectee[$tauxTVA] = - $md->getMontantTVA();
+                else
+                    $totalTvaCollectee[$tauxTVA] -= $md->getMontantTVA();
+                
+                // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
+                if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
+            }
+
             $tvaCollectee[] = array('DATE' => $fv->getDate(),'LI'=> $fv->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC,'TVA' => $fv->getMontantTVA() , 'TVAT' => $montantTvaParType);
             
            
