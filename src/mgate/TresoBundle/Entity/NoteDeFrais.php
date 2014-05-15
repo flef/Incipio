@@ -82,7 +82,7 @@ class NoteDeFrais
     }
     
     public function getMontantTTC(){
-        return $this->getMontantHT + $this->getMontantTVA();
+        return $this->getMontantHT() + $this->getMontantTVA();
     }
     
     public function getReference(){
