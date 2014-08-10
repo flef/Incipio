@@ -53,18 +53,6 @@
             <td>{{ (detail.montantHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
         </tr>        
         {% endfor %}
-        {% if facture.montantADeduire is not null %}
-        {% set totalHT = totalHT - facture.montantADeduire.montantHT %}
-        {% set totalTVA = totalTVA - (facture.montantADeduire.montantHT * (facture.montantADeduire.tauxTVA / 100)) %}
-        {% set totalTTC = totalTTC - (facture.montantADeduire.montantHT * ( 1 + facture.montantADeduire.tauxTVA / 100)) %}
-        <tr>
-            <th>Déjà payé</th>
-            <td>{{ facture.montantADeduire.montantHT | number_format(2, ',', ' ')}} €</td>
-            <td>{{ facture.montantADeduire.tauxTVA }} %</td>
-            <td>{{ (facture.montantADeduire.montantHT * ( facture.montantADeduire.tauxTVA / 100)) | number_format(2, ',', ' ')}} €</td>
-            <td>{{ (facture.montantADeduire.montantHT * ( 1 + facture.montantADeduire.tauxTVA / 100)) | number_format(2, ',', ' ')}} €</td>
-        </tr>
-        {% endif %}
         <tr>
             <th colspan="5" class="danger">Total</th>               
         </tr>

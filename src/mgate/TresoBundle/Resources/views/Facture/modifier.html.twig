@@ -1,7 +1,7 @@
 {% extends "mgateTresoBundle::layout.html.twig" %}
 
 {% block title %}
-	Gestion des notes de frais - {{ parent() }}
+	Ajout d'une Facture - {{ parent() }}
 {% endblock %}
 
 {% block content_bundle %}
@@ -29,8 +29,8 @@
         <tr>
             <th>{{ form_label(form.type) }}</th>
             <td>{{ form_widget(form.type) }}</td>
-            <th>{{ form_label(form.montantADeduire) }}</th>
-            <td>{{ form_widget(form.montantADeduire) }}</td>            
+            <th></th>
+            <td></td>            
         </tr>
         
         <tr>
@@ -47,10 +47,11 @@
             <td></td>
             <td>
                 <table class="table">
-                    <tr>
-                        
+                    <tr>                        
                         <th>{{ form_label(detail.compte) }}</th>
                         <td>{{ form_widget(detail.compte) }}</td>
+                        <th>{{ form_label(detail.type) }}</th>
+                        <td>{{ form_widget(detail.type) }}</td>
                     </tr>
                     <tr>
                         <th>{{ form_label(detail.description) }}</th>
@@ -62,12 +63,20 @@
                         <th>{{ form_label(detail.tauxTVA) }}</th>
                         <td>{{ form_widget(detail.tauxTVA) }}</td>
                     </tr>
+                    <tr>
+                        <th colspan="4">Si prestation :</th>
+                    </tr>
+                    <tr>
+                        <th>{{ form_label(detail.nombreJEH) }}</th>
+                        <td>{{ form_widget(detail.nombreJEH) }}</td>
+                        <th>{{ form_label(detail.prixJEH) }}</th>
+                        <td>{{ form_widget(detail.prixJEH) }}</td>
+                    </tr>
                 </table>
             </td>
         </tr>
         {% endfor %}
     </table>
-   
 	{{ form_widget(form) }}  
 </form>
 {% endblock %}
@@ -136,18 +145,35 @@ function addDeleteButton($tag) {
 }  
 </script>
 <script type="text/javascript" charset="utf-8">
-$(document).ready(function() {
+/*
+    $(document).ready(function() {
     $('select[id$="_type"]').each(
-        function(){
-            if($(this).val() < 4) $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').hide();
-            else $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').show();
-    });
-    
+        function(){                
+            if($(this).val() == {{ constant('\\mgate\\TresoBundle\\Entity\\FactureDetail::TYPE_PRESTATION') }}  ) {
+                $(this).closest('td').find('input[id$="_montantHT"]').parent('div').hide();
+              $(this).closest('td').find('input[id$="_prixJEH"]').parent('div').show;
+              $(this).closest('td').find('input[id$="_nombreJEH"]').parent('div').show();
+            } else {
+                $(this).closest('td').find('input[id$="_montantHT"]').parent('div').show();
+              $(this).closest('td').find('input[id$="_prixJEH"]').parent('div').hide();
+              $(this).closest('td').find('input[id$="_nombreJEH"]').parent('div').hide();
+            }
+        }
+    );
     $('select[id$="_type"]').change(
-       function(){
-            if($(this).val() < 4) $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').hide();
-            else $(this).closest('.table').find('#{{form.montantADeduire.vars.id}}').show();
-    });
+        function(){                
+            if($(this).val() == {{ constant('\\mgate\\TresoBundle\\Entity\\FactureDetail::TYPE_PRESTATION') }}  ) {
+                $(this).closest('td').find('input[id$="_montantHT"]').parent('div').hide();
+                $(this).closest('td').find('input[id$="_prixJEH"]').parent('div').show;
+                $(this).closest('td').find('input[id$="_nombreJEH"]').parent('div').show();
+            } else {
+                $(this).closest('td').find('input[id$="_montantHT"]').parent('div').show();
+                $(this).closest('td').find('input[id$="_prixJEH"]').parent('div').hide();
+                $(this).closest('td').find('input[id$="_nombreJEH"]').parent('div').hide();
+            }
+        }
+    );
 });
+*/
 </script>
 {% endblock %}

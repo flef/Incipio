@@ -9,9 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks
  */
 class FactureDetail
 {
+
+    const TYPE_DEDUCTION    = 1;
+    const TYPE_PRESTATION   = 2;
+    const TYPE_FRAIS        = 3;
+    const TYPE_AUTRE        = 4;
+
     /**
      * @var integer
      *
@@ -28,11 +35,35 @@ class FactureDetail
     private $facture;
 
     /**
+     * @var integer
+     * @abstract 1 is Deduction, > 2 is vente (prestation, frais, refacturation)
+     *
+     * @ORM\Column(name="type", type="smallint", nullable=false)
+     */
+    private $type;
+    
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nombreJEH", type="integer", nullable=true)
+     */
+    private $nombreJEH;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="prixJEH", type="decimal", precision=6, scale=2, nullable=true)
+     * 
+     */
+    private $prixJEH;
 
     /**
      * @var float
@@ -57,6 +88,23 @@ class FactureDetail
     /**
      * ADDITIONAL
      */
+
+    /**
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     */
+    public function calculateMontantHT(){
+        switch($this->type){
+            case self::TYPE_DEDUCTION :
+                $this->montantHT = - abs($this->montantHT);        
+                break;
+            case self::TYPE_PRESTATION :
+                $this->montantHT = $this->nombreJEH * $this->prixJEH;
+                break;
+            default:
+                break;
+        }
+    }
     
     public function getMontantTVA(){
         return $this->tauxTVA * $this->montantHT / 100;        
@@ -65,6 +113,27 @@ class FactureDetail
     public function getMontantTTC(){
         return $this->montantHT + $this->getMontantTVA();
     }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getTypeToString()
+    {
+        $type = $this->getTypeChoices();
+        return $type[$this->type];
+    }
+    
+    public static function getTypeChoices(){
+        return array(
+            self::TYPE_DEDUCTION => 'Déduction',
+            self::TYPE_PRESTATION => 'Préstation',
+            self::TYPE_FRAIS => 'Frais',
+            self::TYPE_AUTRE => 'Autre',
+            );
+    } 
+    
 
 
     /**
@@ -111,7 +180,7 @@ class FactureDetail
     public function setMontantHT($montantHT)
     {
         $this->montantHT = $montantHT;
-    
+        
         return $this;
     }
 
@@ -192,5 +261,74 @@ class FactureDetail
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * Set nombreJEH
+     *
+     * @param integer $nombreJEH
+     * @return FactureDetail
+     */
+    public function setnombreJEH($nombreJEH)
+    {
+        $this->nombreJEH = $nombreJEH;
+    
+        return $this;
+    }
+
+    /**
+     * Get nombreJEH
+     *
+     * @return integer 
+     */
+    public function getnombreJEH()
+    {
+        return $this->nombreJEH;
+    }
+
+    /**
+     * Set prixJEH
+     *
+     * @param string $prixJEH
+     * @return FactureDetail
+     */
+    public function setPrixJEH($prixJEH)
+    {
+        $this->prixJEH = $prixJEH;
+    
+        return $this;
+    }
+
+    /**
+     * Get prixJEH
+     *
+     * @return string 
+     */
+    public function getPrixJEH()
+    {
+        return $this->prixJEH;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * @return FactureDetail
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer 
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

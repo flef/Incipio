@@ -12,11 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Facture
 {
-    public static $TYPE_ACHAT = 1;
-    public static $TYPE_VENTE = 2;
-    public static $TYPE_VENTE_ACCOMPTE = 3;
-    public static $TYPE_VENTE_INTERMEDIAIRE = 4;
-    public static $TYPE_VENTE_SOLDE = 5;
+    const TYPE_ACHAT = 1;
+    const TYPE_VENTE = 2;
+    const TYPE_VENTE_ACCOMPTE = 3;
+    const TYPE_VENTE_INTERMEDIAIRE = 4;
+    const TYPE_VENTE_SOLDE = 5;
     
     /**
      * @var integer
@@ -86,11 +86,6 @@ class Facture
      */
     private $objet;
     
-    /**
-     * @ORM\OneToOne(targetEntity="FactureDetail", cascade={"persist", "merge", "refresh", "remove"})
-     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
-     */
-    private $montantADeduire;
     
    
     /**
@@ -103,7 +98,7 @@ class Facture
      * la CNJE simplifie pour les Junior-Entrepreneurs en leur disant de prendre en compte la date de facturation pour toutes les opérations (biens et services)
      */
     public function getDate(){
-        return $this->type == self::$TYPE_ACHAT ? $this->dateEmission : $this->dateVersement;
+        return $this->type == self::TYPE_ACHAT ? $this->dateEmission : $this->dateVersement;
     }
     
     public function getReference(){
@@ -114,8 +109,6 @@ class Facture
        $montantHT = 0;
        foreach ($this->details as $detail)
             $montantHT += $detail->getMontantHT();
-       if($this->montantADeduire)
-            $montantHT -= $this->montantADeduire->getMontantHT();
        return $montantHT;
     }
     
@@ -123,9 +116,7 @@ class Facture
         $TVA = 0;
         foreach ($this->details as $detail)
             $TVA += $detail->getMontantHT() * $detail->getTauxTVA() / 100;
-        if($this->montantADeduire)
-            $TVA -= $this->montantADeduire->getTauxTVA() * $this->montantADeduire->getMontantHT() / 100;
-       return $TVA;
+        return $TVA;
     }
     
     public function getMontantTTC(){
@@ -157,11 +148,11 @@ class Facture
     
     public static function getTypeChoices(){
         return array(
-            self::$TYPE_ACHAT => 'FA - Facture d\'achat',
-            self::$TYPE_VENTE => 'FV - Facture de vente',
-            self::$TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'acompte',
-            self::$TYPE_VENTE_INTERMEDIAIRE => 'FV - Facture intermédiaire',
-            self::$TYPE_VENTE_SOLDE => 'FV - Facture de solde',
+            self::TYPE_ACHAT => 'FA - Facture d\'achat',
+            self::TYPE_VENTE => 'FV - Facture de vente',
+            self::TYPE_VENTE_ACCOMPTE => 'FV - Facture d\'acompte',
+            self::TYPE_VENTE_INTERMEDIAIRE => 'FV - Facture intermédiaire',
+            self::TYPE_VENTE_SOLDE => 'FV - Facture de solde',
             );
     } 
     
@@ -187,8 +178,6 @@ class Facture
     public function __construct()
     {
         $this->details = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->montantADeduire = new FactureDetail;
-        $this->montantADeduire->setMontantHT(0);
     }
     
     /**
@@ -387,32 +376,7 @@ class Facture
     {
         return $this->etude;
     }
-
-
-
-    /**
-     * Set montantADeduire
-     *
-     * @param \mgate\TresoBundle\Entity\FactureDetail $montantADeduire
-     * @return Facture
-     */
-    public function setMontantADeduire(\mgate\TresoBundle\Entity\FactureDetail $montantADeduire = null)
-    {
-        $this->montantADeduire = $montantADeduire;
-    
-        return $this;
-    }
-
-    /**
-     * Get montantADeduire
-     *
-     * @return \mgate\TresoBundle\Entity\FactureDetail 
-     */
-    public function getMontantADeduire()
-    {
-        return $this->montantADeduire;
-    }
-
+   
     /**
      * Set beneficiaire
      *

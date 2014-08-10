@@ -20,7 +20,10 @@ class FactureDetailType extends AbstractType {
                             'rows'=>2)
                         )
                     )
+                ->add('type', 'choice', array('choices' => \mgate\TresoBundle\Entity\FactureDetail::getTypeChoices(), 'required' => true))
                 ->add('montantHT', 'money', array('label'=>'Prix H.T.', 'required' => false))
+                ->add('prixJEH', 'money', array('label'=>'Prix JEH', 'required' => false))
+                ->add('nombreJEH', 'integer', array('label' => "Nombre de JEH (si prestation)", 'required' => false))
                 ->add('tauxTVA', 'number', array('label'=>'Taux TVA (%)', 'required' => false))
                 ->add('compte', 'genemu_jqueryselect2_entity', array(
                         'class' => 'mgate\TresoBundle\Entity\Compte',

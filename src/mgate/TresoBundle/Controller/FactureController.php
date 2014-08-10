@@ -62,7 +62,7 @@ class FactureController extends Controller
                 $facture->setBeneficiaire($etude->getProspect());            
                 
                 if(!count($etude->getFactures()) && $etude->getAcompte()){
-                    $facture->setType(Facture::$TYPE_VENTE_ACCOMPTE);
+                    $facture->setType(Facture::TYPE_VENTE_ACCOMPTE);
                     $facture->setObjet('Facture d\'Acompte sur l\'étude '.$etude->getReference().', correspondant au règlement de '.$formater->money_format(($etude->getPourcentageAcompte() * 100)).' % de l’étude.');
                     $detail = new FactureDetail;
                     $detail->setCompte( $em->getRepository('mgateTresoBundle:Compte')->findOneBy(array('numero' => $compteAcompte)));
@@ -73,12 +73,7 @@ class FactureController extends Controller
                     $detail->setTauxTVA($tauxTVA);
                 }
                 else{
-                    $facture->setType(Facture::$TYPE_VENTE_SOLDE);
-                    if($etude->getAcompte() && $etude->getFa()){
-                        $montantADeduire = new FactureDetail;
-                        $montantADeduire->setDescription('Facture d\'Acompte sur l\'étude '.$etude->getReference().', correspondant au règlement de '.$formater->money_format(($etude->getPourcentageAcompte() * 100)).' % de l’étude.')->setFacture($facture);
-                        $facture->setMontantADeduire($montantADeduire);
-                    }
+                    $facture->setType(Facture::TYPE_VENTE_SOLDE);
                     
                     $totalTTC = 0;
                     foreach ($etude->getPhases() as $phase){
@@ -122,9 +117,6 @@ class FactureController extends Controller
                     $factured->setFacture($facture);
                 }
 
-                if($facture->getType() <= Facture::$TYPE_VENTE_ACCOMPTE || $facture->getMontantADeduire() == null || $facture->getMontantADeduire()->getMontantHT() == 0)
-                    $facture->setMontantADeduire(null);
-                
                 $em->persist($facture);                
                 $em->flush();
                 return $this->redirect($this->generateUrl('mgateTreso_Facture_voir', array('id' => $facture->getId())));
