@@ -22,7 +22,7 @@ class FactureRepository extends EntityRepository
         $qb = $this->_em->createQueryBuilder();
         $query = $qb->select('f')
                      ->from('mgateTresoBundle:Facture', 'f')
-                     ->where('f.type '.($type == Facture::$TYPE_ACHAT ? '=' : '>').' '.Facture::$TYPE_ACHAT);
+                     ->where('f.type '.($type == Facture::TYPE_ACHAT ? '=' : '>').' '.Facture::TYPE_ACHAT);
         if($trimestriel)
             $query->andWhere("MONTH(f.$date) >= $month")
                   ->andWhere("MONTH(f.$date) < ($month + 2)");

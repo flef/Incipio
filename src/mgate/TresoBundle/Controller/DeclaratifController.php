@@ -70,15 +70,15 @@ class DeclaratifController extends Controller
             $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')).' - '.strftime('%B', $date->modify('+2 month')->format('U')));
             for($i = 0; $i < 3; $i++){
                 $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year, true);
-                $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_ACHAT, $month, $year, true);
-                $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_VENTE, $month, $year, true);
+                $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year, true);
+                $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year, true);
             }            
         }            
         else{
             $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')));
             $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year);
-            $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_ACHAT, $month, $year);
-            $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::$TYPE_VENTE, $month, $year);
+            $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year);
+            $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year);
         }
             
 
