@@ -28,8 +28,10 @@ class TwigExtensionManager extends \Twig_Extension {
     }
     
     public function money($input, $displayZero = true) {    
-        if($input == 0 && !$displayZero) return '';
-        return number_format($input, 2, ',', ' ');
+        if($input == 0 && !$displayZero) 
+            return ' - ';
+        else 
+            return number_format($input, 2, ',', ' ');
     }
     
     /**

@@ -35,6 +35,7 @@ class FactureType extends AbstractType {
                     'required' => true,
                     'label' => 'Facture émise pour/par',                    
                 ))
+                ->add('tauxTVAglobal', 'number', array('label'=>'Taux TVA (%) global', 'required' => false))
                 ->add('dateEmission', 'genemu_jquerydate', array('label'=>'Date d\'émission', 'required'=>true, 'widget'=>'single_text'))
                 ->add('dateVersement', 'genemu_jquerydate', array('label'=>'Date de versement', 'required'=>false, 'widget'=>'single_text'));
     }

@@ -68,11 +68,9 @@ class DeclaratifController extends Controller
         setlocale(LC_TIME, 'fra_fra');
         if(array_key_exists('trimestriel', $data) && $data['trimestriel']){            
             $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')).' - '.strftime('%B', $date->modify('+2 month')->format('U')));
-            for($i = 0; $i < 3; $i++){
-                $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year, true);
-                $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year, true);
-                $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year, true);
-            }            
+            $nfs = $em->getRepository('mgateTresoBundle:NoteDeFrais')->findAllByMonth($month, $year, true);
+            $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year, true);
+            $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year, true);         
         }            
         else{
             $periode = 'Déclaratif pour la période : '.utf8_encode(strftime('%B', $date->format('U')));
@@ -80,10 +78,7 @@ class DeclaratifController extends Controller
             $fas = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_ACHAT, $month, $year);
             $fvs = $em->getRepository('mgateTresoBundle:Facture')->findAllTVAByMonth(Facture::TYPE_VENTE, $month, $year);
         }
-            
 
-        
-        
         
         /**
          * TVA DEDUCTIBLE
@@ -133,41 +128,42 @@ class DeclaratifController extends Controller
             $totalTvaCollectee['TTC'] += $fv->getMontantTTC();
             $totalTvaCollectee['TVA'] += $fv->getMontantTVA();
             
-            foreach ($fv->getDetails() as $fvd){
-                $tauxTVA = $fvd->getTauxTVA();
+            if($fv->getType() > Facture::TYPE_VENTE){
+                $tauxTVA = $fv->getTauxTVAglobal();
+
                 if(key_exists($tauxTVA, $montantTvaParType))
-                    $montantTvaParType[$tauxTVA] += $fvd->getMontantTVA();
-                else
-                    $montantTvaParType[$tauxTVA] = $fvd->getMontantTVA();
+                        $montantTvaParType[$tauxTVA] += $fv->getMontantTVA();
+                    else
+                        $montantTvaParType[$tauxTVA] = $fv->getMontantTVA();
 
-                if(!key_exists($tauxTVA, $totalTvaCollectee))
-                    $totalTvaCollectee[$tauxTVA] = $fvd->getMontantTVA();
-                else
-                    $totalTvaCollectee[$tauxTVA] += $fvd->getMontantTVA();
-                
-                // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
-                if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
+                    if(!key_exists($tauxTVA, $totalTvaCollectee))
+                        $totalTvaCollectee[$tauxTVA] = $fv->getMontantTVA();
+                    else
+                        $totalTvaCollectee[$tauxTVA] += $fv->getMontantTVA();
+            } // A vérifier si l'on peut refacturer à des taux différents
+            else { // si Refacturation à différent taux
+                foreach ($fv->getDetails() as $fvd){
+                    $tauxTVA = $fvd->getTauxTVA();
+                    if(key_exists($tauxTVA, $montantTvaParType))
+                        $montantTvaParType[$tauxTVA] += $fvd->getMontantTVA();
+                    else
+                        $montantTvaParType[$tauxTVA] = $fvd->getMontantTVA();
+
+                    if(!key_exists($tauxTVA, $totalTvaCollectee))
+                        $totalTvaCollectee[$tauxTVA] = $fvd->getMontantTVA();
+                    else
+                        $totalTvaCollectee[$tauxTVA] += $fvd->getMontantTVA();
+                    
+                    // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
+                    if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
+                }
             }
-            if($md = $fv->getMontantADeduire()){
-                $tauxTVA = $md->getTauxTVA();
-                if(key_exists($tauxTVA, $montantTvaParType))
-                    $montantTvaParType[$tauxTVA] -= $md->getMontantTVA();
-                else
-                    $montantTvaParType[$tauxTVA] = - $md->getMontantTVA();
-
-                if(!key_exists($tauxTVA, $totalTvaCollectee))
-                    $totalTvaCollectee[$tauxTVA] = - $md->getMontantTVA();
-                else
-                    $totalTvaCollectee[$tauxTVA] -= $md->getMontantTVA();
-                
-                // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
-                if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
-            }
-
-            $tvaCollectee[] = array('DATE' => $fv->getDate(),'LI'=> $fv->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC,'TVA' => $fv->getMontantTVA() , 'TVAT' => $montantTvaParType);
-            
-           
+    
+            // Ajout de l'éventuel nouveau taux de TVA à la liste des taux
+            if(!in_array($tauxTVA, $tvas) && $tauxTVA != null)$tvas[] = $tauxTVA;
+            $tvaCollectee[] = array('DATE' => $fv->getDate(),'LI'=> $fv->getReference(),'HT' => $montantHT, 'TTC' => $montantTTC,'TVA' => $fv->getMontantTVA() , 'TVAT' => $montantTvaParType);    
         }
+
         sort($tvas);      
         return $this->render('mgateTresoBundle:Declaratif:TVA.html.twig', 
             array('form' => $form->createView(),

@@ -27,7 +27,7 @@ class FactureRepository extends EntityRepository
             $query->andWhere("MONTH(f.$date) >= $month")
                   ->andWhere("MONTH(f.$date) < ($month + 2)");
         else
-            $query->where("MONTH(f.$date) = $month");
+            $query->andWhere("MONTH(f.$date) = $month");
             
         
         $query->andWhere("YEAR(f.$date) = $year")->orderBy("f.$date");                

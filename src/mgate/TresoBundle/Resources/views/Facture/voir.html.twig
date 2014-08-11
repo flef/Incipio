@@ -30,6 +30,7 @@
         <tr>
             <th colspan="5" class="success">Détails des dépenses</th>
         </tr>
+        {% if facture.type <= constant('\\mgate\\TresoBundle\\Entity\\Facture::TYPE_VENTE_ACCOMPTE') %}
         <tr>
             <th>Description</th>
             <th>Prix HT</th>
@@ -37,30 +38,47 @@
             <th>TVA</th>
             <th>Prix TTC</th>
         </tr>
-        {% set totalHT = 0 %}
-        {% set totalTVA = 0 %}
-        {% set totalTTC = 0 %}
-        
-        {% for detail in facture.details %}
-        {% set totalHT = totalHT + detail.montantHT %}
-        {% set totalTVA = totalTVA + (detail.montantHT * detail.tauxTVA / 100) %}
-        {% set totalTTC = totalTTC + (detail.montantHT * ( 1 + detail.tauxTVA / 100))%}
+            {% for detail in facture.details %}
         <tr>
             <td>{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
-            <td>{{ detail.montantHT |number_format(2, ',', ' ')}} €</td>
-            <td>{{ (detail.tauxTVA) |number_format(2, ',', ' ')}} %</td>
-            <td>{{ (detail.montantHT * detail.tauxTVA / 100) |number_format(2, ',', ' ')}} €</td>
-            <td>{{ (detail.montantHT * ( 1 + detail.tauxTVA / 100 )) |number_format(2, ',', ' ')}} €</td>
+            <td>{{ detail.montantHT |money}} €</td>
+            <td>{{ detail.tauxTVA |money}} %</td>
+            <td>{{ detail.montantTVA |money}} €</td>
+            <td>{{ detail.montantTTC |money}} €</td>
         </tr>        
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+        <tr>
+            <th colspan="2">Description</th>
+            <th>Nombre J.E.H</th>
+            <th>Prix J.E.H</th>
+            <th>Prix HT</th>
+        </tr>
+            {% for detail in facture.details %}
+        <tr>
+            <td colspan="2">{{ detail.description }} {% if detail.compte %}<span class="badge" title="{{ detail.compte.libelle }}">{{ detail.compte.numero }}</span>{% endif%}</td>
+            <td>{{ detail.nombreJEH(true) | default('-') }} J.E.H</td>
+            <td>{{ detail.prixJEH |money(false) }} €</td>
+            <td>{{ detail.montantHT |money(false) }} €</td>
+        </tr>        
+            {% endfor %}
+        {% endif %}
         <tr>
             <th colspan="5" class="danger">Total</th>               
         </tr>
+        {% if facture.type <= constant('\\mgate\\TresoBundle\\Entity\\Facture::TYPE_VENTE_ACCOMPTE') %}
         <tr>
-            <td colspan="2">{{ totalHT |number_format(2, ',', ' ') }} € HT</td>
-            <td colspan="2">{{ totalTVA |number_format(2, ',', ' ')}} € de TVA</td>
-            <td>{{ totalTTC |number_format(2, ',', ' ')}} € TTC</td>
+            <td colspan="2">{{ facture.montantHT |money }} € HT</td>
+            <td colspan="2">{{ facture.montantTVA |money}} € de TVA</td>
+            <td>{{ facture.montantTTC |money}} € TTC</td>
         </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">{{ facture.montantHT |money }} € HT</td>
+            <td colspan="2">{{ facture.montantTVA |money}} € de TVA ({{ facture.tauxTVAglobal | money }} %)</td>
+            <td>{{ facture.montantTTC |money}} € TTC</td>
+        </tr>
+        {% endif %}
     </table>
     <table class="table">
         <tr>

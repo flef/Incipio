@@ -12,8 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Facture
 {
+    /* Les factures suivantes ont une TVA renseignée dans facture détail (TVA non global) */
     const TYPE_ACHAT = 1;
     const TYPE_VENTE = 2;
+    /*
+     * Les factures suivantes ont une TVA global au taux normal
+     */
     const TYPE_VENTE_ACCOMPTE = 3;
     const TYPE_VENTE_INTERMEDIAIRE = 4;
     const TYPE_VENTE_SOLDE = 5;
@@ -74,6 +78,13 @@ class Facture
      * @ORM\Column(name="dateVersement", type="date", nullable=true)
      */
     private $dateVersement;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="tauxTVAglobal", type="decimal", precision=6, scale=2, nullable=true)
+     */
+    private $tauxTVAglobal;
     
     /**
      * @ORM\OneToMany(targetEntity="FactureDetail", mappedBy="facture", cascade={"persist", "detach", "remove"}, orphanRemoval=true)
@@ -114,8 +125,17 @@ class Facture
     
     public function getMontantTVA(){
         $TVA = 0;
-        foreach ($this->details as $detail)
-            $TVA += $detail->getMontantHT() * $detail->getTauxTVA() / 100;
+        if($this->type > self::TYPE_VENTE){
+            foreach ($this->details as $detail) {
+                $TVA += $detail->getMontantHT();
+            }
+            $TVA = $this->tauxTVAglobal / 100 * $TVA;
+        }
+        else {
+            foreach ($this->details as $detail){
+                $TVA += $detail->getMontantHT() * $detail->getTauxTVA() / 100;
+            }
+        }
         return $TVA;
     }
     
@@ -398,5 +418,28 @@ class Facture
     public function getBeneficiaire()
     {
         return $this->beneficiaire;
+    }
+
+    /**
+     * Set tauxTVAglobal
+     *
+     * @param float $tauxTVAglobal
+     * @return Facture
+     */
+    public function setTauxTVAglobal($tauxTVAglobal)
+    {
+        $this->tauxTVAglobal = $tauxTVAglobal;
+    
+        return $this;
+    }
+
+    /**
+     * Get tauxTVAglobal
+     *
+     * @return float 
+     */
+    public function getTauxTVAglobal()
+    {
+        return $this->tauxTVAglobal;
     }
 }

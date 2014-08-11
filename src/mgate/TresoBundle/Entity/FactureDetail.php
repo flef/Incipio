@@ -13,11 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FactureDetail
 {
-
-    const TYPE_DEDUCTION    = 1;
-    const TYPE_PRESTATION   = 2;
-    const TYPE_FRAIS        = 3;
-    const TYPE_AUTRE        = 4;
+    /* @abstract dans le cas d'une facture de vente, on applique pas de TVA sur chaque ligne de la facture (mode normal),
+     * la TVA est appliqué au taux normal sur le total HT de la facture. 
+     * Cela permet notamment de prendre en compte correctement les déductions des factures d'acompte sans faire de déduction de TVA.
+     * Dans le cas d'une refacturation, il est possible de renseigner une TVA en appliquant le Type TYPE_AUTRE_TVA. Type par défaut dans le cas d'une facture d'achat.
+     */
+    const TYPE_PRESTATION_HT    = 1;
+    const TYPE_FRAIS_HT         = 2;
+    const TYPE_DEDUCTION_HT     = 3;
+    const TYPE_AUTRE_TVA        = 4;
 
     /**
      * @var integer
@@ -95,11 +99,16 @@ class FactureDetail
      */
     public function calculateMontantHT(){
         switch($this->type){
-            case self::TYPE_DEDUCTION :
-                $this->montantHT = - abs($this->montantHT);        
+            case self::TYPE_DEDUCTION_HT :
+                $this->montantHT = - abs($this->montantHT);
+                $this->tauxTVA = 0;        
                 break;
-            case self::TYPE_PRESTATION :
+            case self::TYPE_PRESTATION_HT :
                 $this->montantHT = $this->nombreJEH * $this->prixJEH;
+                $this->tauxTVA = 0;
+                break;
+            case self::TYPE_FRAIS_HT :
+                $this->tauxTVA = 0;
                 break;
             default:
                 break;
@@ -107,7 +116,10 @@ class FactureDetail
     }
     
     public function getMontantTVA(){
-        return $this->tauxTVA * $this->montantHT / 100;        
+        if($this->type == self::TYPE_AUTRE_TVA)
+            return $this->tauxTVA * $this->montantHT / 100;
+        else
+            return 0;    
     }
     
     public function getMontantTTC(){
@@ -127,10 +139,10 @@ class FactureDetail
     
     public static function getTypeChoices(){
         return array(
-            self::TYPE_DEDUCTION => 'Déduction',
-            self::TYPE_PRESTATION => 'Préstation',
-            self::TYPE_FRAIS => 'Frais',
-            self::TYPE_AUTRE => 'Autre',
+            self::TYPE_DEDUCTION_HT => 'Déduction (TVA globale au taux normal)',
+            self::TYPE_PRESTATION_HT => 'Préstation (TVA globale au taux normal)',
+            self::TYPE_FRAIS_HT => 'Frais (TVA globale au taux normal)',
+            self::TYPE_AUTRE_TVA => 'Autre',
             );
     } 
     
@@ -269,7 +281,7 @@ class FactureDetail
      * @param integer $nombreJEH
      * @return FactureDetail
      */
-    public function setnombreJEH($nombreJEH)
+    public function setNombreJEH($nombreJEH)
     {
         $this->nombreJEH = $nombreJEH;
     
@@ -281,7 +293,7 @@ class FactureDetail
      *
      * @return integer 
      */
-    public function getnombreJEH()
+    public function getNombreJEH()
     {
         return $this->nombreJEH;
     }
