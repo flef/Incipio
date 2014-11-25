@@ -10,7 +10,7 @@ Cet [ERP](http://fr.wikipedia.org/wiki/Progiciel_de_gestion_int%C3%A9gr%C3%A9) e
 
 Incipio est un [ERP](http://fr.wikipedia.org/wiki/Progiciel_de_gestion_int%C3%A9gr%C3%A9) évolutif. Pour cela, des structures sont chargées de maintenir le code existant, de répondre aux nouvelles exigences de la [CNJE](http://www.junior-entreprises.com/) pour toutes les Juniors. Cela concerne notamment les Juniors d’école de commerce ou toute autre structure ne disposant pas de ressource nécessaire pour faire évoluer son [ERP](http://fr.wikipedia.org/wiki/Progiciel_de_gestion_int%C3%A9gr%C3%A9).
 
-Incipio aussi un serveur web capable d’héberger des [ERP](http://fr.wikipedia.org/wiki/Progiciel_de_gestion_int%C3%A9gr%C3%A9) pour plusieurs structures afin de leur faciliter l’accès à cette ressource (solution clefs en main).
+Incipio a aussi un serveur web capable d’héberger des [ERP](http://fr.wikipedia.org/wiki/Progiciel_de_gestion_int%C3%A9gr%C3%A9) pour plusieurs structures afin de leur faciliter l’accès à cette ressource (solution clefs en main).
 
 ---
 
