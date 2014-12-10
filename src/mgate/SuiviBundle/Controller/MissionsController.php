@@ -87,7 +87,7 @@ class MissionsController extends Controller {
                             $repartitionNew->setMission($mission);
                             
                             $repartitionNew->setNbrJEH(0);
-                            $repartitionNew->setPrixJEH(300);
+                            $repartitionNew->setPrixJEH(320);
                         }
                     }
                 }
