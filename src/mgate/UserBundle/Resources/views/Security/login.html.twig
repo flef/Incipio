@@ -23,7 +23,7 @@ along with Incipio as the file LICENSE.  If not, see <http://www.gnu.org/license
 
 {% block fos_user_content %}
 {% if error %}
-    <div>{{ error|trans({}, 'FOSUserBundle') }}</div>
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
 {% endif %}
 
 <form action="{{ path("fos_user_security_check") }}" method="post" class="form-signin" role="form" style="text-align: center;">
