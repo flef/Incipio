@@ -397,6 +397,18 @@ class EtudeManager extends \Twig_Extension {
             $error = array('titre' => 'Incohérence dans les JEH reversé', 'message' => "Vous reversez plus de JEH ($jehReverses) que vous n'en n'avez facturé ($jehFactures)");
             array_push($errors, $error);
         }
+
+        /*****************************************************
+         * Vérification de la nationnalité des intervenants  *
+         *****************************************************/
+        foreach ($etude->getMissions() as $mission) {
+            // Vérification de la présence d'intervenant algériens
+            $intervenant = $mission->getIntervenant();
+            if( $intervenant && $intervenant->getNationalite() == 'DZ'){
+                $error = array('titre' => 'Nationalité des Intervenants', 'message' => "L'intervenant ". $intervenant->getPersonne()->getPrenomNom() . " est de nationnalité algériennne. Il ne peut intervenir sur l'étude.");
+                array_push($errors, $error);
+            }
+        }
         
         
         return $errors;
@@ -445,6 +457,18 @@ class EtudeManager extends \Twig_Extension {
                     $warning = array('titre' => 'Dates sur le RM de '.$intervenant->getPersonne()->getPrenomNom(), 'message' => 'Le RM de '.$intervenant->getPersonne()->getPrenomNom().' est mal rédigé. Vérifiez les dates de signature et de début de mission.');
                     array_push($warnings, $warning);
                 }
+            }
+        }
+
+        /*****************************************************
+         * Vérification de la nationnalité des intervenants  *
+         *****************************************************/
+        foreach ($etude->getMissions() as $mission) {
+            // Vérification de la présence d'intervenant étranger non algérien (relevé dans error)
+            $intervenant = $mission->getIntervenant();
+            if( $intervenant && $intervenant->getNationalite() != 'FR' && $intervenant->getNationalite() != 'DZ'){
+                $warning = array('titre' => 'Nationalité des Intervenants', 'message' => "L'intervenant ". $intervenant->getPersonne()->getPrenomNom() . " n'est pas de nationalité Française. Pensez à faire une Déclaration d'Emploi pour un étudiant Etranger auprès de la préfecture.");
+                array_push($warnings, $warning);
             }
         }
         
