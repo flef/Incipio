@@ -52,7 +52,7 @@ class AuditType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder->add('gender_code', new GenderType(), array(
-            'empty_value' => 'Type d\'audit',
+            'placeholder' => 'Type d\'audit',
         ));
     }
 }
